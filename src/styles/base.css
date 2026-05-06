@@ -1223,3 +1223,121 @@ a {
     flex-direction: column;
   }
 }
+
+/* ── Black Gold theme overrides ───────────────────────────── */
+[data-theme-name='black-gold'] .vx-button {
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: filter 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+[data-theme-name='black-gold'] .vx-button:hover {
+  border-color: transparent;
+  filter: brightness(1.1);
+}
+
+[data-theme-name='black-gold'] .vx-button:focus-visible {
+  outline: 2px solid rgba(200, 169, 124, 0.72);
+  outline-offset: 2px;
+}
+
+[data-theme-name='black-gold'] .vx-button--solid {
+  background: linear-gradient(135deg, #f5e9d7, #c8a97c 48%, #b88d54);
+  color: #09090f;
+  border-color: transparent;
+}
+
+[data-theme-name='black-gold'] .vx-button--solid:hover {
+  filter: brightness(1.08);
+}
+
+[data-theme-name='black-gold'] .vx-button--secondary {
+  background: rgba(245, 233, 215, 0.05);
+  color: #f5e9d7;
+  border-color: rgba(245, 233, 215, 0.15);
+}
+
+[data-theme-name='black-gold'] .vx-button--secondary:hover {
+  background: rgba(245, 233, 215, 0.09);
+  border-color: rgba(200, 169, 124, 0.42);
+}
+
+[data-theme-name='black-gold'] .vx-button--ghost {
+  background: transparent;
+  color: #928a81;
+  border-color: rgba(245, 233, 215, 0.12);
+}
+
+[data-theme-name='black-gold'] .vx-button--ghost:hover {
+  background: rgba(245, 233, 215, 0.06);
+  border-color: rgba(245, 233, 215, 0.2);
+  color: #d7c8b2;
+}
+
+[data-theme-name='black-gold'] .vx-button--danger {
+  background: linear-gradient(135deg, #f0706a, #ef4444);
+  color: #fff;
+  border-color: transparent;
+}
+
+[data-theme-name='black-gold'] .vx-sidebar {
+  border-right: 1px solid rgba(200, 169, 124, 0.18);
+  background: rgba(8, 10, 16, 0.92);
+}
+
+[data-theme-name='black-gold'] .vx-sidebar__brand-icon {
+  background: rgba(200, 169, 124, 0.14);
+  color: #c8a97c;
+}
+
+[data-theme-name='black-gold'] .vx-nav-item--active {
+  background: rgba(200, 169, 124, 0.14);
+  color: #c8a97c;
+}
+
+[data-theme-name='black-gold'] .vx-nav-item:hover:not(.vx-nav-item--active) {
+  background: rgba(245, 233, 215, 0.07);
+  color: #f5e9d7;
+}
+
+[data-theme-name='black-gold'] .vx-nav-item:focus-visible {
+  outline: 2px solid rgba(200, 169, 124, 0.72);
+}
+
+[data-theme-name='black-gold'] .vx-topbar {
+  border-bottom: 1px solid rgba(200, 169, 124, 0.15);
+  background: rgba(5, 7, 11, 0.82);
+}
+
+[data-theme-name='black-gold'] .vx-card {
+  border-color: rgba(200, 169, 124, 0.18);
+  background: rgba(15, 18, 25, 0.76);
+  box-shadow: 0 0 42px rgba(200, 169, 124, 0.06);
+}
+
+[data-theme-name='black-gold'] .vx-input__field {
+  background: rgba(15, 18, 25, 0.76);
+  border-color: rgba(245, 233, 215, 0.12);
+  color: #f5e9d7;
+}
+
+[data-theme-name='black-gold'] .vx-input__field:focus {
+  border-color: #c8a97c;
+  box-shadow: 0 0 0 3px rgba(200, 169, 124, 0.18);
+}
+
+[data-theme-name='black-gold'] .vx-switch__control[aria-checked='true'] {
+  background: #c8a97c;
+}
+
+[data-theme-name='black-gold'] .vx-tabs__trigger[aria-selected='true'] {
+  color: #c8a97c;
+  border-bottom-color: #c8a97c;
+}
+
+[data-theme-name='black-gold'] .vx-badge--accent {
+  background: rgba(200, 169, 124, 0.14);
+  border-color: rgba(200, 169, 124, 0.36);
+  color: #c8a97c;
+}
