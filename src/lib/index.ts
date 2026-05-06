@@ -8,5 +8,16 @@ export { Dialog } from '../components/Dialog';
 export { Input } from '../components/Input';
 export { Switch } from '../components/Switch';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/Tabs';
-export { ThemeProvider, useTheme } from '../components/ThemeProvider';
+export {
+	ThemeProvider,
+	createTheme,
+	themePresets,
+	useTheme,
+} from '../components/ThemeProvider';
+export type {
+	ThemeDefinition,
+	ThemeMode,
+	ThemeRegistry,
+	ThemeTokens,
+} from '../components/ThemeProvider';
 export { ToastProvider, useToast } from '../components/Toast';

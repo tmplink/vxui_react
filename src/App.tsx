@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ArrowRight,
   Bell,
@@ -36,6 +36,7 @@ import {
   TabsList,
   TabsTrigger,
   useToast,
+  useTheme,
 } from './lib';
 
 type PageKey =
@@ -265,8 +266,30 @@ export default function App() {
   const [alertsEnabled, setAlertsEnabled] = useState(true);
   const [compactDensity, setCompactDensity] = useState(false);
   const { push } = useToast();
+  const { mode, setTheme, theme, themes } = useTheme();
+  const [tokenValues, setTokenValues] = useState<Record<string, string>>(() =>
+    tokenCards.reduce<Record<string, string>>((snapshot, token) => {
+      snapshot[token.variable] = token.value;
+      return snapshot;
+    }, {}),
+  );
 
   const activeDocument = pages[activePage];
+  const themeEntries = Object.entries(themes);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const styles = window.getComputedStyle(document.documentElement);
+    const snapshot = tokenCards.reduce<Record<string, string>>((currentValues, token) => {
+      currentValues[token.variable] = styles.getPropertyValue(token.variable).trim() || token.value;
+      return currentValues;
+    }, {});
+
+    setTokenValues(snapshot);
+  }, [theme]);
 
   const selectPage = (page: PageKey) => {
     setActivePage(page);
@@ -376,11 +399,21 @@ export default function App() {
     switch (activePage) {
       case 'quick-start': {
         const quickStartCode = [
-          "import { AppShell, ThemeProvider, ToastProvider } from 'vxui-react';",
+          "import { AppShell, ThemeProvider, ToastProvider, createTheme, themePresets } from 'vxui-react';",
+          '',
+          'const themes = {',
+          '  light: themePresets.light,',
+          '  dark: themePresets.dark,',
+          '  sunset: themePresets.sunset,',
+          "  ocean: createTheme('dark', {",
+          "    label: 'Ocean',",
+          "    tokens: { '--vx-primary': '#38bdf8' },",
+          '  }),',
+          '};',
           '',
           'export function App() {',
           '  return (',
-          '    <ThemeProvider>',
+          '    <ThemeProvider themes={themes} defaultTheme="sunset">',
           '      <ToastProvider>',
           '        <AppShell navSections={sections}>...</AppShell>',
           '      </ToastProvider>',
@@ -584,26 +617,31 @@ export default function App() {
         <h2>Design Tokens</h2>
         <p className="vx-docs-lead">
           All colors, spacing, and typography values are exposed as CSS custom properties under
-          the vx namespace. Override any token to theme the entire framework.
+          the vx namespace. Register named light and dark themes once, then swap the whole
+          framework by theme key.
         </p>
         <div className="vx-docs-token-grid">
-          {tokenCards.map((token) => (
-            <Card key={token.variable} className="vx-doc-token-card">
-              <div
-                className="vx-doc-token-card__swatch"
-                style={{ background: token.value }}
-                aria-hidden="true"
-              />
-              <div className="vx-doc-token-card__row">
-                <div>
-                  <div className="vx-doc-token-card__name">{token.name}</div>
-                  <div className="vx-doc-token-card__var">{token.variable}</div>
+          {tokenCards.map((token) => {
+            const tokenValue = tokenValues[token.variable] ?? token.value;
+
+            return (
+              <Card key={token.variable} className="vx-doc-token-card">
+                <div
+                  className="vx-doc-token-card__swatch"
+                  style={{ background: tokenValue }}
+                  aria-hidden="true"
+                />
+                <div className="vx-doc-token-card__row">
+                  <div>
+                    <div className="vx-doc-token-card__name">{token.name}</div>
+                    <div className="vx-doc-token-card__var">{token.variable}</div>
+                  </div>
+                  <span className="vx-version-pill vx-version-pill--token">{tokenValue}</span>
                 </div>
-                <span className="vx-version-pill vx-version-pill--token">{token.value}</span>
-              </div>
-              <div className="vx-doc-token-card__description">{token.description}</div>
-            </Card>
-          ))}
+                <div className="vx-doc-token-card__description">{token.description}</div>
+              </Card>
+            );
+          })}
         </div>
       </section>
 
@@ -711,7 +749,19 @@ export default function App() {
       navSections={navSections}
       sidebarCollapsed={sidebarCollapsed}
       onSidebarToggle={() => setSidebarCollapsed((value) => !value)}
-      headerActions={<span className="vx-version-pill">v1.0</span>}
+      headerActions={(
+        <div className="vx-inline vx-inline--wrap">
+          <span className="vx-version-pill">v1.0</span>
+          <span className="vx-version-pill vx-version-pill--token">
+            <Palette size={14} />
+            {themes[theme]?.label ?? theme}
+          </span>
+          <span className="vx-version-pill vx-version-pill--token">
+            <MoonStar size={14} />
+            {mode} mode
+          </span>
+        </div>
+      )}
     >
       <div className="vx-page">
         {activePage === 'introduction' ? renderIntroduction() : renderGuidePage()}
@@ -721,21 +771,35 @@ export default function App() {
           <div className="vx-docs-component-grid">
             <Card>
               <CardHeader>
-                <CardTitle>Tokens</CardTitle>
+                <CardTitle>Theme Studio</CardTitle>
                 <CardDescription>
-                  Neutral surfaces, blue accents, and compact borders keep the frame close to the original vxui showcase.
+                  Register named themes once, then switch every component with a single key.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="vx-inline vx-inline--wrap">
-                  <span className="vx-version-pill vx-version-pill--token">
-                    <Palette size={14} />
-                    blue-gray
-                  </span>
-                  <span className="vx-version-pill vx-version-pill--token">
-                    <Sparkles size={14} />
-                    lightweight
-                  </span>
+                <div className="vx-stack vx-stack--tight">
+                  <div className="vx-inline vx-inline--wrap">
+                    {themeEntries.map(([themeName, definition]) => (
+                      <Button
+                        key={themeName}
+                        size="sm"
+                        variant={theme === themeName ? 'solid' : 'secondary'}
+                        onClick={() => setTheme(themeName)}
+                      >
+                        {definition.label ?? themeName}
+                      </Button>
+                    ))}
+                  </div>
+                  <div className="vx-inline vx-inline--wrap">
+                    <span className="vx-version-pill vx-version-pill--token">
+                      <Palette size={14} />
+                      {themes[theme]?.label ?? theme}
+                    </span>
+                    <span className="vx-version-pill vx-version-pill--token">
+                      <Sparkles size={14} />
+                      {mode} mode
+                    </span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
