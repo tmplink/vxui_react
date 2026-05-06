@@ -1224,6 +1224,123 @@ a {
   }
 }
 
+/* ── Ivory Gold theme overrides (light black-gold) ─────────── */
+[data-theme-name='ivory-gold'] .vx-button {
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: filter 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+[data-theme-name='ivory-gold'] .vx-button:hover {
+  border-color: transparent;
+  filter: brightness(0.94);
+}
+
+[data-theme-name='ivory-gold'] .vx-button:focus-visible {
+  outline: 2px solid rgba(160, 116, 42, 0.6);
+  outline-offset: 2px;
+}
+
+[data-theme-name='ivory-gold'] .vx-button--solid {
+  background: linear-gradient(135deg, #d4a44c, #a0742a 52%, #7d5a1e);
+  color: #fff8ee;
+  border: none;
+}
+
+[data-theme-name='ivory-gold'] .vx-button--solid:hover {
+  filter: brightness(1.06);
+}
+
+[data-theme-name='ivory-gold'] .vx-button--secondary {
+  background: rgba(160, 116, 42, 0.07);
+  color: #5a4320;
+  border-color: rgba(160, 116, 42, 0.28);
+}
+
+[data-theme-name='ivory-gold'] .vx-button--secondary:hover {
+  background: rgba(160, 116, 42, 0.13);
+  border-color: rgba(160, 116, 42, 0.48);
+  color: #3a2a0e;
+}
+
+[data-theme-name='ivory-gold'] .vx-button--ghost {
+  background: transparent;
+  color: #9a7c4a;
+  border-color: rgba(160, 116, 42, 0.22);
+}
+
+[data-theme-name='ivory-gold'] .vx-button--ghost:hover {
+  background: rgba(160, 116, 42, 0.07);
+  border-color: rgba(160, 116, 42, 0.4);
+  color: #5a4320;
+}
+
+[data-theme-name='ivory-gold'] .vx-button--danger {
+  background: linear-gradient(135deg, #e05252, #c03030);
+  color: #fff;
+  border-color: transparent;
+}
+
+[data-theme-name='ivory-gold'] .vx-sidebar {
+  background: #fdf9f2;
+}
+
+[data-theme-name='ivory-gold'] .vx-sidebar__brand-icon {
+  background: rgba(160, 116, 42, 0.12);
+  color: #a0742a;
+}
+
+[data-theme-name='ivory-gold'] .vx-nav-item--active {
+  background: rgba(160, 116, 42, 0.12);
+  color: #7d5a1e;
+}
+
+[data-theme-name='ivory-gold'] .vx-nav-item:hover:not(.vx-nav-item--active) {
+  background: rgba(160, 116, 42, 0.06);
+  color: #1c1409;
+}
+
+[data-theme-name='ivory-gold'] .vx-nav-item:focus-visible {
+  outline: 2px solid rgba(160, 116, 42, 0.6);
+}
+
+[data-theme-name='ivory-gold'] .vx-topbar {
+  background: #faf6ee;
+}
+
+[data-theme-name='ivory-gold'] .vx-card {
+  border-color: rgba(160, 116, 42, 0.18);
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(90, 67, 32, 0.08);
+}
+
+[data-theme-name='ivory-gold'] .vx-input__field {
+  background: #ffffff;
+  border-color: rgba(160, 116, 42, 0.22);
+  color: #1c1409;
+}
+
+[data-theme-name='ivory-gold'] .vx-input__field:focus {
+  border-color: #a0742a;
+  box-shadow: 0 0 0 3px rgba(160, 116, 42, 0.14);
+}
+
+[data-theme-name='ivory-gold'] .vx-switch__control[aria-checked='true'] {
+  background: #a0742a;
+}
+
+[data-theme-name='ivory-gold'] .vx-tabs__trigger[aria-selected='true'] {
+  color: #a0742a;
+  border-bottom-color: #a0742a;
+}
+
+[data-theme-name='ivory-gold'] .vx-badge--accent {
+  background: rgba(160, 116, 42, 0.10);
+  border-color: rgba(160, 116, 42, 0.3);
+  color: #7d5a1e;
+}
+
 /* ── Black Gold theme overrides ───────────────────────────── */
 [data-theme-name='black-gold'] .vx-button {
   border-radius: 999px;
@@ -1245,7 +1362,7 @@ a {
 [data-theme-name='black-gold'] .vx-button--solid {
   background: linear-gradient(135deg, #f5e9d7, #c8a97c 48%, #b88d54);
   color: #09090f;
-  border-color: transparent;
+  border: none;
 }
 
 [data-theme-name='black-gold'] .vx-button--solid:hover {
@@ -1282,7 +1399,6 @@ a {
 }
 
 [data-theme-name='black-gold'] .vx-sidebar {
-  border-right: 1px solid rgba(200, 169, 124, 0.18);
   background: rgba(8, 10, 16, 0.92);
 }
 
@@ -1306,7 +1422,6 @@ a {
 }
 
 [data-theme-name='black-gold'] .vx-topbar {
-  border-bottom: 1px solid rgba(200, 169, 124, 0.15);
   background: rgba(5, 7, 11, 0.82);
 }
 
