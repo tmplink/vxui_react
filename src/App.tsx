@@ -25,6 +25,8 @@ import {
   User,
   Zap,
 } from 'lucide-react';
+import { CommandPalette } from './components/CommandPalette';
+import type { SearchEntry } from './components/CommandPalette';
 import {
   AppShell,
   Badge,
@@ -52,6 +54,26 @@ import {
   MobileList,
   MobileListSection,
   MobileListItem,
+  // New components
+  Select,
+  Checkbox,
+  Radio,
+  RadioGroup,
+  Textarea,
+  Slider,
+  Spinner,
+  Progress,
+  Alert,
+  Skeleton,
+  Tooltip,
+  Popover,
+  DropdownMenu,
+  Breadcrumb,
+  Pagination,
+  Accordion,
+  Separator,
+  Avatar,
+  Table,
 } from './lib';
 import { MobilePreviewPage } from './components/mobile/MobilePreviewPage';
 
@@ -62,10 +84,15 @@ type PageKey =
   | 'grid-page'
   | 'elements'
   | 'form-controls'
+  | 'form-inputs'
   | 'navigation'
   | 'data-list'
   | 'empty-states'
   | 'toasts'
+  | 'feedback'
+  | 'overlays'
+  | 'nav-layout'
+  | 'data-display'
   | 'mobile';
 
 interface PageDefinition {
@@ -186,6 +213,61 @@ const pages: Record<PageKey, PageDefinition> = {
       'Avoid repeating the same message on every page transition.',
     ],
   },
+  feedback: {
+    section: 'Feedback',
+    title: 'Feedback Components',
+    description:
+      'Spinner, Progress, Alert, and Skeleton give users clear signals about loading states, results, and missing content.',
+    guidance: [
+      'Use Spinner for short indeterminate waits; Progress for deterministic operations.',
+      'Prefer Alert over toast for persistent or page-level status messages.',
+      'Skeleton should match the shape of the content it replaces to reduce layout shift.',
+    ],
+  },
+  overlays: {
+    section: 'Components',
+    title: 'Overlays',
+    description:
+      'Tooltip, Popover, and DropdownMenu layer transient content above the page without navigating away.',
+    guidance: [
+      'Tooltips are for supplementary text only — never interactive content.',
+      'Popovers can contain forms and rich content; they require explicit close triggers.',
+      'DropdownMenus should group related actions and support keyboard navigation.',
+    ],
+  },
+  'nav-layout': {
+    section: 'Layout',
+    title: 'Navigation & Layout',
+    description:
+      'Breadcrumb, Pagination, Accordion, and Separator handle location, paging, and structural rhythm.',
+    guidance: [
+      'Breadcrumb mirrors route depth — omit it on single-level pages.',
+      'Pagination should show page count so users understand the data set size.',
+      'Accordion works best for progressive disclosure, not primary navigation.',
+    ],
+  },
+  'data-display': {
+    section: 'Components',
+    title: 'Data Display',
+    description:
+      'Avatar and Table present user identity and structured data with clear hierarchy.',
+    guidance: [
+      'Avatar should always have an accessible label, even when showing an image.',
+      'Table supports sortable columns — delegate sort state up when the data is server-side.',
+      'Use striped rows in dense tables to help eyes track across long rows.',
+    ],
+  },
+  'form-inputs': {
+    section: 'Components',
+    title: 'Form Inputs',
+    description:
+      'Select, Checkbox, RadioGroup, Textarea, and Slider extend the form vocabulary beyond text inputs.',
+    guidance: [
+      'Group radio buttons with RadioGroup to share name and semantics.',
+      'Slider is ideal for numeric ranges; pair it with showValue for immediate feedback.',
+      'Textarea defaults to vertical resize — disable resize only in fixed-height containers.',
+    ],
+  },
   mobile: {
     section: 'Mobile',
     title: 'Mobile Components',
@@ -296,6 +378,34 @@ export default function App() {
   const [mobilePreview, setMobilePreview] = useState(false);
   const [alertsEnabled, setAlertsEnabled] = useState(true);
   const [compactDensity, setCompactDensity] = useState(false);
+  const [checkboxA, setCheckboxA] = useState(false);
+  const [checkboxB, setCheckboxB] = useState(true);
+  const [radioVal, setRadioVal] = useState('b');
+  const [sliderVal, setSliderVal] = useState(42);
+  const [paginationPage, setPaginationPage] = useState(1);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // ⌘K / Ctrl+K global shortcut
+  useEffect(() => {
+    const handler = (e: globalThis.KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen((v) => !v);
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, []);
+
+  // Build search index from pages
+  const searchEntries: SearchEntry[] = Object.entries(pages).map(([key, page]) => ({
+    key,
+    title: page.title,
+    section: page.section,
+    description: page.description,
+    keywords: page.guidance,
+  }));
   const { push } = useToast();
   const { mode, setTheme, theme, themes } = useTheme();
   const [tokenValues, setTokenValues] = useState<Record<string, string>>(() =>
@@ -389,6 +499,30 @@ export default function App() {
           onSelect: () => selectPage('form-controls'),
         },
         {
+          key: 'form-inputs',
+          label: 'Form Inputs',
+          icon: <SlidersHorizontal size={16} />,
+          trailing: <ChevronRight size={14} />,
+          active: activePage === 'form-inputs',
+          onSelect: () => selectPage('form-inputs'),
+        },
+        {
+          key: 'overlays',
+          label: 'Overlays',
+          icon: <Package2 size={16} />,
+          trailing: <ChevronRight size={14} />,
+          active: activePage === 'overlays',
+          onSelect: () => selectPage('overlays'),
+        },
+        {
+          key: 'data-display',
+          label: 'Data Display',
+          icon: <List size={16} />,
+          trailing: <ChevronRight size={14} />,
+          active: activePage === 'data-display',
+          onSelect: () => selectPage('data-display'),
+        },
+        {
           key: 'navigation',
           label: 'Navigation',
           icon: <Compass size={16} />,
@@ -421,6 +555,25 @@ export default function App() {
           icon: <Bell size={16} />,
           active: activePage === 'toasts',
           onSelect: () => selectPage('toasts'),
+        },
+        {
+          key: 'feedback',
+          label: 'Feedback Components',
+          icon: <Bell size={16} />,
+          active: activePage === 'feedback',
+          onSelect: () => selectPage('feedback'),
+        },
+      ],
+    },
+    {
+      title: 'Navigation',
+      items: [
+        {
+          key: 'nav-layout',
+          label: 'Navigation & Layout',
+          icon: <Compass size={16} />,
+          active: activePage === 'nav-layout',
+          onSelect: () => selectPage('nav-layout'),
         },
       ],
     },
@@ -585,6 +738,150 @@ export default function App() {
               Create the first example or switch to another category to keep building the documentation surface.
             </div>
             <Button>Create example</Button>
+          </div>
+        );
+      case 'form-inputs':
+        return (
+          <div className="vx-stack">
+            <Select label="Framework" placeholder="Pick a framework…">
+              <option value="react">React</option>
+              <option value="vue">Vue</option>
+              <option value="svelte">Svelte</option>
+            </Select>
+            <div className="vx-inline vx-inline--wrap">
+              <Checkbox label="Accept terms" checked={checkboxA} onChange={e => setCheckboxA(e.target.checked)} />
+              <Checkbox label="Subscribe to updates" description="Weekly digest only" checked={checkboxB} onChange={e => setCheckboxB(e.target.checked)} />
+            </div>
+            <RadioGroup label="Notification preference">
+              <Radio name="notif" value="a" label="All alerts" checked={radioVal === 'a'} onChange={() => setRadioVal('a')} />
+              <Radio name="notif" value="b" label="Mentions only" description="Only when someone tags you" checked={radioVal === 'b'} onChange={() => setRadioVal('b')} />
+              <Radio name="notif" value="c" label="None" checked={radioVal === 'c'} onChange={() => setRadioVal('c')} />
+            </RadioGroup>
+            <Textarea label="Release notes" placeholder="Describe what changed…" rows={3} />
+            <Slider label="Confidence score" showValue min={0} max={100} value={sliderVal}
+              onChange={e => setSliderVal(Number(e.target.value))} />
+          </div>
+        );
+      case 'feedback':
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
+              <Spinner size="sm" />
+              <Spinner size="md" />
+              <Spinner size="lg" />
+            </div>
+            <Progress label="Uploading bundle" showLabel value={68} />
+            <Progress label="Processing" indeterminate />
+            <Alert variant="info" title="New version available">
+              vxUI 1.1 includes Accordion, Table, and Avatar components.
+            </Alert>
+            <Alert variant="success" title="Build complete" onClose={() => {}} />
+            <Alert variant="warning" title="Deprecation notice">The old color token names will be removed in v2.</Alert>
+            <Alert variant="danger" title="Deploy failed">Build step exited with code 1.</Alert>
+            <div className="vx-stack vx-stack--tight">
+              <Skeleton variant="text" lines={3} />
+              <div className="vx-inline">
+                <Skeleton variant="circle" width={40} height={40} />
+                <div className="vx-stack vx-stack--tight" style={{ flex: 1 }}>
+                  <Skeleton variant="text" width="60%" height={14} />
+                  <Skeleton variant="text" width="40%" height={12} />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      case 'overlays':
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center', gap: '1rem' }}>
+              <Tooltip content="Primary action" placement="top">
+                <Button size="sm">Hover me (top)</Button>
+              </Tooltip>
+              <Tooltip content="Right tooltip" placement="right">
+                <Button size="sm" variant="secondary">Right</Button>
+              </Tooltip>
+              <Tooltip content="Bottom tooltip" placement="bottom">
+                <Button size="sm" variant="ghost">Bottom</Button>
+              </Tooltip>
+            </div>
+            <Separator />
+            <Popover
+              content={
+                <div className="vx-stack vx-stack--tight">
+                  <p style={{ fontSize: '0.875rem', margin: 0 }}>Popover content area</p>
+                  <Button size="sm">Confirm</Button>
+                </div>
+              }
+            >
+              <Button variant="secondary" size="sm">Open popover</Button>
+            </Popover>
+            <Separator />
+            <DropdownMenu
+              trigger={<Button variant="secondary" size="sm">Actions ▾</Button>}
+              groups={[
+                {
+                  items: [
+                    { label: 'Edit', shortcut: '⌘E', onClick: () => {} },
+                    { label: 'Duplicate', onClick: () => {} },
+                  ],
+                },
+                {
+                  items: [
+                    { label: 'Archive', onClick: () => {} },
+                    { label: 'Delete', danger: true, onClick: () => {} },
+                  ],
+                },
+              ]}
+            />
+          </div>
+        );
+      case 'nav-layout':
+        return (
+          <div className="vx-stack">
+            <Breadcrumb
+              items={[
+                { label: 'Home', onClick: () => {} },
+                { label: 'Components', onClick: () => {} },
+                { label: 'Navigation & Layout' },
+              ]}
+            />
+            <Separator />
+            <Pagination page={paginationPage} total={120} pageSize={10} onChange={setPaginationPage} />
+            <Separator />
+            <Accordion
+              items={[
+                { key: 'a', title: 'What is vxUI?', content: 'A lightweight React component library built on CSS custom properties.' },
+                { key: 'b', title: 'Does it support dark mode?', content: 'Yes — all color tokens are semantic. Switching themes changes every component at once.' },
+                { key: 'c', title: 'Can I add custom themes?', content: 'Use createTheme() to register any number of named themes.', },
+              ]}
+            />
+          </div>
+        );
+      case 'data-display':
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center', gap: '0.75rem' }}>
+              <Avatar size="xs" name="Alice Wang" />
+              <Avatar size="sm" name="Bob Zhang" />
+              <Avatar size="md" name="Carol Liu" />
+              <Avatar size="lg" name="David Chen" />
+              <Avatar size="xl" shape="square" name="Eve Kim" />
+              <Avatar size="md" />
+            </div>
+            <Separator />
+            <Table
+              striped
+              columns={[
+                { key: 'name', header: 'Name', accessor: r => r.name, sortable: true },
+                { key: 'role', header: 'Role', accessor: r => r.role },
+                { key: 'status', header: 'Status', accessor: r => <Badge variant={r.status === 'Active' ? 'success' : 'neutral'}>{r.status}</Badge> },
+              ]}
+              data={[
+                { name: 'Alice Wang', role: 'Engineer', status: 'Active' },
+                { name: 'Bob Zhang', role: 'Designer', status: 'Away' },
+                { name: 'Carol Liu', role: 'PM', status: 'Active' },
+              ]}
+            />
           </div>
         );
       case 'toasts':
@@ -834,6 +1131,12 @@ export default function App() {
   return (
     <>
       {mobilePreview && <MobilePreviewPage onExit={() => setMobilePreview(false)} />}
+      <CommandPalette
+        entries={searchEntries}
+        open={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onSelect={(key) => { selectPage(key as PageKey); }}
+      />
       <AppShell
       brand="vxUI"
       breadcrumb={(
@@ -848,6 +1151,11 @@ export default function App() {
       onSidebarToggle={() => setSidebarCollapsed((value) => !value)}
       headerActions={(
         <div className="vx-inline vx-inline--wrap">
+          <button type="button" className="vx-cmd-trigger" onClick={() => setSearchOpen(true)}>
+            <Search size={14} />
+            Search
+            <kbd>⌘K</kbd>
+          </button>
           <span className="vx-version-pill">v1.0</span>
           <span className="vx-version-pill vx-version-pill--token">
             <Palette size={14} />

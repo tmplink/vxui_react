@@ -63,17 +63,6 @@ export function AppShell({
               {brandCaption ? <span className="vx-sidebar__brand-caption">{brandCaption}</span> : null}
             </div>
           </div>
-          {onSidebarToggle ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="vx-sidebar__toggle"
-              onClick={onSidebarToggle}
-              aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              {sidebarCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
-            </Button>
-          ) : null}
         </div>
         <nav className="vx-sidebar__nav" aria-label="Primary navigation">
           {sections.map((section, sectionIndex) => (
@@ -104,7 +93,23 @@ export function AppShell({
             </div>
           ))}
         </nav>
-        {sidebarFooter ? <div className="vx-sidebar__footer">{sidebarFooter}</div> : null}
+        <div className="vx-sidebar__footer">
+          {sidebarFooter ? <div className="vx-sidebar__footer-content">{sidebarFooter}</div> : null}
+          {onSidebarToggle ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="vx-sidebar__toggle"
+              onClick={onSidebarToggle}
+              aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              {sidebarCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
+              <span className="vx-sidebar__toggle-label">
+                {sidebarCollapsed ? 'Expand' : 'Collapse'}
+              </span>
+            </Button>
+          ) : null}
+        </div>
       </aside>
 
       <button
