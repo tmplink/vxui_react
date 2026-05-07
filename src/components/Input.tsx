@@ -6,18 +6,20 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   hint?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
+  error?: string;
 }
 
-export function Input({ className, label, hint, prefix, suffix, ...props }: InputProps) {
+export function Input({ className, label, hint, prefix, suffix, error, ...props }: InputProps) {
   return (
     <label className="vx-field-group">
       {label ? <span className="vx-field-group__label">{label}</span> : null}
-      <span className={cx('vx-input', className)}>
+      <span className={cx('vx-input', error && 'vx-input--invalid', className)}>
         {prefix ? <span className="vx-input__ornament">{prefix}</span> : null}
-        <input className="vx-input__field" {...props} />
+        <input className="vx-input__field" aria-invalid={error ? 'true' : undefined} {...props} />
         {suffix ? <span className="vx-input__ornament">{suffix}</span> : null}
       </span>
-      {hint ? <span className="vx-field-group__hint">{hint}</span> : null}
+      {error ? <span className="vx-field-group__error">{error}</span> : null}
+      {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
     </label>
   );
 }

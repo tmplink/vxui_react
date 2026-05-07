@@ -36,6 +36,8 @@ import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { HomePage } from './components/pages/HomePage';
 import { LoginPage } from './components/pages/LoginPage';
 import { RegisterPage } from './components/pages/RegisterPage';
+import { PrivacyPolicyPage } from './components/pages/PrivacyPolicyPage';
+import { TermsOfServicePage } from './components/pages/TermsOfServicePage';
 import { useI18n } from './i18n';
 import {
   AppShell,
@@ -87,7 +89,7 @@ import {
 } from './lib';
 import { MobilePreviewPage } from './components/mobile/MobilePreviewPage';
 
-type AppView = 'home' | 'login' | 'register' | 'docs';
+type AppView = 'home' | 'login' | 'register' | 'docs' | 'privacy-policy' | 'terms-of-service';
 
 type PageKey =
   | 'introduction'
@@ -130,7 +132,29 @@ const tokenBaseValues = [
 
 export default function App() {
   const { t } = useI18n();
-  const [appView, setAppView] = useState<AppView>('home');
+  const getInitialView = (): AppView => {
+    if (typeof window === 'undefined') return 'home';
+    const path = window.location.pathname;
+    if (path === '/login') return 'login';
+    if (path === '/register') return 'register';
+    if (path === '/privacy-policy') return 'privacy-policy';
+    if (path === '/terms-of-service') return 'terms-of-service';
+    if (path.startsWith('/docs')) return 'docs';
+    return 'home';
+  };
+
+  const getInitialPage = (): PageKey => {
+    if (typeof window === 'undefined') return 'introduction';
+    const path = window.location.pathname;
+    if (path.startsWith('/docs/')) {
+      const page = path.split('/')[2];
+      // simplified check, full check would need keys
+      if (page) return page as PageKey;
+    }
+    return 'introduction';
+  };
+
+  const [appView, setAppView] = useState<AppView>(getInitialView);
   const pages = t.pageDefs as Record<PageKey, PageDefinition>;
 
   // Arrays that depend on translations
@@ -165,7 +189,7 @@ export default function App() {
 
     return window.innerWidth < 960;
   });
-  const [activePage, setActivePage] = useState<PageKey>('introduction');
+  const [activePage, setActivePage] = useState<PageKey>(getInitialPage());
   const [mobileTab, setMobileTab] = useState<'home' | 'search' | 'alerts' | 'profile'>('home');
   const [actionSheetOpen, setActionSheetOpen] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
@@ -210,6 +234,44 @@ export default function App() {
 
   const activeDocument = pages[activePage];
   const themeEntries = Object.entries(themes);
+
+  // Update URL purely visually when navigation state changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    let path = '/';
+    if (appView === 'login') path = '/login';
+    else if (appView === 'register') path = '/register';
+    else if (appView === 'privacy-policy') path = '/privacy-policy';
+    else if (appView === 'terms-of-service') path = '/terms-of-service';
+    else if (appView === 'docs') path = `/docs/${activePage}`;
+    
+    if (window.location.pathname !== path) {
+      window.history.pushState({ appView, activePage }, '', path);
+    }
+  }, [appView, activePage]);
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      if (path === '/login') setAppView('login');
+      else if (path === '/register') setAppView('register');
+      else if (path === '/privacy-policy') setAppView('privacy-policy');
+      else if (path === '/terms-of-service') setAppView('terms-of-service');
+      else if (path.startsWith('/docs')) {
+        setAppView('docs');
+        const page = path.split('/')[2];
+        if (page && Object.keys(pages).includes(page)) {
+          setActivePage(page as PageKey);
+        }
+      } else {
+        setAppView('home');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [pages]);
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -984,7 +1046,7 @@ export default function App() {
         onLogin={() => setAppView('login')}
         onRegister={() => setAppView('register')}
         onDocs={() => setAppView('docs')}
-        onPrivacy={() => { setAppView('docs'); selectPage('privacy-policy'); }}
+        onPrivacy={() => setAppView('privacy-policy')}
       />
     );
   }
@@ -1006,9 +1068,19 @@ export default function App() {
         onRegister={() => setAppView('docs')}
         onLogin={() => setAppView('login')}
         onGuest={() => setAppView('docs')}
+        onPrivacy={() => setAppView('privacy-policy')}
+        onTerms={() => setAppView('terms-of-service')}
         onBack={() => setAppView('home')}
       />
     );
+  }
+
+  if (appView === 'privacy-policy') {
+    return <PrivacyPolicyPage onBack={() => setAppView('home')} />;
+  }
+
+  if (appView === 'terms-of-service') {
+    return <TermsOfServicePage onBack={() => setAppView('home')} />;
   }
 
   return (

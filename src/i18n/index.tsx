@@ -146,11 +146,18 @@ export interface Translations {
     navLogin: string;
     navSignup: string;
     navDocs: string;
+    navLogout: string;
     heroTag: string;
     heroTitle: string;
     heroLead: string;
     heroCta: string;
     heroCtaAlt: string;
+    previewLead: string;
+    previewAccessTitle: string;
+    previewAccessMember: string;
+    previewAccessGuest: string;
+    previewMobileTitle: string;
+    previewMobileLead: string;
     featuresSectionTitle: string;
     feat1: string; feat1Desc: string;
     feat2: string; feat2Desc: string;
@@ -161,21 +168,51 @@ export interface Translations {
     loginTitle: string;
     loginSubtitle: string;
     loginEmail: string;
+    loginEmailPlaceholder: string;
     loginPassword: string;
+    loginPasswordPlaceholder: string;
     loginCta: string;
     loginNoAccount: string;
     loginRegister: string;
     loginGuest: string;
+    rememberMe: string;
+    showPassword: string;
+    hidePassword: string;
+    authInfoTitle: string;
+    authInfoBody: string;
     registerTitle: string;
     registerSubtitle: string;
     registerName: string;
+    registerNamePlaceholder: string;
     registerEmail: string;
+    registerEmailPlaceholder: string;
     registerPassword: string;
-    registerTerms: string;
+    registerPasswordPlaceholder: string;
+    registerTermsAgree: string;
+    registerTermsLink: string;
+    registerTermsAnd: string;
+    registerPrivacyLink: string;
     registerCta: string;
     registerHasAccount: string;
     registerLogin: string;
     registerGuest: string;
+    validationNameRequired: string;
+    validationNameShort: string;
+    validationEmailRequired: string;
+    validationEmailInvalid: string;
+    validationPasswordRequired: string;
+    validationPasswordShort: string;
+    validationTermsRequired: string;
+    sessionLoginTitle: string;
+    sessionLoginBody: string;
+    sessionRegisterTitle: string;
+    sessionRegisterBody: string;
+    sessionGuestTitle: string;
+    sessionGuestBody: string;
+    sessionLogoutTitle: string;
+    sessionLogoutBody: string;
+    signedInAs: string;
+    guestLabel: string;
     backHome: string;
     backToDocs: string;
   };
@@ -324,11 +361,18 @@ export const en: Translations = {
     navLogin: 'Log in',
     navSignup: 'Sign up',
     navDocs: 'Docs',
+    navLogout: 'Log out',
     heroTag: 'New · v1.0',
     heroTitle: 'Build faster with vxUI',
     heroLead: 'A lightweight, dependency-free UI framework for building clean admin interfaces. Design tokens, components, and a minimal SPA runtime in one consistent visual language.',
     heroCta: 'Get started',
     heroCtaAlt: 'Browse docs',
+    previewLead: 'A production-minded docs surface with direct guest access, persistent sign-in state, and mobile-ready layouts.',
+    previewAccessTitle: 'Access modes',
+    previewAccessMember: 'Sign in to keep a persisted session and return directly to your workspace.',
+    previewAccessGuest: 'Open the docs immediately as a guest when you only need to inspect components.',
+    previewMobileTitle: 'Mobile-ready',
+    previewMobileLead: 'Navigation and auth layouts collapse cleanly for phones without losing hierarchy or call-to-action priority.',
     featuresSectionTitle: 'Why vxUI',
     feat1: 'Zero dependencies', feat1Desc: 'Ships as a pure CSS + TypeScript package with no peer-lib baggage.',
     feat2: '30+ components', feat2Desc: 'Layout, form, feedback, and list primitives in one cohesive system.',
@@ -339,21 +383,51 @@ export const en: Translations = {
     loginTitle: 'Welcome back',
     loginSubtitle: 'Sign in to access the documentation.',
     loginEmail: 'Email',
+    loginEmailPlaceholder: 'you@example.com',
     loginPassword: 'Password',
+    loginPasswordPlaceholder: 'At least 8 characters',
     loginCta: 'Sign in',
     loginNoAccount: "Don't have an account?",
     loginRegister: 'Register',
     loginGuest: 'Continue without an account →',
+    rememberMe: 'Remember this device',
+    showPassword: 'Show',
+    hidePassword: 'Hide',
+    authInfoTitle: 'Guest access is available',
+    authInfoBody: 'You can go straight to the docs without an account. Sign in only if you want a persisted session example.',
     registerTitle: 'Create account',
     registerSubtitle: 'Get started with vxUI today.',
     registerName: 'Full name',
+    registerNamePlaceholder: 'Jane Smith',
     registerEmail: 'Email',
+    registerEmailPlaceholder: 'jane@company.com',
     registerPassword: 'Password',
-    registerTerms: 'I agree to the terms of service and privacy policy',
+    registerPasswordPlaceholder: 'Create a strong password',
+    registerTermsAgree: 'I agree to the',
+    registerTermsLink: 'Terms of Service',
+    registerTermsAnd: 'and',
+    registerPrivacyLink: 'Privacy Policy',
     registerCta: 'Create account',
     registerHasAccount: 'Already have an account?',
     registerLogin: 'Sign in',
     registerGuest: 'Continue without an account →',
+    validationNameRequired: 'Enter your full name.',
+    validationNameShort: 'Use at least 2 characters for your name.',
+    validationEmailRequired: 'Enter your email address.',
+    validationEmailInvalid: 'Enter a valid email address.',
+    validationPasswordRequired: 'Enter your password.',
+    validationPasswordShort: 'Use at least 8 characters for the password.',
+    validationTermsRequired: 'You must agree to the terms before creating an account.',
+    sessionLoginTitle: 'Signed in',
+    sessionLoginBody: 'Your session is active. You can now browse the docs as a signed-in user.',
+    sessionRegisterTitle: 'Account created',
+    sessionRegisterBody: 'Your sample account is ready and the docs are now unlocked.',
+    sessionGuestTitle: 'Browsing as guest',
+    sessionGuestBody: 'You entered the docs without a saved account session.',
+    sessionLogoutTitle: 'Signed out',
+    sessionLogoutBody: 'Your persisted session was cleared. You are back on the public site.',
+    signedInAs: 'Signed in as',
+    guestLabel: 'Guest',
     backHome: '← Back to home',
     backToDocs: 'Back to docs',
   },
@@ -731,11 +805,18 @@ export const zh: Translations = {
     navLogin: '登录',
     navSignup: '注册',
     navDocs: '文档',
+    navLogout: '退出登录',
     heroTag: '最新 · v1.0',
     heroTitle: '用 vxUI 构建更快',
     heroLead: '一个轻量无依赖的 UI 框架，用于构建简洁的后台管理界面。设计 Token、组件和极简 SPA 运行时，统一在一套一致的视觉语言之下。',
     heroCta: '立即开始',
     heroCtaAlt: '浏览文档',
+    previewLead: '一个面向生产场景的文档入口，支持直接访客访问、持久化登录状态，以及适配移动端的页面布局。',
+    previewAccessTitle: '访问方式',
+    previewAccessMember: '登录后可保留会话状态，下次返回时继续进入你的工作区。',
+    previewAccessGuest: '如果只是查看组件，也可以直接以访客身份打开文档。',
+    previewMobileTitle: '移动端可用',
+    previewMobileLead: '导航和认证布局会在手机上自然折叠，不牺牲层级关系和关键行动按钮。',
     featuresSectionTitle: '为什么选择 vxUI',
     feat1: '零依赖', feat1Desc: '纯 CSS + TypeScript 包，无第三方依赖负担。',
     feat2: '30+ 组件', feat2Desc: '布局、表单、反馈和列表原语，一套搞定。',
@@ -746,21 +827,51 @@ export const zh: Translations = {
     loginTitle: '欢迎回来',
     loginSubtitle: '登录以访问文档。',
     loginEmail: '邮箱',
+    loginEmailPlaceholder: 'you@example.com',
     loginPassword: '密码',
+    loginPasswordPlaceholder: '至少 8 位字符',
     loginCta: '登录',
     loginNoAccount: '还没有账号？',
     loginRegister: '注册',
     loginGuest: '无需登录，直接继续 →',
+    rememberMe: '记住这台设备',
+    showPassword: '显示',
+    hidePassword: '隐藏',
+    authInfoTitle: '支持访客访问',
+    authInfoBody: '如果你只是想查看文档，可以不登录直接进入。登录仅用于演示持久化会话的真实流程。',
     registerTitle: '创建账号',
     registerSubtitle: '立即开始使用 vxUI。',
     registerName: '姓名',
+    registerNamePlaceholder: '张三',
     registerEmail: '邮箱',
+    registerEmailPlaceholder: 'zhangsan@company.com',
     registerPassword: '密码',
-    registerTerms: '我同意服务条款和隐私政策',
+    registerPasswordPlaceholder: '创建一个强密码',
+    registerTermsAgree: '我同意',
+    registerTermsLink: '服务条款',
+    registerTermsAnd: '和',
+    registerPrivacyLink: '隐私政策',
     registerCta: '创建账号',
     registerHasAccount: '已有账号？',
     registerLogin: '登录',
     registerGuest: '无需登录，直接继续 →',
+    validationNameRequired: '请输入你的姓名。',
+    validationNameShort: '姓名至少需要 2 个字符。',
+    validationEmailRequired: '请输入邮箱地址。',
+    validationEmailInvalid: '请输入有效的邮箱地址。',
+    validationPasswordRequired: '请输入密码。',
+    validationPasswordShort: '密码至少需要 8 位字符。',
+    validationTermsRequired: '创建账号前必须同意条款。',
+    sessionLoginTitle: '已登录',
+    sessionLoginBody: '你的会话已生效，现在可以以登录用户身份查看文档。',
+    sessionRegisterTitle: '账号已创建',
+    sessionRegisterBody: '示例账号已创建完成，文档后台现已可用。',
+    sessionGuestTitle: '当前为访客模式',
+    sessionGuestBody: '你正在无账号状态下浏览文档。',
+    sessionLogoutTitle: '已退出登录',
+    sessionLogoutBody: '持久化会话已清除，你已返回公共首页。',
+    signedInAs: '当前登录',
+    guestLabel: '访客',
     backHome: '← 返回首页',
     backToDocs: '返回文档',
   },
