@@ -6,6 +6,7 @@ import {
   Check,
   ChevronRight,
   Compass,
+  Download,
   FileCode2,
   FileX2,
   House,
@@ -15,8 +16,13 @@ import {
   Package2,
   Palette,
   PanelsTopLeft,
+  Search,
+  Share2,
+  Smartphone,
   Sparkles,
   SlidersHorizontal,
+  Trash2,
+  User,
   Zap,
 } from 'lucide-react';
 import {
@@ -37,7 +43,17 @@ import {
   TabsTrigger,
   useToast,
   useTheme,
+  MobileShell,
+  MobileTopBar,
+  MobileIconButton,
+  BottomNav,
+  ActionSheet,
+  ActionSheetItem,
+  MobileList,
+  MobileListSection,
+  MobileListItem,
 } from './lib';
+import { MobilePreviewPage } from './components/mobile/MobilePreviewPage';
 
 type PageKey =
   | 'introduction'
@@ -49,7 +65,8 @@ type PageKey =
   | 'navigation'
   | 'data-list'
   | 'empty-states'
-  | 'toasts';
+  | 'toasts'
+  | 'mobile';
 
 interface PageDefinition {
   section: string;
@@ -169,6 +186,17 @@ const pages: Record<PageKey, PageDefinition> = {
       'Avoid repeating the same message on every page transition.',
     ],
   },
+  mobile: {
+    section: 'Mobile',
+    title: 'Mobile Components',
+    description:
+      'Purpose-built components for mobile devices. Touch-optimised tap targets, portrait-first layout, safe-area awareness, and native-feeling gesture interactions.',
+    guidance: [
+      'Use MobileShell as the root layout — it owns topBar, scrollable main, and bottomNav slots.',
+      'All interactive elements meet the 44 × 44 pt minimum touch target from Apple HIG.',
+      'ActionSheet replaces Dialog on mobile; users can drag down to dismiss it.',
+    ],
+  },
 };
 
 const glanceCards = [
@@ -263,6 +291,9 @@ export default function App() {
     return window.innerWidth < 960;
   });
   const [activePage, setActivePage] = useState<PageKey>('introduction');
+  const [mobileTab, setMobileTab] = useState<'home' | 'search' | 'alerts' | 'profile'>('home');
+  const [actionSheetOpen, setActionSheetOpen] = useState(false);
+  const [mobilePreview, setMobilePreview] = useState(false);
   const [alertsEnabled, setAlertsEnabled] = useState(true);
   const [compactDensity, setCompactDensity] = useState(false);
   const { push } = useToast();
@@ -390,6 +421,18 @@ export default function App() {
           icon: <Bell size={16} />,
           active: activePage === 'toasts',
           onSelect: () => selectPage('toasts'),
+        },
+      ],
+    },
+    {
+      title: 'Mobile',
+      items: [
+        {
+          key: 'mobile',
+          label: 'Mobile Components',
+          icon: <Smartphone size={16} />,
+          active: activePage === 'mobile',
+          onSelect: () => selectPage('mobile'),
         },
       ],
     },
@@ -572,6 +615,58 @@ export default function App() {
             </Button>
           </div>
         );
+      case 'mobile':
+        return (
+          <div className="vxm-phone-frame">
+            <MobileShell
+              topBar={
+                <MobileTopBar
+                  title="Messages"
+                  leading={
+                    <MobileIconButton label="Back">
+                      <ChevronRight size={18} style={{ transform: 'rotate(180deg)' }} />
+                    </MobileIconButton>
+                  }
+                  trailing={
+                    <MobileIconButton label="Share" onClick={() => setActionSheetOpen(true)}>
+                      <Share2 size={18} />
+                    </MobileIconButton>
+                  }
+                />
+              }
+              bottomNav={
+                <BottomNav
+                  items={[
+                    { key: 'home', label: 'Home', icon: <House size={20} />, active: mobileTab === 'home', onSelect: () => setMobileTab('home') },
+                    { key: 'search', label: 'Search', icon: <Search size={20} />, active: mobileTab === 'search', onSelect: () => setMobileTab('search') },
+                    { key: 'alerts', label: 'Alerts', icon: <Bell size={20} />, badge: 3, active: mobileTab === 'alerts', onSelect: () => setMobileTab('alerts') },
+                    { key: 'profile', label: 'Profile', icon: <User size={20} />, active: mobileTab === 'profile', onSelect: () => setMobileTab('profile') },
+                  ]}
+                />
+              }
+            >
+              <MobileListSection title="Recent">
+                <MobileList>
+                  <MobileListItem leading={<Bell size={18} />} label="Deployment complete" description="vxui-react v1.0 shipped" chevron onClick={() => {}} />
+                  <MobileListItem leading={<Package2 size={18} />} label="New component" description="MobileList added" chevron onClick={() => {}} />
+                  <MobileListItem leading={<Zap size={18} />} label="Build passed" description="All 12 checks passed" trailing={<Badge variant="success">OK</Badge>} onClick={() => {}} />
+                  <MobileListItem leading={<Trash2 size={18} />} label="Delete workspace" destructive chevron onClick={() => {}} />
+                  <MobileListItem leading={<User size={18} />} label="Offline user" description="Cannot sync" disabled />
+                </MobileList>
+              </MobileListSection>
+            </MobileShell>
+            <ActionSheet
+              open={actionSheetOpen}
+              onClose={() => setActionSheetOpen(false)}
+              title="Share"
+              description="Choose how to share this item."
+            >
+              <ActionSheetItem icon={<Download size={18} />} onClick={() => setActionSheetOpen(false)}>Download</ActionSheetItem>
+              <ActionSheetItem icon={<Share2 size={18} />} onClick={() => setActionSheetOpen(false)}>Copy link</ActionSheetItem>
+              <ActionSheetItem icon={<Trash2 size={18} />} destructive onClick={() => setActionSheetOpen(false)}>Delete</ActionSheetItem>
+            </ActionSheet>
+          </div>
+        );
       default:
         return null;
     }
@@ -737,7 +832,9 @@ export default function App() {
   );
 
   return (
-    <AppShell
+    <>
+      {mobilePreview && <MobilePreviewPage onExit={() => setMobilePreview(false)} />}
+      <AppShell
       brand="vxUI"
       breadcrumb={(
         <div className="vx-topbar__breadcrumb">
@@ -760,6 +857,10 @@ export default function App() {
             <MoonStar size={14} />
             {mode} mode
           </span>
+          <Button size="sm" variant="secondary" onClick={() => setMobilePreview(true)}>
+            <Smartphone size={14} />
+            Mobile Preview
+          </Button>
         </div>
       )}
     >
@@ -826,5 +927,6 @@ export default function App() {
         </section>
       </div>
     </AppShell>
+    </>
   );
 }
