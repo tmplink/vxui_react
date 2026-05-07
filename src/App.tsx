@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   ArrowRight,
+  AlertTriangle,
   Bell,
   Boxes,
   Check,
@@ -8,25 +9,34 @@ import {
   Compass,
   Download,
   FileCode2,
+  FileText,
   FileX2,
   House,
   LayoutDashboard,
   List,
+  LogIn,
   MoonStar,
   Package2,
   Palette,
   PanelsTopLeft,
   Search,
   Share2,
+  ShieldCheck,
   Smartphone,
   Sparkles,
   SlidersHorizontal,
   Trash2,
   User,
+  UserPlus,
   Zap,
 } from 'lucide-react';
 import { CommandPalette } from './components/CommandPalette';
 import type { SearchEntry } from './components/CommandPalette';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { HomePage } from './components/pages/HomePage';
+import { LoginPage } from './components/pages/LoginPage';
+import { RegisterPage } from './components/pages/RegisterPage';
+import { useI18n } from './i18n';
 import {
   AppShell,
   Badge,
@@ -77,6 +87,8 @@ import {
 } from './lib';
 import { MobilePreviewPage } from './components/mobile/MobilePreviewPage';
 
+type AppView = 'home' | 'login' | 'register' | 'docs';
+
 type PageKey =
   | 'introduction'
   | 'quick-start'
@@ -93,7 +105,12 @@ type PageKey =
   | 'overlays'
   | 'nav-layout'
   | 'data-display'
-  | 'mobile';
+  | 'mobile'
+  | 'home-page'
+  | 'login-page'
+  | 'register-page'
+  | 'error-page'
+  | 'privacy-policy';
 
 interface PageDefinition {
   section: string;
@@ -102,269 +119,45 @@ interface PageDefinition {
   guidance: string[];
 }
 
-const pages: Record<PageKey, PageDefinition> = {
-  introduction: {
-    section: 'Getting Started',
-    title: 'Introduction',
-    description:
-      'A lightweight, dependency-free UI framework for building clean admin interfaces. Design tokens, components, and a minimal SPA runtime live behind one consistent visual language.',
-    guidance: [
-      'Start from the shell and navigation rhythm before styling isolated controls.',
-      'Keep tokens semantic so a theme swap does not require page-specific overrides.',
-      'Treat documentation, examples, and production surfaces as the same design system.',
-    ],
-  },
-  'quick-start': {
-    section: 'Getting Started',
-    title: 'Quick Start',
-    description:
-      'Install the package, wrap your app with providers, and mount a page shell before composing business screens.',
-    guidance: [
-      'Import the shared stylesheet once near the application root.',
-      'Use AppShell for product chrome and keep page content inside the main slot.',
-      'Add ThemeProvider and ToastProvider only when the app needs them.',
-    ],
-  },
-  'shell-sidebar': {
-    section: 'Layout',
-    title: 'Shell & Sidebar',
-    description:
-      'The shell is responsible for sidebar hierarchy, sticky header spacing, and content width. Pages should inherit structure instead of rebuilding it.',
-    guidance: [
-      'Keep navigation labels short so collapsed mode stays scannable.',
-      'Use section titles to separate page groups instead of visual noise.',
-      'Let the content area own page-specific headings and actions.',
-    ],
-  },
-  'grid-page': {
-    section: 'Layout',
-    title: 'Grid & Page',
-    description:
-      'Use simple responsive grids for cards, tokens, and documentation blocks. The page surface should stay neutral and let content carry emphasis.',
-    guidance: [
-      'Prefer 12 to 16 pixel gaps for dense documentation surfaces.',
-      'Reserve larger spacing for section boundaries, not every card.',
-      'Keep max width constrained so long paragraphs remain readable.',
-    ],
-  },
-  elements: {
-    section: 'Components',
-    title: 'Elements',
-    description:
-      'Buttons, badges, and cards should feel quiet by default. The primary action can be loud; everything else should support it.',
-    guidance: [
-      'One primary action per area is usually enough.',
-      'Use badges for compact status or category metadata, not decoration.',
-      'Cards should organize content without feeling like dashboards by default.',
-    ],
-  },
-  'form-controls': {
-    section: 'Components',
-    title: 'Form Controls',
-    description:
-      'Inputs and switches need strong contrast, clear labels, and predictable vertical rhythm. Expose complexity through composition rather than one giant field component.',
-    guidance: [
-      'Always pair form controls with visible labels in admin surfaces.',
-      'Short helper text is better than placeholder-only instruction.',
-      'Confirm destructive or high-impact actions with dialog affordances.',
-    ],
-  },
-  navigation: {
-    section: 'Components',
-    title: 'Navigation',
-    description:
-      'Navigation patterns should communicate location first, then available movement. Tabs work best for sibling views within a single page context.',
-    guidance: [
-      'Mirror information architecture in the control structure.',
-      'Make the active state obvious without relying on color alone.',
-      'Avoid mixing route navigation and local view state in one control.',
-    ],
-  },
-  'data-list': {
-    section: 'Components',
-    title: 'Data List',
-    description:
-      'Lists and tables should prioritize scanning over ornament. Use generous alignment, light separators, and action density only where needed.',
-    guidance: [
-      'Align headers and row content precisely to reduce visual drift.',
-      'Use subtle borders instead of heavy card chrome around every row.',
-      'Reserve destructive affordances for row action groups, not inline text links.',
-    ],
-  },
-  'empty-states': {
-    section: 'Components',
-    title: 'Empty States',
-    description:
-      'An empty state should explain what is missing, why it matters, and what the next action is. It should never feel like a dead end.',
-    guidance: [
-      'Name the object that is absent so users know what they are looking at.',
-      'Offer one clear recovery action.',
-      'Keep the visual weight lighter than success or alert feedback.',
-    ],
-  },
-  toasts: {
-    section: 'Feedback',
-    title: 'Toasts',
-    description:
-      'Toasts confirm short-lived events without interrupting task flow. Keep them brief, specific, and easy to dismiss.',
-    guidance: [
-      'Use success and info to confirm background actions.',
-      'Escalate blocking or destructive states to dialogs instead of stacking toasts.',
-      'Avoid repeating the same message on every page transition.',
-    ],
-  },
-  feedback: {
-    section: 'Feedback',
-    title: 'Feedback Components',
-    description:
-      'Spinner, Progress, Alert, and Skeleton give users clear signals about loading states, results, and missing content.',
-    guidance: [
-      'Use Spinner for short indeterminate waits; Progress for deterministic operations.',
-      'Prefer Alert over toast for persistent or page-level status messages.',
-      'Skeleton should match the shape of the content it replaces to reduce layout shift.',
-    ],
-  },
-  overlays: {
-    section: 'Components',
-    title: 'Overlays',
-    description:
-      'Tooltip, Popover, and DropdownMenu layer transient content above the page without navigating away.',
-    guidance: [
-      'Tooltips are for supplementary text only — never interactive content.',
-      'Popovers can contain forms and rich content; they require explicit close triggers.',
-      'DropdownMenus should group related actions and support keyboard navigation.',
-    ],
-  },
-  'nav-layout': {
-    section: 'Layout',
-    title: 'Navigation & Layout',
-    description:
-      'Breadcrumb, Pagination, Accordion, and Separator handle location, paging, and structural rhythm.',
-    guidance: [
-      'Breadcrumb mirrors route depth — omit it on single-level pages.',
-      'Pagination should show page count so users understand the data set size.',
-      'Accordion works best for progressive disclosure, not primary navigation.',
-    ],
-  },
-  'data-display': {
-    section: 'Components',
-    title: 'Data Display',
-    description:
-      'Avatar and Table present user identity and structured data with clear hierarchy.',
-    guidance: [
-      'Avatar should always have an accessible label, even when showing an image.',
-      'Table supports sortable columns — delegate sort state up when the data is server-side.',
-      'Use striped rows in dense tables to help eyes track across long rows.',
-    ],
-  },
-  'form-inputs': {
-    section: 'Components',
-    title: 'Form Inputs',
-    description:
-      'Select, Checkbox, RadioGroup, Textarea, and Slider extend the form vocabulary beyond text inputs.',
-    guidance: [
-      'Group radio buttons with RadioGroup to share name and semantics.',
-      'Slider is ideal for numeric ranges; pair it with showValue for immediate feedback.',
-      'Textarea defaults to vertical resize — disable resize only in fixed-height containers.',
-    ],
-  },
-  mobile: {
-    section: 'Mobile',
-    title: 'Mobile Components',
-    description:
-      'Purpose-built components for mobile devices. Touch-optimised tap targets, portrait-first layout, safe-area awareness, and native-feeling gesture interactions.',
-    guidance: [
-      'Use MobileShell as the root layout — it owns topBar, scrollable main, and bottomNav slots.',
-      'All interactive elements meet the 44 × 44 pt minimum touch target from Apple HIG.',
-      'ActionSheet replaces Dialog on mobile; users can drag down to dismiss it.',
-    ],
-  },
-};
-
-const glanceCards = [
-  {
-    label: 'Zero dependencies',
-    value: '0',
-    hint: 'Original shell runtime does not require a build pipeline.',
-    icon: <Check size={18} />,
-  },
-  {
-    label: 'Components',
-    value: '30+',
-    hint: 'Layout, form, feedback, and list primitives in one system.',
-    icon: <Boxes size={18} />,
-  },
-  {
-    label: 'Core CSS',
-    value: '~24 KB',
-    hint: 'Neutral tokens and structural styles stay compact.',
-    icon: <FileCode2 size={18} />,
-  },
-  {
-    label: 'Dark mode',
-    value: 'Built-in',
-    hint: 'Semantic variables keep the same components reusable.',
-    icon: <MoonStar size={18} />,
-  },
+// Static token base values (color values don't change with locale)
+const tokenBaseValues = [
+  { key: 'primary' as const, variable: '--vx-primary', value: '#2563eb' },
+  { key: 'surface' as const, variable: '--vx-surface', value: '#ffffff' },
+  { key: 'border' as const, variable: '--vx-border', value: '#e2e8f0' },
+  { key: 'text' as const, variable: '--vx-text', value: '#0f172a' },
 ];
 
-const tokenCards = [
-  {
-    name: 'Primary',
-    variable: '--vx-primary',
-    value: '#2563eb',
-    description: 'Accent color for primary actions, active navigation, and emphasis.',
-  },
-  {
-    name: 'Surface',
-    variable: '--vx-surface',
-    value: '#ffffff',
-    description: 'Default panel and content background for documentation cards and shell regions.',
-  },
-  {
-    name: 'Border',
-    variable: '--vx-border',
-    value: '#e2e8f0',
-    description: 'Light separators that keep the UI structured without adding visual weight.',
-  },
-  {
-    name: 'Text',
-    variable: '--vx-text',
-    value: '#0f172a',
-    description: 'Primary foreground used for headings, dense data, and body copy.',
-  },
-];
-
-const componentFamilies = [
-  {
-    title: 'Layout',
-    description: 'App shell, sticky header, section rhythm, and responsive content framing.',
-    page: 'shell-sidebar' as PageKey,
-  },
-  {
-    title: 'Elements',
-    description: 'Quiet primitives for actions, metadata, and structured content blocks.',
-    page: 'elements' as PageKey,
-  },
-  {
-    title: 'Forms',
-    description: 'Inputs, switches, dialogs, and field composition patterns.',
-    page: 'form-controls' as PageKey,
-  },
-  {
-    title: 'Feedback',
-    description: 'Transient toasts and interruptive confirmation flows.',
-    page: 'toasts' as PageKey,
-  },
-];
-
-const dataListRows = [
-  { name: 'introduction.mdx', kind: 'Guide', updated: '2026-05-02' },
-  { name: 'shell-sidebar.tsx', kind: 'Layout', updated: '2026-05-01' },
-  { name: 'tokens.json', kind: 'Config', updated: '2026-04-28' },
-];
 
 export default function App() {
+  const { t } = useI18n();
+  const [appView, setAppView] = useState<AppView>('home');
+  const pages = t.pageDefs as Record<PageKey, PageDefinition>;
+
+  // Arrays that depend on translations
+  const glanceCards = [
+    { label: t.glance.zeroDeps, value: '0', hint: t.glance.zeroDepsHint, icon: <Check size={18} /> },
+    { label: t.glance.components, value: '30+', hint: t.glance.componentsHint, icon: <Boxes size={18} /> },
+    { label: t.glance.coreCSS, value: '~24 KB', hint: t.glance.coreCSSHint, icon: <FileCode2 size={18} /> },
+    { label: t.glance.darkMode, value: 'Built-in', hint: t.glance.darkModeHint, icon: <MoonStar size={18} /> },
+  ];
+  const tokenCards = [
+    { key: 'primary' as const, name: t.tokens.primary, variable: '--vx-primary', value: '#2563eb', description: t.tokens.primaryDesc },
+    { key: 'surface' as const, name: t.tokens.surface, variable: '--vx-surface', value: '#ffffff', description: t.tokens.surfaceDesc },
+    { key: 'border' as const, name: t.tokens.border, variable: '--vx-border', value: '#e2e8f0', description: t.tokens.borderDesc },
+    { key: 'text' as const, name: t.tokens.text, variable: '--vx-text', value: '#0f172a', description: t.tokens.textDesc },
+  ];
+  const componentFamilies = [
+    { title: t.families.layout, description: t.families.layoutDesc, page: 'shell-sidebar' as PageKey },
+    { title: t.families.elements, description: t.families.elementsDesc, page: 'elements' as PageKey },
+    { title: t.families.forms, description: t.families.formsDesc, page: 'form-controls' as PageKey },
+    { title: t.families.feedback, description: t.families.feedbackDesc, page: 'toasts' as PageKey },
+  ];
+  const dataListRows = [
+    { name: 'introduction.mdx', kind: 'Guide', updated: '2026-05-02' },
+    { name: 'shell-sidebar.tsx', kind: 'Layout', updated: '2026-05-01' },
+    { name: 'tokens.json', kind: 'Config', updated: '2026-04-28' },
+  ];
+
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     if (typeof window === 'undefined') {
       return false;
@@ -409,7 +202,7 @@ export default function App() {
   const { push } = useToast();
   const { mode, setTheme, theme, themes } = useTheme();
   const [tokenValues, setTokenValues] = useState<Record<string, string>>(() =>
-    tokenCards.reduce<Record<string, string>>((snapshot, token) => {
+    tokenBaseValues.reduce<Record<string, string>>((snapshot, token) => {
       snapshot[token.variable] = token.value;
       return snapshot;
     }, {}),
@@ -424,7 +217,7 @@ export default function App() {
     }
 
     const styles = window.getComputedStyle(document.documentElement);
-    const snapshot = tokenCards.reduce<Record<string, string>>((currentValues, token) => {
+    const snapshot = tokenBaseValues.reduce<Record<string, string>>((currentValues, token) => {
       currentValues[token.variable] = styles.getPropertyValue(token.variable).trim() || token.value;
       return currentValues;
     }, {});
@@ -442,151 +235,59 @@ export default function App() {
 
   const navSections = [
     {
-      title: 'Getting Started',
+      title: t.nav.gettingStarted,
       items: [
-        {
-          key: 'introduction',
-          label: 'Introduction',
-          icon: <House size={16} />,
-          active: activePage === 'introduction',
-          onSelect: () => selectPage('introduction'),
-        },
-        {
-          key: 'quick-start',
-          label: 'Quick Start',
-          icon: <Zap size={16} />,
-          active: activePage === 'quick-start',
-          onSelect: () => selectPage('quick-start'),
-        },
+        { key: 'introduction', label: t.pages.introduction, icon: <House size={16} />, active: activePage === 'introduction', onSelect: () => selectPage('introduction') },
+        { key: 'quick-start', label: t.pages['quick-start'], icon: <Zap size={16} />, active: activePage === 'quick-start', onSelect: () => selectPage('quick-start') },
       ],
     },
     {
-      title: 'Layout',
+      title: t.nav.layout,
       items: [
-        {
-          key: 'shell-sidebar',
-          label: 'Shell & Sidebar',
-          icon: <PanelsTopLeft size={16} />,
-          active: activePage === 'shell-sidebar',
-          onSelect: () => selectPage('shell-sidebar'),
-        },
-        {
-          key: 'grid-page',
-          label: 'Grid & Page',
-          icon: <LayoutDashboard size={16} />,
-          active: activePage === 'grid-page',
-          onSelect: () => selectPage('grid-page'),
-        },
+        { key: 'shell-sidebar', label: t.pages['shell-sidebar'], icon: <PanelsTopLeft size={16} />, active: activePage === 'shell-sidebar', onSelect: () => selectPage('shell-sidebar') },
+        { key: 'grid-page', label: t.pages['grid-page'], icon: <LayoutDashboard size={16} />, active: activePage === 'grid-page', onSelect: () => selectPage('grid-page') },
       ],
     },
     {
-      title: 'Components',
+      title: t.nav.components,
       items: [
-        {
-          key: 'elements',
-          label: 'Elements',
-          icon: <Package2 size={16} />,
-          trailing: <ChevronRight size={14} />,
-          active: activePage === 'elements',
-          onSelect: () => selectPage('elements'),
-        },
-        {
-          key: 'form-controls',
-          label: 'Form Controls',
-          icon: <SlidersHorizontal size={16} />,
-          trailing: <ChevronRight size={14} />,
-          active: activePage === 'form-controls',
-          onSelect: () => selectPage('form-controls'),
-        },
-        {
-          key: 'form-inputs',
-          label: 'Form Inputs',
-          icon: <SlidersHorizontal size={16} />,
-          trailing: <ChevronRight size={14} />,
-          active: activePage === 'form-inputs',
-          onSelect: () => selectPage('form-inputs'),
-        },
-        {
-          key: 'overlays',
-          label: 'Overlays',
-          icon: <Package2 size={16} />,
-          trailing: <ChevronRight size={14} />,
-          active: activePage === 'overlays',
-          onSelect: () => selectPage('overlays'),
-        },
-        {
-          key: 'data-display',
-          label: 'Data Display',
-          icon: <List size={16} />,
-          trailing: <ChevronRight size={14} />,
-          active: activePage === 'data-display',
-          onSelect: () => selectPage('data-display'),
-        },
-        {
-          key: 'navigation',
-          label: 'Navigation',
-          icon: <Compass size={16} />,
-          trailing: <ChevronRight size={14} />,
-          active: activePage === 'navigation',
-          onSelect: () => selectPage('navigation'),
-        },
-        {
-          key: 'data-list',
-          label: 'Data List',
-          icon: <List size={16} />,
-          active: activePage === 'data-list',
-          onSelect: () => selectPage('data-list'),
-        },
-        {
-          key: 'empty-states',
-          label: 'Empty States',
-          icon: <FileX2 size={16} />,
-          active: activePage === 'empty-states',
-          onSelect: () => selectPage('empty-states'),
-        },
+        { key: 'elements', label: t.pages.elements, icon: <Package2 size={16} />, trailing: <ChevronRight size={14} />, active: activePage === 'elements', onSelect: () => selectPage('elements') },
+        { key: 'form-controls', label: t.pages['form-controls'], icon: <SlidersHorizontal size={16} />, trailing: <ChevronRight size={14} />, active: activePage === 'form-controls', onSelect: () => selectPage('form-controls') },
+        { key: 'form-inputs', label: t.pages['form-inputs'], icon: <SlidersHorizontal size={16} />, trailing: <ChevronRight size={14} />, active: activePage === 'form-inputs', onSelect: () => selectPage('form-inputs') },
+        { key: 'overlays', label: t.pages.overlays, icon: <Package2 size={16} />, trailing: <ChevronRight size={14} />, active: activePage === 'overlays', onSelect: () => selectPage('overlays') },
+        { key: 'data-display', label: t.pages['data-display'], icon: <List size={16} />, trailing: <ChevronRight size={14} />, active: activePage === 'data-display', onSelect: () => selectPage('data-display') },
+        { key: 'navigation', label: t.pages.navigation, icon: <Compass size={16} />, trailing: <ChevronRight size={14} />, active: activePage === 'navigation', onSelect: () => selectPage('navigation') },
+        { key: 'data-list', label: t.pages['data-list'], icon: <List size={16} />, active: activePage === 'data-list', onSelect: () => selectPage('data-list') },
+        { key: 'empty-states', label: t.pages['empty-states'], icon: <FileX2 size={16} />, active: activePage === 'empty-states', onSelect: () => selectPage('empty-states') },
       ],
     },
     {
-      title: 'Feedback',
+      title: t.nav.feedback,
       items: [
-        {
-          key: 'toasts',
-          label: 'Toasts',
-          icon: <Bell size={16} />,
-          active: activePage === 'toasts',
-          onSelect: () => selectPage('toasts'),
-        },
-        {
-          key: 'feedback',
-          label: 'Feedback Components',
-          icon: <Bell size={16} />,
-          active: activePage === 'feedback',
-          onSelect: () => selectPage('feedback'),
-        },
+        { key: 'toasts', label: t.pages.toasts, icon: <Bell size={16} />, active: activePage === 'toasts', onSelect: () => selectPage('toasts') },
+        { key: 'feedback', label: t.pages.feedback, icon: <Bell size={16} />, active: activePage === 'feedback', onSelect: () => selectPage('feedback') },
       ],
     },
     {
-      title: 'Navigation',
+      title: t.nav.navigation,
       items: [
-        {
-          key: 'nav-layout',
-          label: 'Navigation & Layout',
-          icon: <Compass size={16} />,
-          active: activePage === 'nav-layout',
-          onSelect: () => selectPage('nav-layout'),
-        },
+        { key: 'nav-layout', label: t.pages['nav-layout'], icon: <Compass size={16} />, active: activePage === 'nav-layout', onSelect: () => selectPage('nav-layout') },
       ],
     },
     {
-      title: 'Mobile',
+      title: t.nav.mobile,
       items: [
-        {
-          key: 'mobile',
-          label: 'Mobile Components',
-          icon: <Smartphone size={16} />,
-          active: activePage === 'mobile',
-          onSelect: () => selectPage('mobile'),
-        },
+        { key: 'mobile', label: t.pages.mobile, icon: <Smartphone size={16} />, active: activePage === 'mobile', onSelect: () => selectPage('mobile') },
+      ],
+    },
+    {
+      title: t.nav.templates,
+      items: [
+        { key: 'home-page', label: t.pages['home-page'], icon: <House size={16} />, active: activePage === 'home-page', onSelect: () => selectPage('home-page') },
+        { key: 'login-page', label: t.pages['login-page'], icon: <LogIn size={16} />, active: activePage === 'login-page', onSelect: () => selectPage('login-page') },
+        { key: 'register-page', label: t.pages['register-page'], icon: <UserPlus size={16} />, active: activePage === 'register-page', onSelect: () => selectPage('register-page') },
+        { key: 'error-page', label: t.pages['error-page'], icon: <AlertTriangle size={16} />, active: activePage === 'error-page', onSelect: () => selectPage('error-page') },
+        { key: 'privacy-policy', label: t.pages['privacy-policy'], icon: <ShieldCheck size={16} />, active: activePage === 'privacy-policy', onSelect: () => selectPage('privacy-policy') },
       ],
     },
   ];
@@ -714,9 +415,9 @@ export default function App() {
         return (
           <div className="vx-preview-list">
             <div className="vx-preview-list__row vx-preview-list__row--header">
-              <span>Name</span>
-              <span>Kind</span>
-              <span>Updated</span>
+              <span>{t.dataList.name}</span>
+              <span>{t.dataList.kind}</span>
+              <span>{t.dataList.updated}</span>
             </div>
             {dataListRows.map((row) => (
               <div key={row.name} className="vx-preview-list__row">
@@ -964,6 +665,159 @@ export default function App() {
             </ActionSheet>
           </div>
         );
+      case 'home-page':
+        return (
+          <div className="vx-stack">
+            <div style={{ textAlign: 'center', padding: '20px 16px' }}>
+              <Badge variant="accent" style={{ marginBottom: 10 }}>New release</Badge>
+              <h2 style={{ fontSize: '1.375rem', margin: '0 0 8px' }}>Build faster with vxUI</h2>
+              <p className="vx-muted" style={{ marginBottom: 16, fontSize: '0.9rem' }}>
+                A lightweight component system for modern admin interfaces.
+              </p>
+              <div className="vx-inline" style={{ justifyContent: 'center' }}>
+                <Button onClick={() => selectPage('quick-start')}>
+                  <Zap size={14} />
+                  Get started
+                </Button>
+                <Button variant="secondary" onClick={() => selectPage('elements')}>Browse components</Button>
+              </div>
+            </div>
+            <div className="vx-docs-component-grid">
+              <Card>
+                <CardHeader>
+                  <CardTitle><Zap size={14} style={{ display: 'inline', marginRight: 6 }} />Fast</CardTitle>
+                  <CardDescription>Zero-dependency runtime, no build pipeline required.</CardDescription>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle><Palette size={14} style={{ display: 'inline', marginRight: 6 }} />Themeable</CardTitle>
+                  <CardDescription>Swap the whole system with a single theme key.</CardDescription>
+                </CardHeader>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle><ShieldCheck size={14} style={{ display: 'inline', marginRight: 6 }} />Accessible</CardTitle>
+                  <CardDescription>WCAG-aware tokens and semantic markup throughout.</CardDescription>
+                </CardHeader>
+              </Card>
+            </div>
+          </div>
+        );
+      case 'login-page':
+        return (
+          <div style={{ maxWidth: 340, margin: '0 auto' }}>
+            <Card>
+              <CardHeader>
+                <CardTitle>Sign in</CardTitle>
+                <CardDescription>Enter your credentials to access your account.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="vx-stack">
+                  <Input label="Email" type="email" placeholder="you@example.com" />
+                  <Input label="Password" type="password" placeholder="••••••••" />
+                  <Button style={{ width: '100%' }}>
+                    <LogIn size={14} />
+                    Sign in
+                  </Button>
+                  <p className="vx-muted" style={{ textAlign: 'center', fontSize: '0.8125rem', margin: 0 }}>
+                    Don't have an account?{' '}
+                    <button type="button" className="vx-link" onClick={() => selectPage('register-page')}>
+                      Register
+                    </button>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      case 'register-page':
+        return (
+          <div style={{ maxWidth: 340, margin: '0 auto' }}>
+            <Card>
+              <CardHeader>
+                <CardTitle>Create account</CardTitle>
+                <CardDescription>Fill in the details below to get started.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="vx-stack">
+                  <Input label="Full name" placeholder="Jane Smith" />
+                  <Input label="Email" type="email" placeholder="you@example.com" />
+                  <Input label="Password" type="password" placeholder="At least 8 characters" />
+                  <Checkbox
+                    label="I agree to the terms of service"
+                    checked={checkboxA}
+                    onChange={(e) => setCheckboxA(e.target.checked)}
+                  />
+                  <Button style={{ width: '100%' }}>
+                    <UserPlus size={14} />
+                    Create account
+                  </Button>
+                  <p className="vx-muted" style={{ textAlign: 'center', fontSize: '0.8125rem', margin: 0 }}>
+                    Already have an account?{' '}
+                    <button type="button" className="vx-link" onClick={() => selectPage('login-page')}>
+                      Sign in
+                    </button>
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      case 'error-page':
+        return (
+          <div className="vx-empty-state">
+            <div className="vx-empty-state__icon">
+              <AlertTriangle size={22} />
+            </div>
+            <div className="vx-empty-state__title">404 — Page not found</div>
+            <div className="vx-empty-state__copy">
+              The page you're looking for doesn't exist or has been moved to a new location.
+            </div>
+            <div className="vx-inline">
+              <Button onClick={() => selectPage('introduction')}>
+                <House size={14} />
+                Go home
+              </Button>
+              <Button variant="secondary">Go back</Button>
+            </div>
+          </div>
+        );
+      case 'privacy-policy':
+        return (
+          <div className="vx-stack">
+            <div>
+              <p className="vx-muted" style={{ fontSize: '0.8125rem', margin: '0 0 8px' }}>
+                Last updated: May 2026 · v1.0
+              </p>
+              <h3 style={{ margin: '0 0 6px', fontSize: '1rem' }}>Data Collection</h3>
+              <p className="vx-muted" style={{ margin: 0, fontSize: '0.875rem' }}>
+                We collect only the information necessary to provide the service, including your email address and usage data.
+              </p>
+            </div>
+            <Separator />
+            <div>
+              <h3 style={{ margin: '0 0 6px', fontSize: '1rem' }}>Data Usage</h3>
+              <p className="vx-muted" style={{ margin: 0, fontSize: '0.875rem' }}>
+                Your data is used solely to improve your experience and is never sold to third parties.
+              </p>
+            </div>
+            <Separator />
+            <div>
+              <h3 style={{ margin: '0 0 6px', fontSize: '1rem' }}>Cookies</h3>
+              <p className="vx-muted" style={{ margin: 0, fontSize: '0.875rem' }}>
+                We use essential cookies for authentication and preference storage. No tracking or advertising cookies are used.
+              </p>
+            </div>
+            <Separator />
+            <div>
+              <h3 style={{ margin: '0 0 6px', fontSize: '1rem' }}>Contact</h3>
+              <p className="vx-muted" style={{ margin: 0, fontSize: '0.875rem' }}>
+                For privacy inquiries, contact <span style={{ color: 'var(--vx-primary)' }}>privacy@example.com</span>
+              </p>
+            </div>
+          </div>
+        );
       default:
         return null;
     }
@@ -974,23 +828,21 @@ export default function App() {
       <section className="vx-docs-hero">
         <h1>vxUI</h1>
         <p>
-          A lightweight, dependency-free UI framework for building clean admin interfaces.
-          Design tokens, components, and a minimal SPA runtime live behind one consistent
-          visual language.
+          {t.intro.tagline}
         </p>
         <div className="vx-docs-actions">
           <Button onClick={() => selectPage('quick-start')}>
             <Zap size={16} />
-            Get Started
+            {t.intro.getStarted}
           </Button>
           <Button variant="secondary" onClick={() => selectPage('elements')}>
-            Browse Components
+            {t.intro.browseComponents}
           </Button>
         </div>
       </section>
 
       <section className="vx-docs-section">
-        <h2>At a Glance</h2>
+        <h2>{t.intro.atAGlance}</h2>
         <div className="vx-docs-stats">
           {glanceCards.map((card) => (
             <Card key={card.label} className="vx-doc-stat">
@@ -1006,11 +858,9 @@ export default function App() {
       </section>
 
       <section className="vx-docs-section">
-        <h2>Design Tokens</h2>
+        <h2>{t.intro.designTokens}</h2>
         <p className="vx-docs-lead">
-          All colors, spacing, and typography values are exposed as CSS custom properties under
-          the vx namespace. Register named light and dark themes once, then swap the whole
-          framework by theme key.
+          {t.intro.designTokensLead}
         </p>
         <div className="vx-docs-token-grid">
           {tokenCards.map((token) => {
@@ -1038,7 +888,7 @@ export default function App() {
       </section>
 
       <section className="vx-docs-section">
-        <h2>Component Families</h2>
+        <h2>{t.intro.componentFamilies}</h2>
         <div className="vx-docs-component-grid">
           {componentFamilies.map((family) => (
             <Card key={family.title} className="vx-doc-family-card">
@@ -1048,7 +898,7 @@ export default function App() {
               </CardHeader>
               <CardContent>
                 <Button variant="ghost" size="sm" onClick={() => selectPage(family.page)}>
-                  Open section
+                  {t.docs.openSection}
                   <ArrowRight size={16} />
                 </Button>
               </CardContent>
@@ -1067,9 +917,9 @@ export default function App() {
       <div className="vx-docs-article-grid">
         <Card>
           <CardHeader>
-            <CardTitle>Guidance</CardTitle>
+            <CardTitle>{t.docs.guidance}</CardTitle>
             <CardDescription>
-              Keep the implementation tight and let the design system do most of the visual work.
+              {t.docs.guidanceDesc}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -1082,22 +932,22 @@ export default function App() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Preview</CardTitle>
+            <CardTitle>{t.docs.preview}</CardTitle>
             <CardDescription>
-              A compact example of how this area should feel inside the system.
+              {t.docs.previewDesc}
             </CardDescription>
           </CardHeader>
           <CardContent>{renderPageSample()}</CardContent>
         </Card>
       </div>
       <section className="vx-docs-section">
-        <h2>Notes</h2>
+        <h2>{t.docs.notes}</h2>
         <div className="vx-docs-token-grid">
           <Card>
             <CardHeader>
-              <CardTitle>Primary Theme</CardTitle>
+              <CardTitle>{t.docs.primaryTheme}</CardTitle>
               <CardDescription>
-                Blue-gray neutrals keep emphasis reserved for actions, not decoration.
+                {t.docs.primaryThemeDesc}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -1110,9 +960,9 @@ export default function App() {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>Token Scale</CardTitle>
+              <CardTitle>{t.docs.tokenScale}</CardTitle>
               <CardDescription>
-                Reuse the shared surface, border, and text variables before introducing page-specific styles.
+                {t.docs.tokenScaleDesc}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -1128,6 +978,39 @@ export default function App() {
     </article>
   );
 
+  if (appView === 'home') {
+    return (
+      <HomePage
+        onLogin={() => setAppView('login')}
+        onRegister={() => setAppView('register')}
+        onDocs={() => setAppView('docs')}
+        onPrivacy={() => { setAppView('docs'); selectPage('privacy-policy'); }}
+      />
+    );
+  }
+
+  if (appView === 'login') {
+    return (
+      <LoginPage
+        onLogin={() => setAppView('docs')}
+        onRegister={() => setAppView('register')}
+        onGuest={() => setAppView('docs')}
+        onBack={() => setAppView('home')}
+      />
+    );
+  }
+
+  if (appView === 'register') {
+    return (
+      <RegisterPage
+        onRegister={() => setAppView('docs')}
+        onLogin={() => setAppView('login')}
+        onGuest={() => setAppView('docs')}
+        onBack={() => setAppView('home')}
+      />
+    );
+  }
+
   return (
     <>
       {mobilePreview && <MobilePreviewPage onExit={() => setMobilePreview(false)} />}
@@ -1136,6 +1019,12 @@ export default function App() {
         open={searchOpen}
         onClose={() => setSearchOpen(false)}
         onSelect={(key) => { selectPage(key as PageKey); }}
+        placeholder={t.searchPlaceholder}
+        ariaLabel={t.searchAriaLabel}
+        emptyText={t.searchEmpty}
+        labelNavigate={t.searchNavigate}
+        labelGo={t.searchGo}
+        labelClose={t.searchClose}
       />
       <AppShell
       brand="vxUI"
@@ -1149,13 +1038,19 @@ export default function App() {
       navSections={navSections}
       sidebarCollapsed={sidebarCollapsed}
       onSidebarToggle={() => setSidebarCollapsed((value) => !value)}
+      sidebarFooter={<LanguageSwitcher variant="sidebar" />}
       headerActions={(
         <div className="vx-inline vx-inline--wrap">
+          <button type="button" className="vx-cmd-trigger" onClick={() => setAppView('home')}>
+            <House size={14} />
+            {t.publicPages.backHome}
+          </button>
           <button type="button" className="vx-cmd-trigger" onClick={() => setSearchOpen(true)}>
             <Search size={14} />
-            Search
+            {t.searchTrigger}
             <kbd>⌘K</kbd>
           </button>
+          <LanguageSwitcher variant="inline" />
           <span className="vx-version-pill">v1.0</span>
           <span className="vx-version-pill vx-version-pill--token">
             <Palette size={14} />
@@ -1163,12 +1058,12 @@ export default function App() {
           </span>
           <span className="vx-version-pill vx-version-pill--token">
             <MoonStar size={14} />
-            {mode} mode
+            {t.modeLabel(mode)}
           </span>
-          <Button size="sm" variant="secondary" onClick={() => setMobilePreview(true)}>
+          <button type="button" className="vx-cmd-trigger" onClick={() => setMobilePreview(true)}>
             <Smartphone size={14} />
-            Mobile Preview
-          </Button>
+            {t.mobilePreview}
+          </button>
         </div>
       )}
     >
@@ -1176,13 +1071,13 @@ export default function App() {
         {activePage === 'introduction' ? renderIntroduction() : renderGuidePage()}
 
         <section className="vx-docs-section">
-          <h2>System Preview</h2>
+          <h2>{t.docs.systemPreview}</h2>
           <div className="vx-docs-component-grid">
             <Card>
               <CardHeader>
-                <CardTitle>Theme Studio</CardTitle>
+                <CardTitle>{t.docs.themeStudio}</CardTitle>
                 <CardDescription>
-                  Register named themes once, then switch every component with a single key.
+                  {t.docs.themeStudioDesc}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -1206,7 +1101,7 @@ export default function App() {
                     </span>
                     <span className="vx-version-pill vx-version-pill--token">
                       <Sparkles size={14} />
-                      {mode} mode
+                      {t.modeLabel(mode)}
                     </span>
                   </div>
                 </div>
@@ -1214,19 +1109,19 @@ export default function App() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>Live Controls</CardTitle>
+                <CardTitle>{t.docs.liveControls}</CardTitle>
                 <CardDescription>
-                  A few reusable primitives are still available inside the docs surface.
+                  {t.docs.liveControlsDesc}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="vx-stack vx-stack--tight">
-                  <Input label="Search docs" placeholder="Buttons, tokens, layout..." />
+                  <Input label={t.docs.searchDocs} placeholder={t.docs.searchDocsPlaceholder} />
                   <Switch
                     checked={compactDensity}
                     onCheckedChange={setCompactDensity}
-                    label="Compact density"
-                    description="Tighten the vertical rhythm for denser operator views."
+                    label={t.docs.compactDensity}
+                    description={t.docs.compactDensityDesc}
                   />
                 </div>
               </CardContent>

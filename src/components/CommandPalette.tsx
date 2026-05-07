@@ -15,6 +15,12 @@ export interface CommandPaletteProps {
   open: boolean;
   onClose: () => void;
   onSelect: (key: string) => void;
+  placeholder?: string;
+  ariaLabel?: string;
+  emptyText?: (query: string) => string;
+  labelNavigate?: string;
+  labelGo?: string;
+  labelClose?: string;
 }
 
 function highlight(text: string, query: string) {
@@ -45,7 +51,15 @@ function score(entry: SearchEntry, q: string): number {
   return 0;
 }
 
-export function CommandPalette({ entries, open, onClose, onSelect }: CommandPaletteProps) {
+export function CommandPalette({
+  entries, open, onClose, onSelect,
+  placeholder = 'Search components, pages, keywords…',
+  ariaLabel = 'Search',
+  emptyText = (q) => `No results for "${q}"`,
+  labelNavigate = 'Navigate',
+  labelGo = 'Go',
+  labelClose = 'Close',
+}: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [activeIdx, setActiveIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -122,7 +136,7 @@ export function CommandPalette({ entries, open, onClose, onSelect }: CommandPale
         className="vx-cmd"
         role="dialog"
         aria-modal="true"
-        aria-label="Search"
+        aria-label={ariaLabel}
         onMouseDown={(e) => e.stopPropagation()}
       >
         {/* Search input */}
@@ -135,7 +149,7 @@ export function CommandPalette({ entries, open, onClose, onSelect }: CommandPale
             ref={inputRef}
             className="vx-cmd__input"
             type="text"
-            placeholder="Search components, pages, keywords…"
+            placeholder={placeholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -156,7 +170,7 @@ export function CommandPalette({ entries, open, onClose, onSelect }: CommandPale
         {/* Results */}
         <ul className="vx-cmd__list" ref={listRef} role="listbox">
           {results.length === 0 ? (
-            <li className="vx-cmd__empty">No results for "{query}"</li>
+            <li className="vx-cmd__empty">{emptyText(query)}</li>
           ) : (
             grouped.map((group) =>
               group.items.map((entry, localIdx) => {
@@ -197,9 +211,9 @@ export function CommandPalette({ entries, open, onClose, onSelect }: CommandPale
         </ul>
 
         <div className="vx-cmd__footer">
-          <span><kbd>↑↓</kbd> Navigate</span>
-          <span><kbd>↵</kbd> Go</span>
-          <span><kbd>esc</kbd> Close</span>
+          <span><kbd>↑↓</kbd> {labelNavigate}</span>
+          <span><kbd>↵</kbd> {labelGo}</span>
+          <span><kbd>esc</kbd> {labelClose}</span>
         </div>
       </div>
     </div>

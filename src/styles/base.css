@@ -721,7 +721,7 @@ a {
   gap: 8px;
   min-height: 30px;
   padding: 0 12px;
-  border-radius: 999px;
+  border-radius: var(--vx-radius);
   border: 1px solid var(--vx-border);
   background: color-mix(in srgb, var(--vx-primary-soft) 48%, var(--vx-surface));
   color: var(--vx-primary);
@@ -3002,4 +3002,275 @@ a {
   padding: 0 4px;
   font-family: inherit;
   color: var(--vx-text-muted);
+}
+
+/* ── LanguageSwitcher ──────────────────────────────── */
+
+/* Inline (topbar) variant */
+.vx-lang-inline {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.vx-lang-inline__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 10px;
+  background: transparent;
+  border: none;
+  color: var(--vx-text-muted);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 100ms, color 100ms;
+  white-space: nowrap;
+  position: relative;
+}
+
+.vx-lang-inline__btn + .vx-lang-inline__btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: var(--vx-border);
+}
+
+.vx-lang-inline__btn:hover {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+
+.vx-lang-inline__btn--active {
+  background: var(--vx-primary);
+  color: #fff;
+  font-weight: 500;
+}
+
+.vx-lang-inline__btn--active:hover {
+  background: var(--vx-primary);
+  color: #fff;
+}
+
+/* Sidebar variant */
+.vx-lang-sidebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  width: 100%;
+}
+
+.vx-lang-sidebar__icon {
+  color: var(--vx-text-muted);
+  flex-shrink: 0;
+}
+
+.vx-lang-sidebar__options {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+}
+
+.vx-lang-sidebar__btn {
+  flex: 1;
+  height: 28px;
+  background: var(--vx-bg-accent);
+  border: 1px solid var(--vx-border);
+  border-radius: calc(var(--vx-radius) * 0.75);
+  color: var(--vx-text-muted);
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 100ms, color 100ms, border-color 100ms;
+  white-space: nowrap;
+}
+
+.vx-lang-sidebar__btn:hover {
+  background: var(--vx-surface);
+  border-color: var(--vx-border-strong);
+  color: var(--vx-text);
+}
+
+.vx-lang-sidebar__btn--active {
+  background: color-mix(in srgb, var(--vx-primary) 12%, transparent);
+  border-color: color-mix(in srgb, var(--vx-primary) 35%, transparent);
+  color: var(--vx-primary);
+  font-weight: 500;
+}
+
+/* collapsed sidebar hides label text */
+[data-collapsed="true"] .vx-lang-sidebar {
+  display: none;
+}
+
+/* ── Inline text link (used in template pages) ────────── */
+.vx-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--vx-primary);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.vx-link:hover {
+  opacity: 0.8;
+}
+
+/* ── Public pages (landing, login, register) ─────────── */
+.vx-public {
+  min-height: 100dvh;
+  background: var(--vx-bg);
+  color: var(--vx-text);
+  display: flex;
+  flex-direction: column;
+}
+
+.vx-public-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 60px;
+  border-bottom: 1px solid var(--vx-border);
+  background: var(--vx-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.vx-public-nav__brand {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--vx-primary);
+}
+
+.vx-public-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Hero */
+.vx-public-hero {
+  text-align: center;
+  padding: 80px 32px 64px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.vx-public-hero__title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+
+.vx-public-hero__lead {
+  font-size: 1.0625rem;
+  color: var(--vx-text-muted);
+  line-height: 1.7;
+  margin: 0 0 32px;
+}
+
+.vx-public-hero__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Features section */
+.vx-public-features {
+  padding: 0 32px 80px;
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.vx-public-section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vx-text-muted);
+  margin: 0 0 20px;
+}
+
+.vx-public-features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.vx-public-feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--vx-radius);
+  background: color-mix(in srgb, var(--vx-primary) 12%, transparent);
+  color: var(--vx-primary);
+}
+
+/* Footer */
+.vx-public-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--vx-border);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  color: var(--vx-text-muted);
+}
+
+/* Auth (login / register) */
+.vx-auth {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.vx-auth__card {
+  width: 100%;
+  max-width: 380px;
+}
+
+.vx-auth__logo {
+  text-align: center;
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--vx-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.vx-auth__footer {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: var(--vx-text-muted);
+}
+
+.vx-auth__footer + .vx-auth__footer {
+  margin-top: 8px;
 }
