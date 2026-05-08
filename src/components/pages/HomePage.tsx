@@ -1,9 +1,9 @@
 import {
   ArrowRight,
   Boxes,
-  Check,
   FileCode2,
   MoonStar,
+  Package,
   Palette,
   Search,
   ShieldCheck,
@@ -44,7 +44,7 @@ export function HomePage({
   const isSignedIn = Boolean(viewerName);
 
   const features = [
-    { icon: <Check size={24} />, title: pp.feat1, desc: pp.feat1Desc },
+    { icon: <Package size={24} />, title: pp.feat1, desc: pp.feat1Desc },
     { icon: <Boxes size={24} />, title: pp.feat2, desc: pp.feat2Desc },
     { icon: <Palette size={24} />, title: pp.feat3, desc: pp.feat3Desc },
     { icon: <MoonStar size={24} />, title: pp.feat4, desc: pp.feat4Desc },

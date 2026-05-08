@@ -59,6 +59,7 @@ export interface Translations {
     'register-page': string;
     'error-page': string;
     'privacy-policy': string;
+    'terms-of-service': string;
   };
 
   // Page content
@@ -254,7 +255,7 @@ export const en: Translations = {
     components: 'Components',
     feedback: 'Feedback',
     navigation: 'Navigation',
-    mobile: 'Mobile',
+    mobile: 'Responsive',
     templates: 'Templates',
   },
 
@@ -280,6 +281,7 @@ export const en: Translations = {
     'register-page': 'Register Page',
     'error-page': 'Error Page',
     'privacy-policy': 'Privacy Policy',
+    'terms-of-service': 'Terms of Service',
   },
 
   docs: {
@@ -599,14 +601,14 @@ export const en: Translations = {
       ],
     },
     mobile: {
-      section: 'Mobile',
-      title: 'Mobile Components',
+      section: 'Responsive',
+      title: 'Responsive Patterns',
       description:
-        'Purpose-built components for mobile devices. Touch-optimised tap targets, portrait-first layout, safe-area awareness, and native-feeling gesture interactions.',
+        'A single responsive system for phone, tablet, and desktop. One route tree, one content model, and one set of components adapt through layout instead of duplicate applications.',
       guidance: [
-        'Use MobileShell as the root layout — it owns topBar, scrollable main, and bottomNav slots.',
-        'All interactive elements meet the 44 × 44 pt minimum touch target from Apple HIG.',
-        'ActionSheet replaces Dialog on mobile; users can drag down to dismiss it.',
+        'Keep the route tree identical across breakpoints; only the shell and density should change.',
+        'Turn persistent side navigation into a drawer on narrow screens instead of forking the page implementation.',
+        'Design cards, forms, and tables to reflow from three columns to one without changing component ownership.',
       ],
     },
     'home-page': {
@@ -664,6 +666,17 @@ export const en: Translations = {
         'Version and date the policy at the top so users know when it was last updated.',
       ],
     },
+    'terms-of-service': {
+      section: 'Templates',
+      title: 'Terms of Service',
+      description:
+        'A service terms page with clear headings, plain-language obligations, and a layout that stays readable from narrow phones to wide desktop viewports.',
+      guidance: [
+        'State the usage permission, limitations, and disclaimer in separate sections to reduce legal ambiguity.',
+        'Keep the document scannable with short paragraphs and a compact summary rail.',
+        'Link to the terms directly from registration and pricing flows so consent is contextual.',
+      ],
+    },
   },
 };
 
@@ -695,7 +708,7 @@ export const zh: Translations = {
     components: '组件',
     feedback: '反馈',
     navigation: '导航',
-    mobile: '移动端',
+    mobile: '响应式',
     templates: '模板',
   },
 
@@ -721,6 +734,7 @@ export const zh: Translations = {
     'register-page': '注册页',
     'error-page': '错误页',
     'privacy-policy': '隐私政策',
+    'terms-of-service': '服务条款',
   },
 
   docs: {
@@ -1037,14 +1051,14 @@ export const zh: Translations = {
       ],
     },
     mobile: {
-      section: '移动端',
-      title: '移动端组件',
+      section: '响应式',
+      title: '响应式布局',
       description:
-        '专为移动设备构建的组件。触摸优化的点击目标、竖屏优先布局、安全区感知以及原生手感的手势交互。',
+        '一套同时覆盖手机、平板与桌面的响应式系统。通过布局与密度变化适配不同设备，而不是维护两套应用与两套页面树。',
       guidance: [
-        '使用 MobileShell 作为根布局——它拥有 topBar、可滚动 main 和 bottomNav 插槽。',
-        '所有交互元素均满足 Apple HIG 的 44×44pt 最小触摸目标要求。',
-        'ActionSheet 在移动端替代 Dialog；用户可向下拖动以关闭。',
+        '保持所有断点上的路由树一致，只调整壳层结构和内容密度。',
+        '在窄屏上把常驻侧边导航转成抽屉，而不是复制一套页面实现。',
+        '让卡片、表单和表格从三列到单列平滑重排，不改变组件归属。',
       ],
     },
     'home-page': {
@@ -1100,6 +1114,17 @@ export const zh: Translations = {
         '使用标题将长篇政策文本分成可扫读的章节。',
         '从任何引用政策的同意流程中直接链接到相关章节。',
         '在顶部注明政策版本和日期，让用户了解最近更新时间。',
+      ],
+    },
+    'terms-of-service': {
+      section: '模板',
+      title: '服务条款',
+      description:
+        '具备清晰标题、通俗义务说明且在手机到桌面端都保持可读性的服务条款页面。',
+      guidance: [
+        '将许可范围、使用限制和免责声明拆成独立段落，降低法律歧义。',
+        '正文使用短段落与摘要侧栏，保证长文档依旧可扫读。',
+        '在注册和定价流程中直接链接条款页面，让同意动作具备上下文。',
       ],
     },
   },

@@ -29,7 +29,13 @@ export interface AppShellProps {
   navItems?: AppShellNavItem[];
   navSections?: AppShellNavSection[];
   sidebarCollapsed?: boolean;
+  mobileNavOpen?: boolean;
   onSidebarToggle?: () => void;
+  onMobileNavToggle?: () => void;
+  menuButtonLabel?: string;
+  sidebarCollapseLabel?: string;
+  sidebarExpandLabel?: string;
+  sidebarCloseLabel?: string;
   headerActions?: ReactNode;
   sidebarFooter?: ReactNode;
   children: ReactNode;
@@ -45,7 +51,13 @@ export function AppShell({
   navItems,
   navSections,
   sidebarCollapsed = false,
+  mobileNavOpen = false,
   onSidebarToggle,
+  onMobileNavToggle,
+  menuButtonLabel = 'Open navigation',
+  sidebarCollapseLabel = 'Collapse',
+  sidebarExpandLabel = 'Expand',
+  sidebarCloseLabel = 'Close sidebar',
   headerActions,
   sidebarFooter,
   children,
@@ -53,7 +65,7 @@ export function AppShell({
   const sections = navSections ?? (navItems ? [{ items: navItems }] : []);
 
   return (
-    <div className="vx-shell" data-collapsed={sidebarCollapsed}>
+    <div className="vx-shell" data-collapsed={sidebarCollapsed} data-nav-open={mobileNavOpen}>
       <aside className="vx-sidebar">
         <div className="vx-sidebar__header">
           <div className="vx-sidebar__brand">
@@ -101,26 +113,39 @@ export function AppShell({
               size="sm"
               className="vx-sidebar__toggle"
               onClick={onSidebarToggle}
-              aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+              aria-label={sidebarCollapsed ? sidebarExpandLabel : sidebarCollapseLabel}
             >
               {sidebarCollapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
               <span className="vx-sidebar__toggle-label">
-                {sidebarCollapsed ? 'Expand' : 'Collapse'}
+                {sidebarCollapsed ? sidebarExpandLabel : sidebarCollapseLabel}
               </span>
             </Button>
           ) : null}
         </div>
       </aside>
 
-      <button
-        type="button"
-        className="vx-shell__overlay"
-        aria-label="Close sidebar"
-        onClick={onSidebarToggle}
-      />
+      {onMobileNavToggle ? (
+        <button
+          type="button"
+          className="vx-shell__overlay"
+          aria-label={sidebarCloseLabel}
+          onClick={onMobileNavToggle}
+        />
+      ) : null}
 
       <div className="vx-shell__main">
         <header className="vx-topbar">
+          {onMobileNavToggle ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="vx-topbar__menu"
+              aria-label={menuButtonLabel}
+              onClick={onMobileNavToggle}
+            >
+              {mobileNavOpen ? <PanelLeftClose size={16} /> : <PanelLeftOpen size={16} />}
+            </Button>
+          ) : null}
           <div className="vx-topbar__title-group">
             {breadcrumb ? (
               breadcrumb
