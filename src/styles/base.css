@@ -98,6 +98,88 @@
   --vx-glass-scrim: color-mix(in srgb, #020408 58%, transparent);
 }
 
+/* ── Indigo ─────────────────────────────────────────────── */
+:root[data-theme-name='indigo'] {
+  color-scheme: light;
+  --vx-code-bg: color-mix(in srgb, #dde3f0 72%, #ffffff);
+  --vx-code-text: #1a2336;
+  --vx-code-border: #bfc8e8;
+  --vx-code-comment: #6b7a99;
+  --vx-code-keyword: #5c5fe8;
+  --vx-code-string: #059669;
+  --vx-code-number: #b45309;
+  --vx-code-function: #0f766e;
+  --vx-code-property: #4f52d4;
+  --vx-code-class: #c2410c;
+  --vx-code-tag: #be123c;
+  --vx-code-attr-name: #0f766e;
+  --vx-code-attr-value: #b45309;
+  --vx-code-punctuation: #4a5572;
+  --vx-code-operator: #1a2336;
+  --vx-glass-filter: blur(16px) saturate(1.8);
+  --vx-glass-scrim: color-mix(in srgb, #e8ecf6 48%, transparent);
+}
+
+[data-theme-name='indigo'] .vx-input {
+  background: color-mix(in srgb, #eef0ff 80%, #ffffff);
+  border-color: #d4daf0;
+}
+
+[data-theme-name='indigo'] .vx-input:focus-within {
+  background: #ffffff;
+  border-color: #5c5fe8;
+  box-shadow: 0 0 0 3px rgba(92, 95, 232, 0.12);
+}
+
+[data-theme-name='indigo'] .vx-card {
+  background: #ffffff;
+  border-color: #d4daf0;
+  box-shadow: 0 4px 24px rgba(28, 40, 80, 0.08);
+}
+
+/* ── Violet (light) ─────────────────────────────────────── */
+:root[data-theme-name='violet'] {
+  color-scheme: light;
+  --vx-code-bg: color-mix(in srgb, #ede9fe 72%, #ffffff);
+  --vx-code-text: #1e1b2e;
+  --vx-code-border: #c9bffd;
+  --vx-code-comment: #8b7fc8;
+  --vx-code-keyword: #7c3aed;
+  --vx-code-string: #059669;
+  --vx-code-number: #b45309;
+  --vx-code-function: #0f766e;
+  --vx-code-property: #6d28d9;
+  --vx-code-class: #c2410c;
+  --vx-code-tag: #be123c;
+  --vx-code-attr-name: #0f766e;
+  --vx-code-attr-value: #b45309;
+  --vx-code-punctuation: #6e6a8a;
+  --vx-code-operator: #1e1b2e;
+  --vx-glass-filter: blur(18px) saturate(1.9);
+  --vx-glass-scrim: color-mix(in srgb, #f8f7ff 46%, transparent);
+}
+
+/* ── Violet Dark ────────────────────────────────────────── */
+:root[data-theme-name='violet-dark'] {
+  color-scheme: dark;
+  --vx-code-bg: color-mix(in srgb, #13102a 72%, #0d0b1a 10%);
+  --vx-code-text: #f0eeff;
+  --vx-code-border: rgba(167, 139, 250, 0.20);
+  --vx-code-comment: #8b7fc8;
+  --vx-code-keyword: #c4b5fd;
+  --vx-code-string: #6ee7b7;
+  --vx-code-number: #fde68a;
+  --vx-code-function: #67e8f9;
+  --vx-code-property: #ddd6fe;
+  --vx-code-class: #fdba74;
+  --vx-code-tag: #fda4af;
+  --vx-code-attr-name: #5eead4;
+  --vx-code-attr-value: #fde68a;
+  --vx-code-punctuation: #c4b5fd;
+  --vx-code-operator: #f0eeff;
+  --vx-glass-filter: blur(20px) saturate(1.65);
+}
+
 * {
   box-sizing: border-box;
 }
