@@ -85,3 +85,96 @@ export { MobileList, MobileListSection, MobileListItem } from '../components/mob
 export type { MobileListSectionProps, MobileListItemProps } from '../components/mobile/MobileList';
 export { MobileDrawer, DrawerNavItem, DrawerNavSection } from '../components/mobile/MobileDrawer';
 export type { MobileDrawerProps, DrawerNavItemProps, DrawerNavSectionProps } from '../components/mobile/MobileDrawer';
+
+// New: Form primitives
+export { Label } from '../components/Label';
+export type { LabelProps } from '../components/Label';
+export { Form, FormField, FormLabel, FormDescription, FormMessage, useFormField } from '../components/Form';
+export type { FormProps, FormFieldProps, FormLabelProps, FormDescriptionProps, FormMessageProps } from '../components/Form';
+
+// New: Alert Dialog
+export { AlertDialog } from '../components/AlertDialog';
+export type { AlertDialogProps } from '../components/AlertDialog';
+
+// New: Number Input
+export { NumberInput } from '../components/NumberInput';
+export type { NumberInputProps } from '../components/NumberInput';
+
+// New: Calendar & DatePicker
+export { Calendar } from '../components/Calendar';
+export type { CalendarProps } from '../components/Calendar';
+export { DatePicker } from '../components/DatePicker';
+export type { DatePickerProps } from '../components/DatePicker';
+
+// New: Combobox
+export { Combobox } from '../components/Combobox';
+export type { ComboboxProps, ComboboxOption } from '../components/Combobox';
+
+// New: File Upload
+export { FileUpload } from '../components/FileUpload';
+export type { FileUploadProps, UploadedFile } from '../components/FileUpload';
+
+// New: Sheet
+export { Sheet } from '../components/Sheet';
+export type { SheetProps, SheetSide } from '../components/Sheet';
+
+// New: Scroll Area
+export { ScrollArea } from '../components/ScrollArea';
+export type { ScrollAreaProps } from '../components/ScrollArea';
+
+// New: Toggle
+export { Toggle, ToggleGroup } from '../components/Toggle';
+export type { ToggleProps, ToggleGroupProps, ToggleGroupItem } from '../components/Toggle';
+
+// New: Context Menu
+export { ContextMenu } from '../components/ContextMenu';
+export type { ContextMenuProps, ContextMenuItemProps, ContextMenuGroupProps } from '../components/ContextMenu';
+
+// New: Hover Card
+export { HoverCard } from '../components/HoverCard';
+export type { HoverCardProps, HoverCardPlacement } from '../components/HoverCard';
+
+// New: Menubar
+export { Menubar } from '../components/Menubar';
+export type { MenubarProps, MenubarMenuProps, MenubarGroupProps, MenubarItemProps } from '../components/Menubar';
+
+// New: Navigation Menu
+export { NavigationMenu } from '../components/NavigationMenu';
+export type { NavigationMenuProps, NavMenuItem, NavMenuSubItem } from '../components/NavigationMenu';
+
+// New: Stepper
+export { Stepper } from '../components/Stepper';
+export type { StepperProps, StepItem, StepStatus } from '../components/Stepper';
+
+// New: Timeline
+export { Timeline } from '../components/Timeline';
+export type { TimelineProps, TimelineItem, TimelineItemStatus } from '../components/Timeline';
+
+// New: Empty State
+export { EmptyState } from '../components/EmptyState';
+export type { EmptyStateProps } from '../components/EmptyState';
+
+// Low-priority: Carousel
+export { Carousel } from '../components/Carousel';
+export type { CarouselProps } from '../components/Carousel';
+
+// Low-priority: Rating
+export { Rating } from '../components/Rating';
+export type { RatingProps } from '../components/Rating';
+
+// Low-priority: TreeView
+export { TreeView } from '../components/TreeView';
+export type { TreeViewProps, TreeNode } from '../components/TreeView';
+
+// Low-priority: TagInput
+export { TagInput } from '../components/TagInput';
+export type { TagInputProps } from '../components/TagInput';
+
+// Low-priority: ColorPicker
+export { ColorPicker } from '../components/ColorPicker';
+export type { ColorPickerProps } from '../components/ColorPicker';
+
+// Low-priority: Resizable
+export { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '../components/Resizable';
+export type { ResizablePanelGroupProps, ResizablePanelProps, ResizableHandleProps, ResizableDirection } from '../components/Resizable';
+
