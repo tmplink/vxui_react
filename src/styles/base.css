@@ -456,7 +456,6 @@ a {
   align-self: stretch;
   min-width: 0;
   padding: 12px 0 12px 18px;
-  border-left: 1px solid var(--vx-border);
   overflow: visible;
 }
 
@@ -1556,9 +1555,7 @@ a {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.26), 0 12px 28px rgba(130, 95, 32, 0.16);
 }
 
-[data-theme-name='ivory-gold'] .vx-topbar__actions {
-  border-left-color: rgba(160, 116, 42, 0.18);
-}
+
 
 [data-theme-name='ivory-gold'] .vx-card {
   border-color: rgba(160, 116, 42, 0.18);
@@ -2354,9 +2351,7 @@ a {
   box-shadow: inset 0 1px 0 rgba(255, 244, 220, 0.22), 0 12px 28px rgba(0, 0, 0, 0.24);
 }
 
-[data-theme-name='black-gold'] .vx-topbar__actions {
-  border-left-color: rgba(200, 169, 124, 0.16);
-}
+
 
 [data-theme-name='black-gold'] .vx-card {
   border-color: rgba(200, 169, 124, 0.18);
@@ -4648,10 +4643,7 @@ a {
 }
 
 .vx-bs-doc-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 196px;
-  gap: 40px;
-  align-items: start;
+  display: block;
   padding-top: 32px;
 }
 
@@ -4704,44 +4696,6 @@ a {
   background: color-mix(in srgb, var(--vx-bg-accent) 55%, var(--vx-surface));
 }
 
-.vx-bs-doc-toc {
-  position: sticky;
-  top: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding-left: 14px;
-  border-left: 1px solid var(--vx-border);
-}
-
-.vx-bs-doc-toc__title {
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--vx-text-muted);
-  margin: 0 0 8px;
-}
-
-.vx-bs-doc-toc__nav {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.vx-bs-doc-toc__link {
-  font-size: 0.875rem;
-  color: var(--vx-text-secondary);
-  text-decoration: none;
-  padding: 5px 0;
-  display: block;
-  transition: color 140ms;
-  cursor: pointer;
-}
-
-.vx-bs-doc-toc__link:hover {
-  color: var(--vx-primary);
-}
 
 .vx-bs-doc-pager {
   display: flex;
@@ -4790,15 +4744,7 @@ a {
   color: var(--vx-text);
 }
 
-@media (max-width: 960px) {
-  .vx-bs-doc-body {
-    grid-template-columns: 1fr;
-  }
 
-  .vx-bs-doc-toc {
-    display: none;
-  }
-}
 
 @media (max-width: 720px) {
   .vx-bs-doc-header h1 {

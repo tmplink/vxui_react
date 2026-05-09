@@ -2072,12 +2072,6 @@ export default function App() {
     const prevPage = currentIndex > 0 ? flatPages[currentIndex - 1] : null;
     const nextPage = currentIndex < flatPages.length - 1 ? flatPages[currentIndex + 1] : null;
 
-    const tocSections = [
-      { id: 'overview', label: isZh ? '使用指南' : 'Overview' },
-      ...(hasSample ? [{ id: 'example', label: isZh ? '示例' : 'Example' }] : []),
-      ...(usageSnippet ? [{ id: 'usage', label: isZh ? '用法' : 'Usage' }] : []),
-    ];
-
     return (
       <article className="vx-bs-doc-page">
         {/* Page header */}
@@ -2130,17 +2124,6 @@ export default function App() {
             )}
           </div>
 
-          {/* On this page – sticky right TOC */}
-          <aside className="vx-bs-doc-toc" aria-label={isZh ? '本页内容' : 'On this page'}>
-            <p className="vx-bs-doc-toc__title">{isZh ? '本页内容' : 'On this page'}</p>
-            <nav className="vx-bs-doc-toc__nav">
-              {tocSections.map((s) => (
-                <a key={s.id} href={`#${s.id}`} className="vx-bs-doc-toc__link">
-                  {s.label}
-                </a>
-              ))}
-            </nav>
-          </aside>
         </div>
 
         {/* Prev / Next page navigation */}
