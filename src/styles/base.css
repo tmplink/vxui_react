@@ -36,6 +36,14 @@
   --vx-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
   --vx-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
   --vx-shadow-lg: 0 28px 60px rgba(15, 23, 42, 0.12);
+  --vx-glass-bg: color-mix(in srgb, var(--vx-surface-strong) 82%, transparent);
+  --vx-glass-bg-strong: color-mix(in srgb, var(--vx-surface-strong) 90%, transparent);
+  --vx-glass-border: color-mix(in srgb, var(--vx-border-strong) 52%, var(--vx-border));
+  --vx-glass-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+  --vx-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  --vx-glass-filter: blur(18px) saturate(1.7);
+  --vx-glass-scrim: color-mix(in srgb, var(--vx-bg) 44%, transparent);
+  --vxm-drawer-bg: var(--vx-glass-bg-strong);
   --vx-radius-sm: 8px;
   --vx-radius: 10px;
   --vx-radius-lg: 14px;
@@ -81,6 +89,13 @@
   --vx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --vx-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
   --vx-shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.34);
+  --vx-glass-bg: color-mix(in srgb, var(--vx-surface-strong) 86%, transparent);
+  --vx-glass-bg-strong: color-mix(in srgb, var(--vx-surface-strong) 94%, transparent);
+  --vx-glass-border: color-mix(in srgb, var(--vx-border-strong) 72%, var(--vx-border));
+  --vx-glass-shadow: 0 22px 54px rgba(0, 0, 0, 0.42);
+  --vx-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --vx-glass-filter: blur(20px) saturate(1.55);
+  --vx-glass-scrim: color-mix(in srgb, #020408 58%, transparent);
 }
 
 * {
@@ -133,9 +148,9 @@ a {
   width: var(--vx-sidebar-width);
   min-width: var(--vx-sidebar-width);
   height: 100%;
-  background: var(--vx-surface);
-  backdrop-filter: blur(16px) saturate(1.6);
-  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -165,7 +180,7 @@ a {
   align-items: stretch;
   justify-content: space-between;
   gap: 12px;
-  background: var(--vx-surface);
+  background: var(--vx-glass-bg-strong);
   box-shadow: inset 0 -1px 0 var(--vx-border);
 }
 
@@ -848,8 +863,11 @@ a {
   min-height: 30px;
   padding: 0 12px;
   border-radius: var(--vx-radius);
-  border: 1px solid var(--vx-border);
-  background: color-mix(in srgb, var(--vx-primary-soft) 48%, var(--vx-surface));
+  border: 1px solid var(--vx-glass-border);
+  background: color-mix(in srgb, var(--vx-primary-soft) 26%, var(--vx-glass-bg-strong));
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  box-shadow: var(--vx-glass-highlight);
   color: var(--vx-primary);
   font-size: 13px;
   font-weight: 700;
@@ -857,7 +875,7 @@ a {
 
 .vx-version-pill--token {
   color: var(--vx-text-secondary);
-  background: var(--vx-bg-accent);
+  background: color-mix(in srgb, var(--vx-bg-accent) 20%, var(--vx-glass-bg));
 }
 
 .vx-button {
@@ -1164,8 +1182,9 @@ a {
 .vx-dialog__overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.42);
-  backdrop-filter: blur(3px);
+  background: var(--vx-glass-scrim);
+  backdrop-filter: blur(14px) saturate(1.08);
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
 }
 
 .vx-dialog__content {
@@ -1176,9 +1195,11 @@ a {
   transform: translate(-50%, -50%);
   padding: 20px;
   border-radius: 16px;
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
-  box-shadow: var(--vx-shadow);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
 }
 
 .vx-dialog__header,
@@ -1240,9 +1261,11 @@ a {
   gap: 14px;
   padding: 16px 18px;
   border-radius: 14px;
-  border: 1px solid var(--vx-border);
-  background: var(--vx-surface);
-  box-shadow: var(--vx-shadow);
+  border: 1px solid var(--vx-glass-border);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
 }
 
 .vx-toast--info {
@@ -1341,7 +1364,9 @@ a {
     position: fixed;
     inset: 0;
     border: 0;
-    background: rgba(15, 23, 42, 0.42);
+    background: var(--vx-glass-scrim);
+    backdrop-filter: blur(14px) saturate(1.06);
+    -webkit-backdrop-filter: blur(14px) saturate(1.06);
     display: block;
     opacity: 0;
     pointer-events: none;
@@ -1488,12 +1513,12 @@ a {
 }
 
 [data-theme-name='ivory-gold'] .vx-sidebar {
-  background: #fdf9f2;
+  background: var(--vx-glass-bg-strong);
 }
 
 [data-theme-name='ivory-gold'],
 [data-theme-name='ivory-gold'] * {
-  --vxm-drawer-bg: #fdf9f2;
+  --vxm-drawer-bg: var(--vx-glass-bg-strong);
 }
 
 [data-theme-name='ivory-gold'] .vx-sidebar__brand-icon {
@@ -1516,12 +1541,12 @@ a {
 }
 
 [data-theme-name='ivory-gold'] .vx-topbar {
-  background: #faf6ee;
+  background: var(--vx-glass-bg-strong);
   box-shadow: inset 0 -1px 0 rgba(160, 116, 42, 0.16);
 }
 
 [data-theme-name='ivory-gold'] .vx-sidebar__header {
-  background: #faf6ee;
+  background: var(--vx-glass-bg-strong);
   box-shadow: inset 0 -1px 0 rgba(160, 116, 42, 0.16);
 }
 
@@ -1670,9 +1695,9 @@ a {
 /* BottomNav */
 .vxm-bottomnav {
   display: flex;
-  background: var(--vx-surface);
-  backdrop-filter: blur(16px) saturate(1.6);
-  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
   box-shadow: inset 0 1px 0 var(--vx-border);
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
@@ -1736,7 +1761,9 @@ a {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.48);
+  background: var(--vx-glass-scrim);
+  backdrop-filter: blur(14px) saturate(1.06);
+  -webkit-backdrop-filter: blur(14px) saturate(1.06);
   display: flex;
   align-items: flex-end;
   animation: vxm-overlay-in 180ms ease forwards;
@@ -1745,9 +1772,11 @@ a {
 .vxm-actionsheet {
   width: 100%;
   max-height: 85dvh;
-  background: var(--vxm-drawer-bg, var(--vx-surface));
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  background: var(--vxm-drawer-bg, var(--vx-glass-bg-strong));
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
   display: flex;
@@ -2023,7 +2052,9 @@ a {
 .vxm-drawer__scrim {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, var(--vxm-overlay-opacity, 0.52));
+  background: color-mix(in srgb, var(--vx-glass-scrim) calc(var(--vxm-overlay-opacity, 0.52) * 100%), transparent);
+  backdrop-filter: blur(14px) saturate(1.06);
+  -webkit-backdrop-filter: blur(14px) saturate(1.06);
   transition: background 200ms ease;
 }
 
@@ -2032,12 +2063,12 @@ a {
   z-index: 1;
   height: 100%;
   max-width: 85vw;
-  background: var(--vxm-drawer-bg, var(--vx-surface));
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  background: var(--vxm-drawer-bg, var(--vx-glass-bg-strong));
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
   display: flex;
   flex-direction: column;
-  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   animation: vxm-drawer-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
   will-change: transform;
   touch-action: pan-y;
@@ -2286,12 +2317,12 @@ a {
 }
 
 [data-theme-name='black-gold'] .vx-sidebar {
-  background: rgba(8, 10, 16, 0.92);
+  background: var(--vx-glass-bg-strong);
 }
 
 [data-theme-name='black-gold'],
 [data-theme-name='black-gold'] * {
-  --vxm-drawer-bg: #0d1018;
+  --vxm-drawer-bg: var(--vx-glass-bg-strong);
 }
 
 [data-theme-name='black-gold'] .vx-sidebar__brand-icon {
@@ -2314,7 +2345,7 @@ a {
 }
 
 [data-theme-name='black-gold'] .vx-topbar {
-  background: rgba(5, 7, 11, 0.82);
+  background: var(--vx-glass-bg-strong);
 }
 
 [data-theme-name='black-gold'] .vx-sidebar__brand-icon {
@@ -2699,12 +2730,12 @@ a {
 .vx-popover {
   position: absolute;
   z-index: 500;
-  background: var(--vx-surface);
-  backdrop-filter: blur(16px) saturate(1.6);
-  -webkit-backdrop-filter: blur(16px) saturate(1.6);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   padding: 0.75rem;
   animation: vx-fade-in 150ms ease;
   min-width: 12rem;
@@ -2721,12 +2752,12 @@ a {
   position: absolute;
   z-index: 600;
   top: calc(100% + 4px);
-  background: var(--vx-surface);
-  backdrop-filter: blur(16px) saturate(1.6);
-  -webkit-backdrop-filter: blur(16px) saturate(1.6);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   padding: 0.25rem;
   min-width: 12rem;
   animation: vx-fade-in 150ms ease;
@@ -3182,9 +3213,12 @@ a {
   gap: 8px;
   height: 34px;
   padding: 0 12px;
-  background: var(--vx-bg-accent);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
+  box-shadow: var(--vx-glass-highlight);
   color: var(--vx-text-muted);
   font-size: 0.8125rem;
   cursor: pointer;
@@ -3195,19 +3229,21 @@ a {
 .vx-cmd-trigger:hover {
   border-color: var(--vx-border-strong);
   color: var(--vx-text);
-  background: var(--vx-surface);
+  background: var(--vx-glass-bg-strong);
 }
 
 .vx-cmd-trigger--active {
   color: var(--vx-primary);
   border-color: color-mix(in srgb, var(--vx-primary) 24%, var(--vx-border));
-  background: color-mix(in srgb, var(--vx-primary-soft) 70%, var(--vx-surface));
+  background: color-mix(in srgb, var(--vx-primary-soft) 44%, var(--vx-glass-bg-strong));
 }
 
 .vx-cmd-trigger kbd {
   font-size: 0.6875rem;
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: 3px;
   padding: 0 4px;
   font-family: inherit;
@@ -4920,7 +4956,9 @@ a {
     display: block;
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, 0.42);
+    background: var(--vx-glass-scrim);
+    backdrop-filter: blur(14px) saturate(1.06);
+    -webkit-backdrop-filter: blur(14px) saturate(1.06);
     opacity: 0;
     pointer-events: none;
     transition: opacity 180ms ease;
