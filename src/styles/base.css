@@ -4600,6 +4600,223 @@ a {
   gap: 8px;
 }
 
+/* ─── Bootstrap-style documentation page ──────────────── */
+.vx-bs-doc-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.vx-bs-doc-header {
+  padding-bottom: 28px;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--vx-border);
+}
+
+.vx-bs-doc-kicker {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--vx-primary);
+  margin-bottom: 10px;
+}
+
+.vx-bs-doc-header h1 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  color: var(--vx-text);
+  text-wrap: balance;
+}
+
+.vx-bs-doc-lead {
+  margin: 0 0 16px;
+  max-width: 60ch;
+  font-size: clamp(1rem, 0.3vw + 0.98rem, 1.08rem);
+  line-height: 1.65;
+  color: var(--vx-text-secondary);
+}
+
+.vx-bs-doc-header-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vx-bs-doc-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 196px;
+  gap: 40px;
+  align-items: start;
+  padding-top: 32px;
+}
+
+.vx-bs-doc-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.vx-bs-doc-section {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--vx-border);
+}
+
+.vx-bs-doc-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.vx-bs-section-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--vx-text);
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vx-bs-anchor {
+  color: var(--vx-text-muted);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 140ms;
+  line-height: 1;
+}
+
+.vx-bs-section-heading:hover .vx-bs-anchor {
+  opacity: 1;
+}
+
+.vx-bs-example {
+  padding: 28px 24px;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-lg);
+  background: color-mix(in srgb, var(--vx-bg-accent) 55%, var(--vx-surface));
+}
+
+.vx-bs-doc-toc {
+  position: sticky;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 14px;
+  border-left: 1px solid var(--vx-border);
+}
+
+.vx-bs-doc-toc__title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vx-text-muted);
+  margin: 0 0 8px;
+}
+
+.vx-bs-doc-toc__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vx-bs-doc-toc__link {
+  font-size: 0.875rem;
+  color: var(--vx-text-secondary);
+  text-decoration: none;
+  padding: 5px 0;
+  display: block;
+  transition: color 140ms;
+  cursor: pointer;
+}
+
+.vx-bs-doc-toc__link:hover {
+  color: var(--vx-primary);
+}
+
+.vx-bs-doc-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 32px;
+  border-top: 1px solid var(--vx-border);
+  margin-top: 32px;
+}
+
+.vx-bs-doc-pager__btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 18px;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  cursor: pointer;
+  text-align: left;
+  max-width: 220px;
+  transition: border-color 160ms, background 160ms, transform 160ms;
+}
+
+.vx-bs-doc-pager__btn:hover {
+  border-color: color-mix(in srgb, var(--vx-primary) 40%, var(--vx-border));
+  background: var(--vx-surface-hover);
+  transform: translateY(-1px);
+}
+
+.vx-bs-doc-pager__btn--next {
+  text-align: right;
+  margin-left: auto;
+}
+
+.vx-bs-doc-pager__dir {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--vx-text-muted);
+}
+
+.vx-bs-doc-pager__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--vx-text);
+}
+
+@media (max-width: 960px) {
+  .vx-bs-doc-body {
+    grid-template-columns: 1fr;
+  }
+
+  .vx-bs-doc-toc {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .vx-bs-doc-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .vx-bs-doc-pager {
+    flex-direction: column;
+  }
+
+  .vx-bs-doc-pager__btn,
+  .vx-bs-doc-pager__btn--next {
+    max-width: 100%;
+    text-align: left;
+    margin-left: 0;
+  }
+}
+
 .vx-doc-list {
   margin: 0;
   padding-left: 1.1rem;

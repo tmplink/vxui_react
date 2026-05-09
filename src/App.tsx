@@ -2063,58 +2063,113 @@ export default function App() {
 
   function renderDocPage() {
     const usageSnippet = DOC_USAGE_SNIPPETS[activePage];
+    const sample = renderSample(activePage);
+    const hasSample = sample !== null;
+
+    // Flat ordered page list for prev/next navigation
+    const flatPages = DOC_NAV_GROUPS.flatMap((g) => g.pages);
+    const currentIndex = flatPages.indexOf(activePage);
+    const prevPage = currentIndex > 0 ? flatPages[currentIndex - 1] : null;
+    const nextPage = currentIndex < flatPages.length - 1 ? flatPages[currentIndex + 1] : null;
+
+    const tocSections = [
+      { id: 'overview', label: isZh ? '使用指南' : 'Overview' },
+      ...(hasSample ? [{ id: 'example', label: isZh ? '示例' : 'Example' }] : []),
+      ...(usageSnippet ? [{ id: 'usage', label: isZh ? '用法' : 'Usage' }] : []),
+    ];
 
     return (
-      <article className="vx-doc-page">
-        <section className="vx-doc-page__hero">
-          <div>
-            <span className="vx-doc-page__kicker">{activeDocument.section}</span>
-            <h1>{activeDocument.title}</h1>
-            <p>{activeDocument.description}</p>
-          </div>
-          <div className="vx-doc-page__meta">
+      <article className="vx-bs-doc-page">
+        {/* Page header */}
+        <header className="vx-bs-doc-header">
+          <span className="vx-bs-doc-kicker">{activeDocument.section}</span>
+          <h1>{activeDocument.title}</h1>
+          <p className="vx-bs-doc-lead">{activeDocument.description}</p>
+          <div className="vx-bs-doc-header-badges">
             <span className="vx-version-pill">{copy.livePreview}</span>
             <span className="vx-version-pill vx-version-pill--token">{copy.releaseOptions[releaseTrack]}</span>
           </div>
-        </section>
+        </header>
 
-        <div className="vx-doc-page__grid">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t.docs.guidance}</CardTitle>
-              <CardDescription>{t.docs.guidanceDesc}</CardDescription>
-            </CardHeader>
-            <CardContent>
+        {/* Content body + right TOC */}
+        <div className="vx-bs-doc-body">
+          <div className="vx-bs-doc-content">
+            {/* Overview / Guidance */}
+            <section id="overview" className="vx-bs-doc-section">
+              <h2 className="vx-bs-section-heading">
+                {isZh ? '使用指南' : 'Overview'}
+                <a href="#overview" className="vx-bs-anchor" aria-label={isZh ? '链接到使用指南' : 'Link to Overview'}>#</a>
+              </h2>
               <ul className="vx-doc-list">
                 {activeDocument.guidance.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-            </CardContent>
-          </Card>
+            </section>
 
-          <Card className="vx-doc-page__preview-card">
-            <CardHeader>
-              <CardTitle>{t.docs.preview}</CardTitle>
-              <CardDescription>{t.docs.previewDesc}</CardDescription>
-            </CardHeader>
-            <CardContent>{renderSample(activePage)}</CardContent>
-          </Card>
+            {/* Live example */}
+            {hasSample && (
+              <section id="example" className="vx-bs-doc-section">
+                <h2 className="vx-bs-section-heading">
+                  {isZh ? '示例' : 'Example'}
+                  <a href="#example" className="vx-bs-anchor" aria-label={isZh ? '链接到示例' : 'Link to Example'}>#</a>
+                </h2>
+                <div className="vx-bs-example">{sample}</div>
+              </section>
+            )}
+
+            {/* Code usage */}
+            {usageSnippet && (
+              <section id="usage" className="vx-bs-doc-section">
+                <h2 className="vx-bs-section-heading">
+                  {isZh ? '用法' : 'Usage'}
+                  <a href="#usage" className="vx-bs-anchor" aria-label={isZh ? '链接到用法' : 'Link to Usage'}>#</a>
+                </h2>
+                {renderCodeBlock(usageSnippet)}
+              </section>
+            )}
+          </div>
+
+          {/* On this page – sticky right TOC */}
+          <aside className="vx-bs-doc-toc" aria-label={isZh ? '本页内容' : 'On this page'}>
+            <p className="vx-bs-doc-toc__title">{isZh ? '本页内容' : 'On this page'}</p>
+            <nav className="vx-bs-doc-toc__nav">
+              {tocSections.map((s) => (
+                <a key={s.id} href={`#${s.id}`} className="vx-bs-doc-toc__link">
+                  {s.label}
+                </a>
+              ))}
+            </nav>
+          </aside>
         </div>
 
-        {usageSnippet ? (
-          <Card>
-            <CardHeader>
-              <CardTitle>{isZh ? '示例代码' : 'Code Example'}</CardTitle>
-              <CardDescription>
-                {isZh
-                  ? '按照标准文档结构，先给最小可运行示例，再补充场景化用法。'
-                  : 'Follow a standard documentation structure: start with the smallest working example, then expand into scenario-based usage.'}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>{renderCodeBlock(usageSnippet)}</CardContent>
-          </Card>
-        ) : null}
+        {/* Prev / Next page navigation */}
+        {(prevPage ?? nextPage) && (
+          <nav className="vx-bs-doc-pager" aria-label={isZh ? '分页导航' : 'Page navigation'}>
+            {prevPage ? (
+              <button
+                type="button"
+                className="vx-bs-doc-pager__btn"
+                onClick={() => navigate({ view: 'docs', page: prevPage })}
+              >
+                <span className="vx-bs-doc-pager__dir">← {isZh ? '上一页' : 'Previous'}</span>
+                <span className="vx-bs-doc-pager__label">{pages[prevPage].title}</span>
+              </button>
+            ) : (
+              <div />
+            )}
+            {nextPage && (
+              <button
+                type="button"
+                className="vx-bs-doc-pager__btn vx-bs-doc-pager__btn--next"
+                onClick={() => navigate({ view: 'docs', page: nextPage })}
+              >
+                <span className="vx-bs-doc-pager__dir">{isZh ? '下一页' : 'Next'} →</span>
+                <span className="vx-bs-doc-pager__label">{pages[nextPage].title}</span>
+              </button>
+            )}
+          </nav>
+        )}
       </article>
     );
   }
