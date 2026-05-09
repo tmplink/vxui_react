@@ -157,7 +157,7 @@ export function AppShell({
         data-scrollable="false"
         data-scrollbar-state="hidden"
       >
-        <div ref={sidebarScrollRef} className="vx-sidebar__scroll vx-scroll-area">
+        <div ref={sidebarScrollRef} className="vx-sidebar__scroll vx-scroll-hide-native">
           <div className="vx-sidebar__header">
             <div className="vx-sidebar__brand">
               {brandIcon ? <span className="vx-sidebar__brand-icon">{brandIcon}</span> : null}
@@ -260,7 +260,7 @@ export function AppShell({
           data-scrollable="false"
           data-scrollbar-state="hidden"
         >
-          <main ref={contentScrollRef} className="vx-shell__content vx-scroll-area">{children}</main>
+          <main ref={contentScrollRef} className="vx-shell__content vx-scroll-hide-native">{children}</main>
           <span className="vx-overlay-scrollbar" aria-hidden="true">
             <span className="vx-overlay-scrollbar__thumb" />
           </span>

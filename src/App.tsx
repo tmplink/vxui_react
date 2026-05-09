@@ -2242,30 +2242,29 @@ export default function App() {
         }
         headerActions={
           <div className="vx-docs-toolbar">
-            <button type="button" className="vx-cmd-trigger" onClick={() => navigate({ view: 'home' })}>
+            <Button variant="outline" size="sm" onClick={() => navigate({ view: 'home' })}>
               <House size={14} />
               {t.publicPages.backHome}
-            </button>
-            <button type="button" className="vx-cmd-trigger" onClick={() => setSearchOpen(true)}>
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setSearchOpen(true)}>
               <Search size={14} />
               {t.searchTrigger}
-              <kbd>⌘K</kbd>
-            </button>
-            <button
-              type="button"
-              aria-pressed={compactDensity}
-              className={compactDensity ? 'vx-cmd-trigger vx-cmd-trigger--active' : 'vx-cmd-trigger'}
+              <kbd className="vx-search-kbd">⌘K</kbd>
+            </Button>
+            <Button
+              variant={compactDensity ? "soft" : "outline"}
+              size="sm"
               onClick={() => setCompactDensity((current) => !current)}
             >
               <SlidersHorizontal size={14} />
               {isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`}
-            </button>
+            </Button>
             <DropdownMenu
               trigger={
-                <button type="button" className="vx-cmd-trigger">
+                <Button variant="outline" size="sm">
                   <Palette size={14} />
                   {themes[theme]?.label ?? theme}
-                </button>
+                </Button>
               }
               items={themeEntries.map(([themeName, definition]) => ({
                 label: definition.label ?? themeName,
@@ -2274,10 +2273,10 @@ export default function App() {
             />
             <DropdownMenu
               trigger={
-                <button type="button" className="vx-cmd-trigger">
+                <Button variant="outline" size="sm">
                   <User size={14} />
                   {viewerSession?.name ?? t.publicPages.guestLabel}
-                </button>
+                </Button>
               }
               groups={[
                 {

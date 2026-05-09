@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ChevronDown, Globe } from 'lucide-react';
 import { useI18n, locales } from '../i18n';
 import { cx } from '../lib/cx';
+import { Button } from './Button';
 
 export interface LanguageSwitcherProps {
   /**
@@ -52,18 +53,20 @@ export function LanguageSwitcher({ variant = 'inline', className }: LanguageSwit
         className,
       )}
     >
-      <button
-        type="button"
-        className="vx-lang-drop__trigger"
+      <Button
+        variant="outline"
+        size="sm"
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label="Switch language"
+        className="vx-lang-drop__trigger-btn"
+        style={{ height: '36px' }}
       >
-        <Globe size={13} aria-hidden="true" />
-        <span>{current?.label ?? locale}</span>
-        <ChevronDown size={12} className="vx-lang-drop__chevron" aria-hidden="true" />
-      </button>
+        <Globe size={14} aria-hidden="true" />
+        {current?.label ?? locale}
+        <ChevronDown size={14} className="vx-lang-drop__chevron" aria-hidden="true" />
+      </Button>
 
       {open && (
         <ul className="vx-lang-drop__menu" role="listbox" aria-label="Language">

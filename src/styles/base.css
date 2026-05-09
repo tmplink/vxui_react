@@ -137,6 +137,12 @@
   box-shadow: 0 4px 24px rgba(28, 40, 80, 0.08);
 }
 
+[data-theme-name='indigo'] .vx-button,
+[data-theme-name='indigo'] .vx-input,
+[data-theme-name='indigo'] .vx-badge {
+  border-radius: 12px;
+}
+
 /* ── Violet (light) ─────────────────────────────────────── */
 :root[data-theme-name='violet'] {
   color-scheme: light;
@@ -157,6 +163,40 @@
   --vx-code-operator: #1e1b2e;
   --vx-glass-filter: blur(18px) saturate(1.9);
   --vx-glass-scrim: color-mix(in srgb, #f8f7ff 46%, transparent);
+}
+
+[data-theme-name='violet'] .vx-button,
+[data-theme-name='violet'] .vx-input,
+[data-theme-name='violet'] .vx-badge,
+[data-theme-name='violet'] .vx-cmd-trigger,
+[data-theme-name='violet'] .vx-lang-drop__trigger,
+[data-theme-name='violet-dark'] .vx-button,
+[data-theme-name='violet-dark'] .vx-input,
+[data-theme-name='violet-dark'] .vx-badge,
+[data-theme-name='violet-dark'] .vx-cmd-trigger,
+[data-theme-name='violet-dark'] .vx-lang-drop__trigger,
+[data-theme-name='vxai'] .vx-button,
+[data-theme-name='vxai'] .vx-input,
+[data-theme-name='vxai'] .vx-badge,
+[data-theme-name='vxai'] .vx-cmd-trigger,
+[data-theme-name='vxai'] .vx-lang-drop__trigger,
+[data-theme-name='vxai-dark'] .vx-button,
+[data-theme-name='vxai-dark'] .vx-input,
+[data-theme-name='vxai-dark'] .vx-badge {
+  border-radius: 12px;
+}
+
+[data-theme-name='vxai'] .vx-button--outline,
+[data-theme-name='vxai-dark'] .vx-button--outline {
+  background: var(--vx-surface);
+  box-shadow: var(--vx-shadow-sm);
+  border-color: var(--vx-border);
+}
+
+[data-theme-name='vxai'] .vx-button--outline:hover,
+[data-theme-name='vxai-dark'] .vx-button--outline:hover {
+  background: var(--vx-surface-hover);
+  border-color: var(--vx-border-strong);
 }
 
 /* ── Violet Dark ────────────────────────────────────────── */
@@ -241,8 +281,8 @@ a {
 }
 
 .vx-sidebar__scroll {
+  flex: 1 1 auto;
   min-height: 0;
-  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -543,25 +583,28 @@ a {
 
 .vx-shell__content-wrap {
   position: relative;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
 }
 
 .vx-shell__content {
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding: 28px 24px 48px;
 }
 
-.vx-scroll-area {
+.vx-scroll-hide-native {
   min-height: 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.vx-scroll-area::-webkit-scrollbar {
+.vx-scroll-hide-native::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
@@ -973,10 +1016,6 @@ a {
   transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
-.vx-button:hover {
-  border-color: var(--vx-border-strong);
-}
-
 .vx-button:focus-visible,
 .vx-input:focus-within,
 .vx-switch__control:focus-visible,
@@ -1013,10 +1052,36 @@ a {
   width: 100%;
 }
 
+.vx-button--pill {
+  border-radius: 9999px;
+}
+
+.vx-button--gradient {
+  color: #ffffff;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4);
+}
+
+.vx-button--gradient:hover {
+  box-shadow: 0 8px 22px rgba(79, 70, 229, 0.5);
+  transform: translateY(-1px);
+}
+
+.vx-button--gradient:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
 .vx-button--solid {
   color: #ffffff;
   background: var(--vx-primary);
   border-color: var(--vx-primary);
+}
+
+.vx-button--solid:hover {
+  background: var(--vx-primary-strong);
+  border-color: var(--vx-primary-strong);
 }
 
 .vx-button--secondary {
@@ -1025,15 +1090,71 @@ a {
   background: var(--vx-surface);
 }
 
+.vx-button--secondary:hover {
+  background: var(--vx-surface-hover);
+  border-color: var(--vx-border-strong);
+}
+
 .vx-button--ghost {
   color: var(--vx-text-secondary);
   background: transparent;
-  border-color: var(--vx-border);
+  border-color: transparent;
+}
+
+.vx-button--ghost:hover {
+  color: var(--vx-text);
+  background: var(--vx-bg-accent);
+}
+
+.vx-button--outline {
+  color: var(--vx-text);
+  background: transparent;
+  border-color: var(--vx-border-strong);
+}
+
+.vx-button--outline:hover {
+  background: var(--vx-bg-accent);
+}
+
+.vx-button--soft {
+  color: var(--vx-primary-strong);
+  background: var(--vx-primary-soft);
+  border-color: transparent;
+}
+
+.vx-button--soft:hover {
+  background: color-mix(in srgb, var(--vx-primary-soft) 80%, black);
+}
+
+.vx-button--primary-outline {
+  color: var(--vx-primary);
+  background: transparent;
+  border-color: var(--vx-primary);
+}
+
+.vx-button--primary-outline:hover {
+  background: var(--vx-primary-soft);
 }
 
 .vx-button--danger {
   color: #ffffff;
   background: var(--vx-danger);
+  border-color: var(--vx-danger);
+}
+
+.vx-button--danger:hover {
+  background: color-mix(in srgb, var(--vx-danger) 80%, black);
+  border-color: color-mix(in srgb, var(--vx-danger) 80%, black);
+}
+
+.vx-button--danger-outline {
+  color: var(--vx-danger);
+  background: transparent;
+  border-color: color-mix(in srgb, var(--vx-danger) 50%, transparent);
+}
+
+.vx-button--danger-outline:hover {
+  background: color-mix(in srgb, var(--vx-danger) 10%, transparent);
   border-color: var(--vx-danger);
 }
 
@@ -3315,13 +3436,14 @@ a {
   background: color-mix(in srgb, var(--vx-primary-soft) 44%, var(--vx-glass-bg-strong));
 }
 
-.vx-cmd-trigger kbd {
+/* For search triggers in the top bar using new Button component */
+.vx-search-kbd {
   font-size: 0.6875rem;
-  background: var(--vx-glass-bg-strong);
+  background: var(--vx-surface-hover);
   backdrop-filter: var(--vx-glass-filter);
   -webkit-backdrop-filter: var(--vx-glass-filter);
-  border: 1px solid var(--vx-glass-border);
-  border-radius: 3px;
+  border: 1px solid var(--vx-border);
+  border-radius: 4px;
   padding: 0 4px;
   font-family: inherit;
   color: var(--vx-text-muted);
