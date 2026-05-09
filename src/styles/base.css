@@ -2730,7 +2730,7 @@ a {
 .vx-popover {
   position: absolute;
   z-index: 500;
-  background: var(--vx-glass-bg-strong);
+  background: var(--vx-glass-bg);
   backdrop-filter: var(--vx-glass-filter);
   -webkit-backdrop-filter: var(--vx-glass-filter);
   border: 1px solid var(--vx-glass-border);
@@ -2752,7 +2752,7 @@ a {
   position: absolute;
   z-index: 600;
   top: calc(100% + 4px);
-  background: var(--vx-glass-bg-strong);
+  background: var(--vx-glass-bg);
   backdrop-filter: var(--vx-glass-filter);
   -webkit-backdrop-filter: var(--vx-glass-filter);
   border: 1px solid var(--vx-glass-border);
@@ -3272,9 +3272,12 @@ a {
   gap: 6px;
   height: 34px;
   padding: 0 10px;
-  background: var(--vx-bg-accent);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
+  box-shadow: var(--vx-glass-highlight);
   color: var(--vx-text-muted);
   font-size: 0.8125rem;
   font-family: inherit;
@@ -3288,7 +3291,12 @@ a {
 .vx-lang-drop--open .vx-lang-drop__trigger {
   border-color: var(--vx-border-strong);
   color: var(--vx-text);
-  background: var(--vx-surface);
+  background: var(--vx-glass-bg-strong);
+}
+
+.vx-lang-drop__trigger:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--vx-primary) 72%, white);
+  outline-offset: 2px;
 }
 
 .vx-lang-drop__chevron {
@@ -3306,10 +3314,13 @@ a {
   top: calc(100% + 4px);
   left: 0;
   min-width: 100%;
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
-  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
+  overflow: hidden;
   padding: 4px;
   margin: 0;
   list-style: none;
@@ -3348,13 +3359,14 @@ a {
 }
 
 .vx-lang-drop__item:hover {
-  background: var(--vx-bg-accent);
+  background: color-mix(in srgb, var(--vx-bg-accent) 72%, var(--vx-glass-bg));
   color: var(--vx-text);
 }
 
 .vx-lang-drop__item--active {
   color: var(--vx-primary);
   font-weight: 600;
+  background: color-mix(in srgb, var(--vx-primary-soft) 36%, var(--vx-glass-bg));
 }
 
 .vx-lang-drop__check {
@@ -4868,6 +4880,23 @@ a {
 .vx-public--error,
 .vx-legal-page {
   min-height: 100vh;
+}
+
+.vx-legal-page {
+  background:
+    radial-gradient(120% 72% at 50% 0%, var(--vx-primary-soft) 0%, transparent 68%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--vx-bg-accent) 58%, var(--vx-bg)) 0%,
+      color-mix(in srgb, var(--vx-bg-accent) 24%, var(--vx-bg)) 22%,
+      var(--vx-bg) 56%,
+      color-mix(in srgb, var(--vx-primary-soft) 12%, var(--vx-bg)) 100%
+    );
+}
+
+.vx-legal-page::before,
+.vx-legal-page::after {
+  display: none;
 }
 
 .vx-error-shell,
