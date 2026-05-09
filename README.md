@@ -6,13 +6,17 @@ VXUI React 是对原始 VXUI Foundation 的 React 重写版本，目标是提供
 
 ## 安装
 
+当前版本尚未发布到 npm，安装请直接指向 GitHub 仓库：
+
 ```bash
-npm install vxui-react
+npm install vxui-react@github:tmplink/vxui_react
 ```
 
 `react` 和 `react-dom` 需要由宿主应用提供。
 
 ## 引入样式
+
+安装完成后，包名仍然保持为 `vxui-react`。
 
 ```tsx
 import 'vxui-react/styles.css';
