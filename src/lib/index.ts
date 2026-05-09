@@ -22,6 +22,12 @@ export type {
 } from '../components/ThemeProvider';
 export { ToastProvider, useToast } from '../components/Toast';
 
+// Typography components
+export { Text } from '../components/Text';
+export type { TextProps } from '../components/Text';
+export { Heading } from '../components/Heading';
+export type { HeadingProps } from '../components/Heading';
+
 // Form components
 export { Select } from '../components/Select';
 export type { SelectProps } from '../components/Select';
