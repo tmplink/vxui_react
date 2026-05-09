@@ -52,7 +52,7 @@ export function HomePage({
 
   const previewSections = [
     { id: 'quick-start', icon: <Zap size={18} />, label: t.pages['quick-start'], meta: t.nav.gettingStarted },
-    { id: 'elements', icon: <Palette size={18} />, label: t.pages.elements, meta: t.nav.components },
+    { id: 'button', icon: <Palette size={18} />, label: t.pages.button, meta: t.nav.components },
     { id: 'mobile', icon: <Smartphone size={18} />, label: t.pages.mobile, meta: t.nav.mobile },
   ];
 

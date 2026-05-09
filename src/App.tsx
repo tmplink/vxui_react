@@ -26,6 +26,7 @@ import {
 import { CommandPalette } from './components/CommandPalette';
 import type { SearchEntry } from './components/CommandPalette';
 import type { AppShellNavSection } from './components/AppShell';
+import { CodeBlock } from './components/CodeBlock';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { ErrorPage } from './components/pages/ErrorPage';
 import { HomePage } from './components/pages/HomePage';
@@ -57,7 +58,6 @@ import {
   Select,
   Skeleton,
   Slider,
-  Switch,
   Table,
   Tabs,
   TabsContent,
@@ -73,6 +73,7 @@ const DOC_PAGE_KEYS = [
   'quick-start',
   'shell-sidebar',
   'grid-page',
+  'button',
   'elements',
   'form-controls',
   'form-inputs',
@@ -119,13 +120,27 @@ interface ViewerSession {
 const SESSION_STORAGE_KEY = 'vxui-react-auth-session';
 
 const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; pages: PageKey[] }> = [
-  { key: 'gettingStarted', pages: ['introduction', 'quick-start'] },
-  { key: 'layout', pages: ['shell-sidebar', 'grid-page', 'nav-layout'] },
+  { key: 'gettingStarted', pages: ['introduction'] },
+  { key: 'layout', pages: ['quick-start'] },
   {
     key: 'components',
-    pages: ['elements', 'form-controls', 'form-inputs', 'overlays', 'navigation', 'data-display'],
+    pages: [
+      'shell-sidebar',
+      'grid-page',
+      'nav-layout',
+      'button',
+      'elements',
+      'form-controls',
+      'form-inputs',
+      'navigation',
+      'overlays',
+      'data-display',
+      'data-list',
+      'empty-states',
+      'toasts',
+      'feedback',
+    ],
   },
-  { key: 'feedback', pages: ['data-list', 'empty-states', 'toasts', 'feedback'] },
   {
     key: 'templates',
     pages: ['home-page', 'login-page', 'register-page', 'error-page', 'privacy-policy', 'terms-of-service'],
@@ -138,7 +153,8 @@ const pageIcons: Record<PageKey, ReactNode> = {
   'quick-start': <Zap size={16} />,
   'shell-sidebar': <PanelsTopLeft size={16} />,
   'grid-page': <LayoutDashboard size={16} />,
-  elements: <Sparkles size={16} />,
+  button: <Sparkles size={16} />,
+  elements: <Palette size={16} />,
   'form-controls': <FileText size={16} />,
   'form-inputs': <SlidersHorizontal size={16} />,
   navigation: <Compass size={16} />,
@@ -156,6 +172,740 @@ const pageIcons: Record<PageKey, ReactNode> = {
   'error-page': <AlertTriangle size={16} />,
   'privacy-policy': <ShieldCheck size={16} />,
   'terms-of-service': <FileCode2 size={16} />,
+};
+
+function getDocsGroupLabel(key: NavGroupKey, isZh: boolean) {
+  switch (key) {
+    case 'gettingStarted':
+      return isZh ? '介绍' : 'Introduction';
+    case 'layout':
+      return isZh ? '安装' : 'Installation';
+    case 'components':
+      return isZh ? '组件' : 'Components';
+    case 'templates':
+      return isZh ? '模板' : 'Templates';
+    case 'mobile':
+      return isZh ? '响应式' : 'Responsive';
+    case 'feedback':
+      return isZh ? '反馈' : 'Feedback';
+    default:
+      return isZh ? '文档' : 'Docs';
+  }
+}
+
+function getDocsGroupDescription(key: NavGroupKey, isZh: boolean) {
+  switch (key) {
+    case 'gettingStarted':
+      return isZh
+        ? '先理解设计目标、页面壳层和这套组件系统解决的问题。'
+        : 'Start with the design goals, the page shell, and what this library is meant to solve.';
+    case 'layout':
+      return isZh
+        ? '安装包、引入样式、挂载 Provider，并创建第一个页面。'
+        : 'Install the package, import styles, mount providers, and create the first page.';
+    case 'components':
+      return isZh
+        ? '布局、表单、反馈、数据展示与浮层统一收敛到一个组件入口。'
+        : 'Layout, forms, feedback, data display, and overlays now live under one component entry point.';
+    case 'templates':
+      return isZh
+        ? '直接查看主页、认证页、错误页和法务页等完整页面结构。'
+        : 'Jump straight to full-page examples for home, auth, error, and legal flows.';
+    case 'mobile':
+      return isZh
+        ? '同一套路由和内容模型如何适配手机、平板和桌面。'
+        : 'See how the same route tree and content model adapt across phone, tablet, and desktop.';
+    case 'feedback':
+      return isZh ? '确认状态、加载状态和空状态的反馈模式。' : 'Review status, loading, and empty-state feedback patterns.';
+    default:
+      return isZh ? '浏览文档内容。' : 'Browse documentation content.';
+  }
+}
+
+const QUICK_START_PREVIEW_SNIPPETS = {
+  install: String.raw`npm install vxui-react
+
+// src/main.tsx
+import 'vxui-react/styles.css';`,
+  providers: String.raw`import ReactDOM from 'react-dom/client';
+import { ThemeProvider, ToastProvider, themePresets } from 'vxui-react';
+import App from './App';
+import 'vxui-react/styles.css';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <ThemeProvider themes={themePresets} defaultTheme="light">
+    <ToastProvider>
+      <App />
+    </ToastProvider>
+  </ThemeProvider>,
+);`,
+  layout: String.raw`import {
+  AppShell,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from 'vxui-react';
+
+const navSections = [
+  {
+    title: 'Workspace',
+    items: [
+      { key: 'overview', label: 'Overview', active: true },
+      { key: 'components', label: 'Components' },
+    ],
+  },
+];
+
+export function App() {
+  return (
+    <AppShell
+      brand="Acme Ops"
+      title="Overview"
+      description="Build admin screens from one reusable shell."
+      navSections={navSections}
+      headerActions={<Button size="sm">Create order</Button>}
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle>Queue health</CardTitle>
+        </CardHeader>
+        <CardContent>All services are online.</CardContent>
+      </Card>
+    </AppShell>
+  );
+}`,
+  feedback: String.raw`import { Button, useToast } from 'vxui-react';
+
+export function SaveButton() {
+  const { push } = useToast();
+
+  return (
+    <Button
+      onClick={() =>
+        push({
+          tone: 'success',
+          title: 'Saved',
+          description: 'The latest changes are now available to your team.',
+        })
+      }
+    >
+      Save changes
+    </Button>
+  );
+}`,
+} as const;
+
+const DOC_USAGE_SNIPPETS: Partial<Record<PageKey, string>> = {
+  introduction: String.raw`import {
+  AppShell,
+  ThemeProvider,
+  ToastProvider,
+  themePresets,
+} from 'vxui-react';
+import 'vxui-react/styles.css';
+
+export function App() {
+  return (
+    <ThemeProvider themes={themePresets} defaultTheme="light">
+      <ToastProvider>
+        <AppShell
+          title="Overview"
+          description="Start with the shell, then compose cards, forms, and feedback."
+          navItems={[{ key: 'home', label: 'Home', active: true }]}
+        >
+          <div>Your first VXUI screen.</div>
+        </AppShell>
+      </ToastProvider>
+    </ThemeProvider>
+  );
+}`,
+  'quick-start': String.raw`import { useState } from 'react';
+import {
+  AppShell,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+  ThemeProvider,
+  ToastProvider,
+  themePresets,
+  useToast,
+} from 'vxui-react';
+import 'vxui-react/styles.css';
+
+const navSections = [
+  {
+    title: 'Workspace',
+    items: [{ key: 'overview', label: 'Overview', active: true }],
+  },
+];
+
+function Workspace() {
+  const [projectName, setProjectName] = useState('Launch checklist');
+  const { push } = useToast();
+
+  return (
+    <AppShell
+      brand="Acme Ops"
+      title="Overview"
+      description="Ship internal tools with one component system."
+      navSections={navSections}
+      headerActions={
+        <Button
+          size="sm"
+          onClick={() =>
+            push({
+              tone: 'success',
+              title: 'Saved',
+              description: 'The project settings were updated.',
+            })
+          }
+        >
+          Save
+        </Button>
+      }
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle>Project</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Input
+            label="Project name"
+            value={projectName}
+            onChange={(event) => setProjectName(event.target.value)}
+          />
+        </CardContent>
+      </Card>
+    </AppShell>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider themes={themePresets} defaultTheme="light">
+      <ToastProvider>
+        <Workspace />
+      </ToastProvider>
+    </ThemeProvider>
+  );
+}`,
+  'shell-sidebar': String.raw`import { AppShell, Button, Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+
+const navSections = [
+  {
+    title: 'Guides',
+    items: [
+      { key: 'overview', label: 'Overview', active: true },
+      { key: 'components', label: 'Components', badge: '18' },
+      { key: 'templates', label: 'Templates' },
+    ],
+  },
+];
+
+export function DocsShell() {
+  return (
+    <AppShell
+      brand="VXUI Docs"
+      brandCaption="React component library"
+      title="Overview"
+      description="Keep navigation, header actions, and content in one shell."
+      navSections={navSections}
+      headerActions={<Button size="sm">Publish</Button>}
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle>Layout overview</CardTitle>
+        </CardHeader>
+        <CardContent>Use AppShell as the outer frame for docs, dashboards, and tools.</CardContent>
+      </Card>
+    </AppShell>
+  );
+}`,
+  'grid-page': String.raw`import { Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+
+const metrics = [
+  { label: 'Orders', value: '128' },
+  { label: 'Pending', value: '12' },
+  { label: 'SLA', value: '99.9%' },
+];
+
+export function MetricsGrid() {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gap: 16,
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+      }}
+    >
+      {metrics.map((metric) => (
+        <Card key={metric.label}>
+          <CardHeader>
+            <CardTitle>{metric.label}</CardTitle>
+          </CardHeader>
+          <CardContent>{metric.value}</CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}`,
+  button: String.raw`import { Button } from 'vxui-react';
+
+export function ButtonExamples() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <Button>Primary</Button>
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="danger">Danger</Button>
+      </div>
+
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <Button size="sm">Small</Button>
+        <Button size="md">Medium</Button>
+        <Button size="lg">Large</Button>
+      </div>
+
+      <Button fullWidth>Full width action</Button>
+    </div>
+  );
+}`,
+  elements: String.raw`import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+
+export function ActionCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <Badge variant="accent">New</Badge>
+        <CardTitle>Operator workspace</CardTitle>
+      </CardHeader>
+      <CardContent style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <Button>Save</Button>
+        <Button variant="secondary">Preview</Button>
+        <Button variant="ghost">Cancel</Button>
+        <Badge variant="success">Live</Badge>
+      </CardContent>
+    </Card>
+  );
+}`,
+  'form-controls': String.raw`import { Button, Input, Select, Textarea } from 'vxui-react';
+
+export function ProjectForm() {
+  return (
+    <form style={{ display: 'grid', gap: 16 }}>
+      <Input label="Project name" placeholder="Northwind migration" />
+
+      <Select label="Release track" defaultValue="stable">
+        <option value="stable">Stable</option>
+        <option value="preview">Preview</option>
+        <option value="internal">Internal</option>
+      </Select>
+
+      <Textarea
+        label="Summary"
+        rows={4}
+        placeholder="Describe what changed in this release."
+      />
+
+      <Button type="submit">Save changes</Button>
+    </form>
+  );
+}`,
+  'form-inputs': String.raw`import { useState } from 'react';
+import { Checkbox, Radio, RadioGroup, Slider, Switch } from 'vxui-react';
+
+export function PreferencesForm() {
+  const [realtimeAlerts, setRealtimeAlerts] = useState(true);
+  const [coverage, setCoverage] = useState(80);
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Checkbox
+        defaultChecked
+        label="Enable weekly digest"
+        description="Summarize the most important operational changes."
+      />
+
+      <Switch
+        checked={realtimeAlerts}
+        onCheckedChange={setRealtimeAlerts}
+        label="Realtime alerts"
+        description="Push toast notifications when deployments finish."
+      />
+
+      <RadioGroup label="Density">
+        <Radio name="density" value="comfortable" label="Comfortable" defaultChecked />
+        <Radio name="density" value="compact" label="Compact" />
+      </RadioGroup>
+
+      <Slider
+        label="Documentation coverage"
+        min={0}
+        max={100}
+        value={coverage}
+        onChange={(event) => setCoverage(Number(event.target.value))}
+        showValue
+      />
+    </div>
+  );
+}`,
+  navigation: String.raw`import { useState } from 'react';
+import { Pagination, Tabs, TabsContent, TabsList, TabsTrigger } from 'vxui-react';
+
+export function DocsNavigation() {
+  const [page, setPage] = useState(1);
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Tabs defaultValue="components">
+        <TabsList>
+          <TabsTrigger value="components">Components</TabsTrigger>
+          <TabsTrigger value="templates">Templates</TabsTrigger>
+          <TabsTrigger value="mobile">Responsive</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="components">Browse primitives and composition patterns.</TabsContent>
+        <TabsContent value="templates">Open ready-made page structures.</TabsContent>
+        <TabsContent value="mobile">Keep the same content model on smaller screens.</TabsContent>
+      </Tabs>
+
+      <Pagination page={page} total={48} pageSize={8} onChange={setPage} />
+    </div>
+  );
+}`,
+  'data-list': String.raw`import { Badge, Table } from 'vxui-react';
+
+type ReleaseRow = {
+  name: string;
+  owner: string;
+  status: 'Live' | 'Draft';
+};
+
+const columns = [
+  { key: 'name', header: 'Release', accessor: (row: ReleaseRow) => row.name },
+  { key: 'owner', header: 'Owner', accessor: (row: ReleaseRow) => row.owner },
+  {
+    key: 'status',
+    header: 'Status',
+    accessor: (row: ReleaseRow) => (
+      <Badge variant={row.status === 'Live' ? 'success' : 'warning'}>{row.status}</Badge>
+    ),
+  },
+];
+
+const data: ReleaseRow[] = [
+  { name: 'May rollout', owner: 'Alice', status: 'Live' },
+  { name: 'June beta', owner: 'Bo', status: 'Draft' },
+];
+
+export function ReleaseTable() {
+  return <Table columns={columns} data={data} striped bordered />;
+}`,
+  'empty-states': String.raw`import { Button, Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+
+export function EmptyProjects() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>No projects yet</CardTitle>
+      </CardHeader>
+      <CardContent style={{ display: 'grid', gap: 12 }}>
+        <p>Create the first project to start tracking releases.</p>
+        <div>
+          <Button>Create project</Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}`,
+  toasts: String.raw`import { Button, useToast } from 'vxui-react';
+
+export function PublishButton() {
+  const { push } = useToast();
+
+  return (
+    <Button
+      onClick={() =>
+        push({
+          tone: 'success',
+          title: 'Release published',
+          description: 'Customers can see the new version now.',
+        })
+      }
+    >
+      Publish release
+    </Button>
+  );
+}`,
+  feedback: String.raw`import { Alert, Progress, Skeleton } from 'vxui-react';
+
+export function SyncStatus({ loading = false }: { loading?: boolean }) {
+  if (loading) {
+    return <Skeleton variant="text" lines={3} />;
+  }
+
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Alert variant="info" title="Migration in progress">
+        Shared routes and page templates have been consolidated into one runtime.
+      </Alert>
+      <Progress label="Rollout progress" value={72} showLabel />
+    </div>
+  );
+}`,
+  overlays: String.raw`import { Button, Dialog, DropdownMenu, Popover } from 'vxui-react';
+
+export function OverlayExamples() {
+  return (
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+      <Dialog
+        trigger={<Button>Delete project</Button>}
+        title="Delete project"
+        description="This action removes access for the whole team."
+        footer={
+          <>
+            <Button variant="ghost">Cancel</Button>
+            <Button variant="danger">Delete</Button>
+          </>
+        }
+      >
+        This project will be removed permanently.
+      </Dialog>
+
+      <Popover content={<div>Show context without leaving the current page.</div>}>
+        <Button variant="secondary">Open popover</Button>
+      </Popover>
+
+      <DropdownMenu
+        trigger={<Button variant="secondary">More actions</Button>}
+        items={[
+          { label: 'Duplicate' },
+          { label: 'Archive' },
+          { label: 'Delete', danger: true },
+        ]}
+      />
+    </div>
+  );
+}`,
+  'nav-layout': String.raw`import { Accordion } from 'vxui-react';
+
+const items = [
+  {
+    key: 'route-tree',
+    title: 'Single route tree',
+    content: 'Keep docs, auth, and legal pages inside one app shell.',
+  },
+  {
+    key: 'responsive-shell',
+    title: 'Responsive shell',
+    content: 'Collapse navigation at narrow widths without forking the page tree.',
+  },
+];
+
+export function InformationArchitecture() {
+  return <Accordion items={items} defaultOpen={['route-tree']} />;
+}`,
+  'data-display': String.raw`import { Avatar, Badge, Table } from 'vxui-react';
+
+type TeamRow = {
+  role: string;
+  scope: string;
+  status: 'Stable' | 'Live';
+};
+
+const columns = [
+  { key: 'role', header: 'Role', accessor: (row: TeamRow) => row.role },
+  { key: 'scope', header: 'Scope', accessor: (row: TeamRow) => row.scope },
+  {
+    key: 'status',
+    header: 'Status',
+    accessor: (row: TeamRow) => (
+      <Badge variant={row.status === 'Stable' ? 'success' : 'accent'}>{row.status}</Badge>
+    ),
+  },
+];
+
+const data: TeamRow[] = [
+  { role: 'Design system', scope: 'Shared primitives', status: 'Stable' },
+  { role: 'Documentation', scope: 'Content navigation', status: 'Live' },
+];
+
+export function OwnershipTable() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <div style={{ display: 'flex', gap: 12 }}>
+        <Avatar name="Alice Chen" size="sm" />
+        <Avatar name="Bo Wang" size="md" />
+        <Avatar name="Cora Lin" size="lg" />
+      </div>
+      <Table columns={columns} data={data} compact />
+    </div>
+  );
+}`,
+  mobile: String.raw`import { Bell, Home, Search, User } from 'lucide-react';
+import {
+  BottomNav,
+  MobileIconButton,
+  MobileShell,
+  MobileTopBar,
+} from 'vxui-react';
+
+const items = [
+  { key: 'home', label: 'Home', icon: <Home size={18} />, active: true },
+  { key: 'search', label: 'Search', icon: <Search size={18} /> },
+  { key: 'alerts', label: 'Alerts', icon: <Bell size={18} />, badge: '3' },
+  { key: 'profile', label: 'Profile', icon: <User size={18} /> },
+];
+
+export function MobileWorkspace() {
+  return (
+    <MobileShell
+      topBar={
+        <MobileTopBar
+          title="Orders"
+          trailing={<MobileIconButton label="Notifications"><Bell size={18} /></MobileIconButton>}
+        />
+      }
+      bottomNav={<BottomNav items={items} />}
+    >
+      <div style={{ padding: 16 }}>Keep the same content model, just adapt the shell.</div>
+    </MobileShell>
+  );
+}`,
+  'home-page': String.raw`import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+
+export function MarketingHome() {
+  return (
+    <section style={{ display: 'grid', gap: 24 }}>
+      <div style={{ display: 'grid', gap: 12 }}>
+        <Badge variant="accent">New release</Badge>
+        <h1>Build internal tools faster</h1>
+        <p>Combine layout, forms, feedback, and responsive navigation in one system.</p>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Button>Get started</Button>
+          <Button variant="secondary">Browse docs</Button>
+        </div>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Why teams use VXUI</CardTitle>
+        </CardHeader>
+        <CardContent>One shell, one theme system, and one component vocabulary.</CardContent>
+      </Card>
+    </section>
+  );
+}`,
+  'login-page': String.raw`import { Button, Card, CardContent, CardHeader, CardTitle, Input } from 'vxui-react';
+
+export function LoginScreen() {
+  return (
+    <Card style={{ maxWidth: 420, margin: '0 auto' }}>
+      <CardHeader>
+        <CardTitle>Sign in</CardTitle>
+      </CardHeader>
+      <CardContent style={{ display: 'grid', gap: 16 }}>
+        <Input label="Email" type="email" placeholder="team@example.com" />
+        <Input label="Password" type="password" placeholder="Enter your password" />
+        <Button type="submit" fullWidth>
+          Continue
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}`,
+  'register-page': String.raw`import { Button, Card, CardContent, CardHeader, CardTitle, Checkbox, Input } from 'vxui-react';
+
+export function RegisterScreen() {
+  return (
+    <Card style={{ maxWidth: 420, margin: '0 auto' }}>
+      <CardHeader>
+        <CardTitle>Create account</CardTitle>
+      </CardHeader>
+      <CardContent style={{ display: 'grid', gap: 16 }}>
+        <Input label="Name" placeholder="Alex Morgan" />
+        <Input label="Email" type="email" placeholder="alex@example.com" />
+        <Input label="Password" type="password" placeholder="Create a password" />
+        <Checkbox label="I agree to the terms of service and privacy policy" />
+        <Button type="submit" fullWidth>
+          Create account
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}`,
+  'error-page': String.raw`import { Alert, Button, Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+
+export function ErrorState() {
+  return (
+    <Card style={{ maxWidth: 560, margin: '0 auto' }}>
+      <CardHeader>
+        <CardTitle>We could not load this workspace</CardTitle>
+      </CardHeader>
+      <CardContent style={{ display: 'grid', gap: 16 }}>
+        <Alert variant="danger" title="Request failed">
+          Try refreshing the page or returning to a known route.
+        </Alert>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Button>Retry</Button>
+          <Button variant="secondary">Back to dashboard</Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}`,
+  'privacy-policy': String.raw`import { Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+
+export function PrivacyPolicyPage() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Privacy policy</CardTitle>
+        </CardHeader>
+        <CardContent>
+          We collect operational data only to provide access control, product analytics, and support.
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Data retention</CardTitle>
+        </CardHeader>
+        <CardContent>Document how long logs, audit events, and profile details are retained.</CardContent>
+      </Card>
+    </div>
+  );
+}`,
+  'terms-of-service': String.raw`import { Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+
+export function TermsOfServicePage() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Terms of service</CardTitle>
+        </CardHeader>
+        <CardContent>
+          Explain account responsibilities, acceptable use, and the support boundaries for your product.
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Service commitments</CardTitle>
+        </CardHeader>
+        <CardContent>List uptime targets, incident communication, and escalation paths.</CardContent>
+      </Card>
+    </div>
+  );
+}`,
 };
 
 function isPageKey(value: string | undefined): value is PageKey {
@@ -321,10 +1071,6 @@ export default function App() {
         runtimeDesc: '把主题、密度和会话状态视为全局能力，而不是页面特例。',
         sessionMember: '成员视图',
         sessionGuest: '访客视图',
-        quickStartTabs: { install: '安装', theme: '主题', launch: '落地' },
-        installCode: "npm install vxui-react\nimport 'vxui-react/styles.css';",
-        themeCode: '<ThemeProvider themes={themePresets}>...</ThemeProvider>',
-        launchCode: '<AppShell navSections={docsNav} />',
         accountMenu: '账户',
       }
     : {
@@ -395,10 +1141,6 @@ export default function App() {
         runtimeDesc: 'Treat theme, density, and session state as app-wide capabilities instead of page-specific exceptions.',
         sessionMember: 'Member view',
         sessionGuest: 'Guest view',
-        quickStartTabs: { install: 'Install', theme: 'Theme', launch: 'Launch' },
-        installCode: "npm install vxui-react\nimport 'vxui-react/styles.css';",
-        themeCode: '<ThemeProvider themes={themePresets}>...</ThemeProvider>',
-        launchCode: '<AppShell navSections={docsNav} />',
         accountMenu: 'Account',
       };
 
@@ -411,6 +1153,100 @@ export default function App() {
     { label: copy.metrics.breakpoints, value: '3', hint: copy.metrics.breakpointsDesc },
     { label: copy.metrics.themes, value: String(themeEntries.length), hint: copy.metrics.themesDesc },
   ];
+
+  const docsHomeCopy = isZh
+    ? {
+        badge: 'Documentation',
+        title: 'VXUI React 文档',
+        lead: '文档入口按标准组件库目录组织：先看介绍，再完成安装，然后进入组件、模板和响应式模式。',
+        primary: '阅读简介',
+        secondary: '开始安装',
+        pathTitle: '推荐顺序',
+        pathBody: '首次接入建议按照 介绍 -> 安装 -> 组件 -> 模板 -> 响应式 的顺序浏览。',
+        indexTitle: 'Documentation Index',
+        indexLead: '五个标准入口覆盖整个文档库，避免把概念、接入方式和页面模板混在一起。',
+        sectionsTitle: '按章节浏览',
+        sectionsLead: '使用更标准的文档分层，让用户先找到“看什么”，再决定“怎么用”。',
+        pathsTitle: '推荐阅读路径',
+        pathsLead: '不同任务从不同入口进入，但都落在同一套文档结构里。',
+        rulesTitle: '全局约定',
+        rulesLead: '规则性的说明适合集中放在首页，避免在每个组件页和模板页重复出现。',
+        rulesItems: [
+          '保持所有断点上的路由树一致，只调整壳层结构和内容密度。',
+          '在窄屏上把常驻侧边导航转成抽屉，而不是复制另一套页面实现。',
+          '让卡片、表单和表格从多列到单列平滑重排，不改变组件归属。',
+        ],
+        toolsTitle: '文档级控制',
+        toolsLead: '主题、密度和搜索属于全局工具，应放在文档工具栏统一控制，而不是在每个章节底部重复渲染。',
+        toolsItems: [
+          '主题切换统一放在顶部工具栏的 Theme 菜单中。',
+          '紧凑模式通过顶部工具栏的密度切换按钮统一开关。',
+          '详情页默认只保留 Guidance、Preview 和 Code Example 三个核心区块。',
+        ],
+        openSection: '打开章节',
+        entryCount: '个条目',
+        walkthroughTitle: '首次接入',
+        walkthroughItems: [
+          '先看简介，明确这套组件库的边界和目标。',
+          '进入安装章节，完成样式引入、Provider 挂载和第一个页面。',
+          '再浏览组件章节，按布局、表单、反馈和数据展示逐步接入。',
+        ],
+        adoptionTitle: '常见使用路径',
+        adoptionItems: [
+          { key: 'product', title: '搭业务页面', content: '从安装开始，然后进入 Components，优先看 Shell、Form Controls、Data Display。' },
+          { key: 'marketing', title: '搭公共页面', content: '先看 Templates，再回到 Components 补充按钮、表单和反馈细节。' },
+          { key: 'responsive', title: '做多端适配', content: '最后看 Responsive，确认同一套路由和内容在窄屏下如何重排。' },
+        ],
+      }
+    : {
+        badge: 'Documentation',
+        title: 'VXUI React Documentation',
+        lead: 'The docs entry is now organized like a standard UI library: introduction first, installation next, then components, templates, and responsive patterns.',
+        primary: 'Read introduction',
+        secondary: 'Start installation',
+        pathTitle: 'Recommended order',
+        pathBody: 'For a first pass, follow Introduction -> Installation -> Components -> Templates -> Responsive.',
+        indexTitle: 'Documentation Index',
+        indexLead: 'Five standard entry points cover the whole library so concepts, setup, and page examples no longer compete on the same screen.',
+        sectionsTitle: 'Browse by Section',
+        sectionsLead: 'Use a more standard information architecture so people can find what to read before deciding how to apply it.',
+        pathsTitle: 'Recommended Paths',
+        pathsLead: 'Different tasks start from different entry points, but they all land in the same documentation structure.',
+        rulesTitle: 'Global Conventions',
+        rulesLead: 'Rule-oriented guidance belongs on the docs entry page so it does not repeat across every component or template page.',
+        rulesItems: [
+          'Keep one route tree across breakpoints and only adapt shell structure and density.',
+          'Turn persistent side navigation into a drawer on narrow screens instead of duplicating page implementations.',
+          'Let cards, forms, and tables reflow from multiple columns to one without changing component ownership.',
+        ],
+        toolsTitle: 'Documentation Controls',
+        toolsLead: 'Theme, density, and search are global documentation tools, so they belong in the toolbar instead of being repeated at the bottom of every page.',
+        toolsItems: [
+          'Theme switching lives in the top toolbar Theme menu.',
+          'Compact density is controlled through the toolbar density toggle.',
+          'Detail pages now keep only Guidance, Preview, and Code Example as the core content blocks.',
+        ],
+        openSection: 'Open section',
+        entryCount: 'entries',
+        walkthroughTitle: 'First integration',
+        walkthroughItems: [
+          'Read the introduction to understand the goals and boundaries of the library.',
+          'Move to installation to import styles, mount providers, and ship the first page.',
+          'Browse components next, starting with shell, form controls, feedback, and data display.',
+        ],
+        adoptionTitle: 'Common reading paths',
+        adoptionItems: [
+          { key: 'product', title: 'Build product screens', content: 'Start with Installation, then move into Components, especially Shell, Form Controls, and Data Display.' },
+          { key: 'marketing', title: 'Build public pages', content: 'Start from Templates, then return to Components to refine actions, forms, and feedback.' },
+          { key: 'responsive', title: 'Ship across devices', content: 'Finish with Responsive to verify how the same route tree and content reflow at smaller widths.' },
+        ],
+      };
+
+  const docsHomeGroups = DOC_NAV_GROUPS.map((group) => ({
+    ...group,
+    label: getDocsGroupLabel(group.key, isZh),
+    description: getDocsGroupDescription(group.key, isZh),
+  }));
 
   const searchEntries = useMemo<SearchEntry[]>(
     () =>
@@ -428,7 +1264,7 @@ export default function App() {
     () =>
       DOC_NAV_GROUPS.map((group) => ({
         key: group.key,
-        title: t.nav[group.key],
+        title: getDocsGroupLabel(group.key, isZh),
         items: group.pages.map((pageKey) => ({
           key: pageKey,
           label: pages[pageKey].title,
@@ -437,7 +1273,7 @@ export default function App() {
           onSelect: () => navigate({ view: 'docs', page: pageKey }),
         })),
       })),
-    [activePage, pages, t],
+    [activePage, isZh, pages],
   );
 
   useEffect(() => {
@@ -583,6 +1419,52 @@ export default function App() {
     navigate({ view: 'home' });
   }
 
+  async function handleCopyCode(code: string) {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(code);
+      } else if (typeof document !== 'undefined') {
+        const textarea = document.createElement('textarea');
+        textarea.value = code;
+        textarea.setAttribute('readonly', 'true');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      } else {
+        throw new Error('Clipboard is unavailable.');
+      }
+
+      push({
+        tone: 'success',
+        title: isZh ? '代码已复制' : 'Code copied',
+        description: isZh ? '示例代码已复制到剪贴板。' : 'The example code was copied to your clipboard.',
+      });
+      return true;
+    } catch {
+      push({
+        tone: 'warning',
+        title: isZh ? '复制失败' : 'Copy failed',
+        description: isZh ? '当前环境不支持自动复制，请手动选择代码。' : 'Automatic copy is unavailable here. Please select and copy the code manually.',
+      });
+      return false;
+    }
+  }
+
+  function renderCodeBlock(code: string, language: 'tsx' | 'bash' = 'tsx') {
+    return (
+      <CodeBlock
+        code={code}
+        language={language}
+        copyLabel={isZh ? '复制代码' : 'Copy code'}
+        copiedLabel={isZh ? '已复制' : 'Copied'}
+        onCopy={handleCopyCode}
+      />
+    );
+  }
+
   function renderTemplateLauncher(
     pageKey: Extract<PageKey, 'home-page' | 'login-page' | 'register-page' | 'error-page' | 'privacy-policy' | 'terms-of-service'>,
   ) {
@@ -615,28 +1497,28 @@ export default function App() {
   function renderSample(pageKey: PageKey) {
     switch (pageKey) {
       case 'quick-start':
+        const quickStartTabs = [
+          { value: 'install', label: isZh ? '安装' : 'Install', code: QUICK_START_PREVIEW_SNIPPETS.install },
+          { value: 'providers', label: isZh ? 'Providers' : 'Providers', code: QUICK_START_PREVIEW_SNIPPETS.providers },
+          { value: 'layout', label: isZh ? '页面壳层' : 'Layout', code: QUICK_START_PREVIEW_SNIPPETS.layout },
+          { value: 'feedback', label: isZh ? '反馈' : 'Feedback', code: QUICK_START_PREVIEW_SNIPPETS.feedback },
+        ] as const;
+
         return (
           <Tabs defaultValue="install">
             <TabsList>
-              <TabsTrigger value="install">{copy.quickStartTabs.install}</TabsTrigger>
-              <TabsTrigger value="theme">{copy.quickStartTabs.theme}</TabsTrigger>
-              <TabsTrigger value="launch">{copy.quickStartTabs.launch}</TabsTrigger>
+              {quickStartTabs.map((tab) => (
+                <TabsTrigger key={tab.value} value={tab.value}>
+                  {tab.label}
+                </TabsTrigger>
+              ))}
             </TabsList>
-            <TabsContent value="install">
-              <pre className="vx-code-block">
-                <code>{copy.installCode}</code>
-              </pre>
-            </TabsContent>
-            <TabsContent value="theme">
-              <pre className="vx-code-block">
-                <code>{copy.themeCode}</code>
-              </pre>
-            </TabsContent>
-            <TabsContent value="launch">
-              <pre className="vx-code-block">
-                <code>{copy.launchCode}</code>
-              </pre>
-            </TabsContent>
+
+            {quickStartTabs.map((tab) => (
+              <TabsContent key={tab.value} value={tab.value}>
+                {renderCodeBlock(tab.code, tab.value === 'install' ? 'bash' : 'tsx')}
+              </TabsContent>
+            ))}
           </Tabs>
         );
       case 'shell-sidebar':
@@ -666,6 +1548,23 @@ export default function App() {
                 <small>{metric.hint}</small>
               </div>
             ))}
+          </div>
+        );
+      case 'button':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Button>{isZh ? '主要按钮' : 'Primary'}</Button>
+              <Button variant="secondary">{isZh ? '次级按钮' : 'Secondary'}</Button>
+              <Button variant="ghost">{isZh ? '幽灵按钮' : 'Ghost'}</Button>
+              <Button variant="danger">{isZh ? '危险按钮' : 'Danger'}</Button>
+            </div>
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Button size="sm">{isZh ? '小' : 'Small'}</Button>
+              <Button size="md">{isZh ? '中' : 'Medium'}</Button>
+              <Button size="lg">{isZh ? '大' : 'Large'}</Button>
+            </div>
+            <Button fullWidth>{isZh ? '整行操作' : 'Full width action'}</Button>
           </div>
         );
       case 'elements':
@@ -973,28 +1872,28 @@ export default function App() {
       <div className="vx-docs-workspace__home">
         <section className="vx-docs-home__hero">
           <div className="vx-docs-home__copy">
-            <Badge variant="accent">{copy.docsBadge}</Badge>
-            <h1>{copy.docsTitle}</h1>
-            <p>{copy.docsLead}</p>
+            <Badge variant="accent">{docsHomeCopy.badge}</Badge>
+            <h1>{docsHomeCopy.title}</h1>
+            <p>{docsHomeCopy.lead}</p>
             <div className="vx-docs-home__actions">
-              <Button size="lg" onClick={() => navigate({ view: 'docs', page: 'quick-start' })}>
-                <Zap size={16} />
-                {copy.docsPrimary}
+              <Button size="lg" onClick={() => navigate({ view: 'docs', page: 'introduction' })}>
+                <Compass size={16} />
+                {docsHomeCopy.primary}
               </Button>
-              <Button size="lg" variant="secondary" onClick={() => navigate({ view: 'home' })}>
-                <House size={16} />
-                {copy.docsSecondary}
+              <Button size="lg" variant="secondary" onClick={() => navigate({ view: 'docs', page: 'quick-start' })}>
+                <Zap size={16} />
+                {docsHomeCopy.secondary}
               </Button>
             </div>
-            <Alert title={copy.splitTitle} variant="info">
-              {copy.splitBody}
+            <Alert title={docsHomeCopy.pathTitle} variant="info">
+              {docsHomeCopy.pathBody}
             </Alert>
           </div>
 
           <Card className="vx-docs-home__panel">
             <CardHeader>
-              <CardTitle>{copy.contentMapTitle}</CardTitle>
-              <CardDescription>{copy.libraryLead}</CardDescription>
+              <CardTitle>{docsHomeCopy.indexTitle}</CardTitle>
+              <CardDescription>{docsHomeCopy.indexLead}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="vx-doc-metric-grid">
@@ -1006,21 +1905,15 @@ export default function App() {
                   </div>
                 ))}
               </div>
-              <div className="vx-doc-control-grid">
+              <div className="vx-doc-control-grid vx-doc-control-grid--single">
                 <Select label={copy.releaseLabel} value={releaseTrack} onChange={(event) => setReleaseTrack(event.target.value as ReleaseTrack)}>
                   <option value="stable">{copy.releaseOptions.stable}</option>
                   <option value="preview">{copy.releaseOptions.preview}</option>
                   <option value="internal">{copy.releaseOptions.internal}</option>
                 </Select>
-                <Switch
-                  checked={compactDensity}
-                  description={t.docs.compactDensityDesc}
-                  label={t.docs.compactDensity}
-                  onCheckedChange={setCompactDensity}
-                />
               </div>
               <div className="vx-doc-content-map">
-                {DOC_NAV_GROUPS.map((group) => (
+                {docsHomeGroups.map((group) => (
                   <button
                     key={group.key}
                     type="button"
@@ -1028,8 +1921,8 @@ export default function App() {
                     onClick={() => navigate({ view: 'docs', page: group.pages[0] })}
                   >
                     <div>
-                      <strong>{t.nav[group.key]}</strong>
-                      <span>{group.pages.length} {isZh ? '个条目' : 'entries'}</span>
+                      <strong>{group.label}</strong>
+                      <span>{group.description}</span>
                     </div>
                     <ChevronRight size={16} />
                   </button>
@@ -1041,37 +1934,21 @@ export default function App() {
 
         <section className="vx-docs-home__section">
           <div className="vx-docs-home__section-head">
-            <h2>{copy.supportTitle}</h2>
-            <p>{copy.libraryLead}</p>
-          </div>
-          <div className="vx-breakpoint-grid">
-            {copy.supportCards.map((card) => (
-              <Card key={card.label} className="vx-breakpoint-card vx-breakpoint-card--panel">
-                <CardHeader>
-                  <Badge variant="accent">{card.accent}</Badge>
-                  <CardTitle>{card.label}</CardTitle>
-                  <CardDescription>{card.description}</CardDescription>
-                </CardHeader>
-              </Card>
-            ))}
-          </div>
-        </section>
-
-        <section className="vx-docs-home__section">
-          <div className="vx-docs-home__section-head">
-            <h2>{copy.libraryTitle}</h2>
-            <p>{copy.libraryLead}</p>
+            <h2>{docsHomeCopy.sectionsTitle}</h2>
+            <p>{docsHomeCopy.sectionsLead}</p>
           </div>
           <div className="vx-doc-library-grid">
-            {DOC_NAV_GROUPS.map((group) => (
+            {docsHomeGroups.map((group) => (
               <Card key={group.key} className="vx-doc-library-card">
                 <CardHeader>
-                  <CardTitle>{t.nav[group.key]}</CardTitle>
-                  <CardDescription>{group.pages.length} {isZh ? '个章节' : 'sections'}</CardDescription>
+                  <CardTitle>{group.label}</CardTitle>
+                  <CardDescription>
+                    {group.pages.length} {docsHomeCopy.entryCount}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="vx-doc-library-card__links">
-                    {group.pages.map((pageKey) => (
+                    {group.pages.slice(0, 5).map((pageKey) => (
                       <button
                         key={pageKey}
                         type="button"
@@ -1083,6 +1960,11 @@ export default function App() {
                       </button>
                     ))}
                   </div>
+                  <div style={{ marginTop: 14 }}>
+                    <Button size="sm" variant="secondary" onClick={() => navigate({ view: 'docs', page: group.pages[0] })}>
+                      {docsHomeCopy.openSection}
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -1091,18 +1973,18 @@ export default function App() {
 
         <section className="vx-docs-home__section">
           <div className="vx-docs-home__section-head">
-            <h2>{copy.architectureTitle}</h2>
-            <p>{copy.architectureLead}</p>
+            <h2>{docsHomeCopy.pathsTitle}</h2>
+            <p>{docsHomeCopy.pathsLead}</p>
           </div>
           <div className="vx-doc-architecture-grid">
             <Card>
               <CardHeader>
-                <CardTitle>{copy.architectureTitle}</CardTitle>
-                <CardDescription>{copy.architectureLead}</CardDescription>
+                <CardTitle>{docsHomeCopy.walkthroughTitle}</CardTitle>
+                <CardDescription>{docsHomeCopy.pathBody}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="vx-doc-list">
-                  {copy.architectureBullets.map((item) => (
+                  {docsHomeCopy.walkthroughItems.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
@@ -1110,11 +1992,46 @@ export default function App() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle>{copy.rolloutTitle}</CardTitle>
-                <CardDescription>{isZh ? '本次重构的一步到位路径。' : 'The one-step delivery path for this refactor.'}</CardDescription>
+                <CardTitle>{docsHomeCopy.adoptionTitle}</CardTitle>
+                <CardDescription>{docsHomeCopy.sectionsLead}</CardDescription>
               </CardHeader>
               <CardContent>
-                <Accordion items={copy.rolloutItems} defaultOpen={['shell']} />
+                <Accordion items={docsHomeCopy.adoptionItems} defaultOpen={['product']} />
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section className="vx-docs-home__section">
+          <div className="vx-docs-home__section-head">
+            <h2>{docsHomeCopy.rulesTitle}</h2>
+            <p>{docsHomeCopy.rulesLead}</p>
+          </div>
+          <div className="vx-doc-architecture-grid">
+            <Card>
+              <CardHeader>
+                <CardTitle>{docsHomeCopy.rulesTitle}</CardTitle>
+                <CardDescription>{docsHomeCopy.rulesLead}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="vx-doc-list">
+                  {docsHomeCopy.rulesItems.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>{docsHomeCopy.toolsTitle}</CardTitle>
+                <CardDescription>{docsHomeCopy.toolsLead}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="vx-doc-list">
+                  {docsHomeCopy.toolsItems.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
               </CardContent>
             </Card>
           </div>
@@ -1124,8 +2041,7 @@ export default function App() {
   }
 
   function renderDocPage() {
-    const relatedPages =
-      DOC_NAV_GROUPS.find((group) => group.pages.includes(activePage))?.pages.filter((pageKey) => pageKey !== activePage).slice(0, 3) ?? [];
+    const usageSnippet = DOC_USAGE_SNIPPETS[activePage];
 
     return (
       <article className="vx-doc-page">
@@ -1165,77 +2081,19 @@ export default function App() {
           </Card>
         </div>
 
-        <div className="vx-doc-page__grid vx-doc-page__grid--support">
+        {usageSnippet ? (
           <Card>
             <CardHeader>
-              <CardTitle>{copy.deliveryTitle}</CardTitle>
-              <CardDescription>{isZh ? '当前章节可直接落地的实现要点。' : 'The implementation points you can ship directly from this section.'}</CardDescription>
+              <CardTitle>{isZh ? '示例代码' : 'Code Example'}</CardTitle>
+              <CardDescription>
+                {isZh
+                  ? '按照标准文档结构，先给最小可运行示例，再补充场景化用法。'
+                  : 'Follow a standard documentation structure: start with the smallest working example, then expand into scenario-based usage.'}
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <ul className="vx-doc-list vx-doc-list--tight">
-                {activeDocument.guidance.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </CardContent>
+            <CardContent>{renderCodeBlock(usageSnippet)}</CardContent>
           </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>{copy.responsiveTitle}</CardTitle>
-              <CardDescription>{pages.mobile.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="vx-doc-list vx-doc-list--tight">
-                {copy.responsiveChecklist.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>{copy.runtimeTitle}</CardTitle>
-              <CardDescription>{copy.runtimeDesc}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="vx-doc-runtime-panel">
-                <div className="vx-doc-runtime-panel__themes">
-                  {themeEntries.map(([themeName, definition]) => (
-                    <Button
-                      key={themeName}
-                      size="sm"
-                      variant={theme === themeName ? 'solid' : 'secondary'}
-                      onClick={() => setTheme(themeName)}
-                    >
-                      {definition.label ?? themeName}
-                    </Button>
-                  ))}
-                </div>
-                <Switch
-                  checked={compactDensity}
-                  description={t.docs.compactDensityDesc}
-                  label={t.docs.compactDensity}
-                  onCheckedChange={setCompactDensity}
-                />
-                <div className="vx-doc-runtime-panel__links">
-                  {relatedPages.map((pageKey) => (
-                    <button
-                      key={pageKey}
-                      type="button"
-                      className="vx-doc-runtime-panel__link"
-                      onClick={() => navigate({ view: 'docs', page: pageKey })}
-                    >
-                      <span>{pageIcons[pageKey]}</span>
-                      <span>{pages[pageKey].title}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        ) : null}
       </article>
     );
   }
@@ -1333,6 +2191,15 @@ export default function App() {
               <Search size={14} />
               {t.searchTrigger}
               <kbd>⌘K</kbd>
+            </button>
+            <button
+              type="button"
+              aria-pressed={compactDensity}
+              className={compactDensity ? 'vx-cmd-trigger vx-cmd-trigger--active' : 'vx-cmd-trigger'}
+              onClick={() => setCompactDensity((current) => !current)}
+            >
+              <SlidersHorizontal size={14} />
+              {isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`}
             </button>
             <DropdownMenu
               trigger={

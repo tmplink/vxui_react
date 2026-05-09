@@ -18,6 +18,21 @@
   --vx-text: #0f172a;
   --vx-text-secondary: #64748b;
   --vx-text-muted: #94a3b8;
+  --vx-code-bg: color-mix(in srgb, var(--vx-bg-accent) 78%, var(--vx-surface));
+  --vx-code-text: #0f172a;
+  --vx-code-border: color-mix(in srgb, var(--vx-border-strong) 72%, var(--vx-border));
+  --vx-code-comment: #64748b;
+  --vx-code-keyword: #2563eb;
+  --vx-code-string: #047857;
+  --vx-code-number: #b45309;
+  --vx-code-function: #0f766e;
+  --vx-code-property: #1d4ed8;
+  --vx-code-class: #c2410c;
+  --vx-code-tag: #be123c;
+  --vx-code-attr-name: #0f766e;
+  --vx-code-attr-value: #b45309;
+  --vx-code-punctuation: #475569;
+  --vx-code-operator: #0f172a;
   --vx-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
   --vx-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
   --vx-shadow-lg: 0 28px 60px rgba(15, 23, 42, 0.12);
@@ -48,6 +63,21 @@
   --vx-text: #f8fafc;
   --vx-text-secondary: #94a3b8;
   --vx-text-muted: #94a3b8;
+  --vx-code-bg: color-mix(in srgb, var(--vx-bg-accent) 72%, black 10%);
+  --vx-code-text: #e2e8f0;
+  --vx-code-border: var(--vx-border);
+  --vx-code-comment: #94a3b8;
+  --vx-code-keyword: #93c5fd;
+  --vx-code-string: #86efac;
+  --vx-code-number: #fdba74;
+  --vx-code-function: #67e8f9;
+  --vx-code-property: #bfdbfe;
+  --vx-code-class: #fdba74;
+  --vx-code-tag: #fda4af;
+  --vx-code-attr-name: #5eead4;
+  --vx-code-attr-value: #fde68a;
+  --vx-code-punctuation: #cbd5e1;
+  --vx-code-operator: #e2e8f0;
   --vx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --vx-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
   --vx-shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.34);
@@ -3016,6 +3046,13 @@ a {
   color: var(--vx-text);
   background: var(--vx-surface);
 }
+
+.vx-cmd-trigger--active {
+  color: var(--vx-primary);
+  border-color: color-mix(in srgb, var(--vx-primary) 24%, var(--vx-border));
+  background: color-mix(in srgb, var(--vx-primary-soft) 70%, var(--vx-surface));
+}
+
 .vx-cmd-trigger kbd {
   font-size: 0.6875rem;
   background: var(--vx-surface);
@@ -4124,8 +4161,7 @@ a {
 .vx-docs-home__section,
 .vx-docs-home__section-head,
 .vx-doc-page__hero,
-.vx-doc-preview-stack,
-.vx-doc-runtime-panel {
+.vx-doc-preview-stack {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -4229,9 +4265,12 @@ a {
   margin-bottom: 16px;
 }
 
+.vx-doc-control-grid--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .vx-doc-content-map,
-.vx-doc-library-card__links,
-.vx-doc-runtime-panel__links {
+.vx-doc-library-card__links {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -4239,7 +4278,6 @@ a {
 
 .vx-doc-content-map__row,
 .vx-doc-library-card__link,
-.vx-doc-runtime-panel__link,
 .vx-template-launch,
 .vx-doc-shell-sample__nav,
 .vx-doc-shell-sample__bar {
@@ -4249,8 +4287,7 @@ a {
 }
 
 .vx-doc-content-map__row,
-.vx-doc-library-card__link,
-.vx-doc-runtime-panel__link {
+.vx-doc-library-card__link {
   width: 100%;
   padding: 12px 14px;
   color: var(--vx-text);
@@ -4264,8 +4301,7 @@ a {
 }
 
 .vx-doc-content-map__row:hover,
-.vx-doc-library-card__link:hover,
-.vx-doc-runtime-panel__link:hover {
+.vx-doc-library-card__link:hover {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--vx-primary) 28%, var(--vx-border));
   background: color-mix(in srgb, var(--vx-primary-soft) 64%, var(--vx-surface));
@@ -4280,8 +4316,7 @@ a {
 
 .vx-doc-content-map__row span,
 .vx-template-launch__head p,
-.vx-doc-library-card__link span:last-child,
-.vx-doc-runtime-panel__link span:last-child {
+.vx-doc-library-card__link span:last-child {
   color: var(--vx-text-secondary);
   font-size: 0.875rem;
 }
@@ -4293,10 +4328,6 @@ a {
 .vx-doc-architecture-grid,
 .vx-doc-page__grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.vx-doc-page__grid--support {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .vx-doc-page__hero {
@@ -4341,7 +4372,6 @@ a {
   gap: 10px;
 }
 
-.vx-doc-runtime-panel__themes,
 .vx-doc-preview-inline,
 .vx-error-card__actions,
 .vx-legal-meta {
@@ -4397,17 +4427,105 @@ a {
   grid-column: 1 / -1;
 }
 
+.vx-code-block-wrap {
+  position: relative;
+}
+
+.vx-code-block__copy {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.vx-button.vx-code-block__copy--copied {
+  background: color-mix(in srgb, var(--vx-success) 88%, white 12%);
+  border-color: color-mix(in srgb, var(--vx-success) 72%, var(--vx-border));
+  color: #ffffff;
+}
+
 .vx-code-block {
   margin: 0;
-  padding: 16px 18px;
+  padding: 56px 18px 16px;
   border-radius: var(--vx-radius-lg);
-  border: 1px solid var(--vx-border);
-  background: color-mix(in srgb, var(--vx-bg-accent) 72%, black 10%);
-  color: #e2e8f0;
+  border: 1px solid var(--vx-code-border);
+  background: var(--vx-code-bg);
+  color: var(--vx-code-text);
   font-family: var(--vx-mono);
   font-size: 0.875rem;
   line-height: 1.6;
   overflow: auto;
+}
+
+.vx-code-block__code {
+  display: block;
+  min-width: max-content;
+  color: var(--vx-code-text);
+}
+
+.vx-code-block__code .token.comment,
+.vx-code-block__code .token.prolog,
+.vx-code-block__code .token.doctype,
+.vx-code-block__code .token.cdata {
+  color: var(--vx-code-comment);
+  font-style: italic;
+}
+
+.vx-code-block__code .token.keyword,
+.vx-code-block__code .token.selector,
+.vx-code-block__code .token.atrule {
+  color: var(--vx-code-keyword);
+}
+
+.vx-code-block__code .token.string,
+.vx-code-block__code .token.regex,
+.vx-code-block__code .token.attr-value,
+.vx-code-block__code .token.inserted {
+  color: var(--vx-code-string);
+}
+
+.vx-code-block__code .token.number,
+.vx-code-block__code .token.boolean,
+.vx-code-block__code .token.constant,
+.vx-code-block__code .token.symbol {
+  color: var(--vx-code-number);
+}
+
+.vx-code-block__code .token.function,
+.vx-code-block__code .token.function-variable,
+.vx-code-block__code .token.method {
+  color: var(--vx-code-function);
+}
+
+.vx-code-block__code .token.property,
+.vx-code-block__code .token.parameter {
+  color: var(--vx-code-property);
+}
+
+.vx-code-block__code .token.class-name,
+.vx-code-block__code .token.builtin {
+  color: var(--vx-code-class);
+}
+
+.vx-code-block__code .token.tag,
+.vx-code-block__code .token.deleted {
+  color: var(--vx-code-tag);
+}
+
+.vx-code-block__code .token.attr-name,
+.vx-code-block__code .token.namespace {
+  color: var(--vx-code-attr-name);
+}
+
+.vx-code-block__code .token.punctuation {
+  color: var(--vx-code-punctuation);
+}
+
+.vx-code-block__code .token.operator,
+.vx-code-block__code .token.entity,
+.vx-code-block__code .token.url {
+  color: var(--vx-code-operator);
 }
 
 .vx-breakpoint-grid {
@@ -4591,7 +4709,6 @@ a {
 
 @media (max-width: 1180px) {
   .vx-doc-library-grid,
-  .vx-doc-page__grid--support,
   .vx-breakpoint-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -4665,7 +4782,6 @@ a {
   .vx-doc-metric-grid,
   .vx-doc-control-grid,
   .vx-doc-library-grid,
-  .vx-doc-page__grid--support,
   .vx-breakpoint-grid,
   .vx-doc-skeleton-grid,
   .vx-doc-stat-grid,

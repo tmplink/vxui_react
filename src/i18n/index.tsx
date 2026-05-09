@@ -42,6 +42,7 @@ export interface Translations {
     'quick-start': string;
     'shell-sidebar': string;
     'grid-page': string;
+    button: string;
     elements: string;
     'form-controls': string;
     'form-inputs': string;
@@ -264,6 +265,7 @@ export const en: Translations = {
     'quick-start': 'Quick Start',
     'shell-sidebar': 'Shell & Sidebar',
     'grid-page': 'Grid & Page',
+    button: 'Button',
     elements: 'Elements',
     'form-controls': 'Form Controls',
     'form-inputs': 'Form Inputs',
@@ -436,7 +438,7 @@ export const en: Translations = {
 
   pageDefs: {
     introduction: {
-      section: 'Getting Started',
+      section: 'Introduction',
       title: 'Introduction',
       description:
         'A lightweight, dependency-free UI framework for building clean admin interfaces. Design tokens, components, and a minimal SPA runtime live behind one consistent visual language.',
@@ -447,7 +449,7 @@ export const en: Translations = {
       ],
     },
     'quick-start': {
-      section: 'Getting Started',
+      section: 'Installation',
       title: 'Quick Start',
       description:
         'Install the package, wrap your app with providers, and mount a page shell before composing business screens.',
@@ -458,7 +460,7 @@ export const en: Translations = {
       ],
     },
     'shell-sidebar': {
-      section: 'Layout',
+      section: 'Components',
       title: 'Shell & Sidebar',
       description:
         'The shell is responsible for sidebar hierarchy, sticky header spacing, and content width. Pages should inherit structure instead of rebuilding it.',
@@ -469,7 +471,7 @@ export const en: Translations = {
       ],
     },
     'grid-page': {
-      section: 'Layout',
+      section: 'Components',
       title: 'Grid & Page',
       description:
         'Use simple responsive grids for cards, tokens, and documentation blocks. The page surface should stay neutral and let content carry emphasis.',
@@ -477,6 +479,17 @@ export const en: Translations = {
         'Prefer 12 to 16 pixel gaps for dense documentation surfaces.',
         'Reserve larger spacing for section boundaries, not every card.',
         'Keep max width constrained so long paragraphs remain readable.',
+      ],
+    },
+    button: {
+      section: 'Components',
+      title: 'Button',
+      description:
+        'Buttons carry the primary action hierarchy for the system. Variants, sizes, and width should communicate intent without requiring extra styling.',
+      guidance: [
+        'Use the solid variant for the primary action in a given area.',
+        'Use secondary or ghost variants for supporting actions that should stay visually quieter.',
+        'Use fullWidth for stacked mobile actions or single-column forms.',
       ],
     },
     elements: {
@@ -535,7 +548,7 @@ export const en: Translations = {
       ],
     },
     toasts: {
-      section: 'Feedback',
+      section: 'Components',
       title: 'Toasts',
       description:
         'Toasts confirm short-lived events without interrupting task flow. Keep them brief, specific, and easy to dismiss.',
@@ -546,7 +559,7 @@ export const en: Translations = {
       ],
     },
     feedback: {
-      section: 'Feedback',
+      section: 'Components',
       title: 'Feedback Components',
       description:
         'Spinner, Progress, Alert, and Skeleton give users clear signals about loading states, results, and missing content.',
@@ -568,7 +581,7 @@ export const en: Translations = {
       ],
     },
     'nav-layout': {
-      section: 'Layout',
+      section: 'Components',
       title: 'Navigation & Layout',
       description:
         'Breadcrumb, Pagination, Accordion, and Separator handle location, paging, and structural rhythm.',
@@ -717,6 +730,7 @@ export const zh: Translations = {
     'quick-start': '快速开始',
     'shell-sidebar': '框架与侧边栏',
     'grid-page': '网格与页面',
+    button: '按钮',
     elements: '基础元素',
     'form-controls': '表单控件',
     'form-inputs': '表单输入',
@@ -892,7 +906,7 @@ export const zh: Translations = {
 
   pageDefs: {
     introduction: {
-      section: '开始使用',
+      section: '介绍',
       title: '简介',
       description:
         '一个轻量无依赖的 UI 框架，用于构建简洁的后台管理界面。设计 Token、组件和极简 SPA 运行时，统一在一套一致的视觉语言之下。',
@@ -903,7 +917,7 @@ export const zh: Translations = {
       ],
     },
     'quick-start': {
-      section: '开始使用',
+      section: '安装',
       title: '快速开始',
       description: '安装包，用 Provider 包裹应用，在组合业务页面前先挂载页面框架。',
       guidance: [
@@ -913,7 +927,7 @@ export const zh: Translations = {
       ],
     },
     'shell-sidebar': {
-      section: '布局',
+      section: '组件',
       title: '框架与侧边栏',
       description:
         'Shell 负责侧边栏层级、固定顶栏间距和内容宽度。页面应继承结构而非重新构建。',
@@ -924,7 +938,7 @@ export const zh: Translations = {
       ],
     },
     'grid-page': {
-      section: '布局',
+      section: '组件',
       title: '网格与页面',
       description:
         '为卡片、Token 和文档块使用简单的响应式网格。页面表面应保持中性，由内容承载视觉重点。',
@@ -932,6 +946,17 @@ export const zh: Translations = {
         '在密集文档界面中优先使用 12 至 16 像素的间距。',
         '较大间距应保留给章节边界，而非每张卡片。',
         '限制最大宽度，确保长段落保持可读性。',
+      ],
+    },
+    button: {
+      section: '组件',
+      title: '按钮',
+      description:
+        '按钮承担系统中的主操作层级。变体、尺寸和宽度应该直接表达操作意图，而不需要额外拼样式。',
+      guidance: [
+        '在同一区域内，实心按钮通常只保留给一个主操作。',
+        '次级和幽灵按钮更适合辅助动作，避免和主操作竞争视觉优先级。',
+        '在移动端单列布局或堆叠表单中，优先使用 fullWidth 提升点击面积。',
       ],
     },
     elements: {
@@ -989,7 +1014,7 @@ export const zh: Translations = {
       ],
     },
     toasts: {
-      section: '反馈',
+      section: '组件',
       title: '消息提示',
       description: 'Toast 在不打断任务流程的情况下确认短暂事件。保持简洁、具体且易于关闭。',
       guidance: [
@@ -999,7 +1024,7 @@ export const zh: Translations = {
       ],
     },
     feedback: {
-      section: '反馈',
+      section: '组件',
       title: '反馈组件',
       description:
         'Spinner、Progress、Alert 和 Skeleton 为用户提供关于加载状态、结果和缺失内容的清晰信号。',
@@ -1020,7 +1045,7 @@ export const zh: Translations = {
       ],
     },
     'nav-layout': {
-      section: '布局',
+      section: '组件',
       title: '导航与布局',
       description: 'Breadcrumb、Pagination、Accordion 和 Separator 处理位置、分页和结构节奏。',
       guidance: [

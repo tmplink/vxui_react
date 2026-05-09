@@ -83,6 +83,7 @@ type PageKey =
   | 'quick-start'
   | 'shell-sidebar'
   | 'grid-page'
+  | 'button'
   | 'elements'
   | 'form-controls'
   | 'form-inputs'
@@ -228,6 +229,7 @@ export function MobileApp() {
     {
       title: t.nav.components,
       items: [
+        { key: 'button', label: t.pages.button, icon: <Sparkles size={16} /> },
         { key: 'elements', label: t.pages.elements, icon: <Package2 size={16} /> },
         { key: 'form-controls', label: t.pages['form-controls'], icon: <SlidersHorizontal size={16} /> },
         { key: 'form-inputs', label: t.pages['form-inputs'], icon: <SlidersHorizontal size={16} /> },
@@ -291,6 +293,22 @@ export function MobileApp() {
               <Badge variant="accent">Accent</Badge>
               <Badge variant="success">Success</Badge>
               <Badge variant="warning">Warning</Badge>
+            </div>
+          </div>
+        );
+      case 'button':
+        return (
+          <div className="vx-stack vx-stack--tight">
+            <div className="vx-inline vx-inline--wrap">
+              <Button>Primary</Button>
+              <Button variant="secondary">Secondary</Button>
+              <Button variant="ghost">Ghost</Button>
+              <Button variant="danger">Danger</Button>
+            </div>
+            <div className="vx-inline vx-inline--wrap">
+              <Button size="sm">Small</Button>
+              <Button size="md">Medium</Button>
+              <Button size="lg">Large</Button>
             </div>
           </div>
         );
