@@ -6,10 +6,10 @@ VXUI React 是对原始 VXUI Foundation 的 React 重写版本，目标是提供
 
 ## 安装
 
-当前版本尚未发布到 npm，安装请直接指向 GitHub 仓库：
+从 npm 安装：
 
 ```bash
-npm install vxui-react@github:tmplink/vxui_react
+npm install vxui-react
 ```
 
 `react` 和 `react-dom` 需要由宿主应用提供。

@@ -1,8 +1,24 @@
 {
   "name": "vxui-react",
   "version": "0.1.0",
-  "private": true,
   "description": "A general-purpose React UI framework rebuilt from VXUI principles.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tmplink/vxui_react.git"
+  },
+  "homepage": "https://github.com/tmplink/vxui_react#readme",
+  "bugs": {
+    "url": "https://github.com/tmplink/vxui_react/issues"
+  },
+  "keywords": [
+    "react",
+    "ui",
+    "component-library",
+    "design-system",
+    "dashboard",
+    "typescript"
+  ],
   "type": "module",
   "sideEffects": [
     "**/*.css"

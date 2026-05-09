@@ -223,7 +223,7 @@ function getDocsGroupDescription(key: NavGroupKey, isZh: boolean) {
 }
 
 const QUICK_START_PREVIEW_SNIPPETS = {
-  install: String.raw`npm install vxui-react@github:tmplink/vxui_react
+  install: String.raw`npm install vxui-react
 
 // src/main.tsx
 import 'vxui-react/styles.css';`,
