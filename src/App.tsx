@@ -1889,47 +1889,68 @@ export default function App() {
               {docsHomeCopy.pathBody}
             </Alert>
           </div>
+        </section>
 
-          <Card className="vx-docs-home__panel">
-            <CardHeader>
-              <CardTitle>{docsHomeCopy.indexTitle}</CardTitle>
-              <CardDescription>{docsHomeCopy.indexLead}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="vx-doc-metric-grid">
-                {metricCards.map((metric) => (
-                  <div key={metric.label} className="vx-doc-metric-grid__item">
-                    <span>{metric.label}</span>
-                    <strong>{metric.value}</strong>
-                    <small>{metric.hint}</small>
-                  </div>
-                ))}
-              </div>
-              <div className="vx-doc-control-grid vx-doc-control-grid--single">
-                <Select label={copy.releaseLabel} value={releaseTrack} onChange={(event) => setReleaseTrack(event.target.value as ReleaseTrack)}>
-                  <option value="stable">{copy.releaseOptions.stable}</option>
-                  <option value="preview">{copy.releaseOptions.preview}</option>
-                  <option value="internal">{copy.releaseOptions.internal}</option>
-                </Select>
-              </div>
-              <div className="vx-doc-content-map">
-                {docsHomeGroups.map((group) => (
-                  <button
-                    key={group.key}
-                    type="button"
-                    className="vx-doc-content-map__row"
-                    onClick={() => navigate({ view: 'docs', page: group.pages[0] })}
-                  >
-                    <div>
-                      <strong>{group.label}</strong>
-                      <span>{group.description}</span>
+        <section className="vx-docs-home__section">
+          <div className="vx-docs-home__section-head">
+            <h2>{docsHomeCopy.indexTitle}</h2>
+            <p>{docsHomeCopy.indexLead}</p>
+          </div>
+          <div className="vx-doc-architecture-grid">
+            <Card className="vx-docs-home__panel">
+              <CardHeader>
+                <CardTitle>{isZh ? '文档总览' : 'Docs Overview'}</CardTitle>
+                <CardDescription>
+                  {isZh
+                    ? '从页面规模、断点层级和发布轨道快速判断当前文档范围。'
+                    : 'Review the scope of the docs through page count, breakpoints, and release track.'}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="vx-doc-metric-grid">
+                  {metricCards.map((metric) => (
+                    <div key={metric.label} className="vx-doc-metric-grid__item">
+                      <span>{metric.label}</span>
+                      <strong>{metric.value}</strong>
+                      <small>{metric.hint}</small>
                     </div>
-                    <ChevronRight size={16} />
-                  </button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+                <div className="vx-doc-control-grid vx-doc-control-grid--single">
+                  <Select label={copy.releaseLabel} value={releaseTrack} onChange={(event) => setReleaseTrack(event.target.value as ReleaseTrack)}>
+                    <option value="stable">{copy.releaseOptions.stable}</option>
+                    <option value="preview">{copy.releaseOptions.preview}</option>
+                    <option value="internal">{copy.releaseOptions.internal}</option>
+                  </Select>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="vx-docs-home__panel">
+              <CardHeader>
+                <CardTitle>{copy.contentMapTitle}</CardTitle>
+                <CardDescription>{copy.libraryLead}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="vx-doc-content-map">
+                  {docsHomeGroups.map((group) => (
+                    <button
+                      key={group.key}
+                      type="button"
+                      className="vx-doc-content-map__row"
+                      onClick={() => navigate({ view: 'docs', page: group.pages[0] })}
+                    >
+                      <div>
+                        <strong>{group.label}</strong>
+                        <span>{group.description}</span>
+                      </div>
+                      <ChevronRight size={16} />
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </section>
 
         <section className="vx-docs-home__section">

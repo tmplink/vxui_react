@@ -4151,10 +4151,10 @@ a {
 }
 
 .vx-docs-home__hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  display: flex;
+  flex-direction: column;
   gap: 24px;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .vx-docs-home__copy,
@@ -4167,26 +4167,76 @@ a {
   gap: 16px;
 }
 
-.vx-docs-home__copy h1,
-.vx-doc-page__hero h1,
-.vx-legal-hero h1,
-.vx-error-card__title {
+.vx-docs-home__copy {
+  width: 100%;
+  max-width: min(100%, 820px);
+  gap: 12px;
+}
+
+.vx-docs-home__section-head {
+  max-width: min(100%, 760px);
+  gap: 10px;
+}
+
+.vx-doc-page__hero > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: min(100%, 760px);
+}
+
+.vx-docs-home__copy h1 {
   margin: 0;
-  font-size: clamp(2.1rem, 4vw, 3.4rem);
-  line-height: 1.02;
-  letter-spacing: -0.04em;
+  font-size: clamp(2.75rem, 5vw, 4.5rem);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  text-wrap: balance;
   color: var(--vx-text);
 }
 
 .vx-docs-home__copy p,
+.vx-docs-home__section-head p {
+  margin: 0;
+  max-width: 100%;
+  font-size: clamp(1rem, 0.3vw + 0.98rem, 1.08rem);
+  line-height: 1.62;
+  color: var(--vx-text-secondary);
+}
+
 .vx-doc-page__hero p,
 .vx-legal-hero p,
 .vx-error-card__copy {
   margin: 0;
-  max-width: 64ch;
-  font-size: 1rem;
-  line-height: 1.65;
+  max-width: 60ch;
+  font-size: clamp(1rem, 0.3vw + 0.98rem, 1.08rem);
+  line-height: 1.62;
+  text-wrap: pretty;
   color: var(--vx-text-secondary);
+}
+
+.vx-docs-home__section-head h2,
+.vx-doc-page__hero h1,
+.vx-legal-hero h1,
+.vx-error-card__title {
+  margin: 0;
+  font-weight: 700;
+  text-wrap: balance;
+  color: var(--vx-text);
+}
+
+.vx-docs-home__section-head h2 {
+  font-size: clamp(1.75rem, 2.6vw, 2.35rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.vx-doc-page__hero h1,
+.vx-legal-hero h1,
+.vx-error-card__title {
+  font-size: clamp(2rem, 3.2vw, 2.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
 }
 
 .vx-docs-home__actions {
@@ -4339,12 +4389,13 @@ a {
 
 .vx-doc-page__kicker,
 .vx-legal-meta {
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .vx-doc-page__kicker {
+  display: block;
   color: var(--vx-primary);
   font-weight: 700;
 }
@@ -4795,7 +4846,11 @@ a {
     width: min(100%, calc(100% - 24px));
   }
 
-  .vx-docs-home__copy h1,
+  .vx-docs-home__copy h1 {
+    font-size: 2.5rem;
+  }
+
+  .vx-docs-home__section-head h2,
   .vx-doc-page__hero h1,
   .vx-legal-hero h1,
   .vx-error-card__title {
