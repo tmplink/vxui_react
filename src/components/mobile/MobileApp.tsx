@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   AlertTriangle,
   Bell,
@@ -162,6 +162,8 @@ export function MobileApp() {
   // ── UI state ───────────────────────────────────────────────────────────────
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [actionSheetOpen, setActionSheetOpen] = useState(false);
+  const docHeaderRef = useRef<HTMLDivElement | null>(null);
+  const [isDocHeaderInView, setIsDocHeaderInView] = useState(true);
 
   // ── component preview state ────────────────────────────────────────────────
   const [alertsEnabled, setAlertsEnabled] = useState(true);
@@ -201,6 +203,41 @@ export function MobileApp() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
+  useEffect(() => {
+    if (mobileView !== 'docs') {
+      setIsDocHeaderInView(true);
+      return;
+    }
+
+    docHeaderRef.current?.scrollIntoView({ block: 'start' });
+    setIsDocHeaderInView(true);
+  }, [mobileView, activePage]);
+
+  useEffect(() => {
+    if (mobileView !== 'docs') {
+      return;
+    }
+
+    const target = docHeaderRef.current;
+
+    if (!target || typeof IntersectionObserver === 'undefined') {
+      setIsDocHeaderInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsDocHeaderInView(entry.isIntersecting);
+      },
+      {
+        rootMargin: '-56px 0px 0px 0px',
+      },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [mobileView, activePage]);
+
   // ── helpers ────────────────────────────────────────────────────────────────
   const selectPage = (page: PageKey) => {
     setActivePage(page);
@@ -222,6 +259,7 @@ export function MobileApp() {
   };
 
   const activeDocument = pages[activePage];
+  const docsTopBarFallback = locale === 'zh' ? '文档' : 'Docs';
 
   // ── nav sections for drawer ────────────────────────────────────────────────
   const navSections = [
@@ -700,7 +738,7 @@ export function MobileApp() {
     return (
       <div className="vxm-docs-page">
         {/* Page header */}
-        <div className="vxm-docs-page__header">
+        <div ref={docHeaderRef} className="vxm-docs-page__header">
           <span className="vxm-docs-page__kicker">{activeDocument.section}</span>
           <h1 className="vxm-docs-page__title">{activeDocument.title}</h1>
           <p className="vxm-docs-page__lead">{activeDocument.description}</p>
@@ -890,7 +928,7 @@ export function MobileApp() {
     const isDocsView = activeTab === 'docs' && mobileView === 'docs';
     const isLegalView = mobileView === 'privacy-policy' || mobileView === 'terms-of-service';
     const title = isDocsView
-      ? (activeDocument?.title ?? 'Docs')
+      ? (isDocHeaderInView ? (activeDocument?.section ?? docsTopBarFallback) : (activeDocument?.title ?? docsTopBarFallback))
       : isLegalView
         ? mobileView === 'privacy-policy' ? privacyContent.title : termsContent.title
         : 'vxUI';

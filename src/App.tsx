@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   AlertTriangle,
   ArrowRight,
@@ -1037,6 +1037,8 @@ function DesktopApp() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [compactDensity, setCompactDensity] = useState(false);
   const [releaseTrack, setReleaseTrack] = useState<ReleaseTrack>('stable');
+  const docHeaderRef = useRef<HTMLElement | null>(null);
+  const [isDocHeaderInView, setIsDocHeaderInView] = useState(true);
   const [checkboxA, setCheckboxA] = useState(true);
   const [checkboxB, setCheckboxB] = useState(false);
   const [radioValue, setRadioValue] = useState('system');
@@ -1187,6 +1189,9 @@ function DesktopApp() {
 
   const activePage = route.view === 'docs' ? route.page ?? 'introduction' : 'introduction';
   const activeDocument = pages[activePage] ?? pages.introduction;
+  const isDocDetailPage = route.view === 'docs' && activePage !== 'introduction';
+  const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
+  const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
 
   const metricCards = [
     { label: copy.metrics.templates, value: '6', hint: copy.metrics.templatesDesc },
@@ -1363,6 +1368,41 @@ function DesktopApp() {
   useEffect(() => {
     setMobileNavOpen(false);
   }, [route]);
+
+  useEffect(() => {
+    if (!isDocDetailPage) {
+      setIsDocHeaderInView(true);
+      return;
+    }
+
+    docHeaderRef.current?.scrollIntoView({ block: 'start' });
+    setIsDocHeaderInView(true);
+  }, [isDocDetailPage, activePage]);
+
+  useEffect(() => {
+    if (!isDocDetailPage) {
+      return;
+    }
+
+    const target = docHeaderRef.current;
+
+    if (!target || typeof IntersectionObserver === 'undefined') {
+      setIsDocHeaderInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsDocHeaderInView(entry.isIntersecting);
+      },
+      {
+        rootMargin: '-72px 0px 0px 0px',
+      },
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [isDocDetailPage, activePage]);
 
   useEffect(() => {
     const handler = (event: globalThis.KeyboardEvent) => {
@@ -2125,7 +2165,7 @@ function DesktopApp() {
     return (
       <article className="vx-bs-doc-page">
         {/* Page header */}
-        <header className="vx-bs-doc-header">
+        <header ref={docHeaderRef} className="vx-bs-doc-header">
           <span className="vx-bs-doc-kicker">{activeDocument.section}</span>
           <h1>{activeDocument.title}</h1>
           <p className="vx-bs-doc-lead">{activeDocument.description}</p>
@@ -2318,8 +2358,8 @@ function DesktopApp() {
         breadcrumb={
           <div className="vx-doc-breadcrumb">
             <span className="vx-doc-breadcrumb__kicker">{activeDocument.section}</span>
-            <strong>{activeDocument.title}</strong>
-            <span className="vx-doc-breadcrumb__summary">{activeDocument.description}</span>
+            <strong>{topbarDocLabel}</strong>
+            {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__summary">{activeDocument.description}</span> : null}
           </div>
         }
         headerActions={
