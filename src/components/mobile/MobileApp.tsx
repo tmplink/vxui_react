@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import {
   AlertTriangle,
   Bell,
-  Boxes,
   Check,
+  ChevronLeft,
   ChevronRight,
   Compass,
   FileCode2,
+  FileText,
   FileX2,
   House,
   LayoutDashboard,
   List,
   LogIn,
   Menu,
-  MoonStar,
   Package2,
   Palette,
   PanelsTopLeft,
@@ -36,6 +36,8 @@ import { ActionSheet, ActionSheetItem } from './ActionSheet';
 import { MobileList, MobileListSection, MobileListItem } from './MobileList';
 import { MobileDrawer, DrawerNavItem, DrawerNavSection } from './MobileDrawer';
 import { useI18n } from '../../i18n';
+import { getPrivacyPolicyContent, getTermsOfServiceContent } from '../pages/legalPageContent';
+import { getPublicHomeContent } from '../pages/homePageContent';
 import {
   Badge,
   Button,
@@ -100,7 +102,8 @@ type PageKey =
   | 'login-page'
   | 'register-page'
   | 'error-page'
-  | 'privacy-policy';
+  | 'privacy-policy'
+  | 'terms-of-service';
 
 interface PageDefinition {
   section: string;
@@ -141,11 +144,15 @@ function getMobileTab(): BottomTab {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function MobileApp() {
-  const { t } = useI18n();
+  const { t, locale, setLocale } = useI18n();
   const { push } = useToast();
-  const { mode, setTheme, theme, themes } = useTheme();
+  const { themes } = useTheme();
+  const pp = t.publicPages;
 
   const pages = t.pageDefs as Record<PageKey, PageDefinition>;
+  const { features, previewSections, metaItems } = getPublicHomeContent(t);
+  const privacyContent = getPrivacyPolicyContent(locale);
+  const termsContent = getTermsOfServiceContent(locale);
 
   // ── routing state ──────────────────────────────────────────────────────────
   const [mobileView, setMobileView] = useState<MobileView>(getMobileView);
@@ -199,6 +206,12 @@ export function MobileApp() {
     setActivePage(page);
     setMobileView('docs');
     setActiveTab('docs');
+    setDrawerOpen(false);
+  };
+
+  const openLegalPage = (view: Extract<MobileView, 'privacy-policy' | 'terms-of-service'>) => {
+    setMobileView(view);
+    setActiveTab('home');
     setDrawerOpen(false);
   };
 
@@ -267,6 +280,7 @@ export function MobileApp() {
         { key: 'register-page', label: t.pages['register-page'], icon: <UserPlus size={16} /> },
         { key: 'error-page', label: t.pages['error-page'], icon: <AlertTriangle size={16} /> },
         { key: 'privacy-policy', label: t.pages['privacy-policy'], icon: <ShieldCheck size={16} /> },
+        { key: 'terms-of-service', label: t.pages['terms-of-service'], icon: <FileText size={16} /> },
       ],
     },
   ];
@@ -544,102 +558,133 @@ export function MobileApp() {
 
   const renderHomeContent = () => (
     <div className="vxm-docs-home">
-      {/* Hero */}
       <div className="vxm-docs-home__hero">
         <div className="vxm-docs-home__hero-badge">
-          <Badge variant="accent">v1.0</Badge>
-          <span className="vxm-docs-home__hero-badge-label">vxUI React</span>
+          <Badge variant="accent">{pp.heroTag}</Badge>
         </div>
-        <h1 className="vxm-docs-home__title">vxUI</h1>
-        <p className="vxm-docs-home__lead">A lightweight React component library built on CSS custom properties. Zero dependencies. Built-in dark mode.</p>
+        <h1 className="vxm-docs-home__title">{pp.heroTitle}</h1>
+        <p className="vxm-docs-home__lead">{pp.heroLead}</p>
         <div className="vxm-docs-home__actions">
-          <Button onClick={() => selectPage('quick-start')} style={{ flex: 1 }}>
+          <Button shape="pill" onClick={() => setMobileView('login')} style={{ flex: 1, minHeight: 48 }}>
             <Zap size={16} />
-            Get started
+            {pp.heroCta}
           </Button>
-          <Button variant="secondary" onClick={() => selectPage('elements')} style={{ flex: 1 }}>
-            Browse components
+          <Button variant="secondary" shape="pill" onClick={() => selectPage('introduction')} style={{ flex: 1, minHeight: 48 }}>
+            {pp.heroCtaAlt}
           </Button>
         </div>
+        <p className="vxm-docs-home__status">{pp.previewLead}</p>
       </div>
 
-      {/* Stats */}
-      <MobileListSection title="At a glance" style={{ padding: '0 16px 8px' }}>
-        <div className="vxm-docs-home__stats">
-          <div className="vxm-docs-home__stat">
-            <div className="vxm-docs-home__stat-icon"><Check size={18} /></div>
-            <div className="vxm-docs-home__stat-value">0</div>
-            <div className="vxm-docs-home__stat-label">Dependencies</div>
-          </div>
-          <div className="vxm-docs-home__stat">
-            <div className="vxm-docs-home__stat-icon"><Boxes size={18} /></div>
-            <div className="vxm-docs-home__stat-value">30+</div>
-            <div className="vxm-docs-home__stat-label">Components</div>
-          </div>
-          <div className="vxm-docs-home__stat">
-            <div className="vxm-docs-home__stat-icon"><FileCode2 size={18} /></div>
-            <div className="vxm-docs-home__stat-value">~24 KB</div>
-            <div className="vxm-docs-home__stat-label">Core CSS</div>
-          </div>
-          <div className="vxm-docs-home__stat">
-            <div className="vxm-docs-home__stat-icon"><MoonStar size={18} /></div>
-            <div className="vxm-docs-home__stat-value">Built-in</div>
-            <div className="vxm-docs-home__stat-label">Dark mode</div>
-          </div>
+      <MobileListSection title={pp.navDocs}>
+        <div className="vxm-docs-home__preview-search">
+          <Search size={16} />
+          <span>{t.searchPlaceholder}</span>
         </div>
-      </MobileListSection>
-
-      {/* Quick nav */}
-      <MobileListSection title="Getting started" style={{ padding: '0 16px 8px' }}>
         <MobileList>
-          <MobileListItem leading={<House size={18} />} label="Introduction" description="What is vxUI and how it works" chevron onClick={() => selectPage('introduction')} />
-          <MobileListItem leading={<Zap size={18} />} label="Quick start" description="Up and running in minutes" chevron onClick={() => selectPage('quick-start')} />
+          {previewSections.map((section) => {
+            const Icon = section.icon;
+            return (
+              <MobileListItem
+                key={section.id}
+                leading={<span className="vxm-docs-home__leading-badge"><Icon size={18} /></span>}
+                label={section.label}
+                description={section.meta}
+                chevron
+                onClick={() => selectPage(section.id as PageKey)}
+              />
+            );
+          })}
         </MobileList>
       </MobileListSection>
 
-      <MobileListSection title="Components" style={{ padding: '0 16px 8px' }}>
+      <MobileListSection title={pp.previewAccessTitle}>
         <MobileList>
-          <MobileListItem leading={<Package2 size={18} />} label="Elements" description="Buttons, badges, cards" trailing={<Badge variant="accent">UI</Badge>} chevron onClick={() => selectPage('elements')} />
-          <MobileListItem leading={<SlidersHorizontal size={18} />} label="Form controls" description="Input, switch, dialog" chevron onClick={() => selectPage('form-controls')} />
-          <MobileListItem leading={<SlidersHorizontal size={18} />} label="Form inputs" description="Select, checkbox, radio, slider" chevron onClick={() => selectPage('form-inputs')} />
-          <MobileListItem leading={<Bell size={18} />} label="Feedback" description="Spinner, progress, alert, skeleton" chevron onClick={() => selectPage('feedback')} />
-          <MobileListItem leading={<Package2 size={18} />} label="Overlays" description="Tooltip, popover, dropdown" chevron onClick={() => selectPage('overlays')} />
-          <MobileListItem leading={<Smartphone size={18} />} label="Mobile components" trailing={<Badge variant="success">New</Badge>} description="Shell, BottomNav, Drawer, List" chevron onClick={() => selectPage('mobile')} />
+          {metaItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <MobileListItem
+                key={item.key}
+                leading={<span className="vxm-docs-home__leading-badge vxm-docs-home__leading-badge--accent"><Icon size={18} /></span>}
+                label={item.title}
+                description={(
+                  <span className="vxm-docs-home__meta-copy">
+                    {item.lines.map((line) => (
+                      <span key={line}>{line}</span>
+                    ))}
+                  </span>
+                )}
+              />
+            );
+          })}
         </MobileList>
       </MobileListSection>
 
-      {/* Theme switcher */}
-      <MobileListSection title="Theme" style={{ padding: '0 16px 8px' }}>
-        <div style={{ padding: '4px 0 12px', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {Object.entries(themes).map(([key, def]) => (
-            <Button key={key} size="sm" variant={theme === key ? 'solid' : 'secondary'} onClick={() => setTheme(key)}>
-              {def.label ?? key}
-            </Button>
-          ))}
-        </div>
-        <div className="vx-inline" style={{ paddingBottom: 8 }}>
-          <span className="vx-version-pill vx-version-pill--token">
-            <Palette size={13} />{themes[theme]?.label ?? theme}
-          </span>
-          <span className="vx-version-pill vx-version-pill--token">
-            <Sparkles size={13} />{t.modeLabel(mode)}
-          </span>
-        </div>
+      <MobileListSection title={pp.featuresSectionTitle}>
+        <MobileList>
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <MobileListItem
+                key={feature.key}
+                leading={<span className="vxm-docs-home__leading-badge"><Icon size={18} /></span>}
+                label={feature.title}
+                description={feature.description}
+              />
+            );
+          })}
+        </MobileList>
       </MobileListSection>
 
-      {/* Desktop link */}
-      <div style={{ padding: '8px 16px 32px' }}>
+      <div className="vxm-docs-home__footer">
+        <span className="vxm-docs-home__footer-copy">{pp.footerCopy}</span>
         <button
           type="button"
-          className="vx-cmd-trigger"
-          style={{ width: '100%', justifyContent: 'center', fontSize: 13 }}
-          onClick={() => { window.location.href = '/docs/introduction'; }}
+          className="vxm-docs-home__footer-link"
+          onClick={() => openLegalPage('privacy-policy')}
         >
-          <Smartphone size={14} style={{ transform: 'rotate(0deg)' }} />
-          Switch to desktop version
-          <ChevronRight size={14} />
+          {pp.footerPrivacy}
         </button>
       </div>
+    </div>
+  );
+
+  const renderLegalContent = (content: ReturnType<typeof getPrivacyPolicyContent>) => (
+    <div className="vxm-legal-page">
+      <div className="vxm-legal-page__hero">
+        <Badge variant="accent">{content.badgeLabel}</Badge>
+        <h1 className="vxm-legal-page__title">{content.title}</h1>
+        <p className="vxm-legal-page__lead">{content.lead}</p>
+        <div className="vxm-legal-page__meta">
+          {content.meta.map((item) => (
+            <span key={item} className="vx-version-pill vx-version-pill--token">{item}</span>
+          ))}
+        </div>
+      </div>
+
+      <MobileListSection title={content.summaryTitle}>
+        <MobileList>
+          {content.summaryItems.map((item) => (
+            <MobileListItem
+              key={item}
+              leading={<span className="vxm-legal-page__summary-icon"><Check size={16} /></span>}
+              label={item}
+            />
+          ))}
+        </MobileList>
+      </MobileListSection>
+
+      {content.sections.map((section) => (
+        <MobileListSection key={section.title} title={section.title}>
+          <div className="vxm-legal-page__section-card">
+            {section.paragraphs.map((paragraph) => (
+              <p key={paragraph} className="vxm-legal-page__paragraph">{paragraph}</p>
+            ))}
+          </div>
+        </MobileListSection>
+      ))}
+
+      <div className="vxm-legal-page__footer">{pp.footerCopy}</div>
     </div>
   );
 
@@ -800,10 +845,19 @@ export function MobileApp() {
               <Input type="password" placeholder={t.publicPages.registerPasswordPlaceholder} />
             </div>
             <Checkbox
-              label={`${t.publicPages.registerTermsAgree} ${t.publicPages.registerTermsLink}`}
+              label={`${t.publicPages.registerTermsAgree} ${t.publicPages.registerTermsLink} ${t.publicPages.registerTermsAnd} ${t.publicPages.registerPrivacyLink}`}
               checked={checkboxA}
               onChange={e => setCheckboxA(e.target.checked)}
             />
+            <p className="vxm-auth-screen__legal-links">
+              <button type="button" onClick={() => openLegalPage('terms-of-service')}>
+                {t.publicPages.registerTermsLink}
+              </button>
+              <span>{t.publicPages.registerTermsAnd}</span>
+              <button type="button" onClick={() => openLegalPage('privacy-policy')}>
+                {t.publicPages.registerPrivacyLink}
+              </button>
+            </p>
           </div>
         </div>
         <div className="vxm-auth-screen__actions">
@@ -829,7 +883,12 @@ export function MobileApp() {
 
   const renderTopBar = () => {
     const isDocsView = activeTab === 'docs' && mobileView === 'docs';
-    const title = isDocsView ? (activeDocument?.title ?? 'Docs') : 'vxUI';
+    const isLegalView = mobileView === 'privacy-policy' || mobileView === 'terms-of-service';
+    const title = isDocsView
+      ? (activeDocument?.title ?? 'Docs')
+      : isLegalView
+        ? mobileView === 'privacy-policy' ? privacyContent.title : termsContent.title
+        : 'vxUI';
 
     return (
       <MobileTopBar
@@ -839,6 +898,10 @@ export function MobileApp() {
             <MobileIconButton label="Open navigation" onClick={() => setDrawerOpen(true)}>
               <Menu size={20} />
             </MobileIconButton>
+          ) : isLegalView ? (
+            <MobileIconButton label={pp.backHome} onClick={() => { setMobileView('home'); setActiveTab('home'); }}>
+              <ChevronLeft size={20} />
+            </MobileIconButton>
           ) : undefined
         }
         trailing={
@@ -847,8 +910,8 @@ export function MobileApp() {
               <Share2 size={20} />
             </MobileIconButton>
           ) : (
-            <MobileIconButton label="Sign in" onClick={() => setMobileView('login')}>
-              <User size={20} />
+            <MobileIconButton label={locale === 'zh' ? '快捷操作' : 'Quick actions'} onClick={() => setActionSheetOpen(true)}>
+              <Menu size={20} />
             </MobileIconButton>
           )
         }
@@ -861,6 +924,8 @@ export function MobileApp() {
   const renderContent = () => {
     if (mobileView === 'login') return renderLoginContent();
     if (mobileView === 'register') return renderRegisterContent();
+    if (mobileView === 'privacy-policy') return renderLegalContent(privacyContent);
+    if (mobileView === 'terms-of-service') return renderLegalContent(termsContent);
     if (activeTab === 'search') return renderSearchContent();
     if (activeTab === 'docs') return renderDocContent();
     return renderHomeContent();
@@ -909,14 +974,15 @@ export function MobileApp() {
 
   // ── bottom nav ─────────────────────────────────────────────────────────────
 
-  const isLoginOrRegister = mobileView === 'login' || mobileView === 'register';
+  const isAuthView = mobileView === 'login' || mobileView === 'register';
+  const isLegalView = mobileView === 'privacy-policy' || mobileView === 'terms-of-service';
 
   const renderBottomNav = () => (
     <BottomNav
       items={[
-        { key: 'home', label: 'Home', icon: <House size={22} />, active: activeTab === 'home' && !isLoginOrRegister, onSelect: () => { selectTab('home'); setMobileView('home'); } },
-        { key: 'docs', label: 'Docs', icon: <FileCode2 size={22} />, active: activeTab === 'docs' && !isLoginOrRegister, onSelect: () => { selectTab('docs'); setMobileView('docs'); } },
-        { key: 'search', label: 'Search', icon: <Search size={22} />, active: activeTab === 'search' && !isLoginOrRegister, onSelect: () => { selectTab('search'); } },
+        { key: 'home', label: 'Home', icon: <House size={22} />, active: activeTab === 'home' && !isAuthView && !isLegalView, onSelect: () => { selectTab('home'); setMobileView('home'); } },
+        { key: 'docs', label: 'Docs', icon: <FileCode2 size={22} />, active: activeTab === 'docs' && !isAuthView && !isLegalView, onSelect: () => { selectTab('docs'); setMobileView('docs'); } },
+        { key: 'search', label: 'Search', icon: <Search size={22} />, active: activeTab === 'search' && !isAuthView && !isLegalView, onSelect: () => { selectTab('search'); } },
       ]}
     />
   );
@@ -927,20 +993,35 @@ export function MobileApp() {
     <>
       {renderDrawer()}
       <MobileShell
-        topBar={!isLoginOrRegister ? renderTopBar() : undefined}
-        bottomNav={!isLoginOrRegister ? renderBottomNav() : undefined}
+        topBar={!isAuthView ? renderTopBar() : undefined}
+        bottomNav={!isAuthView && !isLegalView ? renderBottomNav() : undefined}
       >
         {renderContent()}
       </MobileShell>
       <ActionSheet
         open={actionSheetOpen}
         onClose={() => setActionSheetOpen(false)}
-        title="Options"
-        description="Choose an action for this page."
+        title={mobileView === 'docs' ? (locale === 'zh' ? '页面操作' : 'Page actions') : (locale === 'zh' ? '快捷操作' : 'Quick actions')}
+        description={mobileView === 'docs' ? (locale === 'zh' ? '为当前页面选择一个动作。' : 'Choose an action for this page.') : (locale === 'zh' ? '浏览首页、文档、账户与语言入口。' : 'Open home, docs, account, and language actions.')}
       >
-        <ActionSheetItem icon={<Star size={18} />} onClick={() => setActionSheetOpen(false)}>Bookmark page</ActionSheetItem>
-        <ActionSheetItem icon={<Download size={18} />} onClick={() => setActionSheetOpen(false)}>Download PDF</ActionSheetItem>
-        <ActionSheetItem icon={<Trash2 size={18} />} destructive onClick={() => setActionSheetOpen(false)}>Clear history</ActionSheetItem>
+        {mobileView === 'docs' ? (
+          <>
+            <ActionSheetItem icon={<Star size={18} />} onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '收藏页面' : 'Bookmark page'}</ActionSheetItem>
+            <ActionSheetItem icon={<Download size={18} />} onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '下载 PDF' : 'Download PDF'}</ActionSheetItem>
+            <ActionSheetItem icon={<Trash2 size={18} />} destructive onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '清除历史' : 'Clear history'}</ActionSheetItem>
+          </>
+        ) : (
+          <>
+            <ActionSheetItem icon={<FileCode2 size={18} />} onClick={() => { setActionSheetOpen(false); selectPage('introduction'); }}>{pp.navDocs}</ActionSheetItem>
+            <ActionSheetItem icon={<LogIn size={18} />} onClick={() => { setActionSheetOpen(false); setMobileView('login'); }}>{pp.navLogin}</ActionSheetItem>
+            <ActionSheetItem icon={<UserPlus size={18} />} onClick={() => { setActionSheetOpen(false); setMobileView('register'); }}>{pp.navSignup}</ActionSheetItem>
+            <ActionSheetItem icon={locale === 'zh' ? <Check size={18} /> : undefined} onClick={() => { setLocale('zh'); setActionSheetOpen(false); }}>中文</ActionSheetItem>
+            <ActionSheetItem icon={locale === 'en' ? <Check size={18} /> : undefined} onClick={() => { setLocale('en'); setActionSheetOpen(false); }}>English</ActionSheetItem>
+            <ActionSheetItem icon={<ShieldCheck size={18} />} onClick={() => { setActionSheetOpen(false); openLegalPage('privacy-policy'); }}>{pp.footerPrivacy}</ActionSheetItem>
+            <ActionSheetItem icon={<FileText size={18} />} onClick={() => { setActionSheetOpen(false); openLegalPage('terms-of-service'); }}>{t.pages['terms-of-service']}</ActionSheetItem>
+            <ActionSheetItem icon={<Smartphone size={18} />} onClick={() => { setActionSheetOpen(false); window.location.href = '/docs/introduction'; }}>{locale === 'zh' ? '桌面版文档' : 'Desktop docs'}</ActionSheetItem>
+          </>
+        )}
       </ActionSheet>
     </>
   );

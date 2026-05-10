@@ -1,13 +1,7 @@
 import {
   ArrowRight,
-  Boxes,
   FileCode2,
-  MoonStar,
-  Package,
-  Palette,
   Search,
-  ShieldCheck,
-  Smartphone,
   Zap,
 } from 'lucide-react';
 import {
@@ -21,6 +15,7 @@ import {
 } from '../../lib';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useI18n } from '../../i18n';
+import { getPublicHomeContent } from './homePageContent';
 
 interface HomePageProps {
   viewerName?: string | null;
@@ -42,19 +37,7 @@ export function HomePage({
   const { t } = useI18n();
   const pp = t.publicPages;
   const isSignedIn = Boolean(viewerName);
-
-  const features = [
-    { icon: <Package size={24} />, title: pp.feat1, desc: pp.feat1Desc },
-    { icon: <Boxes size={24} />, title: pp.feat2, desc: pp.feat2Desc },
-    { icon: <Palette size={24} />, title: pp.feat3, desc: pp.feat3Desc },
-    { icon: <MoonStar size={24} />, title: pp.feat4, desc: pp.feat4Desc },
-  ];
-
-  const previewSections = [
-    { id: 'quick-start', icon: <Zap size={18} />, label: t.pages['quick-start'], meta: t.nav.gettingStarted },
-    { id: 'button', icon: <Palette size={18} />, label: t.pages.button, meta: t.nav.components },
-    { id: 'mobile', icon: <Smartphone size={18} />, label: t.pages.mobile, meta: t.nav.mobile },
-  ];
+  const { features, previewSections, metaItems } = getPublicHomeContent(t);
 
   return (
     <div className="vx-public">
@@ -135,33 +118,37 @@ export function HomePage({
               </div>
               <div className="vx-public-preview__sections">
                 {previewSections.map((section) => (
-                  <div key={section.id} className="vx-public-preview__section" onClick={() => onDocs(section.id)} style={{ cursor: 'pointer' }}>
-                    <span className="vx-public-preview__section-icon">{section.icon}</span>
-                    <div>
-                      <div className="vx-public-preview__section-label">{section.label}</div>
-                      <div className="vx-public-preview__section-meta">{section.meta}</div>
-                    </div>
-                    <ArrowRight size={16} className="vx-public-preview__section-arrow" />
-                  </div>
+                  (() => {
+                    const Icon = section.icon;
+                    return (
+                      <div key={section.id} className="vx-public-preview__section" onClick={() => onDocs(section.id)} style={{ cursor: 'pointer' }}>
+                        <span className="vx-public-preview__section-icon"><Icon size={18} /></span>
+                        <div>
+                          <div className="vx-public-preview__section-label">{section.label}</div>
+                          <div className="vx-public-preview__section-meta">{section.meta}</div>
+                        </div>
+                        <ArrowRight size={16} className="vx-public-preview__section-arrow" />
+                      </div>
+                    );
+                  })()
                 ))}
               </div>
             </div>
             <div className="vx-public-preview__meta-grid">
-              <div className="vx-public-preview__meta-card">
-                <div className="vx-public-preview__meta-title">
-                  <ShieldCheck size={18} className="vx-text-primary" />
-                  {pp.previewAccessTitle}
-                </div>
-                <p>{pp.previewAccessMember}</p>
-                <p>{pp.previewAccessGuest}</p>
-              </div>
-              <div className="vx-public-preview__meta-card">
-                <div className="vx-public-preview__meta-title">
-                  <Smartphone size={18} className="vx-text-primary" />
-                  {pp.previewMobileTitle}
-                </div>
-                <p>{pp.previewMobileLead}</p>
-              </div>
+              {metaItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.key} className="vx-public-preview__meta-card">
+                    <div className="vx-public-preview__meta-title">
+                      <Icon size={18} className="vx-text-primary" />
+                      {item.title}
+                    </div>
+                    {item.lines.map((line) => (
+                      <p key={line}>{line}</p>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -170,13 +157,18 @@ export function HomePage({
           <p className="vx-public-section-title">{pp.featuresSectionTitle}</p>
           <div className="vx-public-features__grid">
             {features.map((feature) => (
-              <Card key={feature.title} className="vx-public-feature-card">
-                <CardHeader>
-                  <div className="vx-public-feature-icon">{feature.icon}</div>
-                  <CardTitle>{feature.title}</CardTitle>
-                  <CardDescription>{feature.desc}</CardDescription>
-                </CardHeader>
-              </Card>
+              (() => {
+                const Icon = feature.icon;
+                return (
+                  <Card key={feature.key} className="vx-public-feature-card">
+                    <CardHeader>
+                      <div className="vx-public-feature-icon"><Icon size={24} /></div>
+                      <CardTitle>{feature.title}</CardTitle>
+                      <CardDescription>{feature.description}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                );
+              })()
             ))}
           </div>
         </section>
