@@ -577,11 +577,16 @@ export function MobileApp() {
       </div>
 
       <MobileListSection title={pp.navDocs}>
-        <div className="vxm-docs-home__preview-search">
+        <button
+          type="button"
+          className="vxm-docs-home__preview-search"
+          aria-label={t.searchAriaLabel}
+          onClick={() => setActiveTab('search')}
+        >
           <Search size={16} />
           <span>{t.searchPlaceholder}</span>
-        </div>
-        <MobileList>
+        </button>
+        <MobileList className="vxm-docs-home__list">
           {previewSections.map((section) => {
             const Icon = section.icon;
             return (
@@ -599,7 +604,7 @@ export function MobileApp() {
       </MobileListSection>
 
       <MobileListSection title={pp.previewAccessTitle}>
-        <MobileList>
+        <MobileList className="vxm-docs-home__list">
           {metaItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -621,7 +626,7 @@ export function MobileApp() {
       </MobileListSection>
 
       <MobileListSection title={pp.featuresSectionTitle}>
-        <MobileList>
+        <MobileList className="vxm-docs-home__list">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
@@ -663,7 +668,7 @@ export function MobileApp() {
       </div>
 
       <MobileListSection title={content.summaryTitle}>
-        <MobileList>
+        <MobileList className="vxm-legal-page__list">
           {content.summaryItems.map((item) => (
             <MobileListItem
               key={item}

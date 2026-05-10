@@ -1733,9 +1733,13 @@ a {
 .vxm-shell {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
   min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   background: var(--vx-bg);
   overscroll-behavior: none;
+  overflow: hidden;
 }
 
 .vxm-shell__topbar {
@@ -1747,6 +1751,7 @@ a {
 
 .vxm-shell__main {
   flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
@@ -1849,6 +1854,16 @@ a {
   color: var(--vx-text-muted);
   -webkit-tap-highlight-color: transparent;
   transition: color 120ms ease;
+}
+
+.vxm-bottomnav__item:focus {
+  outline: none;
+}
+
+.vxm-bottomnav__item:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--vx-primary) 72%, white);
+  outline-offset: -2px;
+  border-radius: 14px;
 }
 
 .vxm-bottomnav__item--active {
@@ -4295,7 +4310,9 @@ a {
 .vxm-docs-home__preview-search {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 10px;
+  width: calc(100% - 32px);
   min-height: 46px;
   margin: 0 16px 10px;
   padding: 0 14px;
@@ -4304,6 +4321,28 @@ a {
   background: color-mix(in srgb, var(--vx-bg-accent) 72%, var(--vx-surface));
   color: var(--vx-text-muted);
   font-size: 0.875rem;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 100ms ease, border-color 100ms ease, color 100ms ease;
+}
+
+.vxm-docs-home__preview-search:active {
+  background: var(--vx-surface-hover);
+}
+
+.vxm-docs-home__preview-search:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--vx-primary) 72%, white);
+  outline-offset: 2px;
+}
+
+.vxm-docs-home__list,
+.vxm-legal-page__list {
+  margin: 0 16px;
 }
 
 .vxm-docs-home__leading-badge {
