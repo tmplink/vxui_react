@@ -150,6 +150,30 @@ const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; pages: PageKey[] }> = [
   { key: 'mobile', pages: ['mobile'] },
 ];
 
+const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
+  'quick-start',
+  'shell-sidebar',
+  'grid-page',
+  'button',
+  'elements',
+  'form-controls',
+  'form-inputs',
+  'navigation',
+  'data-list',
+  'empty-states',
+  'toasts',
+  'feedback',
+  'overlays',
+  'nav-layout',
+  'data-display',
+  'mobile',
+  'home-page',
+  'login-page',
+  'register-page',
+  'error-page',
+  'privacy-policy',
+]);
+
 const pageIcons: Record<PageKey, ReactNode> = {
   introduction: <Compass size={16} />,
   'quick-start': <Zap size={16} />,
@@ -970,6 +994,10 @@ function buildRoutePath(route: AppRoute) {
     default:
       return `/docs/${route.page ?? 'introduction'}`;
   }
+}
+
+function buildMobilePreviewPath(pageKey: PageKey) {
+  return `/m/docs/${pageKey}`;
 }
 
 function loadSession(): ViewerSession | null {
@@ -2084,6 +2112,9 @@ function DesktopApp() {
     const usageSnippet = DOC_USAGE_SNIPPETS[activePage];
     const sample = renderSample(activePage);
     const hasSample = sample !== null;
+    const mobilePreviewPath = MOBILE_PREVIEW_PAGES.has(activePage)
+      ? buildMobilePreviewPath(activePage)
+      : null;
 
     // Flat ordered page list for prev/next navigation
     const flatPages = DOC_NAV_GROUPS.flatMap((g) => g.pages);
@@ -2127,7 +2158,39 @@ function DesktopApp() {
                   {isZh ? '示例' : 'Example'}
                   <a href="#example" className="vx-bs-anchor" aria-label={isZh ? '链接到示例' : 'Link to Example'}>#</a>
                 </h2>
-                <div className="vx-bs-example">{sample}</div>
+                <div className="vx-bs-example-grid">
+                  <div className="vx-bs-example-panel">
+                    <div className="vx-bs-example-panel__meta">
+                      <span className="vx-bs-example-panel__eyebrow">{isZh ? '桌面端' : 'Desktop'}</span>
+                      <strong>{copy.livePreview}</strong>
+                    </div>
+                    <div className="vx-bs-example">{sample}</div>
+                  </div>
+
+                  {mobilePreviewPath && (
+                    <div className="vx-bs-example-panel vx-bs-example-panel--mobile">
+                      <div className="vx-bs-example-panel__meta">
+                        <span className="vx-bs-example-panel__eyebrow">{isZh ? '移动端' : 'Mobile'}</span>
+                        <strong>{isZh ? '同步预览' : 'Synced preview'}</strong>
+                      </div>
+                      <div className="vx-bs-mobile-preview">
+                        <div className="vxm-phone-frame vx-bs-mobile-preview__frame">
+                          <iframe
+                            className="vx-bs-mobile-preview__iframe"
+                            loading="lazy"
+                            src={mobilePreviewPath}
+                            title={`${activeDocument.title} ${isZh ? '移动端预览' : 'mobile preview'}`}
+                          />
+                        </div>
+                        <p className="vx-bs-mobile-preview__hint">
+                          {isZh
+                            ? '这里加载真实的移动端文档页，便于同时对比桌面与手机呈现。'
+                            : 'This loads the real mobile docs page so desktop and phone presentations stay in sync.'}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </section>
             )}
 
