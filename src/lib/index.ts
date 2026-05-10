@@ -1,5 +1,10 @@
 import '../styles/base.css';
 
+export { ViewportProvider, useViewport } from './viewport';
+export type { ViewportType, ViewportContextValue, ViewportProviderProps } from './viewport';
+export { Responsive } from '../components/Responsive';
+export type { ResponsiveProps } from '../components/Responsive';
+
 export { AppShell } from '../components/AppShell';
 export { Badge } from '../components/Badge';
 export { Button } from '../components/Button';

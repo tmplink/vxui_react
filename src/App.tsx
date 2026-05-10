@@ -35,6 +35,8 @@ import { PrivacyPolicyPage } from './components/pages/PrivacyPolicyPage';
 import { RegisterPage } from './components/pages/RegisterPage';
 import { TermsOfServicePage } from './components/pages/TermsOfServicePage';
 import { useI18n } from './i18n';
+import { Responsive } from './components/Responsive';
+import { MobileApp } from './components/mobile/MobileApp';
 import {
   Accordion,
   Alert,
@@ -228,15 +230,17 @@ const QUICK_START_PREVIEW_SNIPPETS = {
 // src/main.tsx
 import 'vxui-react/styles.css';`,
   providers: String.raw`import ReactDOM from 'react-dom/client';
-import { ThemeProvider, ToastProvider, themePresets } from 'vxui-react';
+import { ThemeProvider, ToastProvider, ViewportProvider, themePresets } from 'vxui-react';
 import App from './App';
 import 'vxui-react/styles.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ThemeProvider themes={themePresets} defaultTheme="light">
-    <ToastProvider>
-      <App />
-    </ToastProvider>
+    <ViewportProvider>
+      <ToastProvider>
+        <App />
+      </ToastProvider>
+    </ViewportProvider>
   </ThemeProvider>,
 );`,
   layout: String.raw`import {
@@ -246,6 +250,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   CardContent,
   CardHeader,
   CardTitle,
+  ViewportProvider,
 } from 'vxui-react';
 
 const navSections = [
@@ -258,22 +263,24 @@ const navSections = [
   },
 ];
 
-export function App() {
+export default function App() {
   return (
-    <AppShell
-      brand="Acme Ops"
-      title="Overview"
-      description="Build admin screens from one reusable shell."
-      navSections={navSections}
-      headerActions={<Button size="sm">Create order</Button>}
-    >
-      <Card>
-        <CardHeader>
-          <CardTitle>Queue health</CardTitle>
-        </CardHeader>
-        <CardContent>All services are online.</CardContent>
-      </Card>
-    </AppShell>
+    <ViewportProvider>
+      <AppShell
+        brand="Acme Ops"
+        title="Overview"
+        description="Build admin screens from one reusable shell."
+        navSections={navSections}
+        headerActions={<Button size="sm">Create order</Button>}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle>Queue health</CardTitle>
+          </CardHeader>
+          <CardContent>All services are online.</CardContent>
+        </Card>
+      </AppShell>
+    </ViewportProvider>
   );
 }`,
   feedback: String.raw`import { Button, useToast } from 'vxui-react';
@@ -302,6 +309,7 @@ const DOC_USAGE_SNIPPETS: Partial<Record<PageKey, string>> = {
   AppShell,
   ThemeProvider,
   ToastProvider,
+  ViewportProvider,
   themePresets,
 } from 'vxui-react';
 import 'vxui-react/styles.css';
@@ -309,15 +317,17 @@ import 'vxui-react/styles.css';
 export function App() {
   return (
     <ThemeProvider themes={themePresets} defaultTheme="light">
-      <ToastProvider>
-        <AppShell
-          title="Overview"
-          description="Start with the shell, then compose cards, forms, and feedback."
-          navItems={[{ key: 'home', label: 'Home', active: true }]}
-        >
-          <div>Your first VXUI screen.</div>
-        </AppShell>
-      </ToastProvider>
+      <ViewportProvider>
+        <ToastProvider>
+          <AppShell
+            title="Overview"
+            description="Start with the shell, then compose cards, forms, and feedback."
+            navItems={[{ key: 'home', label: 'Home', active: true }]}
+          >
+            <div>Your first VXUI screen.</div>
+          </AppShell>
+        </ToastProvider>
+      </ViewportProvider>
     </ThemeProvider>
   );
 }`,
@@ -332,6 +342,7 @@ import {
   Input,
   ThemeProvider,
   ToastProvider,
+  ViewportProvider,
   themePresets,
   useToast,
 } from 'vxui-react';
@@ -388,9 +399,11 @@ function Workspace() {
 export default function App() {
   return (
     <ThemeProvider themes={themePresets} defaultTheme="light">
-      <ToastProvider>
-        <Workspace />
-      </ToastProvider>
+      <ViewportProvider>
+        <ToastProvider>
+          <Workspace />
+        </ToastProvider>
+      </ViewportProvider>
     </ThemeProvider>
   );
 }`,
@@ -979,7 +992,7 @@ function loadSession(): ViewerSession | null {
   return null;
 }
 
-export default function App() {
+function DesktopApp() {
   const { t, locale } = useI18n();
   const isZh = locale === 'zh';
   const pages = t.pageDefs as Record<PageKey, PageDefinition>;
@@ -1563,6 +1576,12 @@ export default function App() {
               <Button size="sm">{isZh ? '小' : 'Small'}</Button>
               <Button size="md">{isZh ? '中' : 'Medium'}</Button>
               <Button size="lg">{isZh ? '大' : 'Large'}</Button>
+            </div>
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Button shape="square">{isZh ? '直角' : 'Square'}</Button>
+              <Button shape="rect">{isZh ? '圆角' : 'Rounded'}</Button>
+              <Button shape="pill">{isZh ? '胶囊' : 'Pill'}</Button>
+              <Button variant="secondary" shape="pill">{isZh ? '次级胶囊' : 'Secondary pill'}</Button>
             </div>
             <Button fullWidth>{isZh ? '整行操作' : 'Full width action'}</Button>
           </div>
@@ -2334,5 +2353,14 @@ export default function App() {
         </div>
       </AppShell>
     </>
+  );
+}
+
+export default function App() {
+  return (
+    <Responsive
+      desktop={<DesktopApp />}
+      mobile={<MobileApp />}
+    />
   );
 }

@@ -733,66 +733,97 @@ export function MobileApp() {
     </div>
   );
 
-  const renderLoginContent = () => (
-    <div style={{ padding: '32px 16px' }}>
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--vx-text)', marginBottom: 6 }}>vxUI</div>
-        <p className="vx-muted" style={{ fontSize: 14 }}>Sign in to continue</p>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Sign in</CardTitle>
-          <CardDescription>Enter your credentials to access the docs.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="vx-stack">
-            <Input label="Email" type="email" placeholder="you@example.com" />
-            <Input label="Password" type="password" placeholder="••••••••" />
-            <Button style={{ width: '100%' }} onClick={() => { setMobileView('docs'); setActiveTab('docs'); }}>
-              <LogIn size={14} />Sign in
-            </Button>
-            <Button variant="ghost" style={{ width: '100%' }} onClick={() => { setMobileView('docs'); setActiveTab('docs'); }}>
-              Continue as guest
-            </Button>
-            <p className="vx-muted" style={{ textAlign: 'center', fontSize: '0.8125rem', margin: 0 }}>
-              No account?{' '}
-              <button type="button" className="vx-link" onClick={() => setMobileView('register')}>Register</button>
+  const renderLoginContent = () => {
+    const isZh = t.locale === 'zh';
+    return (
+      <div className="vxm-auth-screen">
+        <div className="vxm-auth-screen__body">
+          <div className="vxm-auth-screen__icon">
+            <Sparkles size={38} />
+          </div>
+          <h1 className="vxm-auth-screen__title">{t.publicPages.loginCta}</h1>
+          <div className="vxm-auth-screen__fields">
+            <div>
+              <span className="vxm-auth-screen__label">{t.publicPages.loginEmail}</span>
+              <Input type="email" placeholder={t.publicPages.loginEmailPlaceholder} />
+            </div>
+            <div>
+              <span className="vxm-auth-screen__label">{t.publicPages.loginPassword}</span>
+              <Input type="password" placeholder={t.publicPages.loginPasswordPlaceholder} />
+            </div>
+            <p className="vxm-auth-screen__forgot">
+              <button type="button" className="vxm-auth-screen__forgot-btn">
+                {isZh ? '忘记密码？来这里找回' : 'Forgot password?'}
+              </button>
             </p>
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+        </div>
+        <div className="vxm-auth-screen__actions">
+          <Button
+            shape="pill"
+            style={{ width: '100%', minHeight: 52, fontSize: '1rem', fontWeight: 600 }}
+            onClick={() => { setMobileView('docs'); setActiveTab('docs'); }}
+          >
+            {t.publicPages.loginCta}
+          </Button>
+          <p className="vxm-auth-screen__footer-link">
+            {t.publicPages.loginNoAccount}{' '}
+            <button type="button" onClick={() => setMobileView('register')}>
+              {isZh ? '点这里注册' : t.publicPages.loginRegister}
+            </button>
+          </p>
+        </div>
+      </div>
+    );
+  };
 
-  const renderRegisterContent = () => (
-    <div style={{ padding: '32px 16px' }}>
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--vx-text)', marginBottom: 6 }}>vxUI</div>
-        <p className="vx-muted" style={{ fontSize: 14 }}>Create an account</p>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Create account</CardTitle>
-          <CardDescription>Fill in the details below to get started.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="vx-stack">
-            <Input label="Full name" placeholder="Jane Smith" />
-            <Input label="Email" type="email" placeholder="you@example.com" />
-            <Input label="Password" type="password" placeholder="At least 8 characters" />
-            <Checkbox label="I agree to the terms of service" checked={checkboxA} onChange={e => setCheckboxA(e.target.checked)} />
-            <Button style={{ width: '100%' }} onClick={() => { setMobileView('docs'); setActiveTab('docs'); }}>
-              <UserPlus size={14} />Create account
-            </Button>
-            <p className="vx-muted" style={{ textAlign: 'center', fontSize: '0.8125rem', margin: 0 }}>
-              Already have an account?{' '}
-              <button type="button" className="vx-link" onClick={() => setMobileView('login')}>Sign in</button>
-            </p>
+  const renderRegisterContent = () => {
+    const isZh = t.locale === 'zh';
+    return (
+      <div className="vxm-auth-screen">
+        <div className="vxm-auth-screen__body">
+          <div className="vxm-auth-screen__icon">
+            <Sparkles size={38} />
           </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+          <h1 className="vxm-auth-screen__title">{t.publicPages.registerCta}</h1>
+          <div className="vxm-auth-screen__fields">
+            <div>
+              <span className="vxm-auth-screen__label">{t.publicPages.registerName}</span>
+              <Input placeholder={t.publicPages.registerNamePlaceholder} />
+            </div>
+            <div>
+              <span className="vxm-auth-screen__label">{t.publicPages.registerEmail}</span>
+              <Input type="email" placeholder={t.publicPages.registerEmailPlaceholder} />
+            </div>
+            <div>
+              <span className="vxm-auth-screen__label">{t.publicPages.registerPassword}</span>
+              <Input type="password" placeholder={t.publicPages.registerPasswordPlaceholder} />
+            </div>
+            <Checkbox
+              label={`${t.publicPages.registerTermsAgree} ${t.publicPages.registerTermsLink}`}
+              checked={checkboxA}
+              onChange={e => setCheckboxA(e.target.checked)}
+            />
+          </div>
+        </div>
+        <div className="vxm-auth-screen__actions">
+          <Button
+            shape="pill"
+            style={{ width: '100%', minHeight: 52, fontSize: '1rem', fontWeight: 600 }}
+            onClick={() => { setMobileView('docs'); setActiveTab('docs'); }}
+          >
+            {t.publicPages.registerCta}
+          </Button>
+          <p className="vxm-auth-screen__footer-link">
+            {t.publicPages.registerHasAccount}{' '}
+            <button type="button" onClick={() => setMobileView('login')}>
+              {isZh ? '点这里登录' : t.publicPages.registerLogin}
+            </button>
+          </p>
+        </div>
+      </div>
+    );
+  };
 
   // ── top bar ────────────────────────────────────────────────────────────────
 
@@ -896,7 +927,7 @@ export function MobileApp() {
     <>
       {renderDrawer()}
       <MobileShell
-        topBar={renderTopBar()}
+        topBar={!isLoginOrRegister ? renderTopBar() : undefined}
         bottomNav={!isLoginOrRegister ? renderBottomNav() : undefined}
       >
         {renderContent()}

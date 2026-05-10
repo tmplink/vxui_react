@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { cx } from '../lib/cx';
+import { useViewport } from '../lib/viewport';
 import { Button } from './Button';
 
 export interface AppShellNavItem {
@@ -62,6 +63,7 @@ export function AppShell({
   sidebarFooter,
   children,
 }: AppShellProps) {
+  const { isTablet } = useViewport();
   const sections = navSections ?? (navItems ? [{ items: navItems }] : []);
   const sidebarHostRef = useRef<HTMLElement | null>(null);
   const sidebarScrollRef = useRef<HTMLDivElement | null>(null);
@@ -150,7 +152,7 @@ export function AppShell({
   }, []);
 
   return (
-    <div className="vx-shell" data-collapsed={sidebarCollapsed} data-nav-open={mobileNavOpen}>
+    <div className="vx-shell" data-collapsed={sidebarCollapsed} data-nav-open={mobileNavOpen} data-tablet={isTablet}>
       <aside
         ref={sidebarHostRef}
         className="vx-sidebar vx-scroll-host"

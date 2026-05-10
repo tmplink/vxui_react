@@ -4,7 +4,7 @@ import { cx } from '../lib/cx';
 
 type ButtonVariant = 'solid' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'soft' | 'danger-outline' | 'primary-outline' | 'gradient';
 type ButtonSize = 'sm' | 'md' | 'lg';
-type ButtonShape = 'rect' | 'pill';
+type ButtonShape = 'rect' | 'square' | 'pill';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -25,6 +25,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         'vx-button',
         `vx-button--${variant}`,
         `vx-button--${size}`,
+        shape === 'square' && 'vx-button--square',
         shape === 'pill' && 'vx-button--pill',
         fullWidth && 'vx-button--full-width',
         className,
