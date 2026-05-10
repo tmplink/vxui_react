@@ -8,10 +8,12 @@ import {
   Compass,
   FileCode2,
   FileText,
+  Globe,
   House,
   LayoutDashboard,
   List,
   LogIn,
+  MoreHorizontal,
   Palette,
   PanelsTopLeft,
   Search,
@@ -27,14 +29,13 @@ import { CommandPalette } from './components/CommandPalette';
 import type { SearchEntry } from './components/CommandPalette';
 import type { AppShellNavSection } from './components/AppShell';
 import { CodeBlock } from './components/CodeBlock';
-import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { ErrorPage } from './components/pages/ErrorPage';
 import { HomePage } from './components/pages/HomePage';
 import { LoginPage } from './components/pages/LoginPage';
 import { PrivacyPolicyPage } from './components/pages/PrivacyPolicyPage';
 import { RegisterPage } from './components/pages/RegisterPage';
 import { TermsOfServicePage } from './components/pages/TermsOfServicePage';
-import { useI18n } from './i18n';
+import { locales, useI18n } from './i18n';
 import { Responsive } from './components/Responsive';
 import { MobileApp } from './components/mobile/MobileApp';
 import {
@@ -1021,7 +1022,7 @@ function loadSession(): ViewerSession | null {
 }
 
 function DesktopApp() {
-  const { t, locale } = useI18n();
+  const { t, locale, setLocale } = useI18n();
   const isZh = locale === 'zh';
   const pages = t.pageDefs as Record<PageKey, PageDefinition>;
   const { push } = useToast();
@@ -1192,6 +1193,57 @@ function DesktopApp() {
   const isDocDetailPage = route.view === 'docs' && activePage !== 'introduction';
   const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
   const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
+  const docsControlMenuGroups = [
+    {
+      label: isZh ? '视图' : 'View',
+      items: [
+        {
+          label: isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`,
+          icon: <SlidersHorizontal size={14} />,
+          onClick: () => setCompactDensity((current) => !current),
+        },
+      ],
+    },
+    {
+      label: isZh ? '主题' : 'Theme',
+      items: themeEntries.map(([themeName, definition]) => ({
+        label: `${definition.label ?? themeName}${theme === themeName ? (isZh ? ' (当前)' : ' (current)') : ''}`,
+        icon: <Palette size={14} />,
+        onClick: () => setTheme(themeName),
+      })),
+    },
+    {
+      label: copy.accountMenu,
+      items: viewerSession
+        ? [
+            {
+              label: t.publicPages.navLogout,
+              icon: <User size={14} />,
+              onClick: handleLogout,
+            },
+          ]
+        : [
+            {
+              label: t.publicPages.navLogin,
+              icon: <LogIn size={14} />,
+              onClick: () => navigate({ view: 'login' }),
+            },
+            {
+              label: t.publicPages.navSignup,
+              icon: <UserPlus size={14} />,
+              onClick: () => navigate({ view: 'register' }),
+            },
+          ],
+    },
+    {
+      label: isZh ? '语言' : 'Language',
+      items: Object.entries(locales).map(([localeKey, definition]) => ({
+        label: `${definition.label}${locale === localeKey ? (isZh ? ' (当前)' : ' (current)') : ''}`,
+        icon: <Globe size={14} />,
+        onClick: () => setLocale(localeKey),
+      })),
+    },
+  ];
 
   const metricCards = [
     { label: copy.metrics.templates, value: '6', hint: copy.metrics.templatesDesc },
@@ -2356,8 +2408,8 @@ function DesktopApp() {
         brandCaption={isZh ? '统一响应式系统' : 'Unified responsive system'}
         brandIcon={<Sparkles size={16} />}
         breadcrumb={
-          <div className="vx-doc-breadcrumb">
-            <span className="vx-doc-breadcrumb__kicker">{activeDocument.section}</span>
+          <div className="vx-doc-breadcrumb" data-state={showPinnedDocTitle ? 'pinned' : 'overview'}>
+            {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__kicker">{activeDocument.section}</span> : null}
             <strong>{topbarDocLabel}</strong>
             {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__summary">{activeDocument.description}</span> : null}
           </div>
@@ -2373,60 +2425,16 @@ function DesktopApp() {
               {t.searchTrigger}
               <kbd className="vx-search-kbd">⌘K</kbd>
             </Button>
-            <Button
-              variant={compactDensity ? "soft" : "outline"}
-              size="sm"
-              onClick={() => setCompactDensity((current) => !current)}
-            >
-              <SlidersHorizontal size={14} />
-              {isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`}
-            </Button>
             <DropdownMenu
               trigger={
                 <Button variant="outline" size="sm">
-                  <Palette size={14} />
-                  {themes[theme]?.label ?? theme}
+                  <MoreHorizontal size={14} />
+                  {isZh ? '更多' : 'More'}
                 </Button>
               }
-              items={themeEntries.map(([themeName, definition]) => ({
-                label: definition.label ?? themeName,
-                onClick: () => setTheme(themeName),
-              }))}
+              groups={docsControlMenuGroups}
+              align="right"
             />
-            <DropdownMenu
-              trigger={
-                <Button variant="outline" size="sm">
-                  <User size={14} />
-                  {viewerSession?.name ?? t.publicPages.guestLabel}
-                </Button>
-              }
-              groups={[
-                {
-                  label: copy.accountMenu,
-                  items: viewerSession
-                    ? [
-                        {
-                          label: t.publicPages.navLogout,
-                          icon: <User size={14} />,
-                          onClick: handleLogout,
-                        },
-                      ]
-                    : [
-                        {
-                          label: t.publicPages.navLogin,
-                          icon: <LogIn size={14} />,
-                          onClick: () => navigate({ view: 'login' }),
-                        },
-                        {
-                          label: t.publicPages.navSignup,
-                          icon: <UserPlus size={14} />,
-                          onClick: () => navigate({ view: 'register' }),
-                        },
-                      ],
-                },
-              ]}
-            />
-            <LanguageSwitcher variant="inline" />
           </div>
         }
         menuButtonLabel={isZh ? '切换导航' : 'Toggle navigation'}

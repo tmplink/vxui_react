@@ -2904,6 +2904,9 @@ a {
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   padding: 0.25rem;
   min-width: 12rem;
+  max-height: min(26rem, calc(100vh - 96px));
+  overflow: auto;
+  overscroll-behavior: contain;
   animation: vx-fade-in 150ms ease;
 }
 .vx-dropdown__menu--left  { left: 0; }
@@ -4664,11 +4667,15 @@ a {
 .vx-doc-breadcrumb {
   min-width: 0;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
 }
 
 .vx-doc-breadcrumb__kicker {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -4677,10 +4684,18 @@ a {
 }
 
 .vx-doc-breadcrumb strong {
-  font-size: clamp(1.1rem, 0.5vw + 1rem, 1.24rem);
-  line-height: 1.08;
-  letter-spacing: -0.03em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(0.98rem, 0.4vw + 0.92rem, 1.08rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   color: var(--vx-text);
+}
+
+.vx-doc-breadcrumb[data-state='overview'] strong {
+  color: var(--vx-text-secondary);
 }
 
 .vx-doc-breadcrumb__summary {
