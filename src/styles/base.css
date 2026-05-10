@@ -5680,13 +5680,36 @@ a {
 
 .vx-shell[data-tablet='true'] .vx-topbar {
   gap: 12px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  min-height: 0;
+  height: auto;
+  padding: 14px 20px 12px;
+}
+
+.vx-shell[data-tablet='true'] .vx-topbar__menu {
+  order: 1;
+  align-self: flex-start;
+}
+
+.vx-shell[data-tablet='true'] .vx-topbar__title-group {
+  order: 2;
+  flex: 1 1 0;
+  width: auto;
+  min-width: min(280px, 100%);
+  padding: 0;
 }
 
 .vx-shell[data-tablet='true'] .vx-topbar__actions {
+  order: 3;
+  flex: 1 1 100%;
   width: 100%;
   border-left: 0;
-  padding-left: 0;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--vx-border);
   flex-wrap: wrap;
+  justify-content: flex-start;
   overflow: visible;
 }
 
