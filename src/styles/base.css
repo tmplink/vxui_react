@@ -5072,6 +5072,8 @@ a {
 .vx-bs-doc-body {
   display: block;
   padding-top: 32px;
+  container-type: inline-size;
+  container-name: doc-body;
 }
 
 .vx-bs-doc-content {
@@ -5169,8 +5171,8 @@ a {
 }
 
 .vx-bs-mobile-preview__frame {
-  width: min(100%, 280px);
-  height: 560px;
+  width: min(100%, 414px);
+  height: 896px;
   border-width: 5px;
   margin: 0 auto;
   background: var(--vx-bg);
@@ -5260,13 +5262,13 @@ a {
   }
 
   .vx-bs-mobile-preview__frame {
-    height: 520px;
+    height: 800px;
   }
 }
 
-@media (min-width: 1080px) {
+@container doc-body (min-width: 960px) {
   .vx-bs-example-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+    grid-template-columns: minmax(0, 1fr) minmax(414px, 440px);
   }
 }
 
