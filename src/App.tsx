@@ -2595,6 +2595,7 @@ function DesktopApp() {
         brandCaption={isZh ? '统一响应式系统' : 'Unified responsive system'}
         brandIcon={<Sparkles size={16} />}
         topbarRef={docsTopbarRef}
+        density={compactDensity ? 'compact' : 'comfortable'}
         breadcrumb={
           <div className="vx-doc-breadcrumb" data-state={showPinnedDocTitle ? 'pinned' : 'overview'}>
             {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__kicker">{activeDocument.section}</span> : null}
@@ -2701,7 +2702,7 @@ function DesktopApp() {
           </div>
         }
       >
-        <div className="vx-docs-workspace" data-density={compactDensity ? 'compact' : 'comfortable'}>
+        <div className="vx-docs-workspace">
           {activePage === 'introduction' ? renderDocsHome() : renderDocPage()}
         </div>
       </AppShell>

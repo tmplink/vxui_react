@@ -4764,10 +4764,6 @@ a {
   gap: 32px;
 }
 
-.vx-docs-workspace[data-density='compact'] {
-  gap: 24px;
-}
-
 .vx-docs-workspace__home,
 .vx-doc-page {
   display: flex;
@@ -4775,9 +4771,84 @@ a {
   gap: 32px;
 }
 
-.vx-docs-workspace[data-density='compact'] .vx-docs-workspace__home,
-.vx-docs-workspace[data-density='compact'] .vx-doc-page {
-  gap: 24px;
+/* ── Compact density ─────────────────────────────────────── */
+.vx-shell[data-density='compact'] {
+  /* Shrink the shared header-height token; cascade applies to sidebar header + topbar */
+  --vx-header-height: 56px;
+}
+
+/* Sidebar nav */
+.vx-shell[data-density='compact'] .vx-nav-section-block {
+  padding-bottom: 10px;
+}
+.vx-shell[data-density='compact'] .vx-nav-section-block__title {
+  padding-bottom: 6px;
+}
+.vx-shell[data-density='compact'] .vx-nav-section-block__items {
+  gap: 2px;
+}
+.vx-shell[data-density='compact'] .vx-nav-item {
+  min-height: 30px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+/* Topbar */
+.vx-shell[data-density='compact'] .vx-topbar {
+  padding-inline: 18px;
+}
+.vx-shell[data-density='compact'] .vx-topbar__title-group {
+  padding-block: 6px;
+}
+.vx-shell[data-density='compact'] .vx-topbar__actions {
+  padding-block: 6px;
+  gap: 8px;
+}
+
+/* Content area */
+.vx-shell[data-density='compact'] .vx-shell__content {
+  padding: 16px 20px 28px;
+}
+
+/* Doc page structure */
+.vx-shell[data-density='compact'] .vx-bs-doc-header {
+  padding-bottom: 16px;
+}
+.vx-shell[data-density='compact'] .vx-bs-doc-body {
+  padding-top: 18px;
+}
+.vx-shell[data-density='compact'] .vx-bs-doc-section {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.vx-shell[data-density='compact'] .vx-bs-section-heading {
+  margin-bottom: 10px;
+}
+.vx-shell[data-density='compact'] .vx-bs-example {
+  padding: 16px;
+}
+.vx-shell[data-density='compact'] .vx-bs-example-grid {
+  gap: 16px;
+}
+.vx-shell[data-density='compact'] .vx-bs-doc-pager {
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+/* Docs workspace / home */
+.vx-shell[data-density='compact'] .vx-docs-workspace {
+  gap: 20px;
+}
+.vx-shell[data-density='compact'] .vx-docs-workspace__home,
+.vx-shell[data-density='compact'] .vx-doc-page {
+  gap: 20px;
+}
+.vx-shell[data-density='compact'] .vx-docs-home__section,
+.vx-shell[data-density='compact'] .vx-doc-preview-stack {
+  gap: 12px;
+}
+.vx-shell[data-density='compact'] .vx-doc-architecture-grid {
+  gap: 12px;
 }
 
 .vx-docs-home__hero {

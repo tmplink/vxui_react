@@ -92,11 +92,12 @@ function useScrollbarSync(
 export interface ShellProps {
   collapsed?: boolean;
   mobileNavOpen?: boolean;
+  density?: 'comfortable' | 'compact';
   className?: string;
   children: ReactNode;
 }
 
-export function Shell({ collapsed = false, mobileNavOpen = false, className, children }: ShellProps) {
+export function Shell({ collapsed = false, mobileNavOpen = false, density, className, children }: ShellProps) {
   const { isTablet } = useViewport();
   return (
     <div
@@ -104,6 +105,7 @@ export function Shell({ collapsed = false, mobileNavOpen = false, className, chi
       data-collapsed={collapsed}
       data-nav-open={mobileNavOpen}
       data-tablet={isTablet}
+      data-density={density}
     >
       {children}
     </div>

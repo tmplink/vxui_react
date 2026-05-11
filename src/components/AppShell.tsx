@@ -53,6 +53,7 @@ export interface AppShellProps {
   navSections?: AppShellNavSection[];
   sidebarCollapsed?: boolean;
   mobileNavOpen?: boolean;
+  density?: 'comfortable' | 'compact';
   onSidebarToggle?: () => void;
   onMobileNavToggle?: () => void;
   menuButtonLabel?: string;
@@ -82,6 +83,7 @@ export function AppShell({
   sidebarCollapseLabel = 'Collapse',
   sidebarExpandLabel = 'Expand',
   sidebarCloseLabel = 'Close sidebar',
+  density,
   headerActions,
   sidebarFooter,
   children,
@@ -89,7 +91,7 @@ export function AppShell({
   const sections = navSections ?? (navItems ? [{ items: navItems }] : []);
 
   return (
-    <Shell collapsed={sidebarCollapsed} mobileNavOpen={mobileNavOpen}>
+    <Shell collapsed={sidebarCollapsed} mobileNavOpen={mobileNavOpen} density={density}>
       <ShellSidebar
         brand={brand}
         brandCaption={brandCaption}
