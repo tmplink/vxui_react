@@ -2407,7 +2407,6 @@ function DesktopApp() {
           <p className="vx-bs-doc-lead">{activeDocument.description}</p>
           <div className="vx-bs-doc-header-badges">
             <span className="vx-version-pill">{copy.livePreview}</span>
-            <span className="vx-version-pill vx-version-pill--token">{copy.releaseOptions[releaseTrack]}</span>
           </div>
         </header>
 
