@@ -210,3 +210,14 @@ export type { ColorPickerProps } from '../components/ColorPicker';
 export { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '../components/Resizable';
 export type { ResizablePanelGroupProps, ResizablePanelProps, ResizableHandleProps, ResizableDirection } from '../components/Resizable';
 
+// Search / command
+export { CommandPalette } from '../components/CommandPalette';
+export type { CommandPaletteProps, SearchEntry } from '../components/CommandPalette';
+
+// Code display
+export { CodeBlock } from '../components/CodeBlock';
+export type { CodeBlockProps, CodeBlockLanguage } from '../components/CodeBlock';
+
+// Language switcher
+export { LanguageSwitcher } from '../components/LanguageSwitcher';
+export type { LanguageSwitcherProps } from '../components/LanguageSwitcher';

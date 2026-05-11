@@ -55,6 +55,9 @@ export interface Translations {
     feedback: string;
     'nav-layout': string;
     mobile: string;
+    'command-palette': string;
+    'code-block': string;
+    'language-switcher': string;
     'home-page': string;
     'login-page': string;
     'register-page': string;
@@ -278,6 +281,9 @@ export const en: Translations = {
     feedback: 'Feedback Components',
     'nav-layout': 'Navigation & Layout',
     mobile: 'Mobile Components',
+    'command-palette': 'Command Palette',
+    'code-block': 'Code Block',
+    'language-switcher': 'Language Switcher',
     'home-page': 'Home Page',
     'login-page': 'Login Page',
     'register-page': 'Register Page',
@@ -690,6 +696,39 @@ export const en: Translations = {
         'Link to the terms directly from registration and pricing flows so consent is contextual.',
       ],
     },
+    'command-palette': {
+      section: 'Components',
+      title: 'Command Palette',
+      description:
+        'A keyboard-driven search overlay that lets users jump to any page or action without leaving the keyboard. Render it globally, wire a hotkey, then pass a flat list of entries.',
+      guidance: [
+        'Keep the entries list flat and label-searchable — avoid nesting pages under hidden categories.',
+        'Populate entries from the same nav data you use for the sidebar so the two surfaces stay in sync.',
+        'Combine with ⌘K (Mac) or Ctrl+K (Windows) for a familiar shortcut that power users expect.',
+      ],
+    },
+    'code-block': {
+      section: 'Components',
+      title: 'Code Block',
+      description:
+        'A syntax-highlighted, read-only code display with optional filename label. Use it to render installation snippets, usage examples, or any formatted code string.',
+      guidance: [
+        'Set the language prop to the language of the code — tsx, bash, json, etc. — for correct highlighting.',
+        'Pass a filename to give readers context on where the snippet belongs in a project.',
+        'Keep code snippets minimal; show only the lines needed to illustrate the concept being documented.',
+      ],
+    },
+    'language-switcher': {
+      section: 'Components',
+      title: 'Language Switcher',
+      description:
+        'A locale toggle component that updates the entire UI copy when clicked. Drop it into any topbar or settings area — the i18n provider broadcasts the change automatically.',
+      guidance: [
+        'Place the switcher in a persistent surface (topbar or settings page) so users can find it from anywhere.',
+        'The switcher reflects the current locale; no extra state wiring is needed beyond the i18n provider.',
+        'Use the inline variant for topbars and the default variant for settings pages to match visual density.',
+      ],
+    },
   },
 };
 
@@ -743,6 +782,9 @@ export const zh: Translations = {
     feedback: '反馈组件',
     'nav-layout': '导航与布局',
     mobile: '移动端组件',
+    'command-palette': '命令面板',
+    'code-block': '代码块',
+    'language-switcher': '语言切换器',
     'home-page': '主页',
     'login-page': '登录页',
     'register-page': '注册页',
@@ -1150,6 +1192,39 @@ export const zh: Translations = {
         '将许可范围、使用限制和免责声明拆成独立段落，降低法律歧义。',
         '正文使用短段落与摘要侧栏，保证长文档依旧可扫读。',
         '在注册和定价流程中直接链接条款页面，让同意动作具备上下文。',
+      ],
+    },
+    'command-palette': {
+      section: '组件',
+      title: '命令面板',
+      description:
+        '键盘驱动的搜索浮层，让用户无需离开键盘即可跳转到任意页面或触发任意操作。全局挂载、绑定快捷键，传入扁平的条目列表即可使用。',
+      guidance: [
+        '保持条目列表扁平且按标签可搜索——避免隐藏分类嵌套。',
+        '从侧边栏导航数据同步填充条目，确保两个入口保持一致。',
+        '绑定 ⌘K（Mac）或 Ctrl+K（Windows）快捷键，满足高频用户的操作预期。',
+      ],
+    },
+    'code-block': {
+      section: '组件',
+      title: '代码块',
+      description:
+        '带语法高亮的只读代码展示组件，支持可选的文件名标签。用于渲染安装步骤、用法示例或任意格式化的代码字符串。',
+      guidance: [
+        '通过 language 属性指定代码语言（tsx、bash、json 等），以获得正确高亮。',
+        '传入 filename 可为读者提供该代码片段在项目中所属位置的上下文。',
+        '保持示例代码精简——只展示说明当前概念所需的最少行数。',
+      ],
+    },
+    'language-switcher': {
+      section: '组件',
+      title: '语言切换器',
+      description:
+        '点击后即可更新整套 UI 文案的语言切换组件。放入任意顶栏或设置区域——i18n Provider 会自动广播变更，无需额外状态绑定。',
+      guidance: [
+        '将切换器放置在持久性界面（顶栏或设置页）中，方便用户在任何位置找到它。',
+        '切换器自动反映当前语言，除 i18n Provider 外无需额外的状态绑定。',
+        '顶栏中使用 inline 变体，设置页中使用默认变体，以匹配对应场景的视觉密度。',
       ],
     },
   },

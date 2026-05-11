@@ -89,6 +89,9 @@ const DOC_PAGE_KEYS = [
   'overlays',
   'nav-layout',
   'data-display',
+  'command-palette',
+  'code-block',
+  'language-switcher',
   'mobile',
   'home-page',
   'login-page',
@@ -143,6 +146,9 @@ const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; pages: PageKey[] }> = [
       'empty-states',
       'toasts',
       'feedback',
+      'command-palette',
+      'code-block',
+      'language-switcher',
     ],
   },
   {
@@ -168,6 +174,9 @@ const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
   'overlays',
   'nav-layout',
   'data-display',
+  'command-palette',
+  'code-block',
+  'language-switcher',
   'mobile',
   'home-page',
   'login-page',
@@ -193,6 +202,9 @@ const pageIcons: Record<PageKey, ReactNode> = {
   overlays: <ChevronRight size={16} />,
   'nav-layout': <LayoutDashboard size={16} />,
   'data-display': <Boxes size={16} />,
+  'command-palette': <Search size={16} />,
+  'code-block': <FileText size={16} />,
+  'language-switcher': <Globe size={16} />,
   mobile: <Smartphone size={16} />,
   'home-page': <House size={16} />,
   'login-page': <LogIn size={16} />,
@@ -942,6 +954,59 @@ export function TermsOfServicePage() {
         </CardHeader>
         <CardContent>List uptime targets, incident communication, and escalation paths.</CardContent>
       </Card>
+    </div>
+  );
+}`,
+  'command-palette': String.raw`import { useState } from 'react';
+import { Button, CommandPalette } from 'vxui-react';
+
+const entries = [
+  { key: 'home', label: 'Home', description: 'Back to the main landing page' },
+  { key: 'docs', label: 'Documentation', description: 'Browse all components' },
+  { key: 'button', label: 'Button', description: 'Primary action component' },
+  { key: 'dialog', label: 'Dialog', description: 'Modal confirmation overlay' },
+];
+
+export function SearchExample() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>
+        Open search <kbd>⌘K</kbd>
+      </Button>
+      <CommandPalette
+        open={open}
+        entries={entries}
+        placeholder="Search components, pages…"
+        emptyText={(q) => \`No results for "\${q}"\`}
+        ariaLabel="Search"
+        labelClose="Close"
+        labelGo="Go"
+        labelNavigate="Navigate"
+        onClose={() => setOpen(false)}
+        onSelect={(key) => { setOpen(false); console.log('selected:', key); }}
+      />
+    </>
+  );
+}`,
+  'code-block': String.raw`import { CodeBlock } from 'vxui-react';
+
+const snippet = \`import { Button } from 'vxui-react';
+
+export function Example() {
+  return <Button>Click me</Button>;
+}\`;
+
+export function CodeExample() {
+  return <CodeBlock code={snippet} language="tsx" />;
+}`,
+  'language-switcher': String.raw`import { LanguageSwitcher } from 'vxui-react';
+
+// Wrap your app with the i18n provider, then drop in the switcher anywhere.
+export function TopbarActions() {
+  return (
+    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <LanguageSwitcher variant="inline" />
     </div>
   );
 }`,
@@ -2083,6 +2148,42 @@ function DesktopApp() {
       case 'privacy-policy':
       case 'terms-of-service':
         return renderTemplateLauncher(pageKey);
+      case 'command-palette':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <Button onClick={() => setSearchOpen(true)}>
+                {isZh ? '打开搜索' : 'Open search'}
+                <kbd className="vx-search-kbd">⌘K</kbd>
+              </Button>
+            </div>
+            <Alert variant="info" title={isZh ? '键盘优先' : 'Keyboard first'}>
+              {isZh
+                ? '按下 ⌘K（Mac）或 Ctrl+K（Windows）即可随时唤起命令面板，无需鼠标。'
+                : 'Press ⌘K (Mac) or Ctrl+K (Windows) to open the palette from anywhere without reaching for the mouse.'}
+            </Alert>
+          </div>
+        );
+      case 'code-block':
+        return renderCodeBlock(
+          isZh
+            ? `import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>点击我</Button>;\n}`
+            : `import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>Click me</Button>;\n}`,
+          'tsx',
+        );
+      case 'language-switcher':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <LanguageSwitcher variant="inline" />
+            </div>
+            <Alert variant="info" title={isZh ? '全局语言切换' : 'Global language switch'}>
+              {isZh
+                ? '切换语言后，文档内所有 UI 文案（包括顶栏和导航）同步更新，无需刷新页面。'
+                : 'Switching locale updates all UI copy — including the topbar and nav — across the entire docs surface without a page reload.'}
+            </Alert>
+          </div>
+        );
       case 'introduction':
       default:
         return null;
