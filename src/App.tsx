@@ -29,6 +29,7 @@ import { CommandPalette } from './components/CommandPalette';
 import type { SearchEntry } from './components/CommandPalette';
 import type { AppShellNavSection } from './components/AppShell';
 import { CodeBlock } from './components/CodeBlock';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { ErrorPage } from './components/pages/ErrorPage';
 import { HomePage } from './components/pages/HomePage';
 import { LoginPage } from './components/pages/LoginPage';
@@ -1038,7 +1039,9 @@ function DesktopApp() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [compactDensity, setCompactDensity] = useState(false);
   const [releaseTrack, setReleaseTrack] = useState<ReleaseTrack>('stable');
+  const docsTopbarRef = useRef<HTMLElement | null>(null);
   const docHeaderRef = useRef<HTMLElement | null>(null);
+  const [docsTopbarWidth, setDocsTopbarWidth] = useState<number>(() => (typeof window === 'undefined' ? 0 : window.innerWidth));
   const [isDocHeaderInView, setIsDocHeaderInView] = useState(true);
   const [checkboxA, setCheckboxA] = useState(true);
   const [checkboxB, setCheckboxB] = useState(false);
@@ -1193,56 +1196,110 @@ function DesktopApp() {
   const isDocDetailPage = route.view === 'docs' && activePage !== 'introduction';
   const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
   const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
-  const docsControlMenuGroups = [
-    {
-      label: isZh ? '视图' : 'View',
-      items: [
+  // Progressive toolbar overflow: estimate how many buttons fit in the available topbar width.
+  // In tablet mode (≤1023px) the actions row is full-width (topbar padding 20px×2=40px overhead).
+  // In desktop mode the overhead also reserves breadcrumb min-width + gaps (246px total).
+  const isTabletLayout = typeof window !== 'undefined' && window.innerWidth <= 1023;
+  const TOOLBAR_OVERHEAD = isTabletLayout ? 40 : 246;
+  const TOOLBAR_GAP = 10;
+  const MORE_BTN_WIDTH = 92;
+  // Estimated widths (px) for each sm button in priority order
+  const TOOLBAR_ITEM_WIDTHS = [130, 110, 170, 105, 95, 125]; // back, search, density, theme, account, language
+  const availableForActions = docsTopbarWidth > 0 ? docsTopbarWidth - TOOLBAR_OVERHEAD : 9999;
+  const totalAllWidths = TOOLBAR_ITEM_WIDTHS.reduce((sum, w, i) => sum + w + (i > 0 ? TOOLBAR_GAP : 0), 0);
+  let docsToolbarVisibleCount: number;
+  if (totalAllWidths <= availableForActions) {
+    docsToolbarVisibleCount = TOOLBAR_ITEM_WIDTHS.length;
+  } else {
+    const inlineBudget = availableForActions - MORE_BTN_WIDTH - TOOLBAR_GAP;
+    let acc = 0;
+    docsToolbarVisibleCount = 0;
+    for (const w of TOOLBAR_ITEM_WIDTHS) {
+      const needed = docsToolbarVisibleCount === 0 ? w : acc + TOOLBAR_GAP + w;
+      if (needed <= inlineBudget) { acc = needed; docsToolbarVisibleCount++; } else break;
+    }
+  }
+  const showBack = docsToolbarVisibleCount >= 1;
+  const showSearch = docsToolbarVisibleCount >= 2;
+  const showDensity = docsToolbarVisibleCount >= 3;
+  const showThemeBtn = docsToolbarVisibleCount >= 4;
+  const showAccountBtn = docsToolbarVisibleCount >= 5;
+  const showLanguageBtn = docsToolbarVisibleCount >= 6;
+  const showMoreMenu = docsToolbarVisibleCount < TOOLBAR_ITEM_WIDTHS.length;
+  const densityLabel = isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`;
+  const themeMenuItems = themeEntries.map(([themeName, definition]) => ({
+    label: `${definition.label ?? themeName}${theme === themeName ? (isZh ? ' (当前)' : ' (current)') : ''}`,
+    icon: <Palette size={14} />,
+    onClick: () => setTheme(themeName),
+  }));
+  const accountMenuItems = viewerSession
+    ? [
         {
-          label: isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`,
-          icon: <SlidersHorizontal size={14} />,
-          onClick: () => setCompactDensity((current) => !current),
+          label: t.publicPages.navLogout,
+          icon: <User size={14} />,
+          onClick: handleLogout,
         },
-      ],
-    },
-    {
-      label: isZh ? '主题' : 'Theme',
-      items: themeEntries.map(([themeName, definition]) => ({
-        label: `${definition.label ?? themeName}${theme === themeName ? (isZh ? ' (当前)' : ' (current)') : ''}`,
-        icon: <Palette size={14} />,
-        onClick: () => setTheme(themeName),
-      })),
-    },
-    {
-      label: copy.accountMenu,
-      items: viewerSession
-        ? [
-            {
-              label: t.publicPages.navLogout,
-              icon: <User size={14} />,
-              onClick: handleLogout,
-            },
-          ]
-        : [
-            {
-              label: t.publicPages.navLogin,
-              icon: <LogIn size={14} />,
-              onClick: () => navigate({ view: 'login' }),
-            },
-            {
-              label: t.publicPages.navSignup,
-              icon: <UserPlus size={14} />,
-              onClick: () => navigate({ view: 'register' }),
-            },
-          ],
-    },
-    {
-      label: isZh ? '语言' : 'Language',
-      items: Object.entries(locales).map(([localeKey, definition]) => ({
-        label: `${definition.label}${locale === localeKey ? (isZh ? ' (当前)' : ' (current)') : ''}`,
-        icon: <Globe size={14} />,
-        onClick: () => setLocale(localeKey),
-      })),
-    },
+      ]
+    : [
+        {
+          label: t.publicPages.navLogin,
+          icon: <LogIn size={14} />,
+          onClick: () => navigate({ view: 'login' }),
+        },
+        {
+          label: t.publicPages.navSignup,
+          icon: <UserPlus size={14} />,
+          onClick: () => navigate({ view: 'register' }),
+        },
+      ];
+  const docsNavigationMenuGroup = {
+    label: isZh ? '导航' : 'Navigation',
+    items: [
+      {
+        label: t.publicPages.backHome,
+        icon: <House size={14} />,
+        onClick: () => navigate({ view: 'home' }),
+      },
+      {
+        label: t.searchTrigger,
+        icon: <Search size={14} />,
+        shortcut: '⌘K',
+        onClick: () => setSearchOpen(true),
+      },
+    ],
+  };
+  const docsViewMenuGroup = {
+    label: isZh ? '视图' : 'View',
+    items: [
+      {
+        label: densityLabel,
+        icon: <SlidersHorizontal size={14} />,
+        onClick: () => setCompactDensity((current) => !current),
+      },
+    ],
+  };
+  const docsThemeMenuGroup = {
+    label: isZh ? '主题' : 'Theme',
+    items: themeMenuItems,
+  };
+  const docsAccountMenuGroup = {
+    label: copy.accountMenu,
+    items: accountMenuItems,
+  };
+  const docsLanguageMenuGroup = {
+    label: isZh ? '语言' : 'Language',
+    items: Object.entries(locales).map(([localeKey, definition]) => ({
+      label: `${definition.label}${locale === localeKey ? (isZh ? ' (当前)' : ' (current)') : ''}`,
+      icon: <Globe size={14} />,
+      onClick: () => setLocale(localeKey),
+    })),
+  };
+  const docsControlMenuGroups = [
+    docsNavigationMenuGroup,
+    docsViewMenuGroup,
+    docsThemeMenuGroup,
+    docsAccountMenuGroup,
+    docsLanguageMenuGroup,
   ];
 
   const metricCards = [
@@ -1415,6 +1472,32 @@ function DesktopApp() {
     window.addEventListener('resize', handleResize);
 
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const target = docsTopbarRef.current;
+
+    if (!target) {
+      return;
+    }
+
+    const syncWidth = () => {
+      setDocsTopbarWidth(target.getBoundingClientRect().width);
+    };
+
+    syncWidth();
+
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      setDocsTopbarWidth(entry ? entry.contentRect.width : target.getBoundingClientRect().width);
+    });
+
+    observer.observe(target);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -2407,6 +2490,7 @@ function DesktopApp() {
         brand="vxUI"
         brandCaption={isZh ? '统一响应式系统' : 'Unified responsive system'}
         brandIcon={<Sparkles size={16} />}
+        topbarRef={docsTopbarRef}
         breadcrumb={
           <div className="vx-doc-breadcrumb" data-state={showPinnedDocTitle ? 'pinned' : 'overview'}>
             {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__kicker">{activeDocument.section}</span> : null}
@@ -2416,25 +2500,79 @@ function DesktopApp() {
         }
         headerActions={
           <div className="vx-docs-toolbar">
-            <Button variant="outline" size="sm" onClick={() => navigate({ view: 'home' })}>
-              <House size={14} />
-              {t.publicPages.backHome}
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setSearchOpen(true)}>
-              <Search size={14} />
-              {t.searchTrigger}
-              <kbd className="vx-search-kbd">⌘K</kbd>
-            </Button>
-            <DropdownMenu
-              trigger={
-                <Button variant="outline" size="sm">
-                  <MoreHorizontal size={14} />
-                  {isZh ? '更多' : 'More'}
-                </Button>
-              }
-              groups={docsControlMenuGroups}
-              align="right"
-            />
+            {showBack ? (
+              <Button variant="outline" size="sm" onClick={() => navigate({ view: 'home' })}>
+                <House size={14} />
+                {t.publicPages.backHome}
+              </Button>
+            ) : null}
+            {showSearch ? (
+              <Button variant="outline" size="sm" onClick={() => setSearchOpen(true)}>
+                <Search size={14} />
+                {t.searchTrigger}
+                <kbd className="vx-search-kbd">⌘K</kbd>
+              </Button>
+            ) : null}
+            {showDensity ? (
+              <Button
+                variant={compactDensity ? 'soft' : 'outline'}
+                size="sm"
+                onClick={() => setCompactDensity((current) => !current)}
+              >
+                <SlidersHorizontal size={14} />
+                {densityLabel}
+              </Button>
+            ) : null}
+            {showThemeBtn ? (
+              <DropdownMenu
+                trigger={
+                  <Button variant="outline" size="sm">
+                    <Palette size={14} />
+                    {themes[theme]?.label ?? theme}
+                  </Button>
+                }
+                items={themeMenuItems}
+                align="right"
+              />
+            ) : null}
+            {showAccountBtn ? (
+              <DropdownMenu
+                trigger={
+                  <Button variant="outline" size="sm">
+                    <User size={14} />
+                    {viewerSession?.name ?? t.publicPages.guestLabel}
+                  </Button>
+                }
+                groups={[{ label: copy.accountMenu, items: accountMenuItems }]}
+                align="right"
+              />
+            ) : null}
+            {showLanguageBtn ? <LanguageSwitcher variant="inline" /> : null}
+            {showMoreMenu ? (
+              <DropdownMenu
+                key="docs-toolbar-more"
+                trigger={
+                  <Button variant="outline" size="sm">
+                    <MoreHorizontal size={14} />
+                    {isZh ? '更多' : 'More'}
+                  </Button>
+                }
+                groups={[
+                  ...(!showBack || !showSearch ? [{
+                    label: isZh ? '导航' : 'Navigation',
+                    items: [
+                      ...(!showBack ? [{ label: t.publicPages.backHome, icon: <House size={14} />, onClick: () => navigate({ view: 'home' }) }] : []),
+                      ...(!showSearch ? [{ label: t.searchTrigger, icon: <Search size={14} />, shortcut: '⌘K', onClick: () => setSearchOpen(true) }] : []),
+                    ],
+                  }] : []),
+                  ...(!showDensity ? [{ label: isZh ? '视图' : 'View', items: [{ label: densityLabel, icon: <SlidersHorizontal size={14} />, onClick: () => setCompactDensity((c) => !c) }] }] : []),
+                  ...(!showThemeBtn ? [{ label: isZh ? '主题' : 'Theme', items: themeMenuItems }] : []),
+                  ...(!showAccountBtn ? [{ label: copy.accountMenu, items: accountMenuItems }] : []),
+                  ...(!showLanguageBtn ? [{ label: isZh ? '语言' : 'Language', items: Object.entries(locales).map(([k, d]) => ({ label: `${d.label}${locale === k ? (isZh ? ' (当前)' : ' (current)') : ''}`, icon: <Globe size={14} />, onClick: () => setLocale(k) })) }] : []),
+                ]}
+                align="right"
+              />
+            ) : null}
           </div>
         }
         menuButtonLabel={isZh ? '切换导航' : 'Toggle navigation'}

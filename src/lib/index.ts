@@ -6,6 +6,33 @@ export { Responsive } from '../components/Responsive';
 export type { ResponsiveProps } from '../components/Responsive';
 
 export { AppShell } from '../components/AppShell';
+export type { AppShellProps, AppShellNavItem, AppShellNavSection } from '../components/AppShell';
+
+// Shell primitives — compose your own layout
+export {
+  Shell,
+  ShellSidebar,
+  ShellNav,
+  ShellNavSection,
+  ShellNavItem,
+  ShellOverlay,
+  ShellMain,
+  ShellTopbar,
+  ShellContent,
+} from '../components/Shell';
+export type {
+  ShellProps,
+  ShellSidebarProps,
+  ShellNavProps,
+  ShellNavSectionProps,
+  ShellNavItemProps,
+  ShellOverlayProps,
+  ShellMainProps,
+  ShellTopbarProps,
+  ShellContentProps,
+  ShellNavItem as ShellNavItemType,
+  ShellNavSection as ShellNavSectionType,
+} from '../components/Shell';
 export { Badge } from '../components/Badge';
 export { Button } from '../components/Button';
 export { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/Card';
