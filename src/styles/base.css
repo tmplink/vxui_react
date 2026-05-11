@@ -2786,6 +2786,20 @@ a {
 .vx-progress--success .vx-progress__bar { background: #22c55e; }
 .vx-progress--warning .vx-progress__bar { background: #f59e0b; }
 .vx-progress--danger  .vx-progress__bar { background: #ef4444; }
+.vx-progress--rainbow .vx-progress__bar {
+  background: linear-gradient(
+    90deg,
+    #f87171, #fb923c, #facc15, #4ade80,
+    #60a5fa, #a78bfa, #f472b6, #f87171
+  );
+  background-size: 300% 100%;
+  animation: vx-progress-rainbow 3s linear infinite;
+  box-shadow: 0 0 8px 1px color-mix(in srgb, #a78bfa 45%, transparent);
+}
+@keyframes vx-progress-rainbow {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: -300% 0%; }
+}
 .vx-progress--indeterminate .vx-progress__bar {
   width: 45% !important;
   animation: vx-progress-indeterminate 1.4s ease-in-out infinite;

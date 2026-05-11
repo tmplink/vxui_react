@@ -7,7 +7,7 @@ export interface ProgressProps extends HTMLAttributes<HTMLDivElement> {
   label?: string;
   showLabel?: boolean;
   size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'success' | 'warning' | 'danger';
+  variant?: 'default' | 'success' | 'warning' | 'danger' | 'rainbow';
   indeterminate?: boolean;
 }
 

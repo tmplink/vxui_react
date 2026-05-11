@@ -2048,7 +2048,11 @@ function DesktopApp() {
             <Alert title={isZh ? '迁移进度' : 'Migration progress'} variant="info">
               {isZh ? '响应式壳层、模板页面和文档内容库已经收敛到同一套运行时。' : 'The responsive shell, template pages, and docs library now share the same runtime.'}
             </Alert>
-            <Progress label={isZh ? '重构完成度' : 'Refactor completion'} showLabel value={sliderValue} />
+            <Progress label={isZh ? '默认' : 'Default'} showLabel value={sliderValue} />
+            <Progress label={isZh ? '成功' : 'Success'} showLabel value={sliderValue} variant="success" />
+            <Progress label={isZh ? '警告' : 'Warning'} showLabel value={sliderValue} variant="warning" />
+            <Progress label={isZh ? '危险' : 'Danger'} showLabel value={sliderValue} variant="danger" />
+            <Progress label={isZh ? '炫彩' : 'Rainbow'} showLabel value={sliderValue} variant="rainbow" size="lg" />
             <div className="vx-doc-skeleton-grid">
               <Skeleton lines={3} variant="text" />
               <Skeleton height={92} />
