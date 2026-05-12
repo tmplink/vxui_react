@@ -1383,15 +1383,18 @@ a {
 .vx-dialog__overlay {
   position: fixed;
   inset: 0;
+  z-index: 850;
   background: var(--vx-glass-scrim);
   backdrop-filter: blur(14px) saturate(1.08);
   -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  animation: vx-fade-in 200ms ease;
 }
 
 .vx-dialog__content {
   position: fixed;
   top: 50%;
   left: 50%;
+  z-index: 851;
   width: min(560px, calc(100vw - 32px));
   transform: translate(-50%, -50%);
   padding: 20px;
@@ -1401,6 +1404,7 @@ a {
   -webkit-backdrop-filter: var(--vx-glass-filter);
   border: 1px solid var(--vx-glass-border);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
+  animation: vx-fade-in 150ms ease;
 }
 
 .vx-dialog__header,
@@ -1452,7 +1456,7 @@ a {
   margin: 0;
   padding: 0;
   list-style: none;
-  z-index: 20;
+  z-index: 960;
 }
 
 .vx-toast {
@@ -1907,7 +1911,7 @@ a {
 .vxm-actionsheet__overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 800;
   background: var(--vx-glass-scrim);
   backdrop-filter: blur(14px) saturate(1.06);
   -webkit-backdrop-filter: blur(14px) saturate(1.06);
@@ -2192,7 +2196,7 @@ a {
 .vxm-drawer__overlay {
   position: absolute;
   inset: 0;
-  z-index: 200;
+  z-index: 800;
   display: flex;
 }
 
@@ -6039,6 +6043,7 @@ a {
   position: fixed;
   top: 50%;
   left: 50%;
+  z-index: 851;
   width: min(440px, calc(100vw - 32px));
   transform: translate(-50%, -50%);
   padding: 24px;
