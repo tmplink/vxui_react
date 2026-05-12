@@ -579,9 +579,11 @@ export const en: Translations = {
       section: 'Components',
       title: 'Overlays',
       description:
-        'Tooltip, Popover, and DropdownMenu layer transient content above the page without navigating away.',
+        'Dialog, AlertDialog, Sheet, Popover, and DropdownMenu layer transient content above the page without navigating away.',
       guidance: [
-        'Tooltips are for supplementary text only — never interactive content.',
+        'Dialog is for rich confirmations with custom body and footer actions.',
+        'AlertDialog is for destructive or irreversible actions that require explicit confirmation.',
+        'Sheet slides in from an edge — use it for settings panels or contextual detail views.',
         'Popovers can contain forms and rich content; they require explicit close triggers.',
         'DropdownMenus should group related actions and support keyboard navigation.',
       ],
@@ -1079,9 +1081,11 @@ export const zh: Translations = {
     overlays: {
       section: '组件',
       title: '浮层',
-      description: 'Tooltip、Popover 和 DropdownMenu 在页面上方叠加临时内容，无需跳转。',
+      description: 'Dialog、AlertDialog、Sheet、Popover 和 DropdownMenu 在页面上方叠加临时内容，无需跳转。',
       guidance: [
-        'Tooltip 仅用于补充文本，绝不放置可交互内容。',
+        'Dialog 适用于包含自定义内容与操作按钮的富确认场景。',
+        'AlertDialog 适用于破坏性或不可撤销操作，需要用户明确确认。',
+        'Sheet 从页面边缘滑入，适合设置面板或上下文详情视图。',
         'Popover 可包含表单和富内容；需要明确的关闭触发器。',
         'DropdownMenu 应对相关操作分组，并支持键盘导航。',
       ],

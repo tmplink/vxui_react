@@ -6067,6 +6067,14 @@ a {
   gap: 10px;
 }
 
+.vx-dialog--mobile-sheet .vx-alert-dialog__footer {
+  width: 100%;
+}
+
+.vx-dialog--mobile-sheet .vx-alert-dialog__footer .vx-button {
+  flex: 1;
+}
+
 /* ── NumberInput ───────────────────────────────────────────── */
 .vx-number-input {
   display: inline-flex;
@@ -6565,6 +6573,10 @@ a {
   border-top: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
   animation: vx-sheet-slide-bottom 220ms ease;
+}
+
+.vx-dialog--mobile-sheet {
+  max-height: 92dvh;
 }
 .vx-sheet__header {
   display: flex;

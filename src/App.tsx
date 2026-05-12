@@ -42,6 +42,7 @@ import { MobileApp } from './components/mobile/MobileApp';
 import {
   Accordion,
   Alert,
+  AlertDialog,
   AppShell,
   Avatar,
   Badge,
@@ -52,6 +53,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Dialog,
   DropdownMenu,
   Input,
   Pagination,
@@ -60,6 +62,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Sheet,
   Skeleton,
   Slider,
   Table,
@@ -710,13 +713,13 @@ export function SyncStatus({ loading = false }: { loading?: boolean }) {
     </div>
   );
 }`,
-  overlays: String.raw`import { Button, Dialog, DropdownMenu, Popover } from 'vxui-react';
+  overlays: String.raw`import { Button, AlertDialog, Dialog, DropdownMenu, Popover, Sheet } from 'vxui-react';
 
 export function OverlayExamples() {
   return (
     <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
       <Dialog
-        trigger={<Button>Delete project</Button>}
+        trigger={<Button>Open dialog</Button>}
         title="Delete project"
         description="This action removes access for the whole team."
         footer={
@@ -728,6 +731,23 @@ export function OverlayExamples() {
       >
         This project will be removed permanently.
       </Dialog>
+
+      <AlertDialog
+        trigger={<Button variant="secondary">Alert dialog</Button>}
+        title="Confirm publish?"
+        description="All team members will see this immediately."
+        confirmLabel="Publish"
+        cancelLabel="Cancel"
+      />
+
+      <Sheet
+        trigger={<Button variant="secondary">Open sheet</Button>}
+        title="Settings"
+        description="Adjust your preferences here."
+        side="right"
+      >
+        <p>Sheet content area.</p>
+      </Sheet>
 
       <Popover content={<div>Show context without leaving the current page.</div>}>
         <Button variant="secondary">Open popover</Button>
@@ -2061,24 +2081,54 @@ function DesktopApp() {
         );
       case 'overlays':
         return (
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
-            <Popover
-              content={
-                <div className="vx-doc-popover-copy">
-                  {isZh ? 'Popover 用于补充上下文，而不是承载另一套页面层级。' : 'Popover adds context instead of carrying a second page hierarchy.'}
-                </div>
-              }
-            >
-              <Button variant="secondary">Popover</Button>
-            </Popover>
-            <DropdownMenu
-              trigger={<Button variant="secondary">{isZh ? '更多操作' : 'More actions'}</Button>}
-              items={[
-                { label: isZh ? '打开首页' : 'Open home', icon: <House size={14} />, onClick: () => navigate({ view: 'home' }) },
-                { label: isZh ? '打开文档' : 'Open docs', icon: <Search size={14} />, onClick: () => navigate({ view: 'docs', page: 'introduction' }) },
-                { label: isZh ? '查看错误页' : 'Open error page', icon: <AlertTriangle size={14} />, onClick: () => navigate({ view: 'error' }) },
-              ]}
-            />
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Dialog
+                trigger={<Button>{isZh ? '打开对话框' : 'Open dialog'}</Button>}
+                title={isZh ? '删除项目' : 'Delete project'}
+                description={isZh ? '此操作将移除整个团队的访问权限，且无法撤销。' : 'This action removes access for the whole team and cannot be undone.'}
+                footer={
+                  <>
+                    <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
+                    <Button variant="danger">{isZh ? '删除' : 'Delete'}</Button>
+                  </>
+                }
+              >
+                {isZh ? '项目将被永久移除。' : 'The project will be permanently removed.'}
+              </Dialog>
+              <AlertDialog
+                trigger={<Button variant="secondary">{isZh ? '警告对话框' : 'Alert dialog'}</Button>}
+                title={isZh ? '确认发布？' : 'Confirm publish?'}
+                description={isZh ? '发布后所有成员立即可见。' : 'All team members will see this immediately after publishing.'}
+                confirmLabel={isZh ? '发布' : 'Publish'}
+                cancelLabel={isZh ? '取消' : 'Cancel'}
+              />
+              <Sheet
+                trigger={<Button variant="secondary">{isZh ? '打开侧边栏' : 'Open sheet'}</Button>}
+                title={isZh ? '设置' : 'Settings'}
+                description={isZh ? '在此调整您的偏好。' : 'Adjust your preferences here.'}
+                side="right"
+              >
+                <p style={{ margin: 0 }}>{isZh ? '侧边浮层内容区域。' : 'Sheet content area.'}</p>
+              </Sheet>
+              <Popover
+                content={
+                  <div className="vx-doc-popover-copy">
+                    {isZh ? 'Popover 用于补充上下文，而不是承载另一套页面层级。' : 'Popover adds context instead of carrying a second page hierarchy.'}
+                  </div>
+                }
+              >
+                <Button variant="secondary">Popover</Button>
+              </Popover>
+              <DropdownMenu
+                trigger={<Button variant="secondary">{isZh ? '更多操作' : 'More actions'}</Button>}
+                items={[
+                  { label: isZh ? '打开首页' : 'Open home', icon: <House size={14} />, onClick: () => navigate({ view: 'home' }) },
+                  { label: isZh ? '打开文档' : 'Open docs', icon: <Search size={14} />, onClick: () => navigate({ view: 'docs', page: 'introduction' }) },
+                  { label: isZh ? '查看错误页' : 'Open error page', icon: <AlertTriangle size={14} />, onClick: () => navigate({ view: 'error' }) },
+                ]}
+              />
+            </div>
           </div>
         );
       case 'nav-layout':

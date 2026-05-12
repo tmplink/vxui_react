@@ -28,7 +28,9 @@ import {
   Zap,
   Share2,
   Download,
+  Globe,
   Star,
+  X,
 } from 'lucide-react';
 import { MobileShell, MobileTopBar, MobileIconButton } from './MobileShell';
 import { BottomNav } from './BottomNav';
@@ -73,6 +75,9 @@ import {
   Tooltip,
   useToast,
   useTheme,
+  Dialog,
+  AlertDialog,
+  Sheet,
 } from '../../lib';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -162,6 +167,7 @@ export function MobileApp() {
   // ── UI state ───────────────────────────────────────────────────────────────
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [actionSheetOpen, setActionSheetOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const docHeaderRef = useRef<HTMLDivElement | null>(null);
   const [isDocHeaderInView, setIsDocHeaderInView] = useState(true);
 
@@ -436,26 +442,51 @@ export function MobileApp() {
       case 'overlays':
         return (
           <div className="vx-stack">
-            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
-              <Tooltip content="Primary action" placement="top">
-                <Button size="sm">Hover (top)</Button>
-              </Tooltip>
-              <Tooltip content="Right" placement="right">
-                <Button size="sm" variant="secondary">Right</Button>
-              </Tooltip>
+            <div className="vx-inline vx-inline--wrap">
+              <Dialog
+                trigger={<Button size="sm">{locale === 'zh' ? '对话框' : 'Dialog'}</Button>}
+                title={locale === 'zh' ? '删除项目' : 'Delete project'}
+                description={locale === 'zh' ? '此操作无法撤销。' : 'This action cannot be undone.'}
+                footer={
+                  <>
+                    <Button variant="ghost" size="sm">{locale === 'zh' ? '取消' : 'Cancel'}</Button>
+                    <Button variant="danger" size="sm">{locale === 'zh' ? '删除' : 'Delete'}</Button>
+                  </>
+                }
+              >
+                {locale === 'zh' ? '项目将被永久移除。' : 'The project will be permanently removed.'}
+              </Dialog>
+              <AlertDialog
+                trigger={<Button size="sm" variant="secondary">{locale === 'zh' ? '警告框' : 'Alert'}</Button>}
+                title={locale === 'zh' ? '确认发布？' : 'Confirm publish?'}
+                description={locale === 'zh' ? '发布后所有成员立即可见。' : 'All members will see this immediately.'}
+                confirmLabel={locale === 'zh' ? '发布' : 'Publish'}
+                cancelLabel={locale === 'zh' ? '取消' : 'Cancel'}
+              />
+              <Sheet
+                trigger={<Button size="sm" variant="secondary">{locale === 'zh' ? '侧边栏' : 'Sheet'}</Button>}
+                title={locale === 'zh' ? '设置' : 'Settings'}
+                side="bottom"
+              >
+                <p style={{ margin: 0 }}>{locale === 'zh' ? '侧边浮层内容区域。' : 'Sheet content area.'}</p>
+              </Sheet>
             </div>
             <Separator />
-            <Popover content={<div className="vx-stack vx-stack--tight"><p style={{ fontSize: '0.875rem', margin: 0 }}>Popover content</p><Button size="sm">Confirm</Button></div>}>
-              <Button variant="secondary" size="sm">Open popover</Button>
-            </Popover>
-            <Separator />
-            <DropdownMenu
-              trigger={<Button variant="secondary" size="sm">Actions ▾</Button>}
-              groups={[
-                { items: [{ label: 'Edit', shortcut: '⌘E', onClick: () => {} }, { label: 'Duplicate', onClick: () => {} }] },
-                { items: [{ label: 'Archive', onClick: () => {} }, { label: 'Delete', danger: true, onClick: () => {} }] },
-              ]}
-            />
+            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
+              <Tooltip content="Primary action" placement="top">
+                <Button size="sm">{locale === 'zh' ? '提示（上）' : 'Tooltip'}</Button>
+              </Tooltip>
+              <Popover content={<div className="vx-stack vx-stack--tight"><p style={{ fontSize: '0.875rem', margin: 0 }}>Popover content</p><Button size="sm">Confirm</Button></div>}>
+                <Button variant="secondary" size="sm">Popover</Button>
+              </Popover>
+              <DropdownMenu
+                trigger={<Button variant="secondary" size="sm">{locale === 'zh' ? '更多 ▾' : 'Actions ▾'}</Button>}
+                groups={[
+                  { items: [{ label: locale === 'zh' ? '编辑' : 'Edit', onClick: () => {} }, { label: locale === 'zh' ? '复制' : 'Duplicate', onClick: () => {} }] },
+                  { items: [{ label: locale === 'zh' ? '删除' : 'Delete', danger: true, onClick: () => {} }] },
+                ]}
+              />
+            </div>
           </div>
         );
       case 'nav-layout':
@@ -781,45 +812,61 @@ export function MobileApp() {
     );
   };
 
-  const renderSearchContent = () => (
-    <div>
-      <MobileTopBar title="Search" />
-      <div style={{ padding: '12px 16px 0' }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            padding: '0 14px',
-            height: 44,
-            borderRadius: 'var(--vx-radius)',
-            background: 'var(--vx-bg-accent)',
-            color: 'var(--vx-text-muted)',
-            fontSize: 15,
-          }}
-        >
-          <Search size={16} />
-          <span>Search components…</span>
+  const renderSearchContent = () => {
+    const q = searchQuery.trim().toLowerCase();
+    const allItems = navSections.flatMap(s =>
+      s.items.map(item => ({ ...item, sectionTitle: s.title }))
+    );
+    const filtered = q
+      ? allItems.filter(item => item.label.toLowerCase().includes(q) || item.sectionTitle.toLowerCase().includes(q))
+      : allItems;
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <div style={{ padding: '12px 16px 0' }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '0 14px', height: 44, borderRadius: 'var(--vx-radius)', background: 'var(--vx-bg-accent)', color: 'var(--vx-text-muted)', fontSize: 15 }}>
+            <Search size={16} aria-hidden />
+            <input
+              autoFocus
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder={t.searchPlaceholder}
+              aria-label={t.searchAriaLabel}
+              style={{ flex: 1, border: 'none', background: 'transparent', outline: 'none', fontSize: 15, color: 'var(--vx-text)', caretColor: 'var(--vx-primary)' }}
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                aria-label="Clear search"
+                style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer', color: 'var(--vx-text-muted)', display: 'flex', alignItems: 'center' }}
+              >
+                <X size={16} />
+              </button>
+            )}
+          </label>
         </div>
-      </div>
-      <MobileListSection title="All pages" style={{ padding: '16px 16px 0' }}>
-        <MobileList>
-          {navSections.flatMap(s =>
-            s.items.map(item => (
-              <MobileListItem
-                key={item.key}
-                leading={item.icon}
-                label={item.label}
-                description={s.title}
-                chevron
-                onClick={() => { selectPage(item.key as PageKey); setActiveTab('docs'); }}
-              />
-            ))
+        <MobileListSection title={q ? `${filtered.length} ${locale === 'zh' ? '个结果' : 'results'}` : (locale === 'zh' ? '所有页面' : 'All pages')} style={{ padding: '16px 16px 0' }}>
+          {filtered.length > 0 ? (
+            <MobileList>
+              {filtered.map(item => (
+                <MobileListItem
+                  key={item.key}
+                  leading={item.icon}
+                  label={item.label}
+                  description={item.sectionTitle}
+                  chevron
+                  onClick={() => { setSearchQuery(''); selectPage(item.key as PageKey); setActiveTab('docs'); }}
+                />
+              ))}
+            </MobileList>
+          ) : (
+            <p style={{ margin: '8px 16px', fontSize: 14, color: 'var(--vx-text-muted)' }}>{t.searchEmpty(searchQuery)}</p>
           )}
-        </MobileList>
-      </MobileListSection>
-    </div>
-  );
+        </MobileListSection>
+      </div>
+    );
+  };
 
   const renderLoginContent = () => {
     const isZh = t.locale === 'zh';
@@ -926,12 +973,15 @@ export function MobileApp() {
 
   const renderTopBar = () => {
     const isDocsView = activeTab === 'docs' && mobileView === 'docs';
+    const isSearchView = activeTab === 'search';
     const isLegalView = mobileView === 'privacy-policy' || mobileView === 'terms-of-service';
     const title = isDocsView
       ? (isDocHeaderInView ? (activeDocument?.section ?? docsTopBarFallback) : (activeDocument?.title ?? docsTopBarFallback))
       : isLegalView
         ? mobileView === 'privacy-policy' ? privacyContent.title : termsContent.title
-        : 'vxUI';
+        : isSearchView
+          ? t.searchAriaLabel
+          : 'vxUI';
 
     return (
       <MobileTopBar
@@ -1023,9 +1073,10 @@ export function MobileApp() {
   const renderBottomNav = () => (
     <BottomNav
       items={[
-        { key: 'home', label: 'Home', icon: <House size={22} />, active: activeTab === 'home' && !isAuthView && !isLegalView, onSelect: () => { selectTab('home'); setMobileView('home'); } },
-        { key: 'docs', label: 'Docs', icon: <FileCode2 size={22} />, active: activeTab === 'docs' && !isAuthView && !isLegalView, onSelect: () => { selectTab('docs'); setMobileView('docs'); } },
-        { key: 'search', label: 'Search', icon: <Search size={22} />, active: activeTab === 'search' && !isAuthView && !isLegalView, onSelect: () => { selectTab('search'); } },
+        { key: 'home', label: locale === 'zh' ? '首页' : 'Home', icon: <House size={22} />, active: activeTab === 'home' && !isAuthView && !isLegalView, onSelect: () => { selectTab('home'); setMobileView('home'); } },
+        { key: 'docs', label: locale === 'zh' ? '文档' : 'Docs', icon: <FileCode2 size={22} />, active: activeTab === 'docs' && !isAuthView && !isLegalView, onSelect: () => { selectTab('docs'); setMobileView('docs'); } },
+        { key: 'search', label: locale === 'zh' ? '搜索' : 'Search', icon: <Search size={22} />, active: activeTab === 'search' && !isAuthView && !isLegalView, onSelect: () => { selectTab('search'); } },
+        { key: 'lang', label: locale === 'zh' ? 'EN' : '中文', icon: <Globe size={22} />, onSelect: () => setLocale(locale === 'zh' ? 'en' : 'zh') },
       ]}
     />
   );
@@ -1052,6 +1103,8 @@ export function MobileApp() {
             <ActionSheetItem icon={<Star size={18} />} onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '收藏页面' : 'Bookmark page'}</ActionSheetItem>
             <ActionSheetItem icon={<Download size={18} />} onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '下载 PDF' : 'Download PDF'}</ActionSheetItem>
             <ActionSheetItem icon={<Trash2 size={18} />} destructive onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '清除历史' : 'Clear history'}</ActionSheetItem>
+            <ActionSheetItem icon={locale === 'zh' ? <Check size={18} /> : <Globe size={18} />} onClick={() => { setLocale('zh'); setActionSheetOpen(false); }}>中文</ActionSheetItem>
+            <ActionSheetItem icon={locale === 'en' ? <Check size={18} /> : <Globe size={18} />} onClick={() => { setLocale('en'); setActionSheetOpen(false); }}>English</ActionSheetItem>
           </>
         ) : (
           <>

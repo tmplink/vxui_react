@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { cx } from '../lib/cx';
 import { Button } from './Button';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { Sheet } from './Sheet';
 
 export interface AlertDialogProps
   extends Pick<DialogPrimitive.DialogProps, 'defaultOpen' | 'onOpenChange' | 'open'> {
@@ -28,6 +30,39 @@ export function AlertDialog({
   className,
   ...props
 }: AlertDialogProps) {
+  const isMobile = useIsMobile();
+
+  const footer = (
+    <div className="vx-alert-dialog__footer">
+      <DialogPrimitive.Close asChild>
+        <Button variant="secondary" onClick={onCancel}>
+          {cancelLabel}
+        </Button>
+      </DialogPrimitive.Close>
+      <DialogPrimitive.Close asChild>
+        <Button variant={variant === 'danger' ? 'danger' : 'solid'} onClick={onConfirm}>
+          {confirmLabel}
+        </Button>
+      </DialogPrimitive.Close>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <Sheet
+        trigger={trigger}
+        title={title}
+        description={description}
+        side="bottom"
+        footer={footer}
+        className={cx('vx-dialog--mobile-sheet', className)}
+        {...props}
+      >
+        {null}
+      </Sheet>
+    );
+  }
+
   return (
     <DialogPrimitive.Root {...props}>
       <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
@@ -44,18 +79,7 @@ export function AlertDialog({
               {description}
             </DialogPrimitive.Description>
           ) : null}
-          <div className="vx-alert-dialog__footer">
-            <DialogPrimitive.Close asChild>
-              <Button variant="secondary" onClick={onCancel}>
-                {cancelLabel}
-              </Button>
-            </DialogPrimitive.Close>
-            <DialogPrimitive.Close asChild>
-              <Button variant={variant === 'danger' ? 'danger' : 'solid'} onClick={onConfirm}>
-                {confirmLabel}
-              </Button>
-            </DialogPrimitive.Close>
-          </div>
+          {footer}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
