@@ -250,7 +250,7 @@ export const en: Translations = {
   sidebarCloseLabel: 'Close sidebar',
 
   searchTrigger: 'Search',
-  versionLabel: 'v1.0.0',
+  versionLabel: 'v1.1.1',
   mobilePreview: 'Mobile Preview',
 
   nav: {
@@ -751,7 +751,7 @@ export const zh: Translations = {
   sidebarCloseLabel: '关闭侧边栏',
 
   searchTrigger: '搜索',
-  versionLabel: 'v1.0.0',
+  versionLabel: 'v1.1.1',
   mobilePreview: '移动端预览',
 
   nav: {
