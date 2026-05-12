@@ -1,6 +1,6 @@
-# VXUI React
+# VXUI React · v1.1.1
 
-VXUI React 是对原始 VXUI Foundation 的 React 重写版本，目标是提供一套适合后台、运营台、仪表盘和内部工具的通用 UI 组件库。
+VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用 UI 组件库。
 
 文档内容现在按流行 UI 框架的写法组织：先给安装方式，再给最小可运行示例，最后给分场景的组件代码。
 
@@ -176,12 +176,13 @@ export function Root({ children }: { children: React.ReactNode }) {
 
 ## 当前包含
 
-- Layout: AppShell、Card、Separator、Breadcrumb、Pagination
-- Forms: Input、Select、Checkbox、Radio、Textarea、Slider、Switch
-- Feedback: Alert、Toast、Progress、Skeleton、Spinner
-- Overlay: Dialog、Popover、DropdownMenu、Tooltip
-- Data Display: Avatar、Table、Badge
-- Mobile: MobileShell、BottomNav、ActionSheet、MobileDrawer
+- **Layout**: AppShell、Card、Separator、Breadcrumb、Pagination、Resizable、ScrollArea
+- **Forms**: Input、Select、Checkbox、Radio、Textarea、Slider、Switch、NumberInput、TagInput、ColorPicker、DatePicker、FileUpload、Form、Rating、Combobox
+- **Feedback**: Alert、AlertDialog、Toast、Progress、Skeleton、Spinner、Stepper、Timeline、EmptyState
+- **Overlay**: Dialog、Sheet、Popover、DropdownMenu、ContextMenu、Tooltip、HoverCard、CommandPalette、Menubar、NavigationMenu
+- **Data Display**: Avatar、Table、Badge、Tabs、Accordion、TreeView、Carousel、Calendar
+- **Typography**: Heading、Text、Label、CodeBlock
+- **Mobile**: MobileShell、BottomNav、ActionSheet、MobileDrawer、MobileList
 
 ## 本地开发
 
@@ -193,6 +194,12 @@ npm run dev
 ## 验证与构建
 
 ```bash
+# TypeScript 类型检查
 npm run typecheck
+
+# 构建组件库（用于 npm publish）
 npm run build
+
+# 构建演示站（用于 Pages 部署，输出至 dist-demo/）
+npm run build:demo
 ```
