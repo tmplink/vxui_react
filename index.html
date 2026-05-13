@@ -28,6 +28,16 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="VXUI React – Lightweight React UI Framework" />
     <meta name="twitter:description" content="A dependency-free React component library with design tokens, 60+ components, dark mode, and a minimal SPA shell." />
+
+    <!-- GitHub Pages SPA path restore (pairs with public/404.html) -->
+    <script>
+      (function () {
+        var p = new URLSearchParams(window.location.search).get('p');
+        if (p) {
+          window.history.replaceState(null, '', decodeURIComponent(p));
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
