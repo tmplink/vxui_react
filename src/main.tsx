@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import './styles/base.css';
 import { ThemeProvider, ToastProvider, themePresets, ViewportProvider } from './lib';
 import { I18nProvider } from './i18n';
 
