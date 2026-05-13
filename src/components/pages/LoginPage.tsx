@@ -73,7 +73,7 @@ export function LoginPage({ onLogin, onRegister, onGuest, onBack }: LoginPagePro
   return (
     <div className="vx-auth-page">
       <header className="vx-auth-topbar">
-        <div className="vx-auth-topbar__brand">vx<span>UI</span></div>
+        <div className="vx-auth-topbar__brand"><img src="/colorful_flat_icon.svg" alt="vxUI" height={24} /></div>
         <div className="vx-auth-topbar__actions">
           <LanguageSwitcher variant="inline" />
           <button type="button" className="vx-lang-drop__trigger" style={{ width: 'auto' }} onClick={onBack}>
@@ -83,7 +83,7 @@ export function LoginPage({ onLogin, onRegister, onGuest, onBack }: LoginPagePro
       </header>
 
       <div className="vx-auth-card">
-        <div className="vx-auth-card__logo">vx<span>UI</span></div>
+        <div className="vx-auth-card__logo"><img src="/colorful_flat_icon.svg" alt="vxUI" height={48} /></div>
         <div className="vx-auth-card__body">
           <div className="vx-auth__header">
             <h2>{pp.loginTitle}</h2>

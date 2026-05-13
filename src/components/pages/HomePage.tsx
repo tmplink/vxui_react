@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   FileCode2,
+  Github,
   Search,
   Zap,
 } from 'lucide-react';
@@ -43,7 +44,7 @@ export function HomePage({
     <div className="vx-public">
       <header className="vx-public-nav">
         <div className="vx-public-nav__brand">
-          <span className="vx-public-nav__brand-mark">vx<span>UI</span></span>
+          <img src="/colorful_flat_icon.svg" alt="vxUI" height={32} style={{ display: 'block' }} />
         </div>
         <div className="vx-public-nav__links">
           {isSignedIn ? (
@@ -52,6 +53,16 @@ export function HomePage({
             </span>
           ) : null}
           <LanguageSwitcher variant="inline" />
+          <a
+            href="https://github.com/tmplink/vxui_react"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vx-cmd-trigger"
+            aria-label="GitHub"
+          >
+            <Github size={14} />
+            GitHub
+          </a>
           <button type="button" className="vx-cmd-trigger" onClick={() => onDocs()}>
             <FileCode2 size={14} />
             {pp.navDocs}
@@ -176,9 +187,27 @@ export function HomePage({
 
       <footer className="vx-public-footer">
         <span>{pp.footerCopy}</span>
-        <button type="button" className="vx-link" onClick={onPrivacy}>
-          {pp.footerPrivacy}
-        </button>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <a
+            href="https://ui.vx.link"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vx-link"
+          >
+            {pp.footerWebsite}
+          </a>
+          <a
+            href="https://github.com/tmplink/vxui_react"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="vx-link"
+          >
+            {pp.footerGithub}
+          </a>
+          <button type="button" className="vx-link" onClick={onPrivacy}>
+            {pp.footerPrivacy}
+          </button>
+        </div>
       </footer>
     </div>
   );

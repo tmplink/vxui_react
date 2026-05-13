@@ -1,30 +1,28 @@
 # VXUI React · v1.1.1
 
-**官网**：[ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**：[tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [English](README.en.md)
+**Website**: [ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**: [tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [中文](README.md)
 
-VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用 UI 组件库。
+VXUI React is a general-purpose React UI component library designed for admin panels, ops dashboards, internal tools, and data-heavy interfaces.
 
-文档内容现在按流行 UI 框架的写法组织：先给安装方式，再给最小可运行示例，最后给分场景的组件代码。
+The documentation follows the conventions of popular UI frameworks: installation first, then a minimal working example, then scenario-specific component code.
 
-## 安装
+## Installation
 
-从 npm 安装：
+Install from npm:
 
 ```bash
 npm install vxui-react
 ```
 
-`react` 和 `react-dom` 需要由宿主应用提供。
+`react` and `react-dom` must be provided by the host application.
 
-## 引入样式
-
-安装完成后，包名仍然保持为 `vxui-react`。
+## Import Styles
 
 ```tsx
 import 'vxui-react/styles.css';
 ```
 
-## 基础接入
+## Basic Setup
 
 ```tsx
 // src/main.tsx
@@ -42,7 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 ```
 
-## 第一个页面
+## First Page
 
 ```tsx
 import {
@@ -84,7 +82,7 @@ export function App() {
 }
 ```
 
-## 表单示例
+## Form Example
 
 ```tsx
 import { Button, Checkbox, Input, Select, Textarea } from 'vxui-react';
@@ -114,7 +112,7 @@ export function ProjectForm() {
 }
 ```
 
-## 反馈示例
+## Feedback Example
 
 ```tsx
 import { Alert, Button, Progress, useToast } from 'vxui-react';
@@ -146,7 +144,7 @@ export function PublishActions() {
 }
 ```
 
-## 自定义主题
+## Custom Theme
 
 ```tsx
 import { ThemeProvider, createTheme, themePresets } from 'vxui-react';
@@ -174,34 +172,34 @@ export function Root({ children }: { children: React.ReactNode }) {
 }
 ```
 
-运行时可以通过 `useTheme()` 获取当前主题并切换到任意已注册主题，例如 `setTheme('ocean')`。
+Use `useTheme()` at runtime to read the current theme or call `setTheme('ocean')` to switch to any registered theme.
 
-## 当前包含
+## What's Included
 
-- **Layout**: AppShell、Card、Separator、Breadcrumb、Pagination、Resizable、ScrollArea
-- **Forms**: Input、Select、Checkbox、Radio、Textarea、Slider、Switch、NumberInput、TagInput、ColorPicker、DatePicker、FileUpload、Form、Rating、Combobox
-- **Feedback**: Alert、AlertDialog、Toast、Progress、Skeleton、Spinner、Stepper、Timeline、EmptyState
-- **Overlay**: Dialog、Sheet、Popover、DropdownMenu、ContextMenu、Tooltip、HoverCard、CommandPalette、Menubar、NavigationMenu
-- **Data Display**: Avatar、Table、Badge、Tabs、Accordion、TreeView、Carousel、Calendar
-- **Typography**: Heading、Text、Label、CodeBlock
-- **Mobile**: MobileShell、BottomNav、ActionSheet、MobileDrawer、MobileList
+- **Layout**: AppShell, Card, Separator, Breadcrumb, Pagination, Resizable, ScrollArea
+- **Forms**: Input, Select, Checkbox, Radio, Textarea, Slider, Switch, NumberInput, TagInput, ColorPicker, DatePicker, FileUpload, Form, Rating, Combobox
+- **Feedback**: Alert, AlertDialog, Toast, Progress, Skeleton, Spinner, Stepper, Timeline, EmptyState
+- **Overlay**: Dialog, Sheet, Popover, DropdownMenu, ContextMenu, Tooltip, HoverCard, CommandPalette, Menubar, NavigationMenu
+- **Data Display**: Avatar, Table, Badge, Tabs, Accordion, TreeView, Carousel, Calendar
+- **Typography**: Heading, Text, Label, CodeBlock
+- **Mobile**: MobileShell, BottomNav, ActionSheet, MobileDrawer, MobileList
 
-## 本地开发
+## Local Development
 
 ```bash
 npm install
 npm run dev
 ```
 
-## 验证与构建
+## Validation & Build
 
 ```bash
-# TypeScript 类型检查
+# TypeScript type check
 npm run typecheck
 
-# 构建组件库（用于 npm publish）
+# Build component library (for npm publish)
 npm run build
 
-# 构建演示站（用于 Pages 部署，输出至 dist-demo/）
+# Build demo site (for Pages deployment, output to dist-demo/)
 npm run build:demo
 ```

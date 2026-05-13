@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from 'react';
+import { APP_VERSION } from '../lib/version';
 
 // ──────────────────────────────────────────────────────────
 // Translation shape
@@ -170,6 +171,8 @@ export interface Translations {
     feat4: string; feat4Desc: string;
     footerCopy: string;
     footerPrivacy: string;
+    footerGithub: string;
+    footerWebsite: string;
     loginTitle: string;
     loginSubtitle: string;
     loginEmail: string;
@@ -250,7 +253,7 @@ export const en: Translations = {
   sidebarCloseLabel: 'Close sidebar',
 
   searchTrigger: 'Search',
-  versionLabel: 'v1.1.1',
+  versionLabel: APP_VERSION,
   mobilePreview: 'Mobile Preview',
 
   nav: {
@@ -372,7 +375,7 @@ export const en: Translations = {
     navSignup: 'Sign up',
     navDocs: 'Docs',
     navLogout: 'Log out',
-    heroTag: 'New · v1.0',
+    heroTag: `New · ${APP_VERSION}`,
     heroTitle: 'Build faster with vxUI',
     heroLead: 'A lightweight, dependency-free UI framework for building clean admin interfaces. Design tokens, components, and a minimal SPA runtime in one consistent visual language.',
     heroCta: 'Get started',
@@ -390,6 +393,8 @@ export const en: Translations = {
     feat4: 'Dark mode', feat4Desc: 'Semantic tokens keep every component reusable across light and dark themes.',
     footerCopy: '© 2026 vxUI. All rights reserved.',
     footerPrivacy: 'Privacy Policy',
+    footerGithub: 'GitHub',
+    footerWebsite: 'Website',
     loginTitle: 'Welcome back',
     loginSubtitle: 'Sign in to access the documentation.',
     loginEmail: 'Email',
@@ -751,7 +756,7 @@ export const zh: Translations = {
   sidebarCloseLabel: '关闭侧边栏',
 
   searchTrigger: '搜索',
-  versionLabel: 'v1.1.1',
+  versionLabel: APP_VERSION,
   mobilePreview: '移动端预览',
 
   nav: {
@@ -876,7 +881,7 @@ export const zh: Translations = {
     navSignup: '注册',
     navDocs: '文档',
     navLogout: '退出登录',
-    heroTag: '最新 · v1.0',
+    heroTag: `最新 · ${APP_VERSION}`,
     heroTitle: '用 vxUI 构建更快',
     heroLead: '一个轻量无依赖的 UI 框架，用于构建简洁的后台管理界面。设计 Token、组件和极简 SPA 运行时，统一在一套一致的视觉语言之下。',
     heroCta: '立即开始',
@@ -894,6 +899,8 @@ export const zh: Translations = {
     feat4: '深色模式', feat4Desc: '语义 Token 让每个组件在各主题下均可复用。',
     footerCopy: '© 2026 vxUI. 保留所有权利。',
     footerPrivacy: '隐私政策',
+    footerGithub: 'GitHub',
+    footerWebsite: '官网',
     loginTitle: '欢迎回来',
     loginSubtitle: '登录以访问文档。',
     loginEmail: '邮箱',
@@ -1247,9 +1254,28 @@ const I18nContext = createContext<I18nContextValue>({
   setLocale: () => {},
 });
 
+/** Resolve the best supported locale from the browser's language list. */
+function detectLocale(): string {
+  const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('vxui-locale') : null;
+  if (stored && locales[stored]) return stored;
+
+  // Walk navigator.languages in preference order and pick the first match.
+  const langs =
+    typeof navigator !== 'undefined'
+      ? (navigator.languages?.length ? navigator.languages : [navigator.language])
+      : [];
+
+  for (const lang of langs) {
+    // Exact match first (e.g. "zh" or "en")
+    const exact = lang.toLowerCase().split('-')[0];
+    if (locales[lang]) return lang;
+    if (locales[exact]) return exact;
+  }
+  return 'en';
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const stored = typeof localStorage !== 'undefined' ? (localStorage.getItem('vxui-locale') ?? 'en') : 'en';
-  const [locale, setLocaleState] = useState(stored);
+  const [locale, setLocaleState] = useState(() => detectLocale());
   const t = locales[locale] ?? en;
 
   const setLocale = (next: string) => {

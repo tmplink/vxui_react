@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="层_1" data-name="层 1" viewBox="0 0 192 192">
+  <defs>
+    <!-- 日落橙金渐变背景 -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#C0392B"/>
+      <stop offset="30%"  stop-color="#E8541A"/>
+      <stop offset="65%"  stop-color="#F39C12"/>
+      <stop offset="100%" stop-color="#F1C40F"/>
+    </linearGradient>
+    <!-- 左侧形状：白色微暖 -->
+    <linearGradient id="shapeGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FFF5E0" stop-opacity="0.93"/>
+    </linearGradient>
+    <!-- 右侧形状：白色微暖 -->
+    <linearGradient id="shapeGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#FFF8E7" stop-opacity="0.93"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 圆角矩形背景：炫彩渐变 -->
+  <rect width="192" height="192" rx="22.88" fill="url(#bgGradient)"/>
+
+  <!-- 左侧 X 字形 -->
+  <polygon
+    points="45 36.75 28.5 36.75 61.5 90.75 26.25 144 42.75 144 79.5 91.5 45 36.75"
+    fill="url(#shapeGrad1)"/>
+
+  <!-- 右侧 XX 字形 -->
+  <polygon
+    points="162.75 36.75 141 36.75 115.5 81 91.5 37.5 68.25 37.5 102.75 91.5 66 144 88.5 144 114 102.75 138.75 144.75 161.25 144.75 126.75 90.75 162.75 36.75"
+    fill="url(#shapeGrad2)"/>
+
+  <!-- 底部装饰：暖色圆点 -->
+  <circle cx="31.5"   cy="170.63" r="3.75" fill="#FF4D4D"/>
+  <circle cx="42.75"  cy="170.63" r="3.75" fill="#FF8C00"/>
+  <circle cx="54"     cy="170.63" r="3.75" fill="#FFC300"/>
+  <circle cx="131.25" cy="170.63" r="3.75" fill="#FF6B35"/>
+  <circle cx="142.5"  cy="170.63" r="3.75" fill="#FFD700"/>
+
+  <!-- 底部装饰：短横条（暖色） -->
+  <rect x="60.75"  y="166.88" width="18.75" height="7.5" rx="3.75" fill="#E74C3C"/>
+  <rect x="105"    y="166.88" width="18.75" height="7.5" rx="3.75" fill="#F39C12"/>
+  <rect x="149.25" y="166.88" width="18.75" height="7.5" rx="3.75" fill="#FFEAA7"/>
+</svg>

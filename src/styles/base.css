@@ -3390,6 +3390,7 @@ a {
   transition: border-color 120ms, color 120ms, background 120ms;
   white-space: nowrap;
   font-family: inherit;
+  text-decoration: none;
 }
 .vx-cmd-trigger:hover {
   border-color: var(--vx-border-strong);
