@@ -2593,7 +2593,7 @@ function DesktopApp() {
       <AppShell
         brand="vxUI"
         brandCaption={isZh ? '统一响应式系统' : 'Unified responsive system'}
-        brandIcon={<img src="/colorful_flat_icon.svg" alt="" width={16} height={16} style={{ display: 'block' }} />}
+        brandIcon={<img src="/colorful_flat_icon.svg" alt="" />}
         topbarRef={docsTopbarRef}
         density={compactDensity ? 'compact' : 'comfortable'}
         breadcrumb={
