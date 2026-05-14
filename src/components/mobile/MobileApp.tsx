@@ -209,7 +209,6 @@ export function MobileApp() {
       return;
     }
 
-    docHeaderRef.current?.scrollIntoView({ block: 'start' });
     setIsDocHeaderInView(true);
   }, [mobileView, activePage]);
 

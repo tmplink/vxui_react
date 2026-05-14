@@ -14,6 +14,8 @@ export interface ViewportContextValue {
   viewport: ViewportType;
   isPhone: boolean;
   isTablet: boolean;
+  /** True when the device is in the tablet width range AND screen orientation is portrait */
+  isTabletPortrait: boolean;
   isDesktop: boolean;
 }
 
@@ -36,6 +38,7 @@ const ViewportContext = createContext<ViewportContextValue>({
   viewport: 'desktop',
   isPhone: false,
   isTablet: false,
+  isTabletPortrait: false,
   isDesktop: true,
 });
 
@@ -45,25 +48,36 @@ export interface ViewportProviderProps {
   children: ReactNode;
 }
 
+function isPortraitNow(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.innerHeight > window.innerWidth;
+}
+
 export function ViewportProvider({ children }: ViewportProviderProps) {
   // Synchronously read viewport on first render to avoid layout flash
   const [viewport, setViewport] = useState<ViewportType>(resolveViewport);
+  const [portrait, setPortrait] = useState<boolean>(isPortraitNow);
 
   useEffect(() => {
-    // Keep in sync when window is resized
+    // Keep in sync when window is resized or orientation changes
     const onResize = () => {
       const next = resolveViewport();
       setViewport((prev) => (prev === next ? prev : next));
+      const nextPortrait = isPortraitNow();
+      setPortrait((prev) => (prev === nextPortrait ? prev : nextPortrait));
     };
 
     window.addEventListener('resize', onResize, { passive: true });
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  const isTablet = viewport === 'tablet';
+
   const value: ViewportContextValue = {
     viewport,
     isPhone: viewport === 'phone',
-    isTablet: viewport === 'tablet',
+    isTablet,
+    isTabletPortrait: isTablet && portrait,
     isDesktop: viewport === 'desktop',
   };
 

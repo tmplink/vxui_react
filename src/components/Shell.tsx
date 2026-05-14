@@ -98,13 +98,14 @@ export interface ShellProps {
 }
 
 export function Shell({ collapsed = false, mobileNavOpen = false, density, className, children }: ShellProps) {
-  const { isTablet } = useViewport();
+  const { isTablet, isTabletPortrait } = useViewport();
   return (
     <div
       className={cx('vx-shell', className)}
       data-collapsed={collapsed}
       data-nav-open={mobileNavOpen}
       data-tablet={isTablet}
+      data-tablet-portrait={isTabletPortrait}
       data-density={density}
     >
       {children}
@@ -123,6 +124,7 @@ export interface ShellSidebarProps {
   onToggle?: () => void;
   collapseLabel?: string;
   expandLabel?: string;
+  onSidebarClick?: (e: React.MouseEvent<HTMLElement>) => void;
   children?: ReactNode;
 }
 
@@ -135,6 +137,7 @@ export function ShellSidebar({
   onToggle,
   collapseLabel = 'Collapse',
   expandLabel = 'Expand',
+  onSidebarClick,
   children,
 }: ShellSidebarProps) {
   const hostRef = useRef<HTMLElement | null>(null);
@@ -147,6 +150,7 @@ export function ShellSidebar({
       className="vx-sidebar vx-scroll-host"
       data-scrollable="false"
       data-scrollbar-state="hidden"
+      onClickCapture={onSidebarClick}
     >
       <div
         ref={(el) => { scrollRef.current = el; }}

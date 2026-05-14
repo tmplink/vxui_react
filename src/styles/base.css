@@ -1064,6 +1064,33 @@ a {
   border-radius: 9999px;
 }
 
+.vx-button--circle {
+  border-radius: 9999px;
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+/* Loading state */
+.vx-button--loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.vx-button__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: vx-spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes vx-spin {
+  to { transform: rotate(360deg); }
+}
+
 .vx-button--gradient {
   color: #ffffff;
   background: linear-gradient(135deg, #4f46e5, #7c3aed);
@@ -1212,6 +1239,55 @@ a {
   box-shadow: var(--vx-shadow-sm);
 }
 
+/* Card variants */
+.vx-card--flat {
+  box-shadow: none;
+}
+
+.vx-card--elevated {
+  box-shadow:
+    0 4px 12px -2px color-mix(in srgb, var(--vx-text) 10%, transparent),
+    0 12px 32px -4px color-mix(in srgb, var(--vx-text) 8%, transparent);
+}
+
+.vx-card--outlined {
+  background: transparent;
+  box-shadow: none;
+  border-color: var(--vx-border-strong);
+  border-width: 2px;
+}
+
+.vx-card--ghost {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.vx-card--filled {
+  background: var(--vx-bg-accent);
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Card padding overrides */
+.vx-card--pad-none { padding: 0; gap: 0; }
+.vx-card--pad-sm   { padding: 10px; gap: 10px; }
+.vx-card--pad-md   { padding: 18px; gap: 14px; }
+.vx-card--pad-lg   { padding: 28px; gap: 20px; }
+
+/* Hoverable card */
+.vx-card--hoverable {
+  cursor: pointer;
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.vx-card--hoverable:hover {
+  box-shadow:
+    0 6px 18px -2px color-mix(in srgb, var(--vx-text) 12%, transparent),
+    0 16px 36px -4px color-mix(in srgb, var(--vx-text) 8%, transparent);
+  transform: translateY(-2px);
+}
+
 .vx-card__header {
   display: flex;
   flex-direction: column;
@@ -1292,6 +1368,50 @@ a {
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--vx-danger) 18%, transparent);
 }
 
+/* Input variants */
+.vx-input--filled {
+  background: var(--vx-bg-accent);
+  border-color: transparent;
+}
+
+.vx-input--filled:focus-within {
+  border-color: var(--vx-primary);
+  background: var(--vx-surface);
+}
+
+.vx-input--underline {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vx-border);
+  border-radius: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.vx-input--underline:focus-within {
+  border-bottom-color: var(--vx-primary);
+  box-shadow: 0 1px 0 0 var(--vx-primary);
+  outline: none;
+}
+
+.vx-input--borderless {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.vx-input--borderless:focus-within {
+  background: var(--vx-bg-accent);
+  outline: none;
+}
+
+/* Input sizes */
+.vx-input--sm { min-height: 34px; font-size: 13px; padding: 0 10px; }
+.vx-input--lg { min-height: 52px; font-size: 16px; padding: 0 16px; }
+
+/* Rounded / pill input */
+.vx-input--rounded { border-radius: 9999px; }
+
 .vx-input__ornament {
   color: var(--vx-text-muted);
   white-space: nowrap;
@@ -1327,6 +1447,90 @@ a {
 
 .vx-tabs__content {
   margin-top: 16px;
+}
+
+/* ── Segmented Control ───────────────────────── */
+.vx-segmented-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--vx-bg-accent);
+  border: 1px solid var(--vx-border);
+  z-index: 0;
+}
+
+.vx-segmented-control--full {
+  display: flex;
+  width: 100%;
+}
+
+.vx-segmented-control--full .vx-segmented-control__item {
+  flex: 1 1 auto;
+}
+
+.vx-segmented-control__slider {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: 8px;
+  background: var(--vx-surface);
+  box-shadow: var(--vx-shadow-sm);
+  transition: transform 250ms cubic-bezier(0.3, 0, 0, 1), width 250ms cubic-bezier(0.3, 0, 0, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.vx-segmented-control__item {
+  position: relative;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--vx-text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 1;
+}
+
+.vx-segmented-control--sm .vx-segmented-control__item {
+  min-height: 28px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.vx-segmented-control--md .vx-segmented-control__item {
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.vx-segmented-control--lg .vx-segmented-control__item {
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 15px;
+}
+
+.vx-segmented-control__item:hover:not(:disabled) {
+  color: var(--vx-text);
+}
+
+.vx-segmented-control__item--active {
+  color: var(--vx-text);
+  font-weight: 600;
+}
+
+.vx-segmented-control__item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .vx-switch {
@@ -1396,7 +1600,17 @@ a {
   background: var(--vx-glass-scrim);
   backdrop-filter: blur(14px) saturate(1.08);
   -webkit-backdrop-filter: blur(14px) saturate(1.08);
-  animation: vx-fade-in 200ms ease;
+  animation: vx-opacity-in 200ms ease;
+}
+
+@keyframes vx-dialog-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes vx-opacity-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .vx-dialog__content {
@@ -1413,7 +1627,7 @@ a {
   -webkit-backdrop-filter: var(--vx-glass-filter);
   border: 1px solid var(--vx-glass-border);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
-  animation: vx-fade-in 150ms ease;
+  animation: vx-dialog-in 150ms ease;
 }
 
 .vx-dialog__header,
@@ -1453,6 +1667,27 @@ a {
   color: var(--vx-text-secondary);
   cursor: pointer;
 }
+
+/* Dialog size variants */
+.vx-dialog__content--sm { width: min(400px, calc(100vw - 32px)); }
+.vx-dialog__content--lg { width: min(720px, calc(100vw - 32px)); }
+.vx-dialog__content--xl { width: min(960px, calc(100vw - 32px)); }
+.vx-dialog__content--full {
+  width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+}
+
+/* Scrollable body */
+.vx-dialog__content--scrollable .vx-dialog__body {
+  max-height: 60vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Padding variants */
+.vx-dialog__content--pad-none { padding: 0; }
+.vx-dialog__content--pad-sm { padding: 12px; }
+.vx-dialog__content--pad-lg { padding: 32px; }
 
 .vx-toast__viewport {
   position: fixed;
@@ -3174,6 +3409,28 @@ a {
 .vx-table--compact .vx-table__th { padding: 0.375rem 0.75rem; }
 .vx-table--compact .vx-table__td { padding: 0.4375rem 0.75rem; }
 .vx-table--sticky thead { position: sticky; top: 0; z-index: 1; }
+
+/* Table size variants */
+.vx-table--sm .vx-table__th { padding: 0.375rem 0.75rem; font-size: 0.6875rem; }
+.vx-table--sm .vx-table__td { padding: 0.4375rem 0.75rem; font-size: 0.8125rem; }
+.vx-table--lg .vx-table__th { padding: 1rem 1.25rem; font-size: 0.8125rem; }
+.vx-table--lg .vx-table__td { padding: 1rem 1.25rem; font-size: 0.9375rem; }
+
+/* Borderless table */
+.vx-table-wrap--borderless { border: none; box-shadow: none; }
+.vx-table--borderless .vx-table__th { border-bottom: none; }
+.vx-table--borderless .vx-table__td { border-bottom: none; }
+.vx-table--borderless .vx-table__row:last-child .vx-table__td { border-bottom: none; }
+
+/* Square wrapper (no radius) */
+.vx-table-wrap--square { border-radius: 0; }
+
+/* Loading overlay */
+.vx-table__body--loading {
+  position: relative;
+  opacity: 0.45;
+  pointer-events: none;
+}
 .vx-table__empty {
   text-align: center;
   padding: 2.5rem;
@@ -3956,7 +4213,7 @@ a {
   z-index: 10;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
   .vx-public {
     background:
       radial-gradient(circle at 18% 10%, var(--vx-primary-soft) 0%, transparent 42%),
@@ -5827,6 +6084,113 @@ a {
   flex-wrap: wrap;
   justify-content: flex-start;
   overflow: visible;
+}
+
+/* ── Shell: tablet portrait — persistent icon rail + floating expand ── */
+
+/*
+  Tablet portrait mode overrides the default tablet (landscape/overlay) behaviour.
+  By default the sidebar stays in the layout flow as a collapsed icon rail (~60 px wide).
+  When the user taps the hamburger the rail floats open as an overlay without
+  displacing the main content. After the nav item is selected the existing
+  useEffect(() => setMobileNavOpen(false), [route]) closes it automatically.
+*/
+
+/* 1. Use collapsed-width variable for the rail */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) {
+  --vx-sidebar-width: var(--vx-sidebar-width-collapsed);
+}
+
+/* 2. Override the tablet fixed/off-screen sidebar → sticky in-layout rail */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar {
+  position: sticky;
+  top: 0;
+  inset-inline-start: auto;
+  width: var(--vx-sidebar-width);
+  min-width: var(--vx-sidebar-width);
+  height: 100%;
+  transform: none;
+  box-shadow: none;
+  border-right: 1px solid var(--vx-border);
+}
+
+/* 3. Floating expanded sidebar (overrides the sticky above when nav is open) */
+.vx-shell[data-tablet-portrait='true'][data-nav-open='true'] .vx-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(86vw, 320px);
+  min-width: min(86vw, 320px);
+  height: 100dvh;
+  transform: translateX(0);
+  box-shadow: var(--vx-shadow-lg);
+  border-right: 1px solid var(--vx-border);
+}
+
+/* 4. Rail: icon-only appearance (mirror data-collapsed='true' rules) */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-section-block__title,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__label,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__badge,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__trailing,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand-caption,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand-copy,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__toggle-label,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__footer-content {
+  display: none;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item {
+  justify-content: center;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__header {
+  padding-inline: 10px;
+  justify-content: center;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__footer {
+  align-items: center;
+  padding-inline: 10px;
+}
+
+/* 5. Rail sidebar is in layout — restore the dividing border on main */
+.vx-shell[data-tablet-portrait='true'] .vx-shell__main {
+  border-left: 1px solid var(--vx-border);
+}
+
+/* 6. Keep the sidebar collapse-toggle hidden; hamburger in topbar serves this role */
+.vx-shell[data-tablet-portrait='true'] .vx-sidebar__toggle {
+  display: none;
+}
+
+/* 7. Restore topbar layout (no wrap) because tablet portrait is wide enough */
+.vx-shell[data-tablet-portrait='true'] .vx-topbar {
+  flex-wrap: nowrap;
+  align-items: center;
+  height: var(--vx-header-height);
+  padding: 0 26px;
+  gap: 16px;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__menu {
+  display: none;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__title-group {
+  order: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 0;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__actions {
+  order: 0;
+  flex: 0 0 auto;
+  width: auto;
+  padding: 12px 0 12px 18px;
+  border-top: none;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
 }
 
 /* Non-shell layout: doc page grids and legal layout (breakpoint aligned with JS TABLET_MAX=1023) */

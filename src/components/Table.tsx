@@ -17,11 +17,22 @@ export interface TableColumn<T> {
 export interface TableProps<T> extends HTMLAttributes<HTMLDivElement> {
   columns: TableColumn<T>[];
   data: T[];
+  /** Row height preset. 'sm' replaces the legacy `compact` prop. */
+  size?: 'sm' | 'md' | 'lg';
   striped?: boolean;
   hoverable?: boolean;
   bordered?: boolean;
+  /** @deprecated Use size="sm" instead */
   compact?: boolean;
   stickyHeader?: boolean;
+  /** Remove all borders including the outer wrapper border */
+  borderless?: boolean;
+  /** Hide the header row */
+  headless?: boolean;
+  /** Remove the outer wrapper border-radius */
+  rounded?: boolean;
+  /** Show a loading overlay over the table body */
+  loading?: boolean;
   caption?: string;
   emptyText?: ReactNode;
   sortColumn?: string | null;
@@ -32,11 +43,16 @@ export interface TableProps<T> extends HTMLAttributes<HTMLDivElement> {
 export function Table<T>({
   columns,
   data,
+  size = 'md',
   striped = false,
   hoverable = true,
   bordered = false,
   compact = false,
   stickyHeader = false,
+  borderless = false,
+  headless = false,
+  rounded = true,
+  loading = false,
   caption,
   emptyText = '暂无数据',
   sortColumn: controlledSortCol,
@@ -45,6 +61,7 @@ export function Table<T>({
   className,
   ...props
 }: TableProps<T>) {
+  const resolvedSize = compact ? 'sm' : size;
   const [internalSortCol, setInternalSortCol] = useState<string | null>(null);
   const [internalSortDir, setInternalSortDir] = useState<SortDirection>(null);
 
@@ -72,19 +89,26 @@ export function Table<T>({
   }, [sortCol, sortDir, isControlled, onSortChange]);
 
   return (
-    <div className={cx('vx-table-wrap', className)} {...props}>
+    <div className={cx(
+      'vx-table-wrap',
+      borderless && 'vx-table-wrap--borderless',
+      !rounded && 'vx-table-wrap--square',
+      className,
+    )} {...props}>
       <table
         className={cx(
           'vx-table',
           striped && 'vx-table--striped',
           hoverable && 'vx-table--hoverable',
           bordered && 'vx-table--bordered',
-          compact && 'vx-table--compact',
+          borderless && 'vx-table--borderless',
+          resolvedSize !== 'md' && `vx-table--${resolvedSize}`,
           stickyHeader && 'vx-table--sticky',
         )}
       >
         {caption ? <caption className="vx-table__caption">{caption}</caption> : null}
-        <thead>
+        {!headless ? (
+          <thead>
           <tr>
             {columns.map((col) => (
               <th
@@ -114,8 +138,9 @@ export function Table<T>({
               </th>
             ))}
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+        ) : null}
+        <tbody className={cx(loading && 'vx-table__body--loading')}>
           {data.length === 0 ? (
             <tr>
               <td colSpan={columns.length} className="vx-table__empty">{emptyText}</td>

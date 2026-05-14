@@ -14,6 +14,7 @@ import {
   List,
   LogIn,
   MoreHorizontal,
+  Moon,
   Palette,
   PanelsTopLeft,
   Search,
@@ -21,6 +22,8 @@ import {
   SlidersHorizontal,
   Smartphone,
   Sparkles,
+  Sun,
+  Monitor,
   User,
   UserPlus,
   Zap,
@@ -52,6 +55,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Dialog,
   DropdownMenu,
   Input,
   Pagination,
@@ -59,6 +63,7 @@ import {
   Progress,
   Radio,
   RadioGroup,
+  SegmentedControl,
   Select,
   Skeleton,
   Slider,
@@ -70,6 +75,7 @@ import {
   Textarea,
   useTheme,
   useToast,
+  useViewport,
 } from './lib';
 
 const DOC_PAGE_KEYS = [
@@ -1093,6 +1099,7 @@ function DesktopApp() {
   const pages = t.pageDefs as Record<PageKey, PageDefinition>;
   const { push } = useToast();
   const { mode, setTheme, theme, themes } = useTheme();
+  const { isTablet, isTabletPortrait } = useViewport();
   const themeEntries = Object.entries(themes);
   const [route, setRoute] = useState<AppRoute>(() => {
     if (typeof window === 'undefined') return { view: 'home' };
@@ -1262,10 +1269,10 @@ function DesktopApp() {
   const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
   const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
   // Progressive toolbar overflow: estimate how many buttons fit in the available topbar width.
-  // In tablet mode (≤1023px) the actions row is full-width (topbar padding 20px×2=40px overhead).
-  // In desktop mode the overhead also reserves breadcrumb min-width + gaps (246px total).
-  const isTabletLayout = typeof window !== 'undefined' && window.innerWidth <= 1023;
-  const TOOLBAR_OVERHEAD = isTabletLayout ? 40 : 246;
+  // In tablet mode (≤1023px, landscape) the actions row wraps to a new full-width line (padding overhead ≈ 40px).
+  // In desktop mode or tablet portrait, actions are inline and share space with breadcrumbs (overhead ≈ 246px).
+  const isTabletLandscape = isTablet && !isTabletPortrait;
+  const TOOLBAR_OVERHEAD = isTabletLandscape ? 40 : (isTabletPortrait ? 130 : 246);
   const TOOLBAR_GAP = 10;
   const MORE_BTN_WIDTH = 92;
   // Estimated widths (px) for each sm button in priority order
@@ -1567,7 +1574,19 @@ function DesktopApp() {
 
   useEffect(() => {
     setMobileNavOpen(false);
-  }, [route]);
+    
+    // Automatically reset scroll position across the app on route change
+    // Using setTimeout ensures we wait for react to fully render the new route's DOM content
+    // before we attempt to override the scroll position.
+    setTimeout(() => {
+      const scrollable = document.querySelector('.vx-shell__content');
+      if (scrollable) {
+        scrollable.scrollTop = 0;
+      } else {
+        window.scrollTo(0, 0);
+      }
+    }, 50);
+  }, [route.view, route.page]);
 
   useEffect(() => {
     if (!isDocDetailPage) {
@@ -1575,7 +1594,6 @@ function DesktopApp() {
       return;
     }
 
-    docHeaderRef.current?.scrollIntoView({ block: 'start' });
     setIsDocHeaderInView(true);
   }, [isDocDetailPage, activePage]);
 
@@ -1939,6 +1957,19 @@ function DesktopApp() {
                 onChange={() => setRadioValue('compact')}
               />
             </RadioGroup>
+
+            <div style={{ marginTop: 24, marginBottom: 8 }}>
+              <SegmentedControl
+                value={radioValue}
+                onChange={setRadioValue}
+                fullWidth
+                options={[
+                  { label: <><Monitor size={16} />{isZh ? '跟随系统' : 'System'}</>, value: 'system' },
+                  { label: <><Sun size={16} />{isZh ? '浅色' : 'Light'}</>, value: 'comfortable' },
+                  { label: <><Moon size={16} />{isZh ? '深色' : 'Dark'}</>, value: 'compact' }
+                ]}
+              />
+            </div>
             <Slider
               label={isZh ? '文档完成度' : 'Documentation coverage'}
               max={100}
@@ -2062,6 +2093,21 @@ function DesktopApp() {
       case 'overlays':
         return (
           <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+            <Dialog
+              trigger={<Button variant="secondary">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
+              title={isZh ? '删除项目' : 'Delete project'}
+              description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
+              footer={
+                <>
+                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
+                  <Button variant="danger">{isZh ? '删除' : 'Delete'}</Button>
+                </>
+              }
+            >
+              <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>
+                {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
+              </div>
+            </Dialog>
             <Popover
               content={
                 <div className="vx-doc-popover-copy">
@@ -2685,6 +2731,13 @@ function DesktopApp() {
         navSections={navSections}
         onMobileNavToggle={() => setMobileNavOpen((current) => !current)}
         onSidebarToggle={() => setSidebarCollapsed((current) => !current)}
+        onSidebarClick={(e) => {
+          if (isTabletPortrait && !mobileNavOpen) {
+            e.stopPropagation();
+            e.preventDefault();
+            setMobileNavOpen(true);
+          }
+        }}
         sidebarCloseLabel={t.sidebarCloseLabel}
         sidebarCollapseLabel={t.sidebarCollapse}
         sidebarExpandLabel={t.sidebarExpand}

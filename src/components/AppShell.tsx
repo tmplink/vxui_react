@@ -56,6 +56,7 @@ export interface AppShellProps {
   density?: 'comfortable' | 'compact';
   onSidebarToggle?: () => void;
   onMobileNavToggle?: () => void;
+  onSidebarClick?: (e: React.MouseEvent<HTMLElement>) => void;
   menuButtonLabel?: string;
   sidebarCollapseLabel?: string;
   sidebarExpandLabel?: string;
@@ -79,6 +80,7 @@ export function AppShell({
   mobileNavOpen = false,
   onSidebarToggle,
   onMobileNavToggle,
+  onSidebarClick,
   menuButtonLabel = 'Open navigation',
   sidebarCollapseLabel = 'Collapse',
   sidebarExpandLabel = 'Expand',
@@ -99,6 +101,7 @@ export function AppShell({
         collapsed={sidebarCollapsed}
         footer={sidebarFooter}
         onToggle={onSidebarToggle}
+        onSidebarClick={onSidebarClick}
         collapseLabel={sidebarCollapseLabel}
         expandLabel={sidebarExpandLabel}
       >

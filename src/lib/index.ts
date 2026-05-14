@@ -65,6 +65,9 @@ export { Select } from '../components/Select';
 export type { SelectProps } from '../components/Select';
 export { Checkbox } from '../components/Checkbox';
 export type { CheckboxProps } from '../components/Checkbox';
+
+export { SegmentedControl } from '../components/SegmentedControl';
+export type { SegmentedControlProps, SegmentedControlOption } from '../components/SegmentedControl';
 export { Radio, RadioGroup } from '../components/Radio';
 export type { RadioProps, RadioGroupProps } from '../components/Radio';
 export { Textarea } from '../components/Textarea';
