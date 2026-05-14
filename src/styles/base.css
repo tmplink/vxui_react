@@ -54,6 +54,18 @@
   --vx-sidebar-width-collapsed: 72px;
   --vx-header-height: 92px;
   --vx-content-width: 1100px;
+  --vx-z-layout: 10;
+  --vx-z-layout-rail: 20;
+  --vx-z-screen: 200;
+  --vx-z-popover: 120;
+  --vx-z-menu: 140;
+  --vx-z-context-menu: 160;
+  --vx-z-sheet-overlay: 400;
+  --vx-z-sheet: 410;
+  --vx-z-dialog-overlay: 500;
+  --vx-z-dialog: 510;
+  --vx-z-command: 620;
+  --vx-z-toast: 720;
 }
 
 :root[data-theme='dark'] {
@@ -272,7 +284,7 @@ a {
   flex-direction: column;
   overflow: hidden;
   transition: width 180ms ease, transform 180ms ease;
-  z-index: 20;
+  z-index: var(--vx-z-layout-rail);
 }
 
 .vx-sidebar__scroll {
@@ -509,7 +521,7 @@ a {
 .vx-topbar {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: var(--vx-z-layout);
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
@@ -1596,7 +1608,7 @@ a {
 .vx-dialog__overlay {
   position: fixed;
   inset: 0;
-  z-index: 850;
+  z-index: var(--vx-z-dialog-overlay);
   background: var(--vx-glass-scrim);
   backdrop-filter: blur(14px) saturate(1.08);
   -webkit-backdrop-filter: blur(14px) saturate(1.08);
@@ -1617,7 +1629,7 @@ a {
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 851;
+  z-index: var(--vx-z-dialog);
   width: min(560px, calc(100vw - 32px));
   transform: translate(-50%, -50%);
   padding: 20px;
@@ -1659,13 +1671,33 @@ a {
 }
 
 .vx-dialog__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
   width: 36px;
   height: 36px;
-  border: 0;
+  padding: 0;
+  border: 1px solid transparent;
   border-radius: 10px;
-  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  background: color-mix(in srgb, var(--vx-bg-accent) 54%, transparent);
   color: var(--vx-text-secondary);
   cursor: pointer;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease;
+}
+
+.vx-dialog__close:hover {
+  background: color-mix(in srgb, var(--vx-bg-accent) 88%, var(--vx-surface));
+  border-color: color-mix(in srgb, var(--vx-border-strong) 72%, transparent);
+  color: var(--vx-text);
+}
+
+.vx-dialog__close:active {
+  transform: scale(0.97);
 }
 
 /* Dialog size variants */
@@ -1700,7 +1732,7 @@ a {
   margin: 0;
   padding: 0;
   list-style: none;
-  z-index: 960;
+  z-index: var(--vx-z-toast);
 }
 
 .vx-toast {
@@ -1993,7 +2025,7 @@ a {
 .vxm-shell__topbar {
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: var(--vx-z-layout-rail);
   flex: 0 0 auto;
 }
 
@@ -2009,7 +2041,7 @@ a {
   position: sticky;
   bottom: 0;
   flex: 0 0 auto;
-  z-index: 20;
+  z-index: var(--vx-z-layout-rail);
 }
 
 /* MobileTopBar */
@@ -2155,7 +2187,7 @@ a {
 .vxm-actionsheet__overlay {
   position: fixed;
   inset: 0;
-  z-index: 800;
+  z-index: var(--vx-z-sheet-overlay);
   background: var(--vx-glass-scrim);
   backdrop-filter: blur(14px) saturate(1.06);
   -webkit-backdrop-filter: blur(14px) saturate(1.06);
@@ -2440,7 +2472,7 @@ a {
 .vxm-drawer__overlay {
   position: absolute;
   inset: 0;
-  z-index: 800;
+  z-index: var(--vx-z-sheet-overlay);
   display: flex;
 }
 
@@ -2580,7 +2612,7 @@ a {
 .vxm-fullscreen-preview {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: var(--vx-z-screen);
   display: flex;
   flex-direction: column;
   background: var(--vx-bg);
@@ -2601,7 +2633,7 @@ a {
   padding: 0 16px;
   background: var(--vx-surface-strong);
   border-bottom: 1px solid var(--vx-border);
-  z-index: 10;
+  z-index: var(--vx-z-layout);
 }
 
 .vxm-fullscreen-preview__label {
@@ -3135,7 +3167,7 @@ a {
 }
 .vx-popover {
   position: absolute;
-  z-index: 500;
+  z-index: var(--vx-z-popover);
   background: var(--vx-glass-bg);
   backdrop-filter: var(--vx-glass-filter);
   -webkit-backdrop-filter: var(--vx-glass-filter);
@@ -3156,7 +3188,7 @@ a {
 .vx-dropdown__trigger { cursor: pointer; display: inline-flex; align-items: center; }
 .vx-dropdown__menu {
   position: absolute;
-  z-index: 600;
+  z-index: var(--vx-z-menu);
   top: calc(100% + 4px);
   background: var(--vx-glass-bg);
   backdrop-filter: var(--vx-glass-filter);
@@ -3441,7 +3473,7 @@ a {
 .vx-cmd__backdrop {
   position: fixed;
   inset: 0;
-  z-index: 900;
+  z-index: var(--vx-z-command);
   background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: flex-start;
@@ -6020,7 +6052,7 @@ a {
   opacity: 0;
   pointer-events: none;
   transition: opacity 180ms ease;
-  z-index: 18;
+  z-index: calc(var(--vx-z-layout-rail) - 1);
 }
 
 .vx-shell[data-tablet='true'][data-nav-open='true'] .vx-shell__overlay {
@@ -6417,7 +6449,7 @@ a {
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 851;
+  z-index: var(--vx-z-dialog);
   width: min(440px, calc(100vw - 32px));
   transform: translate(-50%, -50%);
   padding: 24px;
@@ -6638,7 +6670,7 @@ a {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
-  z-index: 700;
+  z-index: var(--vx-z-menu);
   animation: vx-fade-in 140ms ease;
 }
 
@@ -6712,7 +6744,7 @@ a {
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  z-index: 700;
+  z-index: var(--vx-z-menu);
   background: var(--vx-glass-bg);
   backdrop-filter: var(--vx-glass-filter);
   -webkit-backdrop-filter: var(--vx-glass-filter);
@@ -6898,12 +6930,12 @@ a {
   background: var(--vx-glass-scrim);
   backdrop-filter: blur(8px) saturate(1.08);
   -webkit-backdrop-filter: blur(8px) saturate(1.08);
-  z-index: 800;
+  z-index: var(--vx-z-sheet-overlay);
   animation: vx-fade-in 200ms ease;
 }
 .vx-sheet {
   position: fixed;
-  z-index: 801;
+  z-index: var(--vx-z-sheet);
   background: var(--vx-glass-bg-strong);
   backdrop-filter: var(--vx-glass-filter);
   -webkit-backdrop-filter: var(--vx-glass-filter);
@@ -7066,6 +7098,10 @@ a {
   display: contents;
 }
 
+.vx-context-menu {
+  z-index: var(--vx-z-context-menu);
+}
+
 /* ── HoverCard ─────────────────────────────────────────────── */
 .vx-hovercard-wrap {
   position: relative;
@@ -7073,7 +7109,7 @@ a {
 }
 .vx-hovercard {
   position: absolute;
-  z-index: 600;
+  z-index: var(--vx-z-popover);
   background: var(--vx-glass-bg);
   backdrop-filter: var(--vx-glass-filter);
   -webkit-backdrop-filter: var(--vx-glass-filter);
@@ -7177,7 +7213,7 @@ a {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
-  z-index: 700;
+  z-index: var(--vx-z-menu);
   min-width: 220px;
   background: var(--vx-glass-bg);
   backdrop-filter: var(--vx-glass-filter);
@@ -7742,7 +7778,7 @@ a {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
-  z-index: 800;
+  z-index: var(--vx-z-menu);
   padding: 14px;
   width: 240px;
   background: var(--vx-glass-bg-strong);

@@ -1,4 +1,4 @@
-# VXUI React · v1.1.2
+# VXUI React · v1.1.3
 
 **官网**：[ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**：[tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [English](README.en.md)
 
