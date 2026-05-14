@@ -1064,6 +1064,33 @@ a {
   border-radius: 9999px;
 }
 
+.vx-button--circle {
+  border-radius: 9999px;
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+/* Loading state */
+.vx-button--loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.vx-button__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: vx-spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes vx-spin {
+  to { transform: rotate(360deg); }
+}
+
 .vx-button--gradient {
   color: #ffffff;
   background: linear-gradient(135deg, #4f46e5, #7c3aed);
@@ -1212,6 +1239,55 @@ a {
   box-shadow: var(--vx-shadow-sm);
 }
 
+/* Card variants */
+.vx-card--flat {
+  box-shadow: none;
+}
+
+.vx-card--elevated {
+  box-shadow:
+    0 4px 12px -2px color-mix(in srgb, var(--vx-text) 10%, transparent),
+    0 12px 32px -4px color-mix(in srgb, var(--vx-text) 8%, transparent);
+}
+
+.vx-card--outlined {
+  background: transparent;
+  box-shadow: none;
+  border-color: var(--vx-border-strong);
+  border-width: 2px;
+}
+
+.vx-card--ghost {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.vx-card--filled {
+  background: var(--vx-bg-accent);
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Card padding overrides */
+.vx-card--pad-none { padding: 0; gap: 0; }
+.vx-card--pad-sm   { padding: 10px; gap: 10px; }
+.vx-card--pad-md   { padding: 18px; gap: 14px; }
+.vx-card--pad-lg   { padding: 28px; gap: 20px; }
+
+/* Hoverable card */
+.vx-card--hoverable {
+  cursor: pointer;
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.vx-card--hoverable:hover {
+  box-shadow:
+    0 6px 18px -2px color-mix(in srgb, var(--vx-text) 12%, transparent),
+    0 16px 36px -4px color-mix(in srgb, var(--vx-text) 8%, transparent);
+  transform: translateY(-2px);
+}
+
 .vx-card__header {
   display: flex;
   flex-direction: column;
@@ -1291,6 +1367,50 @@ a {
   border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border));
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--vx-danger) 18%, transparent);
 }
+
+/* Input variants */
+.vx-input--filled {
+  background: var(--vx-bg-accent);
+  border-color: transparent;
+}
+
+.vx-input--filled:focus-within {
+  border-color: var(--vx-primary);
+  background: var(--vx-surface);
+}
+
+.vx-input--underline {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vx-border);
+  border-radius: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.vx-input--underline:focus-within {
+  border-bottom-color: var(--vx-primary);
+  box-shadow: 0 1px 0 0 var(--vx-primary);
+  outline: none;
+}
+
+.vx-input--borderless {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.vx-input--borderless:focus-within {
+  background: var(--vx-bg-accent);
+  outline: none;
+}
+
+/* Input sizes */
+.vx-input--sm { min-height: 34px; font-size: 13px; padding: 0 10px; }
+.vx-input--lg { min-height: 52px; font-size: 16px; padding: 0 16px; }
+
+/* Rounded / pill input */
+.vx-input--rounded { border-radius: 9999px; }
 
 .vx-input__ornament {
   color: var(--vx-text-muted);
@@ -3174,6 +3294,28 @@ a {
 .vx-table--compact .vx-table__th { padding: 0.375rem 0.75rem; }
 .vx-table--compact .vx-table__td { padding: 0.4375rem 0.75rem; }
 .vx-table--sticky thead { position: sticky; top: 0; z-index: 1; }
+
+/* Table size variants */
+.vx-table--sm .vx-table__th { padding: 0.375rem 0.75rem; font-size: 0.6875rem; }
+.vx-table--sm .vx-table__td { padding: 0.4375rem 0.75rem; font-size: 0.8125rem; }
+.vx-table--lg .vx-table__th { padding: 1rem 1.25rem; font-size: 0.8125rem; }
+.vx-table--lg .vx-table__td { padding: 1rem 1.25rem; font-size: 0.9375rem; }
+
+/* Borderless table */
+.vx-table-wrap--borderless { border: none; box-shadow: none; }
+.vx-table--borderless .vx-table__th { border-bottom: none; }
+.vx-table--borderless .vx-table__td { border-bottom: none; }
+.vx-table--borderless .vx-table__row:last-child .vx-table__td { border-bottom: none; }
+
+/* Square wrapper (no radius) */
+.vx-table-wrap--square { border-radius: 0; }
+
+/* Loading overlay */
+.vx-table__body--loading {
+  position: relative;
+  opacity: 0.45;
+  pointer-events: none;
+}
 .vx-table__empty {
   text-align: center;
   padding: 2.5rem;
