@@ -56,8 +56,8 @@ export function ContextMenu({ groups, items, children, className }: ContextMenuP
       {pos && (
         <div
           ref={menuRef}
-          className="vx-dropdown__menu"
-          style={{ position: 'fixed', top: pos.y, left: pos.x, zIndex: 9999 }}
+          className="vx-dropdown__menu vx-context-menu"
+          style={{ position: 'fixed', top: pos.y, left: pos.x }}
           role="menu"
         >
           {sections.map((group, gi) => (
