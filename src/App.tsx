@@ -70,6 +70,7 @@ import {
   Textarea,
   useTheme,
   useToast,
+  useViewport,
 } from './lib';
 
 const DOC_PAGE_KEYS = [
@@ -1093,6 +1094,7 @@ function DesktopApp() {
   const pages = t.pageDefs as Record<PageKey, PageDefinition>;
   const { push } = useToast();
   const { mode, setTheme, theme, themes } = useTheme();
+  const { isTablet, isTabletPortrait } = useViewport();
   const themeEntries = Object.entries(themes);
   const [route, setRoute] = useState<AppRoute>(() => {
     if (typeof window === 'undefined') return { view: 'home' };
@@ -1262,10 +1264,10 @@ function DesktopApp() {
   const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
   const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
   // Progressive toolbar overflow: estimate how many buttons fit in the available topbar width.
-  // In tablet mode (≤1023px) the actions row is full-width (topbar padding 20px×2=40px overhead).
-  // In desktop mode the overhead also reserves breadcrumb min-width + gaps (246px total).
-  const isTabletLayout = typeof window !== 'undefined' && window.innerWidth <= 1023;
-  const TOOLBAR_OVERHEAD = isTabletLayout ? 40 : 246;
+  // In tablet mode (≤1023px, landscape) the actions row wraps to a new full-width line (padding overhead ≈ 40px).
+  // In desktop mode or tablet portrait, actions are inline and share space with breadcrumbs (overhead ≈ 246px).
+  const isTabletLandscape = isTablet && !isTabletPortrait;
+  const TOOLBAR_OVERHEAD = isTabletLandscape ? 40 : (isTabletPortrait ? 130 : 246);
   const TOOLBAR_GAP = 10;
   const MORE_BTN_WIDTH = 92;
   // Estimated widths (px) for each sm button in priority order
@@ -1567,6 +1569,16 @@ function DesktopApp() {
 
   useEffect(() => {
     setMobileNavOpen(false);
+    
+    // Automatically reset scroll position across the app on route change
+    requestAnimationFrame(() => {
+      const scrollable = document.querySelector('.vx-shell__content');
+      if (scrollable) {
+        scrollable.scrollTop = 0;
+      } else {
+        window.scrollTo(0, 0);
+      }
+    });
   }, [route]);
 
   useEffect(() => {
@@ -1575,7 +1587,6 @@ function DesktopApp() {
       return;
     }
 
-    docHeaderRef.current?.scrollIntoView({ block: 'start' });
     setIsDocHeaderInView(true);
   }, [isDocDetailPage, activePage]);
 
@@ -2685,6 +2696,13 @@ function DesktopApp() {
         navSections={navSections}
         onMobileNavToggle={() => setMobileNavOpen((current) => !current)}
         onSidebarToggle={() => setSidebarCollapsed((current) => !current)}
+        onSidebarClick={(e) => {
+          if (isTabletPortrait && !mobileNavOpen) {
+            e.stopPropagation();
+            e.preventDefault();
+            setMobileNavOpen(true);
+          }
+        }}
         sidebarCloseLabel={t.sidebarCloseLabel}
         sidebarCollapseLabel={t.sidebarCollapse}
         sidebarExpandLabel={t.sidebarExpand}

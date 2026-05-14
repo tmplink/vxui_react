@@ -4119,7 +4119,7 @@ a {
   z-index: 10;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
   .vx-public {
     background:
       radial-gradient(circle at 18% 10%, var(--vx-primary-soft) 0%, transparent 42%),
@@ -5990,6 +5990,113 @@ a {
   flex-wrap: wrap;
   justify-content: flex-start;
   overflow: visible;
+}
+
+/* ── Shell: tablet portrait — persistent icon rail + floating expand ── */
+
+/*
+  Tablet portrait mode overrides the default tablet (landscape/overlay) behaviour.
+  By default the sidebar stays in the layout flow as a collapsed icon rail (~60 px wide).
+  When the user taps the hamburger the rail floats open as an overlay without
+  displacing the main content. After the nav item is selected the existing
+  useEffect(() => setMobileNavOpen(false), [route]) closes it automatically.
+*/
+
+/* 1. Use collapsed-width variable for the rail */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) {
+  --vx-sidebar-width: var(--vx-sidebar-width-collapsed);
+}
+
+/* 2. Override the tablet fixed/off-screen sidebar → sticky in-layout rail */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar {
+  position: sticky;
+  top: 0;
+  inset-inline-start: auto;
+  width: var(--vx-sidebar-width);
+  min-width: var(--vx-sidebar-width);
+  height: 100%;
+  transform: none;
+  box-shadow: none;
+  border-right: 1px solid var(--vx-border);
+}
+
+/* 3. Floating expanded sidebar (overrides the sticky above when nav is open) */
+.vx-shell[data-tablet-portrait='true'][data-nav-open='true'] .vx-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(86vw, 320px);
+  min-width: min(86vw, 320px);
+  height: 100dvh;
+  transform: translateX(0);
+  box-shadow: var(--vx-shadow-lg);
+  border-right: 1px solid var(--vx-border);
+}
+
+/* 4. Rail: icon-only appearance (mirror data-collapsed='true' rules) */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-section-block__title,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__label,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__badge,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__trailing,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand-caption,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand-copy,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__toggle-label,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__footer-content {
+  display: none;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item {
+  justify-content: center;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__header {
+  padding-inline: 10px;
+  justify-content: center;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__footer {
+  align-items: center;
+  padding-inline: 10px;
+}
+
+/* 5. Rail sidebar is in layout — restore the dividing border on main */
+.vx-shell[data-tablet-portrait='true'] .vx-shell__main {
+  border-left: 1px solid var(--vx-border);
+}
+
+/* 6. Keep the sidebar collapse-toggle hidden; hamburger in topbar serves this role */
+.vx-shell[data-tablet-portrait='true'] .vx-sidebar__toggle {
+  display: none;
+}
+
+/* 7. Restore topbar layout (no wrap) because tablet portrait is wide enough */
+.vx-shell[data-tablet-portrait='true'] .vx-topbar {
+  flex-wrap: nowrap;
+  align-items: center;
+  height: var(--vx-header-height);
+  padding: 0 26px;
+  gap: 16px;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__menu {
+  display: none;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__title-group {
+  order: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 0;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__actions {
+  order: 0;
+  flex: 0 0 auto;
+  width: auto;
+  padding: 12px 0 12px 18px;
+  border-top: none;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
 }
 
 /* Non-shell layout: doc page grids and legal layout (breakpoint aligned with JS TABLET_MAX=1023) */
