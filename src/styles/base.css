@@ -1516,7 +1516,17 @@ a {
   background: var(--vx-glass-scrim);
   backdrop-filter: blur(14px) saturate(1.08);
   -webkit-backdrop-filter: blur(14px) saturate(1.08);
-  animation: vx-fade-in 200ms ease;
+  animation: vx-opacity-in 200ms ease;
+}
+
+@keyframes vx-dialog-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes vx-opacity-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .vx-dialog__content {
@@ -1533,7 +1543,7 @@ a {
   -webkit-backdrop-filter: var(--vx-glass-filter);
   border: 1px solid var(--vx-glass-border);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
-  animation: vx-fade-in 150ms ease;
+  animation: vx-dialog-in 150ms ease;
 }
 
 .vx-dialog__header,

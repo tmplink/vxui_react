@@ -52,6 +52,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Dialog,
   DropdownMenu,
   Input,
   Pagination,
@@ -2073,6 +2074,21 @@ function DesktopApp() {
       case 'overlays':
         return (
           <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+            <Dialog
+              trigger={<Button variant="secondary">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
+              title={isZh ? '删除项目' : 'Delete project'}
+              description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
+              footer={
+                <>
+                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
+                  <Button variant="danger">{isZh ? '删除' : 'Delete'}</Button>
+                </>
+              }
+            >
+              <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>
+                {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
+              </div>
+            </Dialog>
             <Popover
               content={
                 <div className="vx-doc-popover-copy">
