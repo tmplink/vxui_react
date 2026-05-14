@@ -14,6 +14,7 @@ import {
   List,
   LogIn,
   MoreHorizontal,
+  Moon,
   Palette,
   PanelsTopLeft,
   Search,
@@ -21,6 +22,8 @@ import {
   SlidersHorizontal,
   Smartphone,
   Sparkles,
+  Sun,
+  Monitor,
   User,
   UserPlus,
   Zap,
@@ -60,6 +63,7 @@ import {
   Progress,
   Radio,
   RadioGroup,
+  SegmentedControl,
   Select,
   Skeleton,
   Slider,
@@ -1953,6 +1957,19 @@ function DesktopApp() {
                 onChange={() => setRadioValue('compact')}
               />
             </RadioGroup>
+
+            <div style={{ marginTop: 24, marginBottom: 8 }}>
+              <SegmentedControl
+                value={radioValue}
+                onChange={setRadioValue}
+                fullWidth
+                options={[
+                  { label: <><Monitor size={16} />{isZh ? '跟随系统' : 'System'}</>, value: 'system' },
+                  { label: <><Sun size={16} />{isZh ? '浅色' : 'Light'}</>, value: 'comfortable' },
+                  { label: <><Moon size={16} />{isZh ? '深色' : 'Dark'}</>, value: 'compact' }
+                ]}
+              />
+            </div>
             <Slider
               label={isZh ? '文档完成度' : 'Documentation coverage'}
               max={100}

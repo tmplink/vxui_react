@@ -1449,6 +1449,90 @@ a {
   margin-top: 16px;
 }
 
+/* ── Segmented Control ───────────────────────── */
+.vx-segmented-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--vx-bg-accent);
+  border: 1px solid var(--vx-border);
+  z-index: 0;
+}
+
+.vx-segmented-control--full {
+  display: flex;
+  width: 100%;
+}
+
+.vx-segmented-control--full .vx-segmented-control__item {
+  flex: 1 1 auto;
+}
+
+.vx-segmented-control__slider {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: 8px;
+  background: var(--vx-surface);
+  box-shadow: var(--vx-shadow-sm);
+  transition: transform 250ms cubic-bezier(0.3, 0, 0, 1), width 250ms cubic-bezier(0.3, 0, 0, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.vx-segmented-control__item {
+  position: relative;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--vx-text-secondary);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 200ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 1;
+}
+
+.vx-segmented-control--sm .vx-segmented-control__item {
+  min-height: 28px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.vx-segmented-control--md .vx-segmented-control__item {
+  min-height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.vx-segmented-control--lg .vx-segmented-control__item {
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 15px;
+}
+
+.vx-segmented-control__item:hover:not(:disabled) {
+  color: var(--vx-text);
+}
+
+.vx-segmented-control__item--active {
+  color: var(--vx-text);
+  font-weight: 600;
+}
+
+.vx-segmented-control__item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .vx-switch {
   display: flex;
   justify-content: space-between;
