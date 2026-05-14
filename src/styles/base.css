@@ -1574,6 +1574,27 @@ a {
   cursor: pointer;
 }
 
+/* Dialog size variants */
+.vx-dialog__content--sm { width: min(400px, calc(100vw - 32px)); }
+.vx-dialog__content--lg { width: min(720px, calc(100vw - 32px)); }
+.vx-dialog__content--xl { width: min(960px, calc(100vw - 32px)); }
+.vx-dialog__content--full {
+  width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+}
+
+/* Scrollable body */
+.vx-dialog__content--scrollable .vx-dialog__body {
+  max-height: 60vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Padding variants */
+.vx-dialog__content--pad-none { padding: 0; }
+.vx-dialog__content--pad-sm { padding: 12px; }
+.vx-dialog__content--pad-lg { padding: 32px; }
+
 .vx-toast__viewport {
   position: fixed;
   right: 18px;
