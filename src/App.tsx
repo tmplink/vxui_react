@@ -1572,15 +1572,17 @@ function DesktopApp() {
     setMobileNavOpen(false);
     
     // Automatically reset scroll position across the app on route change
-    requestAnimationFrame(() => {
+    // Using setTimeout ensures we wait for react to fully render the new route's DOM content
+    // before we attempt to override the scroll position.
+    setTimeout(() => {
       const scrollable = document.querySelector('.vx-shell__content');
       if (scrollable) {
         scrollable.scrollTop = 0;
       } else {
         window.scrollTo(0, 0);
       }
-    });
-  }, [route]);
+    }, 50);
+  }, [route.view, route.page]);
 
   useEffect(() => {
     if (!isDocDetailPage) {
