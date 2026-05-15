@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useState, useRef, useEffect, useId } from 'react';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
+import { useDropDirection } from '../hooks/useDropDirection';
 
 export interface ComboboxOption {
   value: string;
@@ -57,6 +58,7 @@ export function Combobox({
   const wrapRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
+  const dropDirection = useDropDirection(wrapRef, open, 280);
 
   const selectedOption = options.find((o) => o.value === value);
   const filtered = options.filter((o) =>
@@ -144,7 +146,7 @@ export function Combobox({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (
-        <div className="vx-combobox__dropdown">
+        <div className={cx('vx-combobox__dropdown', dropDirection === 'up' && 'vx-combobox__dropdown--up')}>
           {showSearch && (
             <div className="vx-combobox__search-wrap">
               <input

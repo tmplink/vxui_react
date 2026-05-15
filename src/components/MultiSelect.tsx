@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useId } from 'react';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
+import { useDropDirection } from '../hooks/useDropDirection';
 
 export interface MultiSelectOption {
   value: string;
@@ -51,6 +52,7 @@ export function MultiSelect({
   const wrapRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
+  const dropDirection = useDropDirection(wrapRef, open, 300);
 
   const filtered = options.filter((o) =>
     o.label.toLowerCase().includes(search.toLowerCase()),
@@ -172,7 +174,7 @@ export function MultiSelect({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (
-        <div className="vx-multiselect__dropdown">
+        <div className={cx('vx-multiselect__dropdown', dropDirection === 'up' && 'vx-multiselect__dropdown--up')}>
           <div className="vx-multiselect__search-wrap">
             <input
               ref={searchRef}

@@ -6850,6 +6850,10 @@ a {
   z-index: var(--vx-z-menu);
   animation: vx-fade-in 140ms ease;
 }
+.vx-datepicker__popover--up {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
 
 /* ── Combobox ──────────────────────────────────────────────── */
 .vx-combobox {
@@ -6930,6 +6934,10 @@ a {
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   animation: vx-fade-in 140ms ease;
   overflow: hidden;
+}
+.vx-combobox__dropdown--up {
+  top: auto;
+  bottom: calc(100% + 4px);
 }
 .vx-combobox__search-wrap {
   padding: 8px 8px 4px;
@@ -7114,6 +7122,10 @@ a {
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   overflow: hidden;
 }
+.vx-multiselect__dropdown--up {
+  top: auto;
+  bottom: calc(100% + 4px);
+}
 .vx-multiselect__search-wrap {
   padding: 8px;
   border-bottom: 1px solid var(--vx-border);
@@ -7239,6 +7251,10 @@ a {
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   padding: 12px 12px 10px;
   min-width: 160px;
+}
+.vx-timepicker__popover--up {
+  top: auto;
+  bottom: calc(100% + 4px);
 }
 .vx-timepicker__columns {
   display: flex;
@@ -8466,5 +8482,60 @@ a {
 .vx-resizable-handle:hover .vx-resizable-handle__bar,
 .vx-resizable-handle--active .vx-resizable-handle__bar {
   background: var(--vx-primary);
+}
+
+/* ── Mobile form adaptations ─────────────────────────────────
+   On small screens (≤ 640px):
+   • Input font-size ≥ 16px  → prevents iOS auto-zoom
+   • Touch targets ≥ 44px    → meets WCAG 2.5.5 AA
+   • Larger checkbox/radio controls for finger tapping
+   • Slightly larger label / hint / error text
+───────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* ── Spacing ── */
+  .vx-form        { gap: 20px; }
+  .vx-form-field  { gap: 8px; }
+  .vx-field-group { gap: 10px; }
+
+  /* ── Label / helper text ── */
+  .vx-form-label,
+  .vx-field-group__label            { font-size: 14px; }
+  .vx-form-description,
+  .vx-form-message,
+  .vx-field-group__hint,
+  .vx-field-group__error            { font-size: 13px; }
+
+  /* ── Text input (iOS: font-size < 16px triggers auto-zoom) ── */
+  .vx-input                         { min-height: 44px; font-size: 16px; }
+  .vx-input__field                  { font-size: 16px; }
+
+  .vx-select__field                 { min-height: 44px; font-size: 16px; padding-top: 0.625rem; padding-bottom: 0.625rem; }
+
+  .vx-textarea                      { font-size: 16px; }
+
+  .vx-number-input                  { min-height: 44px; }
+  .vx-number-input__btn             { min-height: 44px; }
+  .vx-number-input__field           { font-size: 16px; }
+
+  /* ── Combobox / DatePicker / TimePicker / MultiSelect ── */
+  .vx-combobox__trigger             { min-height: 44px; font-size: 16px; }
+  .vx-datepicker__trigger           { min-height: 44px; font-size: 16px; }
+  .vx-timepicker__trigger           { min-height: 44px; height: 44px; }
+  .vx-timepicker__value             { font-size: 16px; }
+  .vx-multiselect__trigger          { min-height: 44px; }
+  .vx-multiselect__placeholder      { font-size: 15px; }
+
+  /* ── TagInput ── */
+  .vx-tag-input__wrap               { min-height: 44px; }
+  .vx-tag-input__input              { font-size: 16px; }
+
+  /* ── Checkbox ── */
+  .vx-checkbox                      { gap: 10px; padding: 4px 0; }
+  .vx-checkbox__control-wrap        { width: 20px; height: 20px; }
+
+  /* ── Radio ── */
+  .vx-radio                         { gap: 10px; padding: 4px 0; }
+  .vx-radio__control-wrap           { width: 20px; height: 20px; }
+  .vx-radio__dot                    { width: 8px; height: 8px; }
 }
 

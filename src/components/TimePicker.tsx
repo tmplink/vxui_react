@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { cx } from '../lib/cx';
+import { useDropDirection } from '../hooks/useDropDirection';
 
 function pad(n: number): string {
   return String(n).padStart(2, '0');
@@ -145,6 +146,7 @@ export function TimePicker({
 
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const dropDirection = useDropDirection(wrapRef, open, 220);
 
   // Sync local state when controlled value changes
   useEffect(() => {
@@ -208,7 +210,7 @@ export function TimePicker({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (
-        <div className="vx-timepicker__popover" role="dialog" aria-label="Time picker">
+        <div className={cx('vx-timepicker__popover', dropDirection === 'up' && 'vx-timepicker__popover--up')} role="dialog" aria-label="Time picker">
           <div className="vx-timepicker__columns">
             <SpinnerColumn value={h} min={0} max={23} onChange={handleH} label="Hours" />
             <span className="vx-timepicker__sep">:</span>
