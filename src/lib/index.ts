@@ -145,6 +145,14 @@ export type { DatePickerProps } from '../components/DatePicker';
 export { Combobox } from '../components/Combobox';
 export type { ComboboxProps, ComboboxOption } from '../components/Combobox';
 
+// New: MultiSelect
+export { MultiSelect } from '../components/MultiSelect';
+export type { MultiSelectProps, MultiSelectOption } from '../components/MultiSelect';
+
+// New: TimePicker
+export { TimePicker } from '../components/TimePicker';
+export type { TimePickerProps } from '../components/TimePicker';
+
 // New: File Upload
 export { FileUpload } from '../components/FileUpload';
 export type { FileUploadProps, UploadedFile } from '../components/FileUpload';

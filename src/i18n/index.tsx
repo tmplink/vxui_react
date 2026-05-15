@@ -474,11 +474,12 @@ export const en: Translations = {
       section: 'Components',
       title: 'Shell & Sidebar',
       description:
-        'The shell is responsible for sidebar hierarchy, sticky header spacing, and content width. Pages should inherit structure instead of rebuilding it.',
+        'The shell is responsible for sidebar hierarchy, sticky header spacing, and content width. Navigation items support nested sub-menus via the `children` prop — click a parent to expand or collapse its sub-items.',
       guidance: [
         'Keep navigation labels short so collapsed mode stays scannable.',
         'Use section titles to separate page groups instead of visual noise.',
-        'Let the content area own page-specific headings and actions.',
+        'Add `children` to a nav item to make it expandable; set `defaultOpen: true` to start it expanded.',
+        'If any child is active, AppShell auto-opens the parent group.',
       ],
     },
     'grid-page': {
@@ -518,11 +519,13 @@ export const en: Translations = {
       section: 'Components',
       title: 'Form Controls',
       description:
-        'Inputs and switches need strong contrast, clear labels, and predictable vertical rhythm. Expose complexity through composition rather than one giant field component.',
+        'A complete set of form primitives: single-line inputs, multi-line textarea, native select, searchable single-select (Combobox), multi-select with tag display (MultiSelect), and time selection (TimePicker). All share the same label / hint / error layout system.',
       guidance: [
         'Always pair form controls with visible labels in admin surfaces.',
+        'Use Combobox for single-select with optional search; set `searchable={N}` to show the search input only when options exceed N.',
+        'Use MultiSelect when users need to pick several values from a bounded list.',
+        'TimePicker supports 24-hour format and an optional seconds column via the `seconds` prop.',
         'Short helper text is better than placeholder-only instruction.',
-        'Confirm destructive or high-impact actions with dialog affordances.',
       ],
     },
     navigation: {
@@ -979,11 +982,12 @@ export const zh: Translations = {
       section: '组件',
       title: '框架与侧边栏',
       description:
-        'Shell 负责侧边栏层级、固定顶栏间距和内容宽度。页面应继承结构而非重新构建。',
+        'Shell 负责侧边栏层级、固定顶栏间距和内容宽度。导航项支持通过 `children` 字段嵌套子菜单，点击父级项可展开或折叠子项。',
       guidance: [
-        '保持导航标签简短，以确保折叠模式下仍可快速扫读。',
+        '保持导航标签简短，确保折叠模式下仍可快速扫读。',
         '使用章节标题分隔页面分组，而非添加视觉噪音。',
-        '让内容区域自行管理页面特定的标题和操作。',
+        '在导航项中添加 `children` 即可实现可展开子菜单；设置 `defaultOpen: true` 可默认展开。',
+        '如果某子项为 active 状态，AppShell 会自动展开对应父级分组。',
       ],
     },
     'grid-page': {
@@ -1022,11 +1026,13 @@ export const zh: Translations = {
       section: '组件',
       title: '表单控件',
       description:
-        '输入框和开关需要强对比度、清晰标签和可预测的垂直节奏。通过组合而非一个巨型字段组件来暴露复杂性。',
+        '完整的表单原语集：单行输入框、多行文本域、原生选择框、可搜索单选下拉（Combobox）、带标签显示的多选下拉（MultiSelect）和时间选择器（TimePicker）。所有组件共享统一的 label / hint / error 布局体系。',
       guidance: [
         '在管理界面中，表单控件始终应配有可见标签。',
+        '使用 Combobox 实现单选下拉；通过 `searchable={N}` 可设为仅当选项超过 N 条时显示搜索框。',
+        '当用户需要从有限列表中选择多个值时，使用 MultiSelect。',
+        'TimePicker 支持 24 小时制，通过 `seconds` prop 可启用秒选择列。',
         '简短的辅助文本优于仅依赖 placeholder 的说明。',
-        '对破坏性或高影响操作使用对话框进行确认。',
       ],
     },
     navigation: {

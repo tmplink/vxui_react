@@ -1,5 +1,5 @@
-import { useEffect, useRef, forwardRef, type ReactNode } from 'react';
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { useEffect, useRef, useState, forwardRef, type ReactNode } from 'react';
+import { ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { cx } from '../lib/cx';
 import { useViewport } from '../lib/viewport';
 import { Button } from './Button';
@@ -14,6 +14,10 @@ export interface ShellNavItem {
   trailing?: ReactNode;
   active?: boolean;
   onSelect?: () => void;
+  /** Nested sub-items; renders an expandable sub-menu */
+  children?: ShellNavItem[];
+  /** Whether sub-menu is open by default */
+  defaultOpen?: boolean;
 }
 
 export interface ShellNavSection {
@@ -233,20 +237,50 @@ export interface ShellNavItemProps {
   trailing?: ReactNode;
   active?: boolean;
   onSelect?: () => void;
+  /** Nested sub-items rendered as an expandable sub-menu */
+  children?: ReactNode;
+  /** Whether sub-menu starts open. Defaults to false */
+  defaultOpen?: boolean;
 }
 
-export function ShellNavItem({ label, icon, badge, trailing, active, onSelect }: ShellNavItemProps) {
-  return (
+export function ShellNavItem({ label, icon, badge, trailing, active, onSelect, children, defaultOpen = false }: ShellNavItemProps) {
+  const [open, setOpen] = useState(defaultOpen);
+  const hasChildren = Boolean(children);
+
+  const handleClick = () => {
+    if (hasChildren) setOpen((o) => !o);
+    onSelect?.();
+  };
+
+  const btn = (
     <button
       type="button"
-      className={cx('vx-nav-item', active && 'vx-nav-item--active')}
-      onClick={onSelect}
+      className={cx('vx-nav-item', active && 'vx-nav-item--active', hasChildren && 'vx-nav-item--parent')}
+      onClick={handleClick}
+      aria-expanded={hasChildren ? open : undefined}
     >
       {icon ? <span className="vx-nav-item__icon">{icon}</span> : null}
       <span className="vx-nav-item__label">{label}</span>
       {badge ? <span className="vx-nav-item__badge">{badge}</span> : null}
-      {trailing ? <span className="vx-nav-item__trailing">{trailing}</span> : null}
+      {hasChildren ? (
+        <ChevronRight size={14} className={cx('vx-nav-item__chevron', open && 'vx-nav-item__chevron--open')} />
+      ) : trailing ? (
+        <span className="vx-nav-item__trailing">{trailing}</span>
+      ) : null}
     </button>
+  );
+
+  if (!hasChildren) return btn;
+
+  return (
+    <div className="vx-nav-item-wrap">
+      {btn}
+      {open && (
+        <div className="vx-nav-sublist" role="group">
+          {children}
+        </div>
+      )}
+    </div>
   );
 }
 
