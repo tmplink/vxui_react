@@ -1,0 +1,257 @@
+# VXUI React
+
+> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.2.1.
+
+VXUI React provides layout shells, navigation, form controls, data display, overlays, and mobile components. It relies solely on CSS custom properties (design tokens) for theming — no Tailwind, no CSS-in-JS. Radix UI primitives are used for accessibility-critical components (dialogs, menus, tooltips, etc.).
+
+## Installation
+
+```bash
+npm install vxui-react
+```
+
+Import the base stylesheet once at your app entry:
+
+```tsx
+import 'vxui-react/styles';
+```
+
+## Core Layout: AppShell
+
+`AppShell` is the top-level layout component. It composes a collapsible sidebar, sticky topbar, and scrollable content area.
+
+```tsx
+import { AppShell } from 'vxui-react';
+
+<AppShell
+  brand="My App"
+  brandIcon={<img src="/logo.svg" alt="" />}
+  title="Dashboard"
+  navSections={[
+    {
+      key: 'main',
+      items: [
+        { key: 'home', label: 'Home', icon: <HomeIcon />, href: '/' },
+        { key: 'reports', label: 'Reports', icon: <ChartIcon />, href: '/reports' },
+      ],
+    },
+  ]}
+  headerActions={<UserMenu />}
+  sidebarWidth={280}
+>
+  <p>Page content</p>
+</AppShell>
+```
+
+### AppShell Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| brand | string | "VXUI" | Brand/product name shown in the sidebar header |
+| brandCaption | string | — | Secondary subtitle below the brand name |
+| brandIcon | ReactNode | — | Logo element rendered in the sidebar header |
+| title | string | — | Page title shown in the topbar |
+| description | string | — | Page subtitle shown below the topbar title |
+| breadcrumb | ReactNode | — | Breadcrumb element rendered in the topbar |
+| navSections | AppShellNavSection[] | — | Structured nav tree grouped by sections. Preferred over navItems |
+| navItems | AppShellNavItem[] | — | Flat nav list, auto-wrapped in a single unnamed section |
+| sidebarCollapsed | boolean | false | Collapse sidebar to icon-only rail mode |
+| sidebarWidth | number \| string | 240px | Custom sidebar width. Number = px (e.g. 280), string = CSS value (e.g. "18rem") |
+| density | "comfortable" \| "compact" | — | Layout density. "compact" tightens vertical rhythm for high-density UIs |
+| headerActions | ReactNode | — | Slot for right-aligned topbar actions |
+| sidebarFooter | ReactNode | — | Slot rendered at the bottom of the sidebar |
+| mobileNavOpen | boolean | false | Controls whether the mobile nav overlay is visible |
+| onSidebarToggle | () => void | — | Called when the collapse/expand button is clicked |
+| onMobileNavToggle | () => void | — | Called when the mobile overlay toggle is clicked |
+| children | ReactNode | **required** | Main content area rendered inside ShellContent |
+
+### AppShellNavSection
+
+```ts
+interface AppShellNavSection {
+  key: string;
+  label?: string;            // section heading text
+  items: AppShellNavItem[];
+}
+```
+
+### AppShellNavItem
+
+```ts
+interface AppShellNavItem {
+  key: string;
+  label: string;
+  icon?: ReactNode;
+  href?: string;
+  active?: boolean;
+  disabled?: boolean;
+  defaultOpen?: boolean;     // for expandable items with children
+  children?: AppShellNavItem[];  // nest to create expandable sub-menus
+  onClick?: (e: React.MouseEvent) => void;
+}
+```
+
+## Shell (low-level)
+
+`Shell` is the underlying layout primitive used by AppShell. Use it for fully custom layouts.
+
+```tsx
+import { Shell, ShellSidebar, ShellContent } from 'vxui-react';
+
+<Shell sidebarWidth={300} density="compact">
+  <ShellSidebar>{/* nav content */}</ShellSidebar>
+  <ShellContent>{/* page content */}</ShellContent>
+</Shell>
+```
+
+### Shell Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| collapsed | boolean | false | Collapse sidebar to rail mode |
+| mobileNavOpen | boolean | false | Show mobile nav overlay |
+| density | "comfortable" \| "compact" | — | Layout density |
+| sidebarWidth | number \| string | 240px | Custom sidebar width |
+| className | string | — | Additional CSS class |
+| children | ReactNode | **required** | Layout children |
+
+## Component Index
+
+### Layout & Navigation
+- **AppShell** — Full-featured app shell with sidebar, topbar, and content area
+- **Shell / ShellSidebar / ShellContent** — Low-level layout primitives
+- **NavigationMenu** — Horizontal navigation bar with dropdown menus
+- **Breadcrumb** — Breadcrumb trail with separator support
+- **Pagination** — Page navigation with first/last/prev/next controls
+- **Tabs** — Horizontal tab strip with panel content
+- **Menubar** — Desktop-style menu bar
+- **Stepper** — Multi-step wizard indicator
+
+### Buttons & Actions
+- **Button** — Primary action button with variants (default, outline, ghost, destructive) and sizes (sm, md, lg)
+- **Toggle** — Two-state toggle button
+- **SegmentedControl** — Mutually exclusive option group
+- **DropdownMenu** — Trigger + popover menu list (Radix UI)
+- **ContextMenu** — Right-click context menu (Radix UI)
+
+### Forms & Inputs
+- **Input** — Text input with label, error, and description support
+- **Textarea** — Multi-line text input
+- **Select** — Native-style select with custom styling (Radix UI)
+- **Checkbox** — Single checkbox or checkbox group
+- **Radio** — Radio button group
+- **Switch** — Toggle switch
+- **Slider** — Range slider
+- **NumberInput** — Numeric input with increment/decrement controls
+- **TagInput** — Multi-tag token input
+- **Rating** — Star rating input
+- **DatePicker** — Calendar-based date picker
+- **ColorPicker** — Color swatch/hex picker
+- **Combobox** — Autocomplete combo input (Radix UI)
+- **Form** — Form wrapper with validation helpers
+
+### Overlays & Popovers
+- **Dialog** — Modal dialog (Radix UI)
+- **AlertDialog** — Confirmation dialog with destructive action pattern
+- **Sheet** — Slide-in panel (drawer) from any edge
+- **Popover** — Floating content anchored to a trigger (Radix UI)
+- **Tooltip** — Short contextual hover label (Radix UI)
+- **HoverCard** — Rich hover preview card (Radix UI)
+
+### Feedback & Status
+- **Toast** — Ephemeral notification (info / success / warning / danger tones)
+- **Alert** — Inline alert banner (info / success / warning / danger)
+- **Progress** — Linear progress bar (determinate and indeterminate)
+- **Spinner** — Loading spinner
+- **Skeleton** — Placeholder loading skeleton
+
+### Data Display
+- **Table** — Sortable, filterable data table
+- **Badge** — Inline status label with tone variants
+- **Avatar** — User avatar with fallback initials
+- **Card** — Content container card
+- **Accordion** — Collapsible content sections (Radix UI)
+- **Calendar** — Month calendar view
+- **Carousel** — Horizontal content carousel
+- **TreeView** — Hierarchical tree list
+- **Timeline** — Vertical timeline list
+- **ScrollArea** — Custom-styled scrollable container (Radix UI)
+- **Resizable** — Resizable panel layout
+
+### Utility
+- **CodeBlock** — Syntax-highlighted code block (Prism.js)
+- **CommandPalette** — Global keyboard command search
+- **EmptyState** — Empty content placeholder with action
+- **FileUpload** — Drag-and-drop file upload area
+- **LanguageSwitcher** — Locale toggle button
+- **Separator** — Horizontal or vertical rule
+- **Heading / Text / Label** — Typography primitives
+
+### Mobile-specific (vxui-react/mobile)
+- **MobileApp** — Root mobile layout
+- **MobileShell** — Mobile screen wrapper
+- **MobileDrawer** — Bottom-sheet style drawer
+- **BottomNav** — Mobile tab bar
+- **MobileList** — List with dividers optimized for touch
+- **ActionSheet** — iOS-style action sheet
+
+## Theming (CSS Custom Properties)
+
+Override any token in your own stylesheet or via a `<style>` block:
+
+```css
+:root {
+  --vx-primary: #7c3aed;        /* primary action color */
+  --vx-primary-strong: #6d28d9; /* hover/pressed state */
+  --vx-primary-soft: rgba(124, 58, 237, 0.1);
+
+  --vx-secondary: #64748b;      /* secondary/muted color */
+  --vx-success: #10b981;
+  --vx-warning: #f59e0b;
+  --vx-danger: #ef4444;
+
+  --vx-bg: #f8fafc;             /* page background */
+  --vx-bg-accent: #f1f5f9;      /* subtle accent background */
+  --vx-surface: #ffffff;        /* card/panel surfaces */
+  --vx-border: #e2e8f0;         /* default border */
+  --vx-border-strong: #cbd5e1;
+
+  --vx-text: #0f172a;           /* primary text */
+  --vx-text-secondary: #64748b;
+  --vx-text-muted: #94a3b8;
+
+  --vx-radius-sm: 8px;
+  --vx-radius: 10px;
+  --vx-radius-lg: 14px;
+
+  --vx-sidebar-width: 240px;        /* sidebar width (default) */
+  --vx-sidebar-width-collapsed: 72px;
+  --vx-header-height: 92px;
+}
+```
+
+Dark mode tokens are applied automatically when `<html>` has `class="dark"` or `data-theme="dark"`.
+
+## Key Design Principles
+
+1. **No global side-effects** — CSS is scoped to `.vx-*` class names. VXUI will not override your existing styles.
+2. **Token-first theming** — All visual decisions (color, radius, spacing) are CSS variables. Override any of them to rebrand in minutes.
+3. **Accessible by default** — Overlay and interactive components are built on Radix UI primitives, providing keyboard navigation and ARIA semantics out of the box.
+4. **Mobile-first responsive** — Sidebar collapses to an overlay on narrow viewports. Mobile-specific components live in a separate import path.
+5. **No runtime CSS injection** — Styles ship as a single static stylesheet. No flash-of-unstyled-content from runtime injection.
+
+## File Structure (library source)
+
+```
+src/
+  components/        # All React components
+    mobile/          # Mobile-specific components
+    pages/           # Full-page template components
+  styles/
+    base.css         # All CSS (design tokens + component styles)
+  i18n/
+    index.tsx        # English & Chinese translations
+  lib/
+    cx.ts            # className utility
+    version.ts       # library version
+```

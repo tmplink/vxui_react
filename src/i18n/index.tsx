@@ -225,12 +225,19 @@ export interface Translations {
     backToDocs: string;
   };
 
-  // Page definitions (section + title + description + guidance)
+  // Page definitions (section + title + description + guidance + optional props table)
   pageDefs: Record<string, {
     section: string;
     title: string;
     description: string;
     guidance: string[];
+    props?: Array<{
+      prop: string;      // prop name (always English)
+      type: string;      // TypeScript type string
+      default?: string;  // default value if any
+      required?: boolean;
+      description: string; // localized description
+    }>;
   }>;
 }
 
@@ -480,6 +487,26 @@ export const en: Translations = {
         'Use section titles to separate page groups instead of visual noise.',
         'Add `children` to a nav item to make it expandable; set `defaultOpen: true` to start it expanded.',
         'If any child is active, AppShell auto-opens the parent group.',
+        'Customize the sidebar width via the `sidebarWidth` prop (e.g. `sidebarWidth={280}` or `"18rem"`).',
+      ],
+      props: [
+        { prop: 'brand', type: 'string', default: '"VXUI"', description: 'Brand / product name shown in the sidebar header.' },
+        { prop: 'brandCaption', type: 'string', description: 'Secondary subtitle displayed below the brand name.' },
+        { prop: 'brandIcon', type: 'ReactNode', description: 'Logo element (image or icon) rendered in the sidebar header.' },
+        { prop: 'title', type: 'string', description: 'Page title shown in the topbar.' },
+        { prop: 'description', type: 'string', description: 'Page subtitle / description shown below the topbar title.' },
+        { prop: 'breadcrumb', type: 'ReactNode', description: 'Breadcrumb element rendered in the topbar.' },
+        { prop: 'navSections', type: 'AppShellNavSection[]', description: 'Structured navigation tree grouped by sections. Preferred over navItems.' },
+        { prop: 'navItems', type: 'AppShellNavItem[]', description: 'Flat navigation list. Automatically wrapped in a single unnamed section.' },
+        { prop: 'sidebarCollapsed', type: 'boolean', default: 'false', description: 'Collapse sidebar to icon-only rail mode.' },
+        { prop: 'sidebarWidth', type: 'number | string', default: '240px', description: 'Custom sidebar width. Pass a number for px (e.g. 280) or a CSS string (e.g. "18rem").' },
+        { prop: 'density', type: '"comfortable" | "compact"', description: 'Layout density. "compact" tightens vertical rhythm for high-density operator UIs.' },
+        { prop: 'headerActions', type: 'ReactNode', description: 'Slot for right-aligned topbar actions (buttons, dropdowns, user menu, etc.).' },
+        { prop: 'sidebarFooter', type: 'ReactNode', description: 'Slot rendered at the bottom of the sidebar (user info, settings link, etc.).' },
+        { prop: 'mobileNavOpen', type: 'boolean', default: 'false', description: 'Controls whether the mobile navigation overlay is visible.' },
+        { prop: 'onSidebarToggle', type: '() => void', description: 'Called when the collapse / expand button is clicked.' },
+        { prop: 'onMobileNavToggle', type: '() => void', description: 'Called when the mobile overlay toggle button is clicked. Required to enable mobile nav.' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Main page content rendered inside ShellContent.' },
       ],
     },
     'grid-page': {
@@ -988,6 +1015,26 @@ export const zh: Translations = {
         '使用章节标题分隔页面分组，而非添加视觉噪音。',
         '在导航项中添加 `children` 即可实现可展开子菜单；设置 `defaultOpen: true` 可默认展开。',
         '如果某子项为 active 状态，AppShell 会自动展开对应父级分组。',
+        '你可以通过 `sidebarWidth` 属性轻松配置侧边栏的固定宽度（例如 `sidebarWidth={280}` 或 `"18rem"`）。',
+      ],
+      props: [
+        { prop: 'brand', type: 'string', default: '"VXUI"', description: '侧边栏顶部显示的品牌/产品名称。' },
+        { prop: 'brandCaption', type: 'string', description: '品牌名称下方显示的次级说明文字。' },
+        { prop: 'brandIcon', type: 'ReactNode', description: '侧边栏顶部渲染的 Logo 元素（图片或图标）。' },
+        { prop: 'title', type: 'string', description: '顶栏中显示的页面标题。' },
+        { prop: 'description', type: 'string', description: '顶栏标题下方的页面副标题/描述。' },
+        { prop: 'breadcrumb', type: 'ReactNode', description: '顶栏中渲染的面包屑元素。' },
+        { prop: 'navSections', type: 'AppShellNavSection[]', description: '按章节分组的结构化导航树。推荐优先使用此属性。' },
+        { prop: 'navItems', type: 'AppShellNavItem[]', description: '平铺导航列表，自动归入单个无标题章节。' },
+        { prop: 'sidebarCollapsed', type: 'boolean', default: 'false', description: '将侧边栏折叠为仅显示图标的窄轨模式。' },
+        { prop: 'sidebarWidth', type: 'number | string', default: '240px', description: '自定义侧边栏宽度，数字为 px 单位（如 280），也可传入 CSS 字符串（如 "18rem"）。' },
+        { prop: 'density', type: '"comfortable" | "compact"', description: '布局密度。"compact" 收紧垂直间距，适合高密度操作界面。' },
+        { prop: 'headerActions', type: 'ReactNode', description: '顶栏右侧操作区插槽（按钮、下拉菜单、用户菜单等）。' },
+        { prop: 'sidebarFooter', type: 'ReactNode', description: '侧边栏底部内容插槽（用户信息、设置链接等）。' },
+        { prop: 'mobileNavOpen', type: 'boolean', default: 'false', description: '控制移动端导航遮罩层是否显示。' },
+        { prop: 'onSidebarToggle', type: '() => void', description: '点击折叠/展开按钮时的回调。' },
+        { prop: 'onMobileNavToggle', type: '() => void', description: '移动端导航遮罩切换按钮的回调，提供后才会启用移动端导航。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '渲染在 ShellContent 内的主页面内容。' },
       ],
     },
     'grid-page': {
