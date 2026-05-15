@@ -97,12 +97,17 @@ export interface ShellProps {
   collapsed?: boolean;
   mobileNavOpen?: boolean;
   density?: 'comfortable' | 'compact';
+  /** Optional: Configure sidebar width via string (e.g., "18rem") or number (e.g., 280 for px) */
+  sidebarWidth?: number | string;
   className?: string;
   children: ReactNode;
 }
 
-export function Shell({ collapsed = false, mobileNavOpen = false, density, className, children }: ShellProps) {
+export function Shell({ collapsed = false, mobileNavOpen = false, density, sidebarWidth, className, children }: ShellProps) {
   const { isTablet, isTabletPortrait } = useViewport();
+  
+  const style = sidebarWidth ? { '--vx-sidebar-width': typeof sidebarWidth === 'number' ? `${sidebarWidth}px` : sidebarWidth } as React.CSSProperties : undefined;
+
   return (
     <div
       className={cx('vx-shell', className)}
@@ -111,6 +116,7 @@ export function Shell({ collapsed = false, mobileNavOpen = false, density, class
       data-tablet={isTablet}
       data-tablet-portrait={isTabletPortrait}
       data-density={density}
+      style={style}
     >
       {children}
     </div>

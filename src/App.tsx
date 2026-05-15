@@ -129,6 +129,13 @@ interface PageDefinition {
   title: string;
   description: string;
   guidance: string[];
+  props?: Array<{
+    prop: string;
+    type: string;
+    default?: string;
+    required?: boolean;
+    description: string;
+  }>;
 }
 
 interface ViewerSession {
@@ -138,19 +145,20 @@ interface ViewerSession {
 
 const SESSION_STORAGE_KEY = 'vxui-react-auth-session';
 
-const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; pages: PageKey[] }> = [
-  { key: 'gettingStarted', pages: ['introduction'] },
-  { key: 'layout', pages: ['quick-start'] },
+type NavGroupItem = PageKey | { type: 'submenu'; key: string; i18nKey: 'forms'; pages: PageKey[]; icon: JSX.Element };
+
+const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> = [
+  { key: 'gettingStarted', items: ['introduction'] },
+  { key: 'layout', items: ['quick-start'] },
   {
     key: 'components',
-    pages: [
+    items: [
       'shell-sidebar',
       'grid-page',
       'nav-layout',
       'button',
       'elements',
-      'form-controls',
-      'form-inputs',
+      { type: 'submenu', key: 'forms', i18nKey: 'forms', pages: ['form-controls', 'form-inputs'], icon: <SlidersHorizontal size={16} /> },
       'navigation',
       'overlays',
       'data-display',
@@ -165,9 +173,9 @@ const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; pages: PageKey[] }> = [
   },
   {
     key: 'templates',
-    pages: ['home-page', 'login-page', 'register-page', 'error-page', 'privacy-policy', 'terms-of-service'],
+    items: ['home-page', 'login-page', 'register-page', 'error-page', 'privacy-policy', 'terms-of-service'],
   },
-  { key: 'mobile', pages: ['mobile'] },
+  { key: 'mobile', items: ['mobile'] },
 ];
 
 const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
@@ -489,6 +497,7 @@ export function DocsShell() {
       description="Keep navigation, header actions, and content in one shell."
       navSections={navSections}
       headerActions={<Button size="sm">Publish</Button>}
+      sidebarWidth={280} /* Optional: Configure sidebar width via string "18rem" or number */
     >
       <Card>
         <CardHeader>
@@ -1533,6 +1542,7 @@ function DesktopApp() {
 
   const docsHomeGroups = DOC_NAV_GROUPS.map((group) => ({
     ...group,
+    pages: group.items.flatMap((item) => (typeof item === 'string' ? item : item.pages)),
     label: getDocsGroupLabel(group.key, isZh),
     description: getDocsGroupDescription(group.key, isZh),
   }));
@@ -1554,13 +1564,32 @@ function DesktopApp() {
       DOC_NAV_GROUPS.map((group) => ({
         key: group.key,
         title: getDocsGroupLabel(group.key, isZh),
-        items: group.pages.map((pageKey) => ({
-          key: pageKey,
-          label: pages[pageKey].title,
-          icon: pageIcons[pageKey],
-          active: pageKey === activePage,
-          onSelect: () => navigate({ view: 'docs', page: pageKey }),
-        })),
+        items: group.items.map((item) => {
+          if (typeof item === 'string') {
+            const pageKey = item;
+            return {
+              key: pageKey,
+              label: pages[pageKey].title,
+              icon: pageIcons[pageKey],
+              active: pageKey === activePage,
+              onSelect: () => navigate({ view: 'docs', page: pageKey }),
+            };
+          }
+          // handle submenu
+          const title = isZh ? locales.zh.families.forms : locales.en.families.forms;
+          return {
+            key: item.key,
+            label: title,
+            icon: item.icon,
+            children: item.pages.map((pageKey) => ({
+              key: pageKey,
+              label: pages[pageKey].title,
+              icon: pageIcons[pageKey],
+              active: pageKey === activePage,
+              onSelect: () => navigate({ view: 'docs', page: pageKey }),
+            })),
+          };
+        }),
       })),
     [activePage, isZh, pages],
   );
@@ -2559,7 +2588,7 @@ function DesktopApp() {
       : null;
 
     // Flat ordered page list for prev/next navigation
-    const flatPages = DOC_NAV_GROUPS.flatMap((g) => g.pages);
+    const flatPages = DOC_NAV_GROUPS.flatMap((g) => g.items.flatMap((item) => (typeof item === 'string' ? item : item.pages)));
     const currentIndex = flatPages.indexOf(activePage);
     const prevPage = currentIndex > 0 ? flatPages[currentIndex - 1] : null;
     const nextPage = currentIndex < flatPages.length - 1 ? flatPages[currentIndex + 1] : null;
@@ -2643,6 +2672,43 @@ function DesktopApp() {
                   <a href="#usage" className="vx-bs-anchor" aria-label={isZh ? '链接到用法' : 'Link to Usage'}>#</a>
                 </h2>
                 {renderCodeBlock(usageSnippet)}
+              </section>
+            )}
+
+            {/* API Reference (props table) */}
+            {activeDocument.props && activeDocument.props.length > 0 && (
+              <section id="api" className="vx-bs-doc-section">
+                <h2 className="vx-bs-section-heading">
+                  {isZh ? 'API 参考' : 'API Reference'}
+                  <a href="#api" className="vx-bs-anchor" aria-label={isZh ? '链接到 API 参考' : 'Link to API Reference'}>#</a>
+                </h2>
+                <div className="vx-bs-props-table-wrapper">
+                  <table className="vx-bs-props-table">
+                    <thead>
+                      <tr>
+                        <th>{isZh ? '属性' : 'Prop'}</th>
+                        <th>{isZh ? '类型' : 'Type'}</th>
+                        <th>{isZh ? '默认值' : 'Default'}</th>
+                        <th>{isZh ? '说明' : 'Description'}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {activeDocument.props.map((row) => (
+                        <tr key={row.prop}>
+                          <td>
+                            <code>{row.prop}</code>
+                            {row.required && (
+                              <span className="vx-bs-prop-required" title={isZh ? '必填' : 'Required'}>*</span>
+                            )}
+                          </td>
+                          <td><code className="vx-bs-prop-type">{row.type}</code></td>
+                          <td>{row.default ? <code>{row.default}</code> : <span className="vx-bs-prop-dash">—</span>}</td>
+                          <td>{row.description}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </section>
             )}
           </div>

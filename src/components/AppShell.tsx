@@ -52,6 +52,8 @@ export interface AppShellProps {
   navItems?: AppShellNavItem[];
   navSections?: AppShellNavSection[];
   sidebarCollapsed?: boolean;
+  /** Configuration for the minimum and exact width of the sidebar (number as px, or CSS string). */
+  sidebarWidth?: number | string;
   mobileNavOpen?: boolean;
   density?: 'comfortable' | 'compact';
   onSidebarToggle?: () => void;
@@ -77,6 +79,7 @@ export function AppShell({
   navItems,
   navSections,
   sidebarCollapsed = false,
+  sidebarWidth,
   mobileNavOpen = false,
   onSidebarToggle,
   onMobileNavToggle,
@@ -108,7 +111,7 @@ export function AppShell({
   }
 
   return (
-    <Shell collapsed={sidebarCollapsed} mobileNavOpen={mobileNavOpen} density={density}>
+    <Shell collapsed={sidebarCollapsed} mobileNavOpen={mobileNavOpen} density={density} sidebarWidth={sidebarWidth}>
       <ShellSidebar
         brand={brand}
         brandCaption={brandCaption}
