@@ -467,6 +467,41 @@ a {
   align-items: center;
 }
 
+/* ── Sub-nav (nested items) ──────────────────────────────── */
+.vx-nav-item-wrap {
+  display: flex;
+  flex-direction: column;
+}
+.vx-nav-item__chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--vx-text-muted);
+  display: inline-flex;
+  align-items: center;
+  transition: transform 200ms ease;
+}
+.vx-nav-item__chevron--open {
+  transform: rotate(90deg);
+}
+.vx-nav-sublist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 0 4px 10px;
+  margin: 2px 0 4px;
+  background: color-mix(in srgb, var(--vx-bg-accent) 60%, transparent);
+  border-radius: calc(var(--vx-radius) * 0.75);
+}
+/* Sub-items use same .vx-nav-item but are smaller */
+.vx-nav-sublist .vx-nav-item {
+  min-height: 34px;
+  font-size: 13px;
+}
+.vx-nav-sublist .vx-nav-item__label {
+  font-size: 13px;
+  font-weight: 400;
+}
+
 .vx-sidebar__footer {
   margin-top: auto;
   padding: 8px 10px;
@@ -486,6 +521,8 @@ a {
 .vx-shell[data-collapsed='true'] .vx-nav-item__label,
 .vx-shell[data-collapsed='true'] .vx-nav-item__badge,
 .vx-shell[data-collapsed='true'] .vx-nav-item__trailing,
+.vx-shell[data-collapsed='true'] .vx-nav-item__chevron,
+.vx-shell[data-collapsed='true'] .vx-nav-sublist,
 .vx-shell[data-collapsed='true'] .vx-sidebar__brand-caption,
 .vx-shell[data-collapsed='true'] .vx-sidebar__brand-copy,
 .vx-shell[data-collapsed='true'] .vx-sidebar__toggle-label {
@@ -6163,6 +6200,8 @@ a {
 .vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__label,
 .vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__badge,
 .vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__trailing,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__chevron,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-sublist,
 .vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand-caption,
 .vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand-copy,
 .vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__toggle-label,
@@ -6806,6 +6845,349 @@ a {
   font-size: 13px;
   color: var(--vx-text-muted);
   text-align: center;
+}
+
+/* ── MultiSelect ───────────────────────────────────────────── */
+.vx-multiselect {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vx-multiselect__trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 38px;
+  padding: 5px 10px 5px 12px;
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+  cursor: pointer;
+  transition: border-color 140ms, box-shadow 140ms;
+  text-align: left;
+}
+.vx-multiselect__trigger:hover:not(:disabled) {
+  border-color: var(--vx-border-hover);
+}
+.vx-multiselect__trigger:focus-visible {
+  outline: none;
+  border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px var(--vx-primary-soft);
+}
+.vx-multiselect__trigger--invalid {
+  border-color: var(--vx-error) !important;
+}
+.vx-multiselect__trigger--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vx-multiselect__tags {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-width: 0;
+}
+.vx-multiselect__placeholder {
+  font-size: 14px;
+  color: var(--vx-text-muted);
+}
+.vx-multiselect__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px 1px 8px;
+  border-radius: 99px;
+  font-size: 12px;
+  background: var(--vx-primary-soft);
+  color: var(--vx-primary);
+  border: 1px solid color-mix(in srgb, var(--vx-primary) 24%, transparent);
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vx-multiselect__tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.7;
+  padding: 1px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+.vx-multiselect__tag-remove:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--vx-primary) 18%, transparent);
+}
+.vx-multiselect__overflow {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: 99px;
+  font-size: 12px;
+  background: var(--vx-bg-accent);
+  color: var(--vx-text-muted);
+  border: 1px solid var(--vx-border);
+  white-space: nowrap;
+}
+.vx-multiselect__icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  color: var(--vx-text-muted);
+}
+.vx-multiselect__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0.6;
+}
+.vx-multiselect__clear:hover {
+  opacity: 1;
+  background: var(--vx-bg-accent);
+}
+.vx-multiselect__chevron {
+  transition: transform 180ms;
+  flex-shrink: 0;
+}
+.vx-multiselect__chevron--open {
+  transform: rotate(180deg);
+}
+.vx-multiselect__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: var(--vx-z-menu);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+  box-shadow: var(--vx-shadow-md);
+  overflow: hidden;
+}
+.vx-multiselect__search-wrap {
+  padding: 8px;
+  border-bottom: 1px solid var(--vx-border);
+}
+.vx-multiselect__search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  background: var(--vx-bg);
+  border: 1px solid var(--vx-border);
+  border-radius: calc(var(--vx-radius) * 0.75);
+  color: var(--vx-text);
+  font-size: 13px;
+}
+.vx-multiselect__search:focus {
+  outline: none;
+  border-color: var(--vx-primary);
+}
+.vx-multiselect__list {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+.vx-multiselect__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: calc(var(--vx-radius) * 0.75);
+  font-size: 14px;
+  color: var(--vx-text);
+  cursor: pointer;
+  transition: background 100ms;
+}
+.vx-multiselect__option:hover:not(.vx-multiselect__option--disabled) {
+  background: var(--vx-bg-accent);
+}
+.vx-multiselect__option--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vx-multiselect__checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  border: 1.5px solid var(--vx-border);
+  background: var(--vx-surface);
+  color: transparent;
+  transition: background 120ms, border-color 120ms, color 120ms;
+}
+.vx-multiselect__checkbox--checked {
+  background: var(--vx-primary);
+  border-color: var(--vx-primary);
+  color: #fff;
+}
+.vx-multiselect__empty {
+  padding: 12px 10px;
+  font-size: 13px;
+  color: var(--vx-text-muted);
+  text-align: center;
+}
+
+/* ── TimePicker ────────────────────────────────────────────── */
+.vx-timepicker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vx-timepicker__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 38px;
+  padding: 0 12px;
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+  cursor: pointer;
+  transition: border-color 140ms, box-shadow 140ms;
+  color: var(--vx-text);
+  text-align: left;
+}
+.vx-timepicker__trigger:hover:not(:disabled) {
+  border-color: var(--vx-border-hover);
+}
+.vx-timepicker__trigger:focus-visible {
+  outline: none;
+  border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px var(--vx-primary-soft);
+}
+.vx-timepicker__trigger--invalid {
+  border-color: var(--vx-error) !important;
+}
+.vx-timepicker__trigger--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vx-timepicker__value {
+  font-size: 14px;
+  flex: 1;
+}
+.vx-timepicker__value--placeholder {
+  color: var(--vx-text-muted);
+}
+.vx-timepicker__popover {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: var(--vx-z-menu);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+  box-shadow: var(--vx-shadow-md);
+  padding: 12px 12px 10px;
+  min-width: 160px;
+}
+.vx-timepicker__columns {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+.vx-timepicker__sep {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--vx-text-muted);
+  line-height: 1;
+  padding: 0 2px;
+  margin-top: -2px;
+}
+.vx-timepicker__col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 52px;
+  user-select: none;
+}
+.vx-timepicker__col:focus {
+  outline: none;
+}
+.vx-timepicker__col-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 26px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: calc(var(--vx-radius) * 0.75);
+  cursor: pointer;
+  color: var(--vx-text-muted);
+  transition: background 120ms, color 120ms, border-color 120ms;
+}
+.vx-timepicker__col-btn:hover {
+  background: var(--vx-bg-accent);
+  border-color: var(--vx-border);
+  color: var(--vx-text);
+}
+.vx-timepicker__col-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  width: 100%;
+}
+.vx-timepicker__col-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 34px;
+  border-radius: calc(var(--vx-radius) * 0.75);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  transition: background 100ms;
+}
+.vx-timepicker__col-item--selected {
+  background: var(--vx-primary);
+  color: #fff;
+  font-weight: 600;
+}
+.vx-timepicker__col-item--adjacent {
+  color: var(--vx-text-muted);
+  font-size: 13px;
+}
+.vx-timepicker__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--vx-border);
+}
+.vx-timepicker__done {
+  padding: 5px 14px;
+  background: var(--vx-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--vx-radius);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 120ms;
+}
+.vx-timepicker__done:hover {
+  opacity: 0.88;
 }
 
 /* ── FileUpload ────────────────────────────────────────────── */

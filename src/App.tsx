@@ -58,6 +58,7 @@ import {
   Dialog,
   DropdownMenu,
   Input,
+  MultiSelect,
   Pagination,
   Popover,
   Progress,
@@ -65,6 +66,9 @@ import {
   RadioGroup,
   SegmentedControl,
   Select,
+  ShellNav,
+  ShellNavItem,
+  ShellNavSection,
   Skeleton,
   Slider,
   Table,
@@ -73,6 +77,7 @@ import {
   TabsList,
   TabsTrigger,
   Textarea,
+  TimePicker,
   useTheme,
   useToast,
   useViewport,
@@ -457,9 +462,19 @@ const navSections = [
   {
     title: 'Guides',
     items: [
-      { key: 'overview', label: 'Overview', active: true },
-      { key: 'components', label: 'Components', badge: '18' },
-      { key: 'templates', label: 'Templates' },
+      { key: 'overview', label: 'Overview', active: true, onSelect: () => {} },
+      {
+        key: 'components',
+        label: 'Components',
+        badge: '18',
+        defaultOpen: true,
+        children: [
+          { key: 'form-controls', label: 'Form Controls', onSelect: () => {} },
+          { key: 'navigation',    label: 'Navigation',    onSelect: () => {} },
+          { key: 'overlays',      label: 'Overlays',      onSelect: () => {} },
+        ],
+      },
+      { key: 'templates', label: 'Templates', onSelect: () => {} },
     ],
   },
 ];
@@ -551,9 +566,13 @@ export function ActionCard() {
     </Card>
   );
 }`,
-  'form-controls': String.raw`import { Button, Input, Select, Textarea } from 'vxui-react';
+  'form-controls': String.raw`import { useState } from 'react';
+import { Button, Input, MultiSelect, Select, Textarea, TimePicker } from 'vxui-react';
 
 export function ProjectForm() {
+  const [stack, setStack] = useState(['react', 'typescript']);
+  const [deployTime, setDeployTime] = useState('');
+
   return (
     <form style={{ display: 'grid', gap: 16 }}>
       <Input label="Project name" placeholder="Northwind migration" />
@@ -563,6 +582,26 @@ export function ProjectForm() {
         <option value="preview">Preview</option>
         <option value="internal">Internal</option>
       </Select>
+
+      <MultiSelect
+        label="Tech stack"
+        value={stack}
+        onChange={setStack}
+        clearable
+        options={[
+          { value: 'react', label: 'React' },
+          { value: 'typescript', label: 'TypeScript' },
+          { value: 'vite', label: 'Vite' },
+          { value: 'css', label: 'CSS' },
+        ]}
+      />
+
+      <TimePicker
+        label="Deploy time"
+        value={deployTime}
+        onChange={setDeployTime}
+        placeholder="Select time"
+      />
 
       <Textarea
         label="Summary"
@@ -1120,6 +1159,8 @@ function DesktopApp() {
   const [radioValue, setRadioValue] = useState('system');
   const [sliderValue, setSliderValue] = useState(68);
   const [paginationPage, setPaginationPage] = useState(4);
+  const [multiSelectValue, setMultiSelectValue] = useState<string[]>(['react', 'typescript']);
+  const [timeValue, setTimeValue] = useState<string | undefined>(undefined);
 
   const copy = isZh
     ? {
@@ -1822,18 +1863,36 @@ function DesktopApp() {
         );
       case 'shell-sidebar':
         return (
-          <div className="vx-doc-shell-sample">
-            <div className="vx-doc-shell-sample__nav">
-              <span>{isZh ? '导航' : 'Navigation'}</span>
-              <strong>Docs / Templates</strong>
-            </div>
-            <div className="vx-doc-shell-sample__main">
-              <div className="vx-doc-shell-sample__bar">{isZh ? '顶部工具区' : 'Top tools'}</div>
-              <div className="vx-doc-shell-sample__canvas">
-                <div className="vx-doc-shell-sample__card" />
-                <div className="vx-doc-shell-sample__card" />
-                <div className="vx-doc-shell-sample__card vx-doc-shell-sample__card--wide" />
-              </div>
+          <div className="vx-doc-preview-stack">
+            <div style={{ background: 'var(--vx-surface)', border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-lg)', overflow: 'hidden' }}>
+              <ShellNav label={isZh ? '导航示例' : 'Navigation demo'}>
+                <ShellNavSection title={isZh ? '快速开始' : 'Getting started'}>
+                  <ShellNavItem
+                    label={isZh ? '介绍' : 'Introduction'}
+                    active
+                    onSelect={() => {}}
+                  />
+                </ShellNavSection>
+                <ShellNavSection title={isZh ? '组件' : 'Components'}>
+                  <ShellNavItem
+                    label={isZh ? '表单控件' : 'Form controls'}
+                    defaultOpen
+                    onSelect={() => {}}
+                  >
+                    <ShellNavItem label={isZh ? '输入框' : 'Input'} onSelect={() => {}} />
+                    <ShellNavItem label={isZh ? '多选框' : 'MultiSelect'} onSelect={() => {}} />
+                    <ShellNavItem label={isZh ? '时间选择器' : 'TimePicker'} onSelect={() => {}} />
+                  </ShellNavItem>
+                  <ShellNavItem
+                    label={isZh ? '叠层浮层' : 'Overlays'}
+                    onSelect={() => {}}
+                  >
+                    <ShellNavItem label={isZh ? '对话框' : 'Dialog'} onSelect={() => {}} />
+                    <ShellNavItem label={isZh ? '抽屉' : 'Sheet'} onSelect={() => {}} />
+                  </ShellNavItem>
+                  <ShellNavItem label={isZh ? '导航' : 'Navigation'} onSelect={() => {}} />
+                </ShellNavSection>
+              </ShellNav>
             </div>
           </div>
         );
@@ -1910,6 +1969,25 @@ function DesktopApp() {
               <option value="preview">{copy.releaseOptions.preview}</option>
               <option value="internal">{copy.releaseOptions.internal}</option>
             </Select>
+            <MultiSelect
+              label={isZh ? '技术栈' : 'Tech stack'}
+              value={multiSelectValue}
+              onChange={setMultiSelectValue}
+              clearable
+              options={[
+                { value: 'react', label: 'React' },
+                { value: 'typescript', label: 'TypeScript' },
+                { value: 'vite', label: 'Vite' },
+                { value: 'css', label: 'CSS' },
+                { value: 'radix', label: 'Radix UI' },
+              ]}
+            />
+            <TimePicker
+              label={isZh ? '部署时间' : 'Deploy time'}
+              value={timeValue}
+              onChange={setTimeValue}
+              placeholder={isZh ? '选择时间' : 'Select time'}
+            />
             <Textarea
               label={isZh ? '变更摘要' : 'Change summary'}
               value={

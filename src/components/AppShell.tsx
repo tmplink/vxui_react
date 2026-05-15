@@ -1,4 +1,4 @@
-import { type ReactNode, type Ref } from 'react';
+import React, { type ReactNode, type Ref } from 'react';
 import {
   Shell,
   ShellSidebar,
@@ -92,6 +92,21 @@ export function AppShell({
 }: AppShellProps) {
   const sections = navSections ?? (navItems ? [{ items: navItems }] : []);
 
+  function renderNavItem(item: ShellNavItemType): React.ReactElement {
+    const { key, onSelect, children: subItems, defaultOpen, ...rest } = item;
+    const anyChildActive = subItems?.some((c) => c.active) ?? false;
+    return (
+      <ShellNavItem
+        key={key}
+        onSelect={onSelect}
+        defaultOpen={defaultOpen ?? (subItems ? anyChildActive : undefined)}
+        {...rest}
+      >
+        {subItems?.map(renderNavItem)}
+      </ShellNavItem>
+    );
+  }
+
   return (
     <Shell collapsed={sidebarCollapsed} mobileNavOpen={mobileNavOpen} density={density}>
       <ShellSidebar
@@ -108,9 +123,7 @@ export function AppShell({
         <ShellNav>
           {sections.map((section, sectionIndex) => (
             <ShellNavSection key={section.key ?? section.title ?? sectionIndex} title={section.title}>
-              {section.items.map(({ key, onSelect, ...rest }) => (
-                <ShellNavItem key={key} onSelect={onSelect} {...rest} />
-              ))}
+              {section.items.map(renderNavItem)}
             </ShellNavSection>
           ))}
         </ShellNav>
