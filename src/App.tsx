@@ -55,6 +55,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  Combobox,
   Dialog,
   DropdownMenu,
   Input,
@@ -567,9 +568,10 @@ export function ActionCard() {
   );
 }`,
   'form-controls': String.raw`import { useState } from 'react';
-import { Button, Input, MultiSelect, Select, Textarea, TimePicker } from 'vxui-react';
+import { Button, Combobox, Input, MultiSelect, Select, Textarea, TimePicker } from 'vxui-react';
 
 export function ProjectForm() {
+  const [env, setEnv] = useState<string | undefined>(undefined);
   const [stack, setStack] = useState(['react', 'typescript']);
   const [deployTime, setDeployTime] = useState('');
 
@@ -582,6 +584,24 @@ export function ProjectForm() {
         <option value="preview">Preview</option>
         <option value="internal">Internal</option>
       </Select>
+
+      {/* searchable={4}: show search only when options > 4 */}
+      <Combobox
+        label="Environment"
+        value={env}
+        onChange={setEnv}
+        clearable
+        searchable={4}
+        placeholder="Select environment…"
+        options={[
+          { value: 'prod', label: 'Production' },
+          { value: 'staging', label: 'Staging' },
+          { value: 'preview', label: 'Preview' },
+          { value: 'dev', label: 'Development' },
+          { value: 'test', label: 'Testing' },
+          { value: 'sandbox', label: 'Sandbox' },
+        ]}
+      />
 
       <MultiSelect
         label="Tech stack"
@@ -1160,6 +1180,7 @@ function DesktopApp() {
   const [sliderValue, setSliderValue] = useState(68);
   const [paginationPage, setPaginationPage] = useState(4);
   const [multiSelectValue, setMultiSelectValue] = useState<string[]>(['react', 'typescript']);
+  const [comboboxEnv, setComboboxEnv] = useState<string | undefined>(undefined);
   const [timeValue, setTimeValue] = useState<string | undefined>(undefined);
 
   const copy = isZh
@@ -1969,6 +1990,23 @@ function DesktopApp() {
               <option value="preview">{copy.releaseOptions.preview}</option>
               <option value="internal">{copy.releaseOptions.internal}</option>
             </Select>
+            <Combobox
+              label={isZh ? '部署环境' : 'Environment'}
+              value={comboboxEnv}
+              onChange={setComboboxEnv}
+              clearable
+              searchable={4}
+              placeholder={isZh ? '选择环境…' : 'Select environment…'}
+              searchPlaceholder={isZh ? '搜索环境…' : 'Search environments…'}
+              options={[
+                { value: 'prod', label: isZh ? '生产' : 'Production' },
+                { value: 'staging', label: isZh ? '预发布' : 'Staging' },
+                { value: 'preview', label: isZh ? '预览' : 'Preview' },
+                { value: 'dev', label: isZh ? '开发' : 'Development' },
+                { value: 'test', label: isZh ? '测试' : 'Testing' },
+                { value: 'sandbox', label: isZh ? '沙箱' : 'Sandbox' },
+              ]}
+            />
             <MultiSelect
               label={isZh ? '技术栈' : 'Tech stack'}
               value={multiSelectValue}

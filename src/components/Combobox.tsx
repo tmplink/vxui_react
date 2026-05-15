@@ -22,6 +22,13 @@ export interface ComboboxProps {
   disabled?: boolean;
   clearable?: boolean;
   emptyText?: string;
+  /**
+   * Controls when the search input is shown.
+   * - `true` (default): always show
+   * - `false`: never show
+   * - `number N`: show only when `options.length > N`
+   */
+  searchable?: boolean | number;
   className?: string;
 }
 
@@ -38,6 +45,7 @@ export function Combobox({
   disabled,
   clearable = false,
   emptyText = 'No results',
+  searchable = true,
   className,
 }: ComboboxProps) {
   const isControlled = controlledValue !== undefined;
@@ -54,15 +62,19 @@ export function Combobox({
   const filtered = options.filter((o) =>
     o.label.toLowerCase().includes(search.toLowerCase()),
   );
+  const showSearch =
+    typeof searchable === 'number' ? options.length > searchable : searchable;
 
   useEffect(() => {
     if (!open) {
       setSearch('');
       return;
     }
-    const t = setTimeout(() => searchRef.current?.focus(), 0);
-    return () => clearTimeout(t);
-  }, [open]);
+    if (showSearch) {
+      const t = setTimeout(() => searchRef.current?.focus(), 0);
+      return () => clearTimeout(t);
+    }
+  }, [open, showSearch]);
 
   useEffect(() => {
     if (!open) return;
@@ -133,17 +145,19 @@ export function Combobox({
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (
         <div className="vx-combobox__dropdown">
-          <div className="vx-combobox__search-wrap">
-            <input
-              ref={searchRef}
-              type="text"
-              className="vx-combobox__search"
-              placeholder={searchPlaceholder}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              aria-label={searchPlaceholder}
-            />
-          </div>
+          {showSearch && (
+            <div className="vx-combobox__search-wrap">
+              <input
+                ref={searchRef}
+                type="text"
+                className="vx-combobox__search"
+                placeholder={searchPlaceholder}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                aria-label={searchPlaceholder}
+              />
+            </div>
+          )}
           <ul id={listboxId} className="vx-combobox__list" role="listbox" aria-label={label ?? 'Options'}>
             {filtered.length === 0 ? (
               <li className="vx-combobox__empty">{emptyText}</li>

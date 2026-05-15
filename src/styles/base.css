@@ -435,7 +435,7 @@ a {
 .vx-nav-item--active {
   color: var(--vx-primary);
   background: var(--vx-primary-soft);
-  border-color: rgba(37, 99, 235, 0.14);
+  border-color: color-mix(in srgb, var(--vx-primary) 14%, transparent);
 }
 
 .vx-nav-item__icon {
@@ -2852,6 +2852,13 @@ a {
   background: rgba(200, 169, 124, 0.14);
   border-color: rgba(200, 169, 124, 0.36);
   color: #c8a97c;
+}
+
+/* primary 为浅金色（#c8a97c），白色文字对比度不足，统一改为深色 */
+[data-theme-name='black-gold'] .vx-multiselect__checkbox--checked,
+[data-theme-name='black-gold'] .vx-timepicker__col-item--selected,
+[data-theme-name='black-gold'] .vx-timepicker__done {
+  color: #09090f;
 }
 
 /* ── Select ────────────────────────────────────────── */
@@ -6869,7 +6876,7 @@ a {
   text-align: left;
 }
 .vx-multiselect__trigger:hover:not(:disabled) {
-  border-color: var(--vx-border-hover);
+  border-color: var(--vx-border-strong);
 }
 .vx-multiselect__trigger:focus-visible {
   outline: none;
@@ -6877,7 +6884,7 @@ a {
   box-shadow: 0 0 0 3px var(--vx-primary-soft);
 }
 .vx-multiselect__trigger--invalid {
-  border-color: var(--vx-error) !important;
+  border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border)) !important;
 }
 .vx-multiselect__trigger--disabled {
   opacity: 0.5;
@@ -6968,10 +6975,12 @@ a {
   left: 0;
   right: 0;
   z-index: var(--vx-z-menu);
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
-  box-shadow: var(--vx-shadow-md);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   overflow: hidden;
 }
 .vx-multiselect__search-wrap {
@@ -7065,7 +7074,7 @@ a {
   text-align: left;
 }
 .vx-timepicker__trigger:hover:not(:disabled) {
-  border-color: var(--vx-border-hover);
+  border-color: var(--vx-border-strong);
 }
 .vx-timepicker__trigger:focus-visible {
   outline: none;
@@ -7073,7 +7082,7 @@ a {
   box-shadow: 0 0 0 3px var(--vx-primary-soft);
 }
 .vx-timepicker__trigger--invalid {
-  border-color: var(--vx-error) !important;
+  border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border)) !important;
 }
 .vx-timepicker__trigger--disabled {
   opacity: 0.5;
@@ -7091,10 +7100,12 @@ a {
   top: calc(100% + 4px);
   left: 0;
   z-index: var(--vx-z-menu);
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
-  box-shadow: var(--vx-shadow-md);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   padding: 12px 12px 10px;
   min-width: 160px;
 }
