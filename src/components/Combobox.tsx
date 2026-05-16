@@ -1,8 +1,7 @@
-import type { ReactNode } from 'react';
-import { useState, useRef, useEffect, useId } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useId } from 'react';
+import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
-import { useDropDirection } from '../hooks/useDropDirection';
 
 export interface ComboboxOption {
   value: string;
@@ -56,9 +55,19 @@ export function Combobox({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const wrapRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
-  const dropDirection = useDropDirection(wrapRef, open, 280);
+
+  /** Fixed position for portaled desktop dropdown. null = render inline (mobile). */
+  const [dropPos, setDropPos] = useState<{
+    top?: number;
+    bottom?: number;
+    left: number;
+    width: number;
+    direction: 'down' | 'up';
+  } | null>(null);
 
   const selectedOption = options.find((o) => o.value === value);
   const filtered = options.filter((o) =>
@@ -81,7 +90,9 @@ export function Combobox({
   useEffect(() => {
     if (!open) return;
     const onOutside = (e: Event) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      const inWrap = wrapRef.current?.contains(e.target as Node);
+      const inDropdown = dropdownRef.current?.contains(e.target as Node);
+      if (!inWrap && !inDropdown) setOpen(false);
     };
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
@@ -102,6 +113,38 @@ export function Combobox({
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
+  // Compute fixed position for desktop (>640px). Mobile uses inline CSS bottom-sheet.
+  useLayoutEffect(() => {
+    if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
+      setDropPos(null);
+      return;
+    }
+    const rect = triggerRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const direction = spaceBelow < 280 && spaceAbove > spaceBelow ? 'up' : 'down';
+    setDropPos(
+      direction === 'down'
+        ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
+        : { bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width, direction },
+    );
+  }, [open]);
+
+  // Close portaled dropdown on scroll/resize (but not when scrolling inside it)
+  useEffect(() => {
+    if (!open || !dropPos) return;
+    const close = (e: Event) => {
+      if (dropdownRef.current?.contains(e.target as Node)) return;
+      setOpen(false);
+    };
+    window.addEventListener('scroll', close, { capture: true, passive: true });
+    window.addEventListener('resize', close);
+    return () => {
+      window.removeEventListener('scroll', close, { capture: true });
+      window.removeEventListener('resize', close);
+    };
+  }, [open, dropPos]);
+
   const select = (option: ComboboxOption) => {
     if (option.disabled) return;
     if (!isControlled) setInternalValue(option.value);
@@ -119,6 +162,7 @@ export function Combobox({
     <div ref={wrapRef} className={cx('vx-combobox', open && 'vx-combobox--open', className)}>
       {label ? <span className="vx-field-group__label">{label}</span> : null}
       <button
+        ref={triggerRef}
         type="button"
         className={cx(
           'vx-combobox__trigger',
@@ -153,46 +197,53 @@ export function Combobox({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open && (
-        <div className={cx('vx-combobox__dropdown', dropDirection === 'up' && 'vx-combobox__dropdown--up')}>
-          {showSearch && (
-            <div className="vx-combobox__search-wrap">
-              <input
-                ref={searchRef}
-                type="text"
-                className="vx-combobox__search"
-                placeholder={searchPlaceholder}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                aria-label={searchPlaceholder}
-              />
-            </div>
-          )}
-          <ul id={listboxId} className="vx-combobox__list" role="listbox" aria-label={label ?? 'Options'}>
-            {filtered.length === 0 ? (
-              <li className="vx-combobox__empty">{emptyText}</li>
-            ) : (
-              filtered.map((option) => (
-                <li
-                  key={option.value}
-                  className={cx(
-                    'vx-combobox__option',
-                    option.value === value && 'vx-combobox__option--selected',
-                    option.disabled && 'vx-combobox__option--disabled',
-                  )}
-                  role="option"
-                  aria-selected={option.value === value}
-                  aria-disabled={option.disabled}
-                  onClick={() => select(option)}
-                >
-                  <span>{option.label}</span>
-                  {option.value === value ? <Check size={14} /> : null}
-                </li>
-              ))
+      {open && (() => {
+        const dropdownNode = (
+          <div
+            ref={dropdownRef}
+            className={cx('vx-combobox__dropdown', dropPos?.direction === 'up' && 'vx-combobox__dropdown--up')}
+            style={dropPos ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width } : undefined}
+          >
+            {showSearch && (
+              <div className="vx-combobox__search-wrap">
+                <input
+                  ref={searchRef}
+                  type="text"
+                  className="vx-combobox__search"
+                  placeholder={searchPlaceholder}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  aria-label={searchPlaceholder}
+                />
+              </div>
             )}
-          </ul>
-        </div>
-      )}
+            <ul id={listboxId} className="vx-combobox__list" role="listbox" aria-label={label ?? 'Options'}>
+              {filtered.length === 0 ? (
+                <li className="vx-combobox__empty">{emptyText}</li>
+              ) : (
+                filtered.map((option) => (
+                  <li
+                    key={option.value}
+                    className={cx(
+                      'vx-combobox__option',
+                      option.value === value && 'vx-combobox__option--selected',
+                      option.disabled && 'vx-combobox__option--disabled',
+                    )}
+                    role="option"
+                    aria-selected={option.value === value}
+                    aria-disabled={option.disabled}
+                    onClick={() => select(option)}
+                  >
+                    <span>{option.label}</span>
+                    {option.value === value ? <Check size={14} /> : null}
+                  </li>
+                ))
+              )}
+            </ul>
+          </div>
+        );
+        return dropPos ? createPortal(dropdownNode, document.body) : dropdownNode;
+      })()}
     </div>
   );
 }

@@ -577,12 +577,22 @@ export function ActionCard() {
   );
 }`,
   'form-controls': String.raw`import { useState } from 'react';
-import { Button, Combobox, Input, MultiSelect, Select, Textarea, TimePicker } from 'vxui-react';
+import { Combobox, Input, MultiSelect, Select, Textarea, TimePicker } from 'vxui-react';
 
 export function ProjectForm() {
   const [env, setEnv] = useState<string | undefined>(undefined);
   const [stack, setStack] = useState(['react', 'typescript']);
   const [deployTime, setDeployTime] = useState('');
+  // Stacking verification — two Comboboxes one below the other
+  const [regionA, setRegionA] = useState<string | undefined>(undefined);
+  const [regionB, setRegionB] = useState<string | undefined>(undefined);
+
+  const REGIONS = [
+    { value: 'us-east-1', label: 'US East – N. Virginia' },
+    { value: 'us-west-2', label: 'US West – Oregon' },
+    { value: 'eu-west-1', label: 'EU West – Ireland' },
+    { value: 'ap-southeast-1', label: 'Asia Pacific – Singapore' },
+  ];
 
   return (
     <form style={{ display: 'grid', gap: 16 }}>
@@ -638,7 +648,26 @@ export function ProjectForm() {
         placeholder="Describe what changed in this release."
       />
 
-      <Button type="submit">Save changes</Button>
+      {/*
+       * Stacking test: when two Comboboxes are placed directly one above the
+       * other, the first dropdown must render above the second field without
+       * z-index bleed. Dropdowns are portaled to document.body on desktop
+       * (> 640 px) so they always escape any stacking-context ancestor.
+       */}
+      <Combobox
+        label="Source region"
+        value={regionA}
+        onChange={setRegionA}
+        placeholder="Select region…"
+        options={REGIONS}
+      />
+      <Combobox
+        label="Target region"
+        value={regionB}
+        onChange={setRegionB}
+        placeholder="Select region…"
+        options={REGIONS}
+      />
     </form>
   );
 }`,
@@ -1190,6 +1219,8 @@ function DesktopApp() {
   const [paginationPage, setPaginationPage] = useState(4);
   const [multiSelectValue, setMultiSelectValue] = useState<string[]>(['react', 'typescript']);
   const [comboboxEnv, setComboboxEnv] = useState<string | undefined>(undefined);
+  const [comboboxRegionA, setComboboxRegionA] = useState<string | undefined>(undefined);
+  const [comboboxRegionB, setComboboxRegionB] = useState<string | undefined>(undefined);
   const [timeValue, setTimeValue] = useState<string | undefined>(undefined);
 
   const copy = isZh
@@ -2065,6 +2096,38 @@ function DesktopApp() {
               readOnly
               resize="none"
             />
+            {/* ── Stacking verification ── */}
+            <div style={{ borderTop: '1px solid var(--vx-border)', paddingTop: 16 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--vx-text-muted)', margin: '0 0 12px' }}>
+                {isZh ? '堆叠验证 · 打开第一个下拉，确认第二个字段不被遮穿' : 'Stacking · open the first dropdown, the second field must stay visible'}
+              </p>
+              <div style={{ display: 'grid', gap: 12 }}>
+                <Combobox
+                  label={isZh ? '来源区域' : 'Source region'}
+                  value={comboboxRegionA}
+                  onChange={setComboboxRegionA}
+                  placeholder={isZh ? '选择区域…' : 'Select region…'}
+                  options={[
+                    { value: 'us-east-1', label: 'US East – N. Virginia' },
+                    { value: 'us-west-2', label: 'US West – Oregon' },
+                    { value: 'eu-west-1', label: 'EU West – Ireland' },
+                    { value: 'ap-southeast-1', label: 'Asia Pacific – Singapore' },
+                  ]}
+                />
+                <Combobox
+                  label={isZh ? '目标区域' : 'Target region'}
+                  value={comboboxRegionB}
+                  onChange={setComboboxRegionB}
+                  placeholder={isZh ? '选择区域…' : 'Select region…'}
+                  options={[
+                    { value: 'us-east-1', label: 'US East – N. Virginia' },
+                    { value: 'us-west-2', label: 'US West – Oregon' },
+                    { value: 'eu-west-1', label: 'EU West – Ireland' },
+                    { value: 'ap-southeast-1', label: 'Asia Pacific – Singapore' },
+                  ]}
+                />
+              </div>
+            </div>
           </div>
         );
       case 'form-inputs':

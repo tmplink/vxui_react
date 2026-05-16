@@ -1,10 +1,14 @@
-import { useEffect, useRef, useState, forwardRef, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useRef, useState, forwardRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { cx } from '../lib/cx';
 import { useViewport } from '../lib/viewport';
 import { Button } from './Button';
 
 // ---------- Shared types ----------
+
+/** Internal context that propagates whether the shell sidebar is collapsed. */
+const ShellCollapsedCtx = createContext(false);
 
 export interface ShellNavItem {
   key: string;
@@ -109,17 +113,19 @@ export function Shell({ collapsed = false, mobileNavOpen = false, density, sideb
   const style = sidebarWidth ? { '--vx-sidebar-width': typeof sidebarWidth === 'number' ? `${sidebarWidth}px` : sidebarWidth } as React.CSSProperties : undefined;
 
   return (
-    <div
-      className={cx('vx-shell', className)}
-      data-collapsed={collapsed}
-      data-nav-open={mobileNavOpen}
-      data-tablet={isTablet}
-      data-tablet-portrait={isTabletPortrait}
-      data-density={density}
-      style={style}
-    >
-      {children}
-    </div>
+    <ShellCollapsedCtx.Provider value={collapsed}>
+      <div
+        className={cx('vx-shell', className)}
+        data-collapsed={collapsed}
+        data-nav-open={mobileNavOpen}
+        data-tablet={isTablet}
+        data-tablet-portrait={isTabletPortrait}
+        data-density={density}
+        style={style}
+      >
+        {children}
+      </div>
+    </ShellCollapsedCtx.Provider>
   );
 }
 
@@ -251,11 +257,39 @@ export interface ShellNavItemProps {
 
 export function ShellNavItem({ label, icon, badge, trailing, active, onSelect, children, defaultOpen = false }: ShellNavItemProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const [flyoutVisible, setFlyoutVisible] = useState(false);
+  const [flyoutPos, setFlyoutPos] = useState({ top: 0, left: 0 });
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const collapsed = useContext(ShellCollapsedCtx);
   const hasChildren = Boolean(children);
 
+  // Clean up pending hide timer on unmount
+  useEffect(() => () => { if (hideTimer.current !== undefined) clearTimeout(hideTimer.current); }, []);
+
   const handleClick = () => {
-    if (hasChildren) setOpen((o) => !o);
-    onSelect?.();
+    if (hasChildren && !collapsed) setOpen((o) => !o);
+    if (!hasChildren || collapsed) onSelect?.();
+  };
+
+  /** Show flyout anchored to the right edge of the sidebar. */
+  const openFlyout = () => {
+    if (!collapsed || !hasChildren || !wrapRef.current) return;
+    if (hideTimer.current !== undefined) clearTimeout(hideTimer.current);
+    const r = wrapRef.current.getBoundingClientRect();
+    // Anchor to the sidebar's right edge, not the item wrap's right edge
+    const sidebar = wrapRef.current.closest<HTMLElement>('.vx-sidebar');
+    const sidebarRight = sidebar ? sidebar.getBoundingClientRect().right : r.right;
+    setFlyoutPos({ top: r.top - 6, left: sidebarRight + 4 });
+    setFlyoutVisible(true);
+  };
+
+  const scheduleFlyoutClose = () => {
+    hideTimer.current = setTimeout(() => setFlyoutVisible(false), 100);
+  };
+
+  const cancelFlyoutClose = () => {
+    if (hideTimer.current !== undefined) clearTimeout(hideTimer.current);
   };
 
   const btn = (
@@ -263,7 +297,8 @@ export function ShellNavItem({ label, icon, badge, trailing, active, onSelect, c
       type="button"
       className={cx('vx-nav-item', active && 'vx-nav-item--active', hasChildren && 'vx-nav-item--parent')}
       onClick={handleClick}
-      aria-expanded={hasChildren ? open : undefined}
+      aria-expanded={hasChildren && !collapsed ? open : undefined}
+      title={collapsed ? label : undefined}
     >
       {icon ? <span className="vx-nav-item__icon">{icon}</span> : null}
       <span className="vx-nav-item__label">{label}</span>
@@ -279,12 +314,37 @@ export function ShellNavItem({ label, icon, badge, trailing, active, onSelect, c
   if (!hasChildren) return btn;
 
   return (
-    <div className="vx-nav-item-wrap">
+    <div
+      ref={wrapRef}
+      className="vx-nav-item-wrap"
+      onMouseEnter={openFlyout}
+      onMouseLeave={collapsed ? scheduleFlyoutClose : undefined}
+    >
       {btn}
-      {open && (
+
+      {/* Inline sub-menu — shown only in expanded sidebar */}
+      {!collapsed && open && (
         <div className="vx-nav-sublist" role="group">
           {children}
         </div>
+      )}
+
+      {/* Fixed flyout — shown on hover in collapsed sidebar, portalled to body
+          so it escapes the sidebar's backdrop-filter containing block */}
+      {collapsed && flyoutVisible && createPortal(
+        <ShellCollapsedCtx.Provider value={false}>
+          <div
+            className="vx-nav-sublist-flyout"
+            style={{ top: flyoutPos.top, left: flyoutPos.left }}
+            role="group"
+            onMouseEnter={cancelFlyoutClose}
+            onMouseLeave={scheduleFlyoutClose}
+          >
+            <div className="vx-nav-sublist-flyout__label">{label}</div>
+            {children}
+          </div>
+        </ShellCollapsedCtx.Provider>,
+        document.body,
       )}
     </div>
   );

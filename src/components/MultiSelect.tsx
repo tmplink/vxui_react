@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect, useId } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useId } from 'react';
+import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
-import { useDropDirection } from '../hooks/useDropDirection';
 
 export interface MultiSelectOption {
   value: string;
@@ -50,9 +50,19 @@ export function MultiSelect({
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const wrapRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
-  const dropDirection = useDropDirection(wrapRef, open, 300);
+
+  /** Fixed position for portaled desktop dropdown. null = render inline (mobile). */
+  const [dropPos, setDropPos] = useState<{
+    top?: number;
+    bottom?: number;
+    left: number;
+    width: number;
+    direction: 'down' | 'up';
+  } | null>(null);
 
   const filtered = options.filter((o) =>
     o.label.toLowerCase().includes(search.toLowerCase()),
@@ -70,7 +80,9 @@ export function MultiSelect({
   useEffect(() => {
     if (!open) return;
     const onOutside = (e: Event) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      const inWrap = wrapRef.current?.contains(e.target as Node);
+      const inDropdown = dropdownRef.current?.contains(e.target as Node);
+      if (!inWrap && !inDropdown) setOpen(false);
     };
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
@@ -90,6 +102,38 @@ export function MultiSelect({
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
+
+  // Compute fixed position for desktop (>640px). Mobile uses inline CSS bottom-sheet.
+  useLayoutEffect(() => {
+    if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
+      setDropPos(null);
+      return;
+    }
+    const rect = triggerRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const direction = spaceBelow < 300 && spaceAbove > spaceBelow ? 'up' : 'down';
+    setDropPos(
+      direction === 'down'
+        ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
+        : { bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width, direction },
+    );
+  }, [open]);
+
+  // Close portaled dropdown on scroll/resize (but not when scrolling inside it)
+  useEffect(() => {
+    if (!open || !dropPos) return;
+    const close = (e: Event) => {
+      if (dropdownRef.current?.contains(e.target as Node)) return;
+      setOpen(false);
+    };
+    window.addEventListener('scroll', close, { capture: true, passive: true });
+    window.addEventListener('resize', close);
+    return () => {
+      window.removeEventListener('scroll', close, { capture: true });
+      window.removeEventListener('resize', close);
+    };
+  }, [open, dropPos]);
 
   const toggle = (option: MultiSelectOption) => {
     if (option.disabled) return;
@@ -124,6 +168,7 @@ export function MultiSelect({
     <div ref={wrapRef} className={cx('vx-multiselect', open && 'vx-multiselect--open', className)}>
       {label ? <span className="vx-field-group__label">{label}</span> : null}
       <button
+        ref={triggerRef}
         type="button"
         className={cx(
           'vx-multiselect__trigger',
@@ -181,49 +226,56 @@ export function MultiSelect({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open && (
-        <div className={cx('vx-multiselect__dropdown', dropDirection === 'up' && 'vx-multiselect__dropdown--up')}>
-          <div className="vx-multiselect__search-wrap">
-            <input
-              ref={searchRef}
-              type="text"
-              className="vx-multiselect__search"
-              placeholder={searchPlaceholder}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              aria-label={searchPlaceholder}
-            />
+      {open && (() => {
+        const dropdownNode = (
+          <div
+            ref={dropdownRef}
+            className={cx('vx-multiselect__dropdown', dropPos?.direction === 'up' && 'vx-multiselect__dropdown--up')}
+            style={dropPos ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width } : undefined}
+          >
+            <div className="vx-multiselect__search-wrap">
+              <input
+                ref={searchRef}
+                type="text"
+                className="vx-multiselect__search"
+                placeholder={searchPlaceholder}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                aria-label={searchPlaceholder}
+              />
+            </div>
+            <ul id={listboxId} className="vx-multiselect__list" role="listbox" aria-multiselectable="true" aria-label={label ?? 'Options'}>
+              {filtered.length === 0 ? (
+                <li className="vx-multiselect__empty">{emptyText}</li>
+              ) : (
+                filtered.map((option) => {
+                  const isSelected = value.includes(option.value);
+                  return (
+                    <li
+                      key={option.value}
+                      className={cx(
+                        'vx-multiselect__option',
+                        isSelected && 'vx-multiselect__option--selected',
+                        option.disabled && 'vx-multiselect__option--disabled',
+                      )}
+                      role="option"
+                      aria-selected={isSelected}
+                      aria-disabled={option.disabled}
+                      onClick={() => toggle(option)}
+                    >
+                      <span className={cx('vx-multiselect__checkbox', isSelected && 'vx-multiselect__checkbox--checked')}>
+                        {isSelected ? <Check size={11} /> : null}
+                      </span>
+                      <span>{option.label}</span>
+                    </li>
+                  );
+                })
+              )}
+            </ul>
           </div>
-          <ul id={listboxId} className="vx-multiselect__list" role="listbox" aria-multiselectable="true" aria-label={label ?? 'Options'}>
-            {filtered.length === 0 ? (
-              <li className="vx-multiselect__empty">{emptyText}</li>
-            ) : (
-              filtered.map((option) => {
-                const isSelected = value.includes(option.value);
-                return (
-                  <li
-                    key={option.value}
-                    className={cx(
-                      'vx-multiselect__option',
-                      isSelected && 'vx-multiselect__option--selected',
-                      option.disabled && 'vx-multiselect__option--disabled',
-                    )}
-                    role="option"
-                    aria-selected={isSelected}
-                    aria-disabled={option.disabled}
-                    onClick={() => toggle(option)}
-                  >
-                    <span className={cx('vx-multiselect__checkbox', isSelected && 'vx-multiselect__checkbox--checked')}>
-                      {isSelected ? <Check size={11} /> : null}
-                    </span>
-                    <span>{option.label}</span>
-                  </li>
-                );
-              })
-            )}
-          </ul>
-        </div>
-      )}
+        );
+        return dropPos ? createPortal(dropdownNode, document.body) : dropdownNode;
+      })()}
     </div>
   );
 }
