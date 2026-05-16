@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MultiSelect } from '../MultiSelect';
+import { Dialog } from '../Dialog';
+import { Button } from '../Button';
 
 const OPTIONS = [
   { value: 'react', label: 'React' },
@@ -164,5 +166,19 @@ describe('MultiSelect', () => {
     // Value stays until parent updates it
     rerender(<MultiSelect options={OPTIONS} value={['react', 'vue']} onChange={onChange} />);
     expect(screen.getByText('Vue')).toBeInTheDocument();
+  });
+
+  it('adds a dialog stacking class to a portaled dropdown opened inside Dialog', async () => {
+    render(
+      <Dialog trigger={<Button>Open</Button>} title="Pick frameworks">
+        <MultiSelect options={OPTIONS} placeholder="Pick frameworks" />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Pick frameworks' }));
+
+    const dropdown = document.body.querySelector('.vx-multiselect__dropdown');
+    expect(dropdown).toHaveClass('vx-multiselect__dropdown--in-dialog');
   });
 });

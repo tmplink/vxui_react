@@ -1764,8 +1764,14 @@ a {
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   animation: vx-dialog-in 150ms ease;
 }
-/* When a custom dropdown is open inside the dialog, allow it to overflow */
-.vx-dialog__content:has(.vx-combobox__dropdown, .vx-multiselect__dropdown, .vx-dropdown__menu) {
+/* When an inline popover is open inside the dialog, allow it to overflow */
+.vx-dialog__content:has(
+  .vx-combobox__dropdown,
+  .vx-multiselect__dropdown,
+  .vx-dropdown__menu,
+  .vx-datepicker__popover,
+  .vx-timepicker__popover
+) {
   overflow: visible;
 }
 
@@ -1847,7 +1853,9 @@ a {
 .vx-dialog__content--scrollable .vx-dialog__body:has(
   .vx-combobox__dropdown,
   .vx-multiselect__dropdown,
-  .vx-dropdown__menu
+  .vx-dropdown__menu,
+  .vx-datepicker__popover,
+  .vx-timepicker__popover
 ) {
   overflow-y: visible;
 }
@@ -7221,6 +7229,9 @@ a {
   animation: vx-fade-in 140ms ease;
   overflow: hidden;
 }
+.vx-combobox__dropdown--in-dialog {
+  z-index: calc(var(--vx-z-dialog) + 1);
+}
 .vx-combobox__dropdown--up {
   /* direction handled by inline style from portal */
 }
@@ -7403,6 +7414,9 @@ a {
   border-radius: var(--vx-radius);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   overflow: hidden;
+}
+.vx-multiselect__dropdown--in-dialog {
+  z-index: calc(var(--vx-z-dialog) + 1);
 }
 .vx-multiselect__dropdown--up {
   /* direction handled by inline style from portal */

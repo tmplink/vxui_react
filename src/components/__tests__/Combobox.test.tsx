@@ -1,6 +1,8 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Combobox } from '../Combobox';
+import { Dialog } from '../Dialog';
+import { Button } from '../Button';
 
 const OPTIONS = [
   { value: 'react', label: 'React' },
@@ -175,5 +177,19 @@ describe('Combobox', () => {
     expect(screen.getByRole('listbox')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Outside' }));
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('adds a dialog stacking class to a portaled dropdown opened inside Dialog', async () => {
+    render(
+      <Dialog trigger={<Button>Open</Button>} title="Pick a framework">
+        <Combobox options={OPTIONS} placeholder="Pick framework" />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Pick framework' }));
+
+    const dropdown = document.body.querySelector('.vx-combobox__dropdown');
+    expect(dropdown).toHaveClass('vx-combobox__dropdown--in-dialog');
   });
 });

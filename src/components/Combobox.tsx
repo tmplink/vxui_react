@@ -68,6 +68,7 @@ export function Combobox({
     width: number;
     direction: 'down' | 'up';
   } | null>(null);
+  const [portalInDialog, setPortalInDialog] = useState(false);
 
   const selectedOption = options.find((o) => o.value === value);
   const filtered = options.filter((o) =>
@@ -117,12 +118,14 @@ export function Combobox({
   useLayoutEffect(() => {
     if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
       setDropPos(null);
+      setPortalInDialog(false);
       return;
     }
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 280 && spaceAbove > spaceBelow ? 'up' : 'down';
+    setPortalInDialog(Boolean(wrapRef.current?.closest('.vx-dialog__content')));
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
@@ -201,7 +204,11 @@ export function Combobox({
         const dropdownNode = (
           <div
             ref={dropdownRef}
-            className={cx('vx-combobox__dropdown', dropPos?.direction === 'up' && 'vx-combobox__dropdown--up')}
+            className={cx(
+              'vx-combobox__dropdown',
+              dropPos?.direction === 'up' && 'vx-combobox__dropdown--up',
+              dropPos && portalInDialog && 'vx-combobox__dropdown--in-dialog',
+            )}
             style={dropPos ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width } : undefined}
           >
             {showSearch && (

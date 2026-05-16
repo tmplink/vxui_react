@@ -63,6 +63,7 @@ export function MultiSelect({
     width: number;
     direction: 'down' | 'up';
   } | null>(null);
+  const [portalInDialog, setPortalInDialog] = useState(false);
 
   const filtered = options.filter((o) =>
     o.label.toLowerCase().includes(search.toLowerCase()),
@@ -107,12 +108,14 @@ export function MultiSelect({
   useLayoutEffect(() => {
     if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
       setDropPos(null);
+      setPortalInDialog(false);
       return;
     }
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 300 && spaceAbove > spaceBelow ? 'up' : 'down';
+    setPortalInDialog(Boolean(wrapRef.current?.closest('.vx-dialog__content')));
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
@@ -230,7 +233,11 @@ export function MultiSelect({
         const dropdownNode = (
           <div
             ref={dropdownRef}
-            className={cx('vx-multiselect__dropdown', dropPos?.direction === 'up' && 'vx-multiselect__dropdown--up')}
+            className={cx(
+              'vx-multiselect__dropdown',
+              dropPos?.direction === 'up' && 'vx-multiselect__dropdown--up',
+              dropPos && portalInDialog && 'vx-multiselect__dropdown--in-dialog',
+            )}
             style={dropPos ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width } : undefined}
           >
             <div className="vx-multiselect__search-wrap">
