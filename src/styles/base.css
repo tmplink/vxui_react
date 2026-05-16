@@ -517,6 +517,55 @@ a {
   font-weight: 400;
 }
 
+/* ── Collapsed-sidebar submenu flyout ──────────────────────────────────────
+   Rendered as position:fixed so it escapes the sidebar's overflow:hidden.
+   Appears to the right of the sidebar on hover.
+   ────────────────────────────────────────────────────────────────────────── */
+.vx-nav-sublist-flyout {
+  position: fixed;
+  z-index: var(--vx-z-popover);
+  min-width: 180px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+  box-shadow: var(--vx-shadow);
+  animation: vx-flyout-in 120ms ease;
+}
+
+@keyframes vx-flyout-in {
+  from { opacity: 0; transform: translateX(6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Section heading shown at top of flyout */
+.vx-nav-sublist-flyout__label {
+  padding: 4px 10px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vx-text-muted);
+  border-bottom: 1px solid var(--vx-border);
+  margin-bottom: 4px;
+}
+
+/* Child nav items inside flyout: standard size, no left indent */
+.vx-nav-sublist-flyout .vx-nav-item {
+  min-height: 36px;
+  padding: 0 10px;
+  justify-content: flex-start;
+}
+/* Override the collapsed-state display:none from the parent shell */
+.vx-nav-sublist-flyout .vx-nav-item__label {
+  display: block !important;
+  font-size: 13px;
+  font-weight: 500;
+}
+
 .vx-sidebar__footer {
   margin-top: auto;
   padding: 8px 10px;
@@ -558,6 +607,22 @@ a {
   justify-content: center;
   width: 100%;
   padding: 0;
+}
+
+/* Subtle indicator dot: parent items have sub-menus reachable via hover */
+.vx-shell[data-collapsed='true'] .vx-nav-item--parent {
+  position: relative;
+}
+.vx-shell[data-collapsed='true'] .vx-nav-item--parent::after {
+  content: '';
+  position: absolute;
+  bottom: 7px;
+  right: 7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--vx-text-muted);
+  opacity: 0.55;
 }
 
 .vx-shell__main {
