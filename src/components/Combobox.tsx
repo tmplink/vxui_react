@@ -116,7 +116,7 @@ export function Combobox({
   };
 
   return (
-    <div ref={wrapRef} className={cx('vx-combobox', className)}>
+    <div ref={wrapRef} className={cx('vx-combobox', open && 'vx-combobox--open', className)}>
       {label ? <span className="vx-field-group__label">{label}</span> : null}
       <button
         type="button"

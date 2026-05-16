@@ -121,7 +121,7 @@ export function MultiSelect({
   }, {});
 
   return (
-    <div ref={wrapRef} className={cx('vx-multiselect', className)}>
+    <div ref={wrapRef} className={cx('vx-multiselect', open && 'vx-multiselect--open', className)}>
       {label ? <span className="vx-field-group__label">{label}</span> : null}
       <button
         type="button"

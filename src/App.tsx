@@ -2253,6 +2253,7 @@ function DesktopApp() {
                 {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
               </div>
             </Dialog>
+
             <Popover
               content={
                 <div className="vx-doc-popover-copy">
