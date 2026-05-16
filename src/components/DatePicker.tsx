@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { cx } from '../lib/cx';
 import { Calendar } from './Calendar';
+import { useDropDirection } from '../hooks/useDropDirection';
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString();
@@ -50,21 +51,30 @@ export function DatePicker({
   const selected = isControlled ? controlledValue : internalValue;
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const dropDirection = useDropDirection(wrapRef, open, 320);
 
   useEffect(() => {
     if (!open) return;
-    const handler = (e: MouseEvent) => {
+    const handler = (e: Event) => {
       if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
     };
     const keyHandler = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
     document.addEventListener('mousedown', handler);
+    document.addEventListener('touchstart', handler, { passive: true });
     document.addEventListener('keydown', keyHandler);
     return () => {
       document.removeEventListener('mousedown', handler);
+      document.removeEventListener('touchstart', handler);
       document.removeEventListener('keydown', keyHandler);
     };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
 
   const handleSelect = (date: Date) => {
@@ -96,7 +106,7 @@ export function DatePicker({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open ? (
-        <div className="vx-datepicker__popover" role="dialog" aria-label="Date picker">
+        <div className={cx('vx-datepicker__popover', dropDirection === 'up' && 'vx-datepicker__popover--up')} role="dialog" aria-label="Date picker">
           <Calendar
             value={selected}
             onChange={handleSelect}

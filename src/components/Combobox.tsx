@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useState, useRef, useEffect, useId } from 'react';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
+import { useDropDirection } from '../hooks/useDropDirection';
 
 export interface ComboboxOption {
   value: string;
@@ -57,6 +58,7 @@ export function Combobox({
   const wrapRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
+  const dropDirection = useDropDirection(wrapRef, open, 280);
 
   const selectedOption = options.find((o) => o.value === value);
   const filtered = options.filter((o) =>
@@ -78,18 +80,26 @@ export function Combobox({
 
   useEffect(() => {
     if (!open) return;
-    const onOutside = (e: MouseEvent) => {
+    const onOutside = (e: Event) => {
       if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
     document.addEventListener('mousedown', onOutside);
+    document.addEventListener('touchstart', onOutside, { passive: true });
     document.addEventListener('keydown', onKey);
     return () => {
       document.removeEventListener('mousedown', onOutside);
+      document.removeEventListener('touchstart', onOutside);
       document.removeEventListener('keydown', onKey);
     };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
 
   const select = (option: ComboboxOption) => {
@@ -144,7 +154,7 @@ export function Combobox({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (
-        <div className="vx-combobox__dropdown">
+        <div className={cx('vx-combobox__dropdown', dropDirection === 'up' && 'vx-combobox__dropdown--up')}>
           {showSearch && (
             <div className="vx-combobox__search-wrap">
               <input
