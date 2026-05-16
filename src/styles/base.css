@@ -1865,6 +1865,35 @@ a {
   color: var(--vx-text);
 }
 
+@keyframes vx-toast-in-mobile {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .vx-toast__viewport {
+    /* Sit above the mobile bottom nav (56px) + safe-area + 12px gap */
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px) + 12px);
+    left: 12px;
+    right: 12px;
+    width: auto;
+  }
+
+  .vx-toast {
+    animation: vx-toast-in-mobile 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 14px 10px 14px 14px;
+  }
+
+  /* Larger close button for touch */
+  .vx-toast__close {
+    width: 36px;
+    height: 36px;
+    margin-top: -6px;
+    margin-right: -6px;
+    border-radius: 10px;
+  }
+}
+
 .vx-stack {
   display: flex;
   flex-direction: column;
@@ -2258,6 +2287,76 @@ a {
   line-height: 1;
 }
 
+/* BottomNav submenu */
+.vxm-bottomnav-wrap {
+  position: relative;
+}
+
+.vxm-bottomnav__scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--vx-z-dropdown);
+}
+
+.vxm-bottomnav__submenu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  max-width: calc(100vw - 32px);
+  max-height: min(60vh, 520px);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-lg);
+  box-shadow: var(--vx-shadow-lg);
+  z-index: calc(var(--vx-z-dropdown) + 1);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: vxm-submenu-in 150ms ease forwards;
+}
+
+.vxm-bottomnav__submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 50px;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--vx-text);
+  font-family: var(--vx-font);
+  -webkit-tap-highlight-color: transparent;
+  transition: background 100ms ease;
+}
+
+.vxm-bottomnav__submenu-item + .vxm-bottomnav__submenu-item {
+  border-top: 1px solid var(--vx-border);
+}
+
+.vxm-bottomnav__submenu-item:active {
+  background: var(--vx-surface-hover);
+}
+
+.vxm-bottomnav__submenu-icon {
+  display: flex;
+  color: var(--vx-primary);
+}
+
+.vxm-bottomnav__item--submenu-open {
+  color: var(--vx-primary);
+}
+
+@keyframes vxm-submenu-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
 /* ActionSheet */
 .vxm-actionsheet__overlay {
   position: fixed;
@@ -2621,11 +2720,49 @@ a {
   color: var(--vx-text-muted);
 }
 
+.vxm-drawer-section__items-wrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 220ms ease;
+}
+
+.vxm-drawer-section__items-wrap--closed {
+  grid-template-rows: 0fr;
+}
+
 .vxm-drawer-section__items {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 2px;
   padding: 0 8px;
+}
+
+/* Collapsible section header */
+.vxm-drawer-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 4px 16px 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vxm-drawer-section__header .vxm-drawer-section__title {
+  padding: 0;
+}
+
+.vxm-drawer-section__chevron {
+  color: var(--vx-text-muted);
+  flex-shrink: 0;
+  transition: transform 220ms ease;
+}
+
+.vxm-drawer-section__chevron--open {
+  transform: rotate(180deg);
 }
 
 /* DrawerNavItem */
@@ -4653,42 +4790,43 @@ a {
 }
 
 .vxm-docs-home__hero {
-  padding: 28px 16px 20px;
+  flex: 1;
+  padding: 32px 20px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  gap: 14px;
   text-align: center;
+  background: radial-gradient(
+    ellipse 110% 45% at 50% 0%,
+    color-mix(in srgb, var(--vx-primary) 13%, var(--vx-surface)) 0%,
+    var(--vx-surface) 70%
+  );
 }
 
 .vxm-docs-home__hero-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-}
-
-.vxm-docs-home__hero-badge-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--vx-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 .vxm-docs-home__title {
   margin: 0;
-  max-width: 10ch;
-  font-size: clamp(2.35rem, 10vw, 3.4rem);
+  font-size: clamp(1.9rem, 8vw, 2.8rem);
   font-weight: 800;
   letter-spacing: -0.03em;
+  line-height: 1.1;
+  background: linear-gradient(140deg, var(--vx-text) 20%, var(--vx-primary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   color: var(--vx-text);
-  line-height: 1.04;
 }
 
 .vxm-docs-home__lead {
   margin: 0;
-  max-width: 32ch;
+  max-width: 30ch;
   font-size: 0.9375rem;
   color: var(--vx-text-secondary);
   line-height: 1.62;
@@ -4698,48 +4836,68 @@ a {
   display: flex;
   width: 100%;
   gap: 10px;
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
-.vxm-docs-home__status {
-  margin: 0;
-  max-width: 34ch;
-  font-size: 0.8125rem;
-  line-height: 1.6;
-  color: var(--vx-text-muted);
+/* Bottom section — visually distinct from hero */
+.vxm-docs-home__bottom {
+  border-top: 1px solid var(--vx-border);
+  background: var(--vx-bg-accent);
+  padding: 16px 16px 0;
 }
 
-.vxm-docs-home__preview-search {
+.vxm-docs-home__chips {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.vxm-docs-home__chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 12px;
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+}
+
+.vxm-docs-home__chip-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--vx-primary) 12%, var(--vx-surface));
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 10px;
-  width: calc(100% - 32px);
-  min-height: 46px;
-  margin: 0 16px 10px;
-  padding: 0 14px;
-  border-radius: var(--vx-radius-lg);
-  border: 1px solid var(--vx-border);
-  background: color-mix(in srgb, var(--vx-bg-accent) 72%, var(--vx-surface));
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--vx-primary);
+  margin-top: 1px;
+}
+
+.vxm-docs-home__chip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.vxm-docs-home__chip-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--vx-text);
+  line-height: 1.3;
+}
+
+.vxm-docs-home__chip-desc {
+  font-size: 0.6875rem;
   color: var(--vx-text-muted);
-  font-size: 0.875rem;
-  box-sizing: border-box;
-  appearance: none;
-  -webkit-appearance: none;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 100ms ease, border-color 100ms ease, color 100ms ease;
-}
-
-.vxm-docs-home__preview-search:active {
-  background: var(--vx-surface-hover);
-}
-
-.vxm-docs-home__preview-search:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--vx-primary) 72%, white);
-  outline-offset: 2px;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .vxm-docs-home__list,
@@ -4747,32 +4905,12 @@ a {
   margin: 0 16px;
 }
 
-.vxm-docs-home__leading-badge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--vx-primary-soft) 62%, var(--vx-surface));
-  color: var(--vx-primary);
-}
-
-.vxm-docs-home__leading-badge--accent {
-  background: color-mix(in srgb, var(--vx-primary-soft) 40%, var(--vx-glass-bg-strong));
-}
-
-.vxm-docs-home__meta-copy {
-  display: grid;
-  gap: 6px;
-}
-
 .vxm-docs-home__footer {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 4px 16px 32px;
+  padding: 4px 0 32px;
 }
 
 .vxm-docs-home__footer-copy {
@@ -8537,5 +8675,170 @@ a {
   .vx-radio                         { gap: 10px; padding: 4px 0; }
   .vx-radio__control-wrap           { width: 20px; height: 20px; }
   .vx-radio__dot                    { width: 8px; height: 8px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Mobile bottom-sheet for dropdown overlays (≤ 640 px)
+   • Combobox / MultiSelect / TimePicker slide up as a full-width
+     bottom sheet instead of an inline floating dropdown.
+   • Handle bar via ::before (absolute, top-centre of sheet).
+   • Semi-transparent backdrop via ::after (fixed, full-viewport,
+     z-index: -1 so it appears behind the sheet content but above
+     the page; pointer-events: none lets taps fall through to the
+     document touchstart/mousedown handler which closes the sheet).
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* ── Sheet container ── */
+  .vx-combobox__dropdown,
+  .vx-multiselect__dropdown,
+  .vx-timepicker__popover,
+  .vx-datepicker__popover,
+  .vx-colorpicker__panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100%;
+    max-height: min(70vh, 560px);
+    min-width: unset;
+    border-radius: 20px 20px 0 0;
+    border: none;
+    border-top: 1px solid var(--vx-border);
+    background: var(--vx-surface);
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.14);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    z-index: var(--vx-z-sheet);
+    padding-top: 24px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: vx-sheet-slide-up 260ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  /* Always bottom (override --up direction flip on mobile) */
+  .vx-combobox__dropdown--up,
+  .vx-multiselect__dropdown--up,
+  .vx-timepicker__popover--up,
+  .vx-datepicker__popover--up {
+    top: auto;
+    bottom: 0;
+  }
+
+  /* Handle bar */
+  .vx-combobox__dropdown::before,
+  .vx-multiselect__dropdown::before,
+  .vx-timepicker__popover::before,
+  .vx-datepicker__popover::before,
+  .vx-colorpicker__panel::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    background: var(--vx-border-strong);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+
+  /* Backdrop — placed on the wrapper (outside the sheet's stacking
+     context) so it appears below the sheet, not on top of it.
+     z-index: sheet - 1 puts it above the page but below the sheet. */
+  .vx-combobox:has(.vx-combobox__dropdown)::after,
+  .vx-multiselect:has(.vx-multiselect__dropdown)::after,
+  .vx-timepicker:has(.vx-timepicker__popover)::after,
+  .vx-datepicker:has(.vx-datepicker__popover)::after,
+  .vx-colorpicker:has(.vx-colorpicker__panel)::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.42);
+    z-index: calc(var(--vx-z-sheet) - 1);
+    pointer-events: none;
+  }
+
+  /* ── Scrollable list ── */
+  .vx-combobox__list,
+  .vx-multiselect__list {
+    max-height: none;
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 4px 8px 20px;
+  }
+
+  /* ── Larger touch targets for options ── */
+  .vx-combobox__option {
+    min-height: 52px;
+    padding: 12px 16px;
+    font-size: 15px;
+    border-radius: var(--vx-radius);
+  }
+  .vx-multiselect__option {
+    min-height: 52px;
+    padding: 12px 16px;
+    font-size: 15px;
+    border-radius: var(--vx-radius);
+  }
+
+  /* ── Search input ── */
+  .vx-combobox__search,
+  .vx-multiselect__search {
+    font-size: 16px;
+    padding: 10px 14px;
+    height: 44px;
+  }
+
+  /* ── TimePicker: wider columns, larger hit areas ── */
+  .vx-timepicker__columns {
+    padding: 8px 0;
+    gap: 8px;
+  }
+  .vx-timepicker__col        { width: 72px; }
+  .vx-timepicker__col-item   { height: 52px; font-size: 22px; }
+  .vx-timepicker__col-item--adjacent { font-size: 17px; }
+  .vx-timepicker__col-btn    { width: 44px; height: 44px; }
+  .vx-timepicker__footer     {
+    padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  .vx-timepicker__done {
+    width: 100%;
+    height: 44px;
+    font-size: 16px;
+    border-radius: var(--vx-radius);
+    justify-content: center;
+  }
+
+  /* ── DatePicker: scrollable calendar in sheet ── */
+  .vx-datepicker__popover {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 24px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* ── ColorPicker: scrollable panel in sheet ── */
+  .vx-colorpicker__panel {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 24px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+  .vx-colorpicker__hue-slider,
+  .vx-colorpicker__sat-slider,
+  .vx-colorpicker__lit-slider { height: 36px; }
+  .vx-colorpicker__close {
+    width: 100%;
+    height: 44px;
+    font-size: 16px;
+    margin-top: 8px;
+    border-radius: var(--vx-radius);
+  }
+}
+
+@keyframes vx-sheet-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
 }
 

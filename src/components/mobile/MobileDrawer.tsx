@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { cx } from '../../lib/cx';
 
 export interface MobileDrawerProps {
@@ -139,14 +140,39 @@ export function DrawerNavItem({ icon, label, badge, active, onClick }: DrawerNav
 
 export interface DrawerNavSectionProps {
   title?: string;
+  /** 是否可折叠，默认 false */
+  collapsible?: boolean;
+  /** 初始展开状态，collapsible=true 时有效，默认 true */
+  defaultOpen?: boolean;
   children: ReactNode;
 }
 
-export function DrawerNavSection({ title, children }: DrawerNavSectionProps) {
+export function DrawerNavSection({ title, collapsible = false, defaultOpen = true, children }: DrawerNavSectionProps) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
   return (
-    <div className="vxm-drawer-section">
-      {title && <div className="vxm-drawer-section__title">{title}</div>}
-      <div className="vxm-drawer-section__items">{children}</div>
+    <div className={cx('vxm-drawer-section', collapsible && 'vxm-drawer-section--collapsible')}>
+      {title && (
+        collapsible ? (
+          <button
+            type="button"
+            className="vxm-drawer-section__header"
+            onClick={() => setIsOpen(v => !v)}
+            aria-expanded={isOpen}
+          >
+            <span className="vxm-drawer-section__title">{title}</span>
+            <ChevronDown
+              size={14}
+              className={cx('vxm-drawer-section__chevron', isOpen && 'vxm-drawer-section__chevron--open')}
+            />
+          </button>
+        ) : (
+          <div className="vxm-drawer-section__title">{title}</div>
+        )
+      )}
+      <div className={cx('vxm-drawer-section__items-wrap', !isOpen && 'vxm-drawer-section__items-wrap--closed')}>
+        <div className="vxm-drawer-section__items">{children}</div>
+      </div>
     </div>
   );
 }

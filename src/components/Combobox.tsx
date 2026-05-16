@@ -80,18 +80,26 @@ export function Combobox({
 
   useEffect(() => {
     if (!open) return;
-    const onOutside = (e: MouseEvent) => {
+    const onOutside = (e: Event) => {
       if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
     };
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
     document.addEventListener('mousedown', onOutside);
+    document.addEventListener('touchstart', onOutside, { passive: true });
     document.addEventListener('keydown', onKey);
     return () => {
       document.removeEventListener('mousedown', onOutside);
+      document.removeEventListener('touchstart', onOutside);
       document.removeEventListener('keydown', onKey);
     };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
 
   const select = (option: ComboboxOption) => {

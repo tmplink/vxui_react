@@ -158,18 +158,26 @@ export function TimePicker({
 
   useEffect(() => {
     if (!open) return;
-    const handler = (e: MouseEvent) => {
+    const handler = (e: Event) => {
       if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
     };
     const keyHandler = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
     document.addEventListener('mousedown', handler);
+    document.addEventListener('touchstart', handler, { passive: true });
     document.addEventListener('keydown', keyHandler);
     return () => {
       document.removeEventListener('mousedown', handler);
+      document.removeEventListener('touchstart', handler);
       document.removeEventListener('keydown', keyHandler);
     };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
   }, [open]);
 
   const commit = useCallback(

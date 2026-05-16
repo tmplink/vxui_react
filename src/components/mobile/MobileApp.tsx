@@ -29,6 +29,8 @@ import {
   Share2,
   Download,
   Star,
+  Globe,
+  X,
 } from 'lucide-react';
 import { MobileShell, MobileTopBar, MobileIconButton } from './MobileShell';
 import { BottomNav } from './BottomNav';
@@ -73,6 +75,32 @@ import {
   Tooltip,
   useToast,
   useTheme,
+  LanguageSwitcher,
+  Combobox,
+  MultiSelect,
+  TimePicker,
+  SegmentedControl,
+  Dialog,
+  AlertDialog,
+  DatePicker,
+  NumberInput,
+  TagInput,
+  FileUpload,
+  Rating,
+  Toggle,
+  ToggleGroup,
+  Stepper,
+  Timeline,
+  EmptyState,
+  Sheet,
+  ColorPicker,
+  Carousel,
+  TreeView,
+  ScrollArea,
+  HoverCard,
+  ContextMenu,
+  NavigationMenu,
+  Menubar,
 } from '../../lib';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -103,7 +131,10 @@ type PageKey =
   | 'register-page'
   | 'error-page'
   | 'privacy-policy'
-  | 'terms-of-service';
+  | 'terms-of-service'
+  | 'command-palette'
+  | 'code-block'
+  | 'language-switcher';
 
 interface PageDefinition {
   section: string;
@@ -141,6 +172,74 @@ function getMobileTab(): BottomTab {
   return 'home';
 }
 
+// ─── SearchBox ──────────────────────────────────────────────────────────────
+
+interface SearchBoxProps {
+  value: string;
+  onChange?: (v: string) => void;
+  onFocus?: () => void;
+  placeholder?: string;
+  ariaLabel?: string;
+  inputRef?: React.RefObject<HTMLInputElement>;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+function SearchBox({ value, onChange, onFocus, placeholder, ariaLabel, inputRef, className, style }: SearchBoxProps) {
+  return (
+    <div
+      className={className}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        ...style,
+      }}
+    >
+      <Search size={16} style={{ color: 'var(--vx-text-muted)', flexShrink: 0 }} />
+      <input
+        ref={inputRef}
+        type="search"
+        value={value}
+        onChange={onChange ? e => onChange(e.target.value) : undefined}
+        onFocus={onFocus}
+        readOnly={!onChange}
+        placeholder={placeholder}
+        aria-label={ariaLabel}
+        autoComplete="off"
+        style={{
+          flex: 1,
+          border: 'none',
+          background: 'transparent',
+          outline: 'none',
+          fontSize: 15,
+          color: 'var(--vx-text)',
+          minWidth: 0,
+          cursor: onChange ? 'text' : 'pointer',
+        }}
+      />
+      {value && onChange && (
+        <button
+          type="button"
+          onClick={() => onChange('')}
+          style={{
+            border: 'none',
+            background: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            color: 'var(--vx-text-muted)',
+            display: 'flex',
+            alignItems: 'center',
+            flexShrink: 0,
+          }}
+        >
+          <X size={16} />
+        </button>
+      )}
+    </div>
+  );
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function MobileApp() {
@@ -160,6 +259,8 @@ export function MobileApp() {
   const [activeTab, setActiveTab] = useState<BottomTab>(getMobileTab);
 
   // ── UI state ───────────────────────────────────────────────────────────────
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [actionSheetOpen, setActionSheetOpen] = useState(false);
   const docHeaderRef = useRef<HTMLDivElement | null>(null);
@@ -173,6 +274,19 @@ export function MobileApp() {
   const [sliderVal, setSliderVal] = useState(42);
   const [paginationPage, setPaginationPage] = useState(1);
   const [mobileTab, setMobileTab] = useState<'home' | 'search' | 'alerts' | 'profile'>('home');
+  const [comboboxVal, setComboboxVal] = useState('');
+  const [multiSelectVal, setMultiSelectVal] = useState<string[]>([]);
+  const [timeVal, setTimeVal] = useState('');
+  const [releaseTrackVal, setReleaseTrackVal] = useState('');
+  const [dateVal, setDateVal] = useState<Date | undefined>();
+  const [numVal, setNumVal] = useState(1);
+  const [tagVal, setTagVal] = useState<string[]>(['react', 'vxui']);
+  const [colorVal, setColorVal] = useState('#3b82f6');
+  const [ratingVal, setRatingVal] = useState(3);
+  const [toggleGroupVal, setToggleGroupVal] = useState<string | string[]>('list');
+  const [stepperStep, setStepperStep] = useState(1);
+  const [carouselIdx, setCarouselIdx] = useState(0);
+  const [treeSelected, setTreeSelected] = useState('');
 
   // ── URL sync ───────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -211,6 +325,14 @@ export function MobileApp() {
 
     setIsDocHeaderInView(true);
   }, [mobileView, activePage]);
+
+  // Auto-focus search input when switching to the search tab
+  useEffect(() => {
+    if (activeTab === 'search') {
+      const id = setTimeout(() => searchInputRef.current?.focus(), 80);
+      return () => clearTimeout(id);
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     if (mobileView !== 'docs') {
@@ -264,6 +386,8 @@ export function MobileApp() {
   const navSections = [
     {
       title: t.nav.gettingStarted,
+      collapsible: true,
+      defaultOpen: true,
       items: [
         { key: 'introduction', label: t.pages.introduction, icon: <House size={16} /> },
         { key: 'quick-start', label: t.pages['quick-start'], icon: <Zap size={16} /> },
@@ -271,6 +395,8 @@ export function MobileApp() {
     },
     {
       title: t.nav.layout,
+      collapsible: true,
+      defaultOpen: true,
       items: [
         { key: 'shell-sidebar', label: t.pages['shell-sidebar'], icon: <PanelsTopLeft size={16} /> },
         { key: 'grid-page', label: t.pages['grid-page'], icon: <LayoutDashboard size={16} /> },
@@ -278,6 +404,8 @@ export function MobileApp() {
     },
     {
       title: t.nav.components,
+      collapsible: true,
+      defaultOpen: false,
       items: [
         { key: 'button', label: t.pages.button, icon: <Sparkles size={16} /> },
         { key: 'elements', label: t.pages.elements, icon: <Package2 size={16} /> },
@@ -288,10 +416,15 @@ export function MobileApp() {
         { key: 'navigation', label: t.pages.navigation, icon: <Compass size={16} /> },
         { key: 'data-list', label: t.pages['data-list'], icon: <List size={16} /> },
         { key: 'empty-states', label: t.pages['empty-states'], icon: <FileX2 size={16} /> },
+        { key: 'command-palette', label: t.pages['command-palette'], icon: <Search size={16} /> },
+        { key: 'code-block', label: t.pages['code-block'], icon: <FileCode2 size={16} /> },
+        { key: 'language-switcher', label: t.pages['language-switcher'], icon: <Globe size={16} /> },
       ],
     },
     {
       title: t.nav.feedback,
+      collapsible: true,
+      defaultOpen: true,
       items: [
         { key: 'toasts', label: t.pages.toasts, icon: <Bell size={16} /> },
         { key: 'feedback', label: t.pages.feedback, icon: <Bell size={16} /> },
@@ -299,18 +432,24 @@ export function MobileApp() {
     },
     {
       title: t.nav.navigation,
+      collapsible: true,
+      defaultOpen: true,
       items: [
         { key: 'nav-layout', label: t.pages['nav-layout'], icon: <Compass size={16} /> },
       ],
     },
     {
       title: t.nav.mobile,
+      collapsible: true,
+      defaultOpen: true,
       items: [
         { key: 'mobile', label: t.pages.mobile, icon: <Smartphone size={16} /> },
       ],
     },
     {
       title: t.nav.templates,
+      collapsible: true,
+      defaultOpen: true,
       items: [
         { key: 'home-page', label: t.pages['home-page'], icon: <House size={16} /> },
         { key: 'login-page', label: t.pages['login-page'], icon: <LogIn size={16} /> },
@@ -366,8 +505,67 @@ export function MobileApp() {
       case 'form-controls':
         return (
           <div className="vx-stack">
-            <Input label="Workspace name" placeholder="vxui-docs" />
-            <Switch checked={alertsEnabled} onCheckedChange={setAlertsEnabled} label="Realtime alerts" />
+            <Input label="Project name" placeholder="vxui-docs" />
+            <Combobox
+              label="Release track"
+              value={releaseTrackVal}
+              onChange={setReleaseTrackVal}
+              placeholder="Pick a track…"
+              options={[
+                { value: 'stable', label: 'Stable' },
+                { value: 'preview', label: 'Preview' },
+                { value: 'internal', label: 'Internal' },
+              ]}
+            />
+            <Combobox
+              label="Environment"
+              value={comboboxVal}
+              onChange={setComboboxVal}
+              clearable
+              searchable={4}
+              placeholder="Select environment…"
+              searchPlaceholder="Search environments…"
+              options={[
+                { value: 'prod', label: 'Production' },
+                { value: 'staging', label: 'Staging' },
+                { value: 'preview', label: 'Preview' },
+                { value: 'dev', label: 'Development' },
+              ]}
+            />
+            <MultiSelect
+              label="Tech stack"
+              value={multiSelectVal}
+              onChange={setMultiSelectVal}
+              clearable
+              options={[
+                { value: 'react', label: 'React' },
+                { value: 'typescript', label: 'TypeScript' },
+                { value: 'vite', label: 'Vite' },
+                { value: 'css', label: 'CSS' },
+              ]}
+            />
+            <TimePicker
+              label="Deploy time"
+              value={timeVal}
+              onChange={setTimeVal}
+              placeholder="Select time"
+            />
+            <DatePicker
+              label="Release date"
+              value={dateVal}
+              onChange={setDateVal}
+              placeholder="Pick a date"
+            />
+            <Select label="Native select (system UI)" hint="Wraps a native &lt;select&gt; element with custom styling.">
+              <option value="a">Option A</option>
+              <option value="b">Option B</option>
+              <option value="c">Option C</option>
+            </Select>
+            <NumberInput label="Quantity" value={numVal} onChange={setNumVal} min={0} max={99} />
+            <TagInput label="Labels" value={tagVal} onChange={setTagVal} placeholder="Add label…" />
+            <FileUpload label="Attachments" multiple />
+            <ColorPicker label="Brand color" value={colorVal} onChange={setColorVal} />
+            <Textarea label="Change summary" placeholder="Describe what changed…" resize="none" rows={3} />
           </div>
         );
       case 'navigation':
@@ -392,11 +590,6 @@ export function MobileApp() {
       case 'form-inputs':
         return (
           <div className="vx-stack">
-            <Select label="Framework" placeholder="Pick a framework…">
-              <option value="react">React</option>
-              <option value="vue">Vue</option>
-              <option value="svelte">Svelte</option>
-            </Select>
             <div className="vx-stack vx-stack--tight">
               <Checkbox label="Accept terms" checked={checkboxA} onChange={e => setCheckboxA(e.target.checked)} />
               <Checkbox label="Subscribe" description="Weekly digest only" checked={checkboxB} onChange={e => setCheckboxB(e.target.checked)} />
@@ -406,8 +599,31 @@ export function MobileApp() {
               <Radio name="mn" value="b" label="Mentions only" checked={radioVal === 'b'} onChange={() => setRadioVal('b')} />
               <Radio name="mn" value="c" label="None" checked={radioVal === 'c'} onChange={() => setRadioVal('c')} />
             </RadioGroup>
-            <Textarea label="Notes" placeholder="Describe what changed…" rows={3} />
+            <SegmentedControl
+              value={radioVal}
+              onChange={setRadioVal}
+              fullWidth
+              options={[
+                { label: 'All', value: 'a' },
+                { label: 'Mentions', value: 'b' },
+                { label: 'None', value: 'c' },
+              ]}
+            />
             <Slider label="Score" showValue min={0} max={100} value={sliderVal} onChange={e => setSliderVal(Number(e.target.value))} />
+            <Switch label="Push notifications" checked={alertsEnabled} onCheckedChange={setAlertsEnabled} />
+            <Rating label="Satisfaction" value={ratingVal} onChange={setRatingVal} />
+            <div className="vx-stack vx-stack--tight">
+              <span style={{ fontSize: '0.875rem', color: 'var(--vx-text-secondary)' }}>View</span>
+              <ToggleGroup
+                items={[
+                  { value: 'grid', label: 'Grid' },
+                  { value: 'list', label: 'List' },
+                  { value: 'table', label: 'Table' },
+                ]}
+                value={toggleGroupVal}
+                onValueChange={v => setToggleGroupVal(v)}
+              />
+            </div>
           </div>
         );
       case 'feedback':
@@ -455,6 +671,47 @@ export function MobileApp() {
                 { items: [{ label: 'Archive', onClick: () => {} }, { label: 'Delete', danger: true, onClick: () => {} }] },
               ]}
             />
+            <Separator />
+            <Dialog
+              trigger={<Button variant="secondary" size="sm">Open Dialog</Button>}
+              title="Delete project"
+              description="This action removes access for the whole team."
+              footer={<><Button variant="ghost">Cancel</Button><Button variant="danger">Delete</Button></>}
+            >
+              <p style={{ fontSize: '0.875rem', color: 'var(--vx-text-secondary)', margin: 0 }}>This project will be permanently removed.</p>
+            </Dialog>
+            <AlertDialog
+              trigger={<Button variant="danger" size="sm">Delete account</Button>}
+              title="Delete your account?"
+              description="This action cannot be undone. All your data will be permanently removed."
+              confirmLabel="Yes, delete"
+              cancelLabel="Cancel"
+              variant="danger"
+            />
+            <Sheet
+              trigger={<Button variant="secondary" size="sm">Open Sheet</Button>}
+              title="Notifications"
+              description="Manage your notification preferences."
+              side="bottom"
+            >
+              <p style={{ fontSize: '0.875rem', margin: 0, color: 'var(--vx-text-secondary)' }}>Sheet content goes here.</p>
+            </Sheet>
+            <HoverCard
+              content={<div style={{ fontSize: '0.875rem', padding: '4px 0' }}>Detailed info on hover / focus</div>}
+            >
+              <Button variant="ghost" size="sm">HoverCard ↗</Button>
+            </HoverCard>
+            <ContextMenu
+              items={[
+                { label: 'Copy', onClick: () => {} },
+                { label: 'Paste', onClick: () => {} },
+                { label: 'Delete', danger: true, onClick: () => {} },
+              ]}
+            >
+              <div style={{ padding: '12px', border: '1px dashed var(--vx-border)', borderRadius: 'var(--vx-radius)', fontSize: '0.875rem', color: 'var(--vx-text-secondary)', textAlign: 'center' }}>
+                Right-click / long-press
+              </div>
+            </ContextMenu>
           </div>
         );
       case 'nav-layout':
@@ -468,6 +725,35 @@ export function MobileApp() {
               { key: 'a', title: 'What is vxUI?', content: 'A lightweight React component library.' },
               { key: 'b', title: 'Dark mode?', content: 'Yes — all color tokens are semantic.' },
             ]} />
+            <Separator />
+            <NavigationMenu
+              items={[
+                { label: 'Docs', items: [
+                  { label: 'Introduction', description: 'Get started', onClick: () => selectPage('introduction') },
+                  { label: 'Quick Start', description: 'Install & use', onClick: () => selectPage('quick-start') },
+                ]},
+                { label: 'Components', items: [
+                  { label: 'Button', onClick: () => selectPage('button') },
+                  { label: 'Form Controls', onClick: () => selectPage('form-controls') },
+                ]},
+                { label: 'Mobile', onClick: () => selectPage('mobile'), active: activePage === 'mobile' },
+              ]}
+            />
+            <Separator />
+            <Menubar
+              menus={[
+                { label: 'File', items: [
+                  { label: 'New', shortcut: '⌘N', onClick: () => {} },
+                  { label: 'Open', shortcut: '⌘O', onClick: () => {} },
+                  { label: 'Save', shortcut: '⌘S', onClick: () => {} },
+                ]},
+                { label: 'Edit', items: [
+                  { label: 'Undo', shortcut: '⌘Z', onClick: () => {} },
+                  { label: 'Redo', shortcut: '⌘⇧Z', onClick: () => {} },
+                  { label: 'Delete', danger: true, onClick: () => {} },
+                ]},
+              ]}
+            />
           </div>
         );
       case 'data-display':
@@ -491,6 +777,62 @@ export function MobileApp() {
                 { name: 'Bob Zhang', role: 'Designer', status: 'Away' },
               ]}
             />
+            <Separator />
+            <Stepper
+              currentStep={stepperStep}
+              steps={[
+                { label: 'Account' },
+                { label: 'Profile' },
+                { label: 'Review' },
+              ]}
+            />
+            <div className="vx-inline" style={{ gap: 8 }}>
+              <Button size="sm" variant="secondary" onClick={() => setStepperStep(Math.max(0, stepperStep - 1))}>Back</Button>
+              <Button size="sm" onClick={() => setStepperStep(Math.min(2, stepperStep + 1))}>Next</Button>
+            </div>
+            <Separator />
+            <Timeline items={[
+              { title: 'Deployed v1.2', time: '2h ago', status: 'success' },
+              { title: 'Build started', time: '2h 5m ago', status: 'info' },
+              { title: 'Tests passed', time: '2h 10m ago', status: 'success' },
+              { title: 'PR merged', time: 'Yesterday' },
+            ]} />
+            <Separator />
+            <ScrollArea maxHeight={120}>
+              {[...Array(8)].map((_, i) => (
+                <div key={i} style={{ padding: '8px 0', borderBottom: i < 7 ? '1px solid var(--vx-border)' : 'none', fontSize: '0.875rem' }}>
+                  List item {i + 1}
+                </div>
+              ))}
+            </ScrollArea>
+            <Separator />
+            <Carousel
+              items={[
+                <div key="1" style={{ height: 100, background: 'var(--vx-surface-raised)', borderRadius: 'var(--vx-radius)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.875rem', color: 'var(--vx-text-secondary)' }}>Slide 1</div>,
+                <div key="2" style={{ height: 100, background: 'var(--vx-accent-subtle)', borderRadius: 'var(--vx-radius)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.875rem', color: 'var(--vx-accent)' }}>Slide 2</div>,
+                <div key="3" style={{ height: 100, background: 'var(--vx-success-subtle)', borderRadius: 'var(--vx-radius)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.875rem', color: 'var(--vx-success)' }}>Slide 3</div>,
+              ]}
+              index={carouselIdx}
+              onIndexChange={setCarouselIdx}
+              showDots
+              showArrows
+            />
+            <Separator />
+            <TreeView
+              nodes={[
+                { id: 'lib', label: 'src/lib', icon: <Package2 size={14} />, children: [
+                  { id: 'index', label: 'index.ts', icon: <FileText size={14} /> },
+                  { id: 'cx', label: 'cx.ts', icon: <FileText size={14} /> },
+                ]},
+                { id: 'components', label: 'src/components', icon: <Package2 size={14} />, children: [
+                  { id: 'button', label: 'Button.tsx', icon: <FileCode2 size={14} /> },
+                  { id: 'input', label: 'Input.tsx', icon: <FileCode2 size={14} /> },
+                ]},
+              ]}
+              selected={treeSelected}
+              onSelect={id => setTreeSelected(id)}
+              defaultExpanded={['lib', 'components']}
+            />
           </div>
         );
       case 'toasts':
@@ -503,14 +845,17 @@ export function MobileApp() {
       case 'mobile':
         return (
           <div className="vx-stack vx-stack--tight">
-            <Alert variant="info" title="You are viewing the mobile docs site">
-              This page demonstrates the same mobile components that power this very interface.
+            <Alert variant="info" title={locale === 'zh' ? '移动端组件套件' : 'Mobile component suite'}>
+              {locale === 'zh'
+                ? '5 个专为移动端设计的组件，支持侧边栏折叠分组和底部导航子菜单。'
+                : '5 mobile-specific components. Drawer supports collapsible sections; BottomNav supports submenus.'}
             </Alert>
             <MobileList>
               <MobileListItem leading={<Zap size={18} />} label="MobileShell" description="Layout: topBar + main + bottomNav" chevron onClick={() => {}} />
-              <MobileListItem leading={<Bell size={18} />} label="BottomNav" description="Tab navigation with badges" chevron onClick={() => {}} />
-              <MobileListItem leading={<Package2 size={18} />} label="MobileDrawer" description="Slide-in navigation with swipe-to-close" chevron onClick={() => {}} />
-              <MobileListItem leading={<List size={18} />} label="MobileList" description="Touch-optimized list rows" chevron onClick={() => {}} />
+              <MobileListItem leading={<Bell size={18} />} label="BottomNav" description={locale === 'zh' ? '支持子菜单弹出' : 'Supports submenu popups'} chevron onClick={() => {}} />
+              <MobileListItem leading={<Package2 size={18} />} label="MobileDrawer" description={locale === 'zh' ? '侧边栏折叠分组' : 'Collapsible nav sections'} chevron onClick={() => {}} />
+              <MobileListItem leading={<List size={18} />} label="MobileList" description={locale === 'zh' ? '触控优化列表行' : 'Touch-optimized list rows'} chevron onClick={() => {}} />
+              <MobileListItem leading={<Smartphone size={18} />} label="ActionSheet" description={locale === 'zh' ? '底部上拉面板' : 'Bottom sheet for contextual actions'} chevron onClick={() => {}} />
             </MobileList>
           </div>
         );
@@ -586,6 +931,115 @@ export function MobileApp() {
             </div>
           </div>
         );
+      case 'introduction':
+        return (
+          <div className="vx-stack">
+            <Alert variant="info" title="Welcome to vxUI">
+              A lightweight React component library. Zero heavy dependencies, themeable, and dark-mode ready.
+            </Alert>
+            <div className="vx-inline vx-inline--wrap">
+              <Badge variant="accent">React</Badge>
+              <Badge variant="success">TypeScript</Badge>
+              <Badge variant="warning">MIT</Badge>
+              <Badge>Zero deps</Badge>
+            </div>
+          </div>
+        );
+      case 'shell-sidebar':
+        return (
+          <div className="vx-stack vx-stack--tight">
+            <MobileList>
+              <MobileListItem leading={<House size={16} />} label="Introduction" description="Getting started" chevron onClick={() => selectPage('introduction')} />
+              <MobileListItem leading={<Zap size={16} />} label="Quick Start" description="Getting started" chevron onClick={() => selectPage('quick-start')} />
+              <MobileListItem leading={<Sparkles size={16} />} label="Button" description="Components" chevron onClick={() => selectPage('button')} />
+              <MobileListItem leading={<SlidersHorizontal size={16} />} label="Form Controls" description="Components" chevron onClick={() => selectPage('form-controls')} />
+            </MobileList>
+          </div>
+        );
+      case 'grid-page':
+        return (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            {[
+              { label: 'Components', value: '55+' },
+              { label: 'Themes', value: '8' },
+              { label: 'Locales', value: '2' },
+              { label: 'Zero deps', value: '✓' },
+            ].map(m => (
+              <Card key={m.label}>
+                <CardContent style={{ padding: '14px 16px' }}>
+                  <div style={{ fontSize: 11, color: 'var(--vx-text-muted)', marginBottom: 4 }}>{m.label}</div>
+                  <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--vx-text)' }}>{m.value}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        );
+      case 'data-list':
+        return (
+          <Table
+            columns={[
+              { key: 'name', header: 'Screen', accessor: (r: { name: string; status: string; variant: 'success' | 'accent' | 'warning' }) => r.name },
+              { key: 'status', header: 'Status', accessor: (r: { name: string; status: string; variant: 'success' | 'accent' | 'warning' }) => <Badge variant={r.variant}>{r.status}</Badge> },
+            ]}
+            data={[
+              { name: 'Home', status: 'Unified', variant: 'success' as const },
+              { name: 'Error', status: 'New', variant: 'accent' as const },
+              { name: 'Mobile', status: 'Reframed', variant: 'warning' as const },
+            ]}
+          />
+        );
+      case 'empty-states':
+        return (
+          <EmptyState
+            icon={<AlertTriangle size={22} />}
+            title="Nothing here yet"
+            description="Empty states share the same visual language as error pages, with a lighter tone."
+            action={<Button variant="secondary" size="sm" onClick={() => selectPage('introduction')}>Get started</Button>}
+          />
+        );
+      case 'terms-of-service':
+        return (
+          <div className="vx-stack">
+            <div>
+              <p className="vx-muted" style={{ fontSize: '0.8rem', margin: '0 0 6px' }}>{termsContent.lead}</p>
+              {termsContent.sections.slice(0, 1).map(s => (
+                <div key={s.title}>
+                  <h3 style={{ margin: '0 0 4px', fontSize: '1rem' }}>{s.title}</h3>
+                  <p className="vx-muted" style={{ margin: 0, fontSize: '0.875rem' }}>{s.paragraphs[0]}</p>
+                </div>
+              ))}
+            </div>
+            <Separator />
+            <Button variant="secondary" size="sm" onClick={() => openLegalPage('terms-of-service')}>
+              Read full terms
+            </Button>
+          </div>
+        );
+      case 'command-palette':
+        return (
+          <div className="vx-stack">
+            <Alert variant="info" title="Keyboard first">
+              Press ⌘K (Mac) or Ctrl+K (Windows) to open the command palette from anywhere without reaching for the mouse.
+            </Alert>
+          </div>
+        );
+      case 'code-block':
+        return (
+          <pre className="vx-docs-code" style={{ fontSize: 11, overflowX: 'auto' }}>
+            {`import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>Click me</Button>;\n}`}
+          </pre>
+        );
+      case 'language-switcher':
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline">
+              <LanguageSwitcher variant="inline" />
+            </div>
+            <Alert variant="info" title="Global language switch">
+              Switching locale updates all UI copy across the entire docs surface without a page reload.
+            </Alert>
+          </div>
+        );
       default:
         return null;
     }
@@ -610,83 +1064,36 @@ export function MobileApp() {
             {pp.heroCtaAlt}
           </Button>
         </div>
-        <p className="vxm-docs-home__status">{pp.previewLead}</p>
       </div>
 
-      <MobileListSection title={pp.navDocs}>
-        <button
-          type="button"
-          className="vxm-docs-home__preview-search"
-          aria-label={t.searchAriaLabel}
-          onClick={() => setActiveTab('search')}
-        >
-          <Search size={16} />
-          <span>{t.searchPlaceholder}</span>
-        </button>
-        <MobileList className="vxm-docs-home__list">
-          {previewSections.map((section) => {
-            const Icon = section.icon;
-            return (
-              <MobileListItem
-                key={section.id}
-                leading={<span className="vxm-docs-home__leading-badge"><Icon size={18} /></span>}
-                label={section.label}
-                description={section.meta}
-                chevron
-                onClick={() => selectPage(section.id as PageKey)}
-              />
-            );
-          })}
-        </MobileList>
-      </MobileListSection>
-
-      <MobileListSection title={pp.previewAccessTitle}>
-        <MobileList className="vxm-docs-home__list">
-          {metaItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <MobileListItem
-                key={item.key}
-                leading={<span className="vxm-docs-home__leading-badge vxm-docs-home__leading-badge--accent"><Icon size={18} /></span>}
-                label={item.title}
-                description={(
-                  <span className="vxm-docs-home__meta-copy">
-                    {item.lines.map((line) => (
-                      <span key={line}>{line}</span>
-                    ))}
-                  </span>
-                )}
-              />
-            );
-          })}
-        </MobileList>
-      </MobileListSection>
-
-      <MobileListSection title={pp.featuresSectionTitle}>
-        <MobileList className="vxm-docs-home__list">
+      <div className="vxm-docs-home__bottom">
+        <div className="vxm-docs-home__chips">
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <MobileListItem
-                key={feature.key}
-                leading={<span className="vxm-docs-home__leading-badge"><Icon size={18} /></span>}
-                label={feature.title}
-                description={feature.description}
-              />
+              <div key={feature.key} className="vxm-docs-home__chip">
+                <div className="vxm-docs-home__chip-icon">
+                  <Icon size={16} />
+                </div>
+                <div className="vxm-docs-home__chip-body">
+                  <span className="vxm-docs-home__chip-label">{feature.title}</span>
+                  <span className="vxm-docs-home__chip-desc">{feature.description}</span>
+                </div>
+              </div>
             );
           })}
-        </MobileList>
-      </MobileListSection>
+        </div>
 
-      <div className="vxm-docs-home__footer">
-        <span className="vxm-docs-home__footer-copy">{pp.footerCopy}</span>
-        <button
-          type="button"
-          className="vxm-docs-home__footer-link"
-          onClick={() => openLegalPage('privacy-policy')}
-        >
-          {pp.footerPrivacy}
-        </button>
+        <div className="vxm-docs-home__footer">
+          <span className="vxm-docs-home__footer-copy">{pp.footerCopy}</span>
+          <button
+            type="button"
+            className="vxm-docs-home__footer-link"
+            onClick={() => openLegalPage('privacy-policy')}
+          >
+            {pp.footerPrivacy}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -780,45 +1187,60 @@ export function MobileApp() {
     );
   };
 
-  const renderSearchContent = () => (
-    <div>
-      <MobileTopBar title="Search" />
-      <div style={{ padding: '12px 16px 0' }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            padding: '0 14px',
-            height: 44,
-            borderRadius: 'var(--vx-radius)',
-            background: 'var(--vx-bg-accent)',
-            color: 'var(--vx-text-muted)',
-            fontSize: 15,
-          }}
-        >
-          <Search size={16} />
-          <span>Search components…</span>
+  const renderSearchContent = () => {
+    const q = searchQuery.trim().toLowerCase();
+    const allItems = navSections.flatMap(s =>
+      s.items.map(item => ({ ...item, section: s.title }))
+    );
+    const filtered = q
+      ? allItems.filter(item =>
+          item.label.toLowerCase().includes(q) ||
+          item.section.toLowerCase().includes(q)
+        )
+      : allItems;
+    return (
+      <div>
+        <div style={{ padding: '12px 16px 0' }}>
+          <SearchBox
+            inputRef={searchInputRef}
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder={t.searchPlaceholder}
+            ariaLabel={t.searchAriaLabel}
+            style={{
+              padding: '0 14px',
+              height: 44,
+              borderRadius: 'var(--vx-radius)',
+              background: 'var(--vx-bg-accent)',
+            }}
+          />
         </div>
-      </div>
-      <MobileListSection title="All pages" style={{ padding: '16px 16px 0' }}>
-        <MobileList>
-          {navSections.flatMap(s =>
-            s.items.map(item => (
-              <MobileListItem
-                key={item.key}
-                leading={item.icon}
-                label={item.label}
-                description={s.title}
-                chevron
-                onClick={() => { selectPage(item.key as PageKey); setActiveTab('docs'); }}
-              />
-            ))
+        <MobileListSection
+          title={q ? `${filtered.length} result${filtered.length !== 1 ? 's' : ''}` : 'All pages'}
+          style={{ padding: '16px 16px 0' }}
+        >
+          {filtered.length > 0 ? (
+            <MobileList>
+              {filtered.map(item => (
+                <MobileListItem
+                  key={item.key}
+                  leading={item.icon}
+                  label={item.label}
+                  description={item.section}
+                  chevron
+                  onClick={() => { selectPage(item.key as PageKey); setActiveTab('docs'); setSearchQuery(''); }}
+                />
+              ))}
+            </MobileList>
+          ) : (
+            <div style={{ padding: '32px 0', textAlign: 'center', color: 'var(--vx-text-muted)', fontSize: 14 }}>
+              No results for "{searchQuery}"
+            </div>
           )}
-        </MobileList>
-      </MobileListSection>
-    </div>
-  );
+        </MobileListSection>
+      </div>
+    );
+  };
 
   const renderLoginContent = () => {
     const isZh = t.locale === 'zh';
@@ -926,11 +1348,14 @@ export function MobileApp() {
   const renderTopBar = () => {
     const isDocsView = activeTab === 'docs' && mobileView === 'docs';
     const isLegalView = mobileView === 'privacy-policy' || mobileView === 'terms-of-service';
+    const isSearchView = activeTab === 'search';
     const title = isDocsView
       ? (isDocHeaderInView ? (activeDocument?.section ?? docsTopBarFallback) : (activeDocument?.title ?? docsTopBarFallback))
       : isLegalView
         ? mobileView === 'privacy-policy' ? privacyContent.title : termsContent.title
-        : 'vxUI';
+        : isSearchView
+          ? (locale === 'zh' ? '搜索' : 'Search')
+          : 'vxUI';
 
     return (
       <MobileTopBar
@@ -999,7 +1424,12 @@ export function MobileApp() {
       }
     >
       {navSections.map(section => (
-        <DrawerNavSection key={section.title} title={section.title}>
+        <DrawerNavSection
+          key={section.title}
+          title={section.title}
+          collapsible={section.collapsible}
+          defaultOpen={section.defaultOpen}
+        >
           {section.items.map(item => (
             <DrawerNavItem
               key={item.key}
@@ -1023,7 +1453,34 @@ export function MobileApp() {
     <BottomNav
       items={[
         { key: 'home', label: 'Home', icon: <House size={22} />, active: activeTab === 'home' && !isAuthView && !isLegalView, onSelect: () => { selectTab('home'); setMobileView('home'); } },
-        { key: 'docs', label: 'Docs', icon: <FileCode2 size={22} />, active: activeTab === 'docs' && !isAuthView && !isLegalView, onSelect: () => { selectTab('docs'); setMobileView('docs'); } },
+        {
+          key: 'docs',
+          label: 'Docs',
+          icon: <FileCode2 size={22} />,
+          active: activeTab === 'docs' && !isAuthView && !isLegalView,
+          submenu: [
+            { key: 'introduction', label: t.pages.introduction, icon: <House size={16} />, onSelect: () => { selectPage('introduction'); selectTab('docs'); } },
+            { key: 'quick-start', label: t.pages['quick-start'], icon: <Zap size={16} />, onSelect: () => { selectPage('quick-start'); selectTab('docs'); } },
+            { key: 'shell-sidebar', label: t.pages['shell-sidebar'], icon: <PanelsTopLeft size={16} />, onSelect: () => { selectPage('shell-sidebar'); selectTab('docs'); } },
+            { key: 'grid-page', label: t.pages['grid-page'], icon: <LayoutDashboard size={16} />, onSelect: () => { selectPage('grid-page'); selectTab('docs'); } },
+            { key: 'button', label: t.pages.button, icon: <Sparkles size={16} />, onSelect: () => { selectPage('button'); selectTab('docs'); } },
+            { key: 'elements', label: t.pages.elements, icon: <Package2 size={16} />, onSelect: () => { selectPage('elements'); selectTab('docs'); } },
+            { key: 'form-controls', label: t.pages['form-controls'], icon: <SlidersHorizontal size={16} />, onSelect: () => { selectPage('form-controls'); selectTab('docs'); } },
+            { key: 'form-inputs', label: t.pages['form-inputs'], icon: <SlidersHorizontal size={16} />, onSelect: () => { selectPage('form-inputs'); selectTab('docs'); } },
+            { key: 'overlays', label: t.pages.overlays, icon: <Package2 size={16} />, onSelect: () => { selectPage('overlays'); selectTab('docs'); } },
+            { key: 'data-display', label: t.pages['data-display'], icon: <List size={16} />, onSelect: () => { selectPage('data-display'); selectTab('docs'); } },
+            { key: 'navigation', label: t.pages.navigation, icon: <Compass size={16} />, onSelect: () => { selectPage('navigation'); selectTab('docs'); } },
+            { key: 'data-list', label: t.pages['data-list'], icon: <List size={16} />, onSelect: () => { selectPage('data-list'); selectTab('docs'); } },
+            { key: 'empty-states', label: t.pages['empty-states'], icon: <FileX2 size={16} />, onSelect: () => { selectPage('empty-states'); selectTab('docs'); } },
+            { key: 'command-palette', label: t.pages['command-palette'], icon: <Search size={16} />, onSelect: () => { selectPage('command-palette'); selectTab('docs'); } },
+            { key: 'code-block', label: t.pages['code-block'], icon: <FileCode2 size={16} />, onSelect: () => { selectPage('code-block'); selectTab('docs'); } },
+            { key: 'language-switcher', label: t.pages['language-switcher'], icon: <Globe size={16} />, onSelect: () => { selectPage('language-switcher'); selectTab('docs'); } },
+            { key: 'toasts', label: t.pages.toasts, icon: <Bell size={16} />, onSelect: () => { selectPage('toasts'); selectTab('docs'); } },
+            { key: 'feedback', label: t.pages.feedback, icon: <Bell size={16} />, onSelect: () => { selectPage('feedback'); selectTab('docs'); } },
+            { key: 'nav-layout', label: t.pages['nav-layout'], icon: <Compass size={16} />, onSelect: () => { selectPage('nav-layout'); selectTab('docs'); } },
+            { key: 'mobile', label: t.pages.mobile, icon: <Smartphone size={16} />, onSelect: () => { selectPage('mobile'); selectTab('docs'); } },
+          ],
+        },
         { key: 'search', label: 'Search', icon: <Search size={22} />, active: activeTab === 'search' && !isAuthView && !isLegalView, onSelect: () => { selectTab('search'); } },
       ]}
     />
