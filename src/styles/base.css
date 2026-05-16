@@ -66,6 +66,23 @@
   --vx-z-dialog: 510;
   --vx-z-command: 620;
   --vx-z-toast: 720;
+
+  /* ── Control size tokens ───────────────────────────────────────────
+     These drive the unified height / padding / font-size across all
+     interactive controls: Button, Input, Select, Combobox, DatePicker,
+     TimePicker, MultiSelect, NumberInput, ColorPicker, etc.
+  ─────────────────────────────────────────────────────────────────── */
+  --vx-ctrl-h-sm:  36px;
+  --vx-ctrl-h-md:  42px;
+  --vx-ctrl-h-lg:  48px;
+
+  --vx-ctrl-px-sm: 10px;
+  --vx-ctrl-px-md: 12px;
+  --vx-ctrl-px-lg: 16px;
+
+  --vx-ctrl-fs-sm: 13px;
+  --vx-ctrl-fs-md: 14px;
+  --vx-ctrl-fs-lg: 15px;
 }
 
 :root[data-theme='dark'] {
@@ -1054,8 +1071,9 @@ a {
 }
 
 .vx-button {
-  min-height: 42px;
-  padding: 0 16px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
+  font-size: var(--vx-ctrl-fs-md);
   border: 1px solid transparent;
   border-radius: var(--vx-radius);
   display: inline-flex;
@@ -1082,21 +1100,21 @@ a {
 }
 
 .vx-button--sm {
-  min-height: 36px;
-  padding: 0 12px;
-  font-size: 13px;
+  min-height: var(--vx-ctrl-h-sm);
+  padding: 0 var(--vx-ctrl-px-sm);
+  font-size: var(--vx-ctrl-fs-sm);
 }
 
 .vx-button--md {
-  min-height: 42px;
-  padding: 0 16px;
-  font-size: 14px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
+  font-size: var(--vx-ctrl-fs-md);
 }
 
 .vx-button--lg {
-  min-height: 48px;
-  padding: 0 18px;
-  font-size: 15px;
+  min-height: var(--vx-ctrl-h-lg);
+  padding: 0 var(--vx-ctrl-px-lg);
+  font-size: var(--vx-ctrl-fs-lg);
 }
 
 .vx-button--full-width {
@@ -1386,8 +1404,9 @@ a {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 42px;
-  padding: 0 12px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
+  font-size: var(--vx-ctrl-fs-md);
   border-radius: 10px;
   border: 1px solid var(--vx-border);
   background: var(--vx-surface);
@@ -1452,9 +1471,9 @@ a {
   outline: none;
 }
 
-/* Input sizes */
-.vx-input--sm { min-height: 34px; font-size: 13px; padding: 0 10px; }
-.vx-input--lg { min-height: 52px; font-size: 16px; padding: 0 16px; }
+/* Input sizes — aligned with --vx-ctrl-h-* tokens */
+.vx-input--sm { min-height: var(--vx-ctrl-h-sm); font-size: var(--vx-ctrl-fs-sm); padding: 0 var(--vx-ctrl-px-sm); }
+.vx-input--lg { min-height: var(--vx-ctrl-h-lg); font-size: var(--vx-ctrl-fs-lg); padding: 0 var(--vx-ctrl-px-lg); }
 
 /* Rounded / pill input */
 .vx-input--rounded { border-radius: 9999px; }
@@ -1666,6 +1685,10 @@ a {
   left: 50%;
   z-index: var(--vx-z-dialog);
   width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   transform: translate(-50%, -50%);
   padding: 20px;
   border-radius: 16px;
@@ -1675,6 +1698,10 @@ a {
   border: 1px solid var(--vx-glass-border);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   animation: vx-dialog-in 150ms ease;
+}
+/* When a custom dropdown is open inside the dialog, allow it to overflow */
+.vx-dialog__content:has(.vx-combobox__dropdown, .vx-multiselect__dropdown, .vx-dropdown__menu) {
+  overflow: visible;
 }
 
 .vx-dialog__header,
@@ -1698,6 +1725,8 @@ a {
 }
 
 .vx-dialog__body {
+  flex: 1;
+  min-height: 0;
   margin: 18px 0 22px;
 }
 
@@ -1741,14 +1770,28 @@ a {
 .vx-dialog__content--xl { width: min(960px, calc(100vw - 32px)); }
 .vx-dialog__content--full {
   width: calc(100vw - 32px);
-  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
 }
 
 /* Scrollable body */
 .vx-dialog__content--scrollable .vx-dialog__body {
-  max-height: 60vh;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+/* When a dropdown is open inside a scrollable dialog, temporarily allow overflow */
+.vx-dialog__content--scrollable .vx-dialog__body:has(
+  .vx-combobox__dropdown,
+  .vx-multiselect__dropdown,
+  .vx-dropdown__menu
+) {
+  overflow-y: visible;
+}
+
+/* Elevate open dropdown containers so they stack above siblings */
+.vx-combobox--open,
+.vx-multiselect--open,
+.vx-dropdown--open {
+  z-index: 1;
 }
 
 /* Padding variants */
@@ -1903,6 +1946,50 @@ a {
 .vx-stack--tight {
   gap: 12px;
 }
+
+/* ── Inline control row ────────────────────────────────────────────────────
+   Aligns Button + Input + Select + Combobox etc. side-by-side without
+   extra wrapper tweaks.  All children share the same baseline height tier.
+
+   Usage:
+     <div class="vx-ctrl-row">              ← md (default, 42px)
+     <div class="vx-ctrl-row vx-ctrl-row--sm">   ← sm (36px)
+     <div class="vx-ctrl-row vx-ctrl-row--lg">   ← lg (48px)
+   ────────────────────────────────────────────────────────────────────── */
+.vx-ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* flex-shrink: 0 keeps fixed-width controls (icon buttons, badges…) intact */
+.vx-ctrl-row > * {
+  flex-shrink: 0;
+}
+
+/* Inputs / selects that should stretch to fill remaining space */
+.vx-ctrl-row > .vx-field-group,
+.vx-ctrl-row > .vx-input,
+.vx-ctrl-row > .vx-select,
+.vx-ctrl-row > .vx-combobox,
+.vx-ctrl-row > .vx-datepicker,
+.vx-ctrl-row > .vx-number-input,
+.vx-ctrl-row > .vx-multiselect,
+.vx-ctrl-row > .vx-timepicker {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Size variants – override the shared token so all children auto-size */
+.vx-ctrl-row--sm {
+  --vx-ctrl-h-sm: var(--vx-ctrl-h-sm);   /* explicit, already correct */
+  align-items: center;
+}
+.vx-ctrl-row--sm > .vx-button { min-height: var(--vx-ctrl-h-sm); }
+.vx-ctrl-row--sm > .vx-input  { min-height: var(--vx-ctrl-h-sm); font-size: var(--vx-ctrl-fs-sm); padding: 0 var(--vx-ctrl-px-sm); }
+
+.vx-ctrl-row--lg > .vx-button { min-height: var(--vx-ctrl-h-lg); }
+.vx-ctrl-row--lg > .vx-input  { min-height: var(--vx-ctrl-h-lg); font-size: var(--vx-ctrl-fs-lg); padding: 0 var(--vx-ctrl-px-lg); }
 
 .vx-muted {
   margin: 0;
@@ -3049,8 +3136,9 @@ a {
   border: 1px solid var(--vx-border);
   border-radius: var(--vx-radius);
   color: var(--vx-text);
-  font-size: 0.875rem;
-  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  font-size: var(--vx-ctrl-fs-md);
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 2.25rem 0 var(--vx-ctrl-px-md);
   outline: none;
   cursor: pointer;
   transition: border-color 150ms, box-shadow 150ms;
@@ -6797,7 +6885,7 @@ a {
 .vx-number-input {
   display: inline-flex;
   align-items: center;
-  min-height: 42px;
+  min-height: var(--vx-ctrl-h-md);
   border-radius: 10px;
   border: 1px solid var(--vx-border);
   background: var(--vx-surface);
@@ -6818,7 +6906,7 @@ a {
   justify-content: center;
   width: 36px;
   height: 100%;
-  min-height: 42px;
+  min-height: var(--vx-ctrl-h-md);
   flex-shrink: 0;
   border: none;
   background: transparent;
@@ -6953,13 +7041,13 @@ a {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 42px;
-  padding: 0 12px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
   border-radius: 10px;
   border: 1px solid var(--vx-border);
   background: var(--vx-surface);
   color: var(--vx-text);
-  font-size: 14px;
+  font-size: var(--vx-ctrl-fs-md);
   cursor: pointer;
   text-align: left;
   transition: border-color 140ms;
@@ -7004,13 +7092,13 @@ a {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 42px;
-  padding: 0 12px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
   border-radius: 10px;
   border: 1px solid var(--vx-border);
   background: var(--vx-surface);
   color: var(--vx-text);
-  font-size: 14px;
+  font-size: var(--vx-ctrl-fs-md);
   cursor: pointer;
   text-align: left;
   width: 100%;
@@ -7143,8 +7231,8 @@ a {
   align-items: center;
   gap: 6px;
   width: 100%;
-  min-height: 38px;
-  padding: 5px 10px 5px 12px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 5px 10px 5px var(--vx-ctrl-px-md);
   background: var(--vx-surface);
   border: 1px solid var(--vx-border);
   border-radius: var(--vx-radius);
@@ -7344,8 +7432,9 @@ a {
   align-items: center;
   gap: 8px;
   width: 100%;
-  height: 38px;
-  padding: 0 12px;
+  min-height: var(--vx-ctrl-h-md);
+  height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
   background: var(--vx-surface);
   border: 1px solid var(--vx-border);
   border-radius: var(--vx-radius);
@@ -8644,21 +8733,21 @@ a {
   .vx-field-group__error            { font-size: 13px; }
 
   /* ── Text input (iOS: font-size < 16px triggers auto-zoom) ── */
-  .vx-input                         { min-height: 44px; font-size: 16px; }
+  .vx-input                         { min-height: 44px; font-size: 16px; --vx-ctrl-h-md: 44px; }
   .vx-input__field                  { font-size: 16px; }
 
-  .vx-select__field                 { min-height: 44px; font-size: 16px; padding-top: 0.625rem; padding-bottom: 0.625rem; }
+  .vx-select__field                 { min-height: 44px; font-size: 16px; }
 
   .vx-textarea                      { font-size: 16px; }
 
-  .vx-number-input                  { min-height: 44px; }
+  .vx-number-input                  { --vx-ctrl-h-md: 44px; }
   .vx-number-input__btn             { min-height: 44px; }
   .vx-number-input__field           { font-size: 16px; }
 
   /* ── Combobox / DatePicker / TimePicker / MultiSelect ── */
   .vx-combobox__trigger             { min-height: 44px; font-size: 16px; }
   .vx-datepicker__trigger           { min-height: 44px; font-size: 16px; }
-  .vx-timepicker__trigger           { min-height: 44px; height: 44px; }
+  .vx-timepicker__trigger           { min-height: 44px; height: 44px; font-size: 16px; }
   .vx-timepicker__value             { font-size: 16px; }
   .vx-multiselect__trigger          { min-height: 44px; }
   .vx-multiselect__placeholder      { font-size: 15px; }

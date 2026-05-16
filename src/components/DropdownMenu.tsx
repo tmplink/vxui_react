@@ -64,7 +64,7 @@ export function DropdownMenu({
   const allGroups: DropdownMenuGroupProps[] = groups ?? (items ? [{ items }] : []);
 
   return (
-    <div ref={wrapRef} className={cx('vx-dropdown', className)}>
+    <div ref={wrapRef} className={cx('vx-dropdown', open && 'vx-dropdown--open', className)}>
       <div className="vx-dropdown__trigger" onClick={toggle} role="button" tabIndex={0}
         onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => { if (e.key === 'Enter' || e.key === ' ') toggle(); }}>
         {trigger}

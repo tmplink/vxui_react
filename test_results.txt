@@ -1,0 +1,1434 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.6 [39m[90m/Users/xiefan/github/vxui_react[39m
+
+[90mstderr[2m | src/components/__tests__/AlertDialog.test.tsx[2m > [22m[2mAlertDialog[2m > [22m[2mcalls onConfirm when confirm button clicked
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/AlertDialog.test.tsx[2m > [22m[2mAlertDialog[2m > [22m[2mcalls onCancel when cancel button clicked
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [31m❯[39m src/components/__tests__/TimePicker.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 311[2mms[22m[39m
+     [32m✓[39m renders an input-like trigger[32m 98[2mms[22m[39m
+     [32m✓[39m shows placeholder when no value[32m 4[2mms[22m[39m
+     [32m✓[39m opens time picker panel on click[32m 44[2mms[22m[39m
+     [32m✓[39m renders label when provided[32m 2[2mms[22m[39m
+     [32m✓[39m renders hint text[32m 1[2mms[22m[39m
+     [32m✓[39m renders error text[32m 1[2mms[22m[39m
+     [32m✓[39m shows initial value[32m 1[2mms[22m[39m
+     [32m✓[39m increments hour via up button[32m 34[2mms[22m[39m
+     [32m✓[39m decrements hour via down button[32m 39[2mms[22m[39m
+     [32m✓[39m wraps hour from 23 to 0[32m 29[2mms[22m[39m
+     [32m✓[39m wraps hour from 0 to 23[32m 27[2mms[22m[39m
+[31m     [31m×[31m calls onChange when time is confirmed[39m[32m 25[2mms[22m[39m
+     [32m✓[39m is disabled when disabled prop set[32m 4[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/ColorPicker.test.tsx [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 319[2mms[22m[39m
+     [32m✓[39m renders a trigger button[32m 102[2mms[22m[39m
+[31m     [31m×[31m shows default value label[39m[32m 6[2mms[22m[39m
+     [32m✓[39m renders label[32m 7[2mms[22m[39m
+     [32m✓[39m renders hint[32m 2[2mms[22m[39m
+     [32m✓[39m renders error[32m 2[2mms[22m[39m
+     [32m✓[39m opens color panel on trigger click[32m 41[2mms[22m[39m
+     [32m✓[39m closes panel on outside click[32m 35[2mms[22m[39m
+     [32m✓[39m is disabled when disabled prop set[32m 5[2mms[22m[39m
+     [32m✓[39m does not open panel when disabled[32m 16[2mms[22m[39m
+     [32m✓[39m renders preset swatches when showPresets=true[32m 19[2mms[22m[39m
+[31m     [31m×[31m calls onChange when value changes[39m[32m 83[2mms[22m[39m
+[90mstderr[2m | src/components/__tests__/AlertDialog.test.tsx[2m > [22m[2mAlertDialog[2m > [22m[2mapplies danger variant class
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [31m❯[39m src/components/__tests__/AlertDialog.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 292[2mms[22m[39m
+     [32m✓[39m renders trigger[32m 119[2mms[22m[39m
+     [32m✓[39m dialog not visible initially[32m 4[2mms[22m[39m
+     [32m✓[39m opens dialog on trigger click[32m 51[2mms[22m[39m
+     [32m✓[39m shows title and description[32m 31[2mms[22m[39m
+     [32m✓[39m calls onConfirm when confirm button clicked[32m 32[2mms[22m[39m
+     [32m✓[39m calls onCancel when cancel button clicked[32m 31[2mms[22m[39m
+[31m     [31m×[31m applies danger variant class[39m[32m 22[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/TagInput.test.tsx [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 315[2mms[22m[39m
+     [32m✓[39m renders an input[32m 109[2mms[22m[39m
+     [32m✓[39m renders label when provided[32m 5[2mms[22m[39m
+     [32m✓[39m renders initial tags from defaultValue[32m 4[2mms[22m[39m
+     [32m✓[39m adds a tag on Enter[32m 56[2mms[22m[39m
+     [32m✓[39m adds a tag on comma[32m 29[2mms[22m[39m
+[31m     [31m×[31m removes tag when remove button clicked[39m[32m 14[2mms[22m[39m
+     [32m✓[39m removes last tag on Backspace when input empty[32m 16[2mms[22m[39m
+     [32m✓[39m respects maxTags limit[32m 20[2mms[22m[39m
+     [32m✓[39m does not add duplicate tags[32m 32[2mms[22m[39m
+     [32m✓[39m calls onChange when tags change[32m 24[2mms[22m[39m
+     [32m✓[39m renders error text[32m 1[2mms[22m[39m
+     [32m✓[39m is disabled when disabled prop set[32m 2[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/FileUpload.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 206[2mms[22m[39m
+[31m     [31m×[31m renders a file input zone[39m[32m 85[2mms[22m[39m
+     [32m✓[39m renders label when provided[32m 4[2mms[22m[39m
+     [32m✓[39m renders hint text[32m 2[2mms[22m[39m
+     [32m✓[39m renders error text[32m 2[2mms[22m[39m
+[31m     [31m×[31m is disabled when disabled prop set[39m[32m 4[2mms[22m[39m
+     [32m✓[39m shows file list after selecting files[32m 32[2mms[22m[39m
+     [32m✓[39m calls onFiles callback with selected files[32m 17[2mms[22m[39m
+     [32m✓[39m shows error for files exceeding maxSize[32m 12[2mms[22m[39m
+     [32m✓[39m allows removing a file from the list[32m 31[2mms[22m[39m
+     [32m✓[39m accepts multiple files when multiple=true[32m 15[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/Table.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 206[2mms[22m[39m
+     [32m✓[39m renders table with data[32m 22[2mms[22m[39m
+     [32m✓[39m renders column headers[32m 3[2mms[22m[39m
+     [32m✓[39m renders empty text when data is empty[32m 2[2mms[22m[39m
+     [32m✓[39m renders custom emptyText[32m 1[2mms[22m[39m
+     [32m✓[39m renders caption[32m 4[2mms[22m[39m
+     [32m✓[39m applies striped class[32m 3[2mms[22m[39m
+     [32m✓[39m applies hoverable class by default[32m 1[2mms[22m[39m
+     [32m✓[39m applies bordered class[32m 1[2mms[22m[39m
+     [32m✓[39m applies size sm class[32m 2[2mms[22m[39m
+     [32m✓[39m compact prop maps to size sm[32m 1[2mms[22m[39m
+[31m     [31m×[31m shows loading state[39m[32m 4[2mms[22m[39m
+     [32m✓[39m sorts column on header click (uncontrolled)[32m 80[2mms[22m[39m
+     [32m✓[39m sorts desc on second click[32m 26[2mms[22m[39m
+     [32m✓[39m clears sort on third click[32m 37[2mms[22m[39m
+     [32m✓[39m calls onSortChange in controlled mode[32m 14[2mms[22m[39m
+     [32m✓[39m hides header when headless=true[32m 3[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/Calendar.test.tsx [2m([22m[2m10 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 213[2mms[22m[39m
+     [32m✓[39m renders a calendar grid[32m 92[2mms[22m[39m
+     [32m✓[39m renders day buttons[32m 29[2mms[22m[39m
+     [32m✓[39m shows current month[32m 6[2mms[22m[39m
+[31m     [31m×[31m calls onChange when a day is selected[39m[32m 21[2mms[22m[39m
+     [32m✓[39m navigates to previous month[32m 21[2mms[22m[39m
+     [32m✓[39m navigates to next month[32m 14[2mms[22m[39m
+     [32m✓[39m renders with defaultValue selected date[32m 4[2mms[22m[39m
+[31m     [31m×[31m disables days outside min/max range[39m[32m 6[2mms[22m[39m
+     [32m✓[39m weekStartsOnMonday shows Monday header[32m 13[2mms[22m[39m
+     [32m✓[39m forwards className[32m 6[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/LanguageSwitcher.test.tsx [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 197[2mms[22m[39m
+     [32m✓[39m renders a trigger button[32m 81[2mms[22m[39m
+     [32m✓[39m dropdown not visible initially[32m 5[2mms[22m[39m
+     [32m✓[39m opens dropdown on click[32m 20[2mms[22m[39m
+     [32m✓[39m shows available locales in dropdown[32m 18[2mms[22m[39m
+     [32m✓[39m closes on Escape[32m 17[2mms[22m[39m
+     [32m✓[39m closes on outside click[32m 27[2mms[22m[39m
+[31m     [31m×[31m switches locale on option click[39m[32m 24[2mms[22m[39m
+     [32m✓[39m applies sidebar variant class[32m 2[2mms[22m[39m
+     [32m✓[39m forwards className[32m 2[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/Rating.test.tsx [2m([22m[2m12 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 161[2mms[22m[39m
+     [32m✓[39m renders star buttons[32m 77[2mms[22m[39m
+     [32m✓[39m renders custom max stars[32m 8[2mms[22m[39m
+[31m     [31m×[31m shows label when provided[39m[32m 7[2mms[22m[39m
+     [32m✓[39m calls onChange when star clicked[32m 30[2mms[22m[39m
+     [32m✓[39m renders controlled value[32m 6[2mms[22m[39m
+     [32m✓[39m renders defaultValue[32m 5[2mms[22m[39m
+[31m     [31m×[31m is readonly when readOnly=true[39m[32m 10[2mms[22m[39m
+     [32m✓[39m is disabled when disabled=true[32m 5[2mms[22m[39m
+     [32m✓[39m applies size class sm[32m 5[2mms[22m[39m
+     [32m✓[39m applies size class md[32m 1[2mms[22m[39m
+     [32m✓[39m applies size class lg[32m 3[2mms[22m[39m
+     [32m✓[39m forwards className[32m 2[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/ThemeProvider.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 102[2mms[22m[39m
+     [32m✓[39m renders children[32m 17[2mms[22m[39m
+     [32m✓[39m provides default theme name[32m 4[2mms[22m[39m
+[31m     [31m×[31m allows setting a different theme by name[39m[32m 73[2mms[22m[39m
+[31m     [31m×[31m uses initial defaultTheme from prop[39m[32m 2[2mms[22m[39m
+     [32m✓[39m throws useTheme outside provider[32m 4[2mms[22m[39m
+     [32m✓[39m creates a theme object with mode and tokens[32m 0[2mms[22m[39m
+     [32m✓[39m has multiple presets[32m 0[2mms[22m[39m
+     [32m✓[39m each preset has a mode[32m 0[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/Checkbox.test.tsx [2m([22m[2m9 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 144[2mms[22m[39m
+     [32m✓[39m renders a checkbox[32m 81[2mms[22m[39m
+     [32m✓[39m renders label when provided[32m 6[2mms[22m[39m
+[31m     [31m×[31m renders description when provided[39m[32m 4[2mms[22m[39m
+     [32m✓[39m can be checked[32m 24[2mms[22m[39m
+     [32m✓[39m is disabled when disabled prop set[32m 4[2mms[22m[39m
+     [32m✓[39m calls onChange handler[32m 12[2mms[22m[39m
+     [32m✓[39m renders as controlled checked[32m 3[2mms[22m[39m
+     [32m✓[39m renders as controlled unchecked[32m 3[2mms[22m[39m
+     [32m✓[39m forwards className[32m 5[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/DatePicker.test.tsx [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 204[2mms[22m[39m
+     [32m✓[39m renders a trigger button[32m 79[2mms[22m[39m
+     [32m✓[39m shows placeholder when no value[32m 4[2mms[22m[39m
+     [32m✓[39m renders label[32m 2[2mms[22m[39m
+     [32m✓[39m renders hint[32m 2[2mms[22m[39m
+     [32m✓[39m renders error[32m 2[2mms[22m[39m
+     [32m✓[39m opens calendar on trigger click[32m 43[2mms[22m[39m
+     [32m✓[39m closes calendar on outside click[32m 30[2mms[22m[39m
+     [32m✓[39m shows formatted value when defaultValue set[32m 1[2mms[22m[39m
+[31m     [31m×[31m calls onChange when date selected[39m[32m 27[2mms[22m[39m
+     [32m✓[39m is disabled when disabled prop set[32m 3[2mms[22m[39m
+     [32m✓[39m does not open calendar when disabled[32m 10[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/NumberInput.test.tsx [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/components/__tests__/CommandPalette.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m7 failed[39m[2m)[22m[32m 44[2mms[22m[39m
+     [32m✓[39m does not render when open=false[32m 13[2mms[22m[39m
+[31m     [31m×[31m renders search input when open=true[39m[32m 14[2mms[22m[39m
+[31m     [31m×[31m shows all entries when no search input[39m[32m 3[2mms[22m[39m
+[31m     [31m×[31m filters entries on search[39m[32m 3[2mms[22m[39m
+[31m     [31m×[31m calls onClose on Escape[39m[32m 4[2mms[22m[39m
+[31m     [31m×[31m calls onSelect when entry clicked[39m[32m 2[2mms[22m[39m
+[31m     [31m×[31m calls onSelect on Enter for highlighted item[39m[32m 2[2mms[22m[39m
+[31m     [31m×[31m navigates with ArrowDown/ArrowUp[39m[32m 2[2mms[22m[39m
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mopens when the trigger is clicked
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mdisplays title and children when open
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mrenders the footer when provided
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mcloses when the close button is clicked
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mdoes not render close button when closable=false
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mapplies scrollable class when scrollable=true
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mdoes not apply scrollable class by default
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mapplies size class for size="sm"
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/components/__tests__/MultiSelect.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 413[2mms[22m[39m
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mapplies size class for size="lg"
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mapplies size class for size="xl"
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mapplies size class for size="full"
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mdoes not apply a size modifier class for the default md size
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mapplies padding variant classes
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Dialog.test.tsx[2m > [22m[2mDialog[2m > [22m[2mapplies a custom className
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/components/__tests__/Dialog.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 408[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Combobox.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 401[2mms[22m[39m
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mopens on trigger click
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mshows title
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mshows children content
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mshows footer when provided
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mcloses on X button click
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mapplies side left
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mapplies side right
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mapplies side top
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/components/__tests__/Sheet.test.tsx[2m > [22m[2mSheet[2m > [22m[2mapplies side bottom
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/components/__tests__/Sheet.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 320[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/DropdownMenu.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 313[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Toast.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 276[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Menubar.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 255[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/TreeView.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 245[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Carousel.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 188[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Toggle.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 167[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Input.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[32m 150[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Popover.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/CodeBlock.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 5144[2mms[22m[39m
+[31m     [31m×[31m renders code content[39m[32m 27[2mms[22m[39m
+     [32m✓[39m renders copy button[32m 76[2mms[22m[39m
+     [32m✓[39m shows copyLabel text[32m 4[2mms[22m[39m
+     [32m✓[39m calls onCopy when copy button clicked[32m 30[2mms[22m[39m
+[31m     [31m×[31m shows copiedLabel after copying[39m[33m 5001[2mms[22m[39m
+     [32m✓[39m renders without language prop[32m 2[2mms[22m[39m
+     [32m✓[39m renders in a container[32m 2[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/ContextMenu.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 203[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/BottomNav.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 230[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/NavigationMenu.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 211[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Pagination.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Accordion.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 269[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Radio.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 182[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Tabs.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 259[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/MobileDrawer.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[32m 199[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Switch.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 175[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/SegmentedControl.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Alert.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 166[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Heading.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Button.test.tsx [2m([22m[2m22 tests[22m[2m)[22m[32m 195[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Spinner.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 130[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Select.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 159[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Textarea.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 161[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/MobileList.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[32m 184[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Progress.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Breadcrumb.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 159[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/ActionSheet.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 136[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/ScrollArea.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Avatar.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 127[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Form.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Slider.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Timeline.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/EmptyState.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 126[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Skeleton.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/HoverCard.test.tsx [2m([22m[2m5 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 10071[2mms[22m[39m
+     [32m✓[39m renders children[32m 35[2mms[22m[39m
+     [32m✓[39m card not visible initially[32m 6[2mms[22m[39m
+[31m     [31m×[31m shows card on hover[39m[33m 5005[2mms[22m[39m
+[31m     [31m×[31m hides card on mouse leave[39m[33m 5004[2mms[22m[39m
+     [32m✓[39m shows card on focus[32m 20[2mms[22m[39m
+ [31m❯[39m src/components/__tests__/Tooltip.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 10143[2mms[22m[39m
+     [32m✓[39m renders children[32m 114[2mms[22m[39m
+     [32m✓[39m tooltip not visible initially[32m 4[2mms[22m[39m
+[31m     [31m×[31m shows tooltip on hover[39m[33m 5009[2mms[22m[39m
+[31m     [31m×[31m hides tooltip on mouse leave[39m[33m 5003[2mms[22m[39m
+     [32m✓[39m shows tooltip on focus[32m 9[2mms[22m[39m
+     [32m✓[39m forwards className[32m 2[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Text.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[32m 58[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Card.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Stepper.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 95[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Badge.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Resizable.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Label.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Separator.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m src/components/__tests__/Responsive.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/viewport.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/useIsMobile.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m src/hooks/__tests__/useDropDirection.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m src/lib/__tests__/cx.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/NumberInput.test.tsx[2m [ src/components/__tests__/NumberInput.test.tsx ][22m
+[31m[1mError[22m: Transform failed with 1 error:
+/Users/xiefan/github/vxui_react/src/components/__tests__/NumberInput.test.tsx:79:0: ERROR: Unexpected "}"[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36m/Users/xiefan/github/vxui_react/src/components/__tests__/NumberInput.test.tsx[39m:79:0
+[33m  
+  Unexpected "}"
+  77 |      expect(container.querySelector('.vx-number-input')).toHaveClass('vx-number-input', 'extra');
+  78 |    });
+  79 |  });
+     |  ^
+  80 |  
+  [39m
+[90m [2m❯[22m failureErrorWithLog node_modules/esbuild/lib/main.js:[2m1467:15[22m[39m
+[90m [2m❯[22m node_modules/esbuild/lib/main.js:[2m736:50[22m[39m
+[90m [2m❯[22m responseCallbacks.<computed> node_modules/esbuild/lib/main.js:[2m603:9[22m[39m
+[90m [2m❯[22m handleIncomingPacket node_modules/esbuild/lib/main.js:[2m658:12[22m[39m
+[90m [2m❯[22m Socket.readFromStdout node_modules/esbuild/lib/main.js:[2m581:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/31]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 30 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/AlertDialog.test.tsx[2m > [22mAlertDialog[2m > [22mapplies danger variant class
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveClass([22m[32m[32m"vx-btn--danger"[32m[31m[2m)[22m
+
+Expected the element to have class:
+[32m  vx-btn--danger[31m
+Received:
+[31m  vx-button vx-button--danger vx-button--md[31m[39m
+[36m [2m❯[22m src/components/__tests__/AlertDialog.test.tsx:[2m99:24[22m[39m
+    [90m 97|[39m     await userEvent.click(screen.getByRole('button', { name: 'Delete' …
+    [90m 98|[39m     [35mconst[39m confirmBtn [33m=[39m screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'Confirm'[39m })[33m;[39m
+    [90m 99|[39m     [34mexpect[39m(confirmBtn)[33m.[39m[34mtoHaveClass[39m([32m'vx-btn--danger'[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m100|[39m   })[33m;[39m
+    [90m101|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/Calendar.test.tsx[2m > [22mCalendar[2m > [22mcalls onChange when a day is selected
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called at least once[39m
+[36m [2m❯[22m src/components/__tests__/Calendar.test.tsx:[2m28:22[22m[39m
+    [90m 26|[39m     const days = screen.getAllByRole('button').filter((btn) => /^\d+$/…
+    [90m 27|[39m     [35mawait[39m userEvent[33m.[39m[34mclick[39m(days[[34m0[39m])[33m;[39m
+    [90m 28|[39m     [34mexpect[39m(onChange)[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m   |[39m                      [31m^[39m
+    [90m 29|[39m   })[33m;[39m
+    [90m 30|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/Calendar.test.tsx[2m > [22mCalendar[2m > [22mdisables days outside min/max range
+[31m[1mAssertionError[22m: expected 0 to be greater than 0[39m
+[36m [2m❯[22m src/components/__tests__/Calendar.test.tsx:[2m60:33[22m[39m
+    [90m 58|[39m       (btn) => btn.hasAttribute('disabled') && /^\d+$/.test(btn.textCo…
+    [90m 59|[39m     )[33m;[39m
+    [90m 60|[39m     [34mexpect[39m(disabledDays[33m.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m   |[39m                                 [31m^[39m
+    [90m 61|[39m   })[33m;[39m
+    [90m 62|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/Checkbox.test.tsx[2m > [22mCheckbox[2m > [22mrenders description when provided
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: Read the terms carefully. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<label[31m
+      [33mclass[31m=[32m"vx-checkbox"[31m
+    [36m>[31m
+      [36m<span[31m
+        [33mclass[31m=[32m"vx-checkbox__control-wrap"[31m
+      [36m>[31m
+        [36m<input[31m
+          [33mclass[31m=[32m"vx-checkbox__input"[31m
+          [33mtype[31m=[32m"checkbox"[31m
+        [36m/>[31m
+        [36m<span[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"vx-checkbox__box"[31m
+        [36m>[31m
+          [36m<svg[31m
+            [33mfill[31m=[32m"none"[31m
+            [33mheight[31m=[32m"10"[31m
+            [33mviewBox[31m=[32m"0 0 10 10"[31m
+            [33mwidth[31m=[32m"10"[31m
+          [36m>[31m
+            [36m<path[31m
+              [33md[31m=[32m"M2 5l2.5 2.5L8 3"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"1.75"[31m
+            [36m/>[31m
+          [36m</svg>[31m
+        [36m</span>[31m
+      [36m</span>[31m
+    [36m</label>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/__tests__/Checkbox.test.tsx:[2m18:19[22m[39m
+    [90m 16|[39m   [34mit[39m([32m'renders description when provided'[39m[33m,[39m () [33m=>[39m {
+    [90m 17|[39m     [34mrender[39m([33m<[39m[33mCheckbox[39m [33mdescription[39m[33m=[39m[32m"Read the terms carefully"[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 18|[39m     expect(screen.getByText('Read the terms carefully')).toBeInTheDocu…
+    [90m   |[39m                   [31m^[39m
+    [90m 19|[39m   })[33m;[39m
+    [90m 20|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/CodeBlock.test.tsx[2m > [22mCodeBlock[2m > [22mrenders code content
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: /const x/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"vx-code-block-wrap"[31m
+      [33mdata-language[31m=[32m"javascript"[31m
+    [36m>[31m
+      [36m<button[31m
+        [33mclass[31m=[32m"vx-button vx-button--secondary vx-button--sm vx-code-block__copy"[31m
+        [33mtype[31m=[32m"button"[31m
+      [36m>[31m
+        [36m<svg[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"lucide lucide-copy"[31m
+          [33mfill[31m=[32m"none"[31m
+          [33mheight[31m=[32m"14"[31m
+          [33mstroke[31m=[32m"currentColor"[31m
+          [33mstroke-linecap[31m=[32m"round"[31m
+          [33mstroke-linejoin[31m=[32m"round"[31m
+          [33mstroke-width[31m=[32m"2"[31m
+          [33mviewBox[31m=[32m"0 0 24 24"[31m
+          [33mwidth[31m=[32m"14"[31m
+          [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+        [36m>[31m
+          [36m<rect[31m
+            [33mheight[31m=[32m"14"[31m
+            [33mrx[31m=[32m"2"[31m
+            [33mry[31m=[32m"2"[31m
+            [33mwidth[31m=[32m"14"[31m
+            [33mx[31m=[32m"8"[31m
+            [33my[31m=[32m"8"[31m
+          [36m/>[31m
+          [36m<path[31m
+            [33md[31m=[32m"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"[31m
+          [36m/>[31m
+        [36m</svg>[31m
+        [0mCopy[0m
+      [36m</button>[31m
+      [36m<pre[31m
+        [33mclass[31m=[32m"vx-code-block"[31m
+      [36m>[31m
+        [36m<code[31m
+          [33mclass[31m=[32m"vx-code-block__code language-javascript"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"token keyword"[31m
+          [36m>[31m
+            [0mconst[0m
+          [36m</span>[31m
+          [0m x [0m
+          [36m<span[31m
+            [33mclass[31m=[32m"token operator"[31m
+          [36m>[31m
+            [0m=[0m
+          [36m</span>[31m
+          [0m [0m
+          [36m<span[31m
+            [33mclass[31m=[32m"token number"[31m
+          [36m>[31m
+            [0m1[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"token punctuation"[31m
+          [36m>[31m
+            [0m;[0m
+          [36m</span>[31m
+        [36m</code>[31m
+      [36m</pre>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/__tests__/CodeBlock.test.tsx:[2m14:19[22m[39m
+    [90m 12|[39m   [34mit[39m([32m'renders code content'[39m[33m,[39m () [33m=>[39m {
+    [90m 13|[39m     render(<CodeBlock {...defaultProps} code="const x = 1;" language="…
+    [90m 14|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([36m/const x/[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 15|[39m   })[33m;[39m
+    [90m 16|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/CodeBlock.test.tsx[2m > [22mCodeBlock[2m > [22mshows copiedLabel after copying
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m src/components/__tests__/CodeBlock.test.tsx:[2m34:3[22m[39m
+    [90m 32|[39m   })[33m;[39m
+    [90m 33|[39m
+    [90m 34|[39m   [34mit[39m([32m'shows copiedLabel after copying'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   |[39m   [31m^[39m
+    [90m 35|[39m     vi[33m.[39m[34museFakeTimers[39m()[33m;[39m
+    [90m 36|[39m     [35mconst[39m onCopy [33m=[39m vi[33m.[39m[34mfn[39m()[33m.[39m[34mmockResolvedValue[39m([35mtrue[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/ColorPicker.test.tsx[2m > [22mColorPicker[2m > [22mshows default value label
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: #ff0000. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"vx-colorpicker"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"vx-colorpicker__row"[31m
+      [36m>[31m
+        [36m<button[31m
+          [33maria-expanded[31m=[32m"false"[31m
+          [33maria-haspopup[31m=[32m"dialog"[31m
+          [33maria-label[31m=[32m"Current color: #ff0000. Click to open color picker."[31m
+          [33mclass[31m=[32m"vx-colorpicker__swatch-btn"[31m
+          [33mstyle[31m=[32m"--vx-cp-color: #ff0000;"[31m
+          [33mtype[31m=[32m"button"[31m
+        [36m/>[31m
+        [36m<input[31m
+          [33maria-label[31m=[32m"Hex color value"[31m
+          [33mclass[31m=[32m"vx-colorpicker__hex-input"[31m
+          [33mmaxlength[31m=[32m"7"[31m
+          [33mtype[31m=[32m"text"[31m
+          [33mvalue[31m=[32m"#ff0000"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/__tests__/ColorPicker.test.tsx:[2m13:19[22m[39m
+    [90m 11|[39m   [34mit[39m([32m'shows default value label'[39m[33m,[39m () [33m=>[39m {
+    [90m 12|[39m     [34mrender[39m([33m<[39m[33mColorPicker[39m [33mdefaultValue[39m[33m=[39m[32m"#ff0000"[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 13|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'#ff0000'[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 14|[39m   })[33m;[39m
+    [90m 15|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/ColorPicker.test.tsx[2m > [22mColorPicker[2m > [22mcalls onChange when value changes
+[31m[1mTestingLibraryElementError[22m[39m: Found multiple elements with the role "button"
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-expanded[39m=[32m"true"[39m
+  [33maria-haspopup[39m=[32m"dialog"[39m
+  [33maria-label[39m=[32m"Current color: #00ff00. Click to open color picker."[39m
+  [33mclass[39m=[32m"vx-colorpicker__swatch-btn"[39m
+  [33mstyle[39m=[32m"--vx-cp-color: #00ff00;"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#ef4444"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(239, 68, 68);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#f97316"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(249, 115, 22);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#eab308"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(234, 179, 8);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#22c55e"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(34, 197, 94);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#06b6d4"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(6, 182, 212);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#3b82f6"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(59, 130, 246);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#8b5cf6"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(139, 92, 246);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#ec4899"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(236, 72, 153);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#64748b"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(100, 116, 139);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#0f172a"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(15, 23, 42);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#ffffff"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(255, 255, 255);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33maria-label[39m=[32m"#f8fafc"[39m
+  [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+  [33mstyle[39m=[32m"background: rgb(248, 250, 252);"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m/>[39m
+
+Ignored nodes: comments, script, style
+[36m<button[39m
+  [33mclass[39m=[32m"vx-colorpicker__close"[39m
+  [33mtype[39m=[32m"button"[39m
+[36m>[39m
+  [0mDone[0m
+[36m</button>[39m
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"vx-colorpicker"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"vx-colorpicker__row"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-expanded[39m=[32m"true"[39m
+          [33maria-haspopup[39m=[32m"dialog"[39m
+          [33maria-label[39m=[32m"Current color: #00ff00. Click to open color picker."[39m
+          [33mclass[39m=[32m"vx-colorpicker__swatch-btn"[39m
+          [33mstyle[39m=[32m"--vx-cp-color: #00ff00;"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m/>[39m
+        [36m<input[39m
+          [33maria-label[39m=[32m"Hex color value"[39m
+          [33mclass[39m=[32m"vx-colorpicker__hex-input"[39m
+          [33mmaxlength[39m=[32m"7"[39m
+          [33mtype[39m=[32m"text"[39m
+          [33mvalue[39m=[32m"#00ff00"[39m
+        [36m/>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33maria-label[39m=[32m"Color picker"[39m
+        [33mclass[39m=[32m"vx-colorpicker__panel"[39m
+        [33mrole[39m=[32m"dialog"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"vx-colorpicker__section-label"[39m
+        [36m>[39m
+          [0mHue[0m
+        [36m</div>[39m
+        [36m<input[39m
+          [33maria-label[39m=[32m"Hue"[39m
+          [33mclass[39m=[32m"vx-colorpicker__hue-slider"[39m
+          [33mmax[39m=[32m"360"[39m
+          [33mmin[39m=[32m"0"[39m
+          [33mtype[39m=[32m"range"[39m
+          [33mvalue[39m=[32m"120"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"vx-colorpicker__section-label"[39m
+        [36m>[39m
+          [0mSaturation[0m
+        [36m</div>[39m
+        [36m<input[39m
+          [33maria-label[39m=[32m"Saturation"[39m
+          [33mclass[39m=[32m"vx-colorpicker__sat-slider"[39m
+          [33mmax[39m=[32m"100"[39m
+          [33mmin[39m=[32m"0"[39m
+          [33mstyle[39m=[32m"--vx-cp-hue: 120;"[39m
+          [33mtype[39m=[32m"range"[39m
+          [33mvalue[39m=[32m"100"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"vx-colorpicker__section-label"[39m
+        [36m>[39m
+          [0mLightness[0m
+        [36m</div>[39m
+        [36m<input[39m
+          [33maria-label[39m=[32m"Lightness"[39m
+          [33mclass[39m=[32m"vx-colorpicker__lit-slider"[39m
+          [33mmax[39m=[32m"100"[39m
+          [33mmin[39m=[32m"0"[39m
+          [33mstyle[39m=[32m"--vx-cp-hue: 120; --vx-cp-sat: 100%;"[39m
+          [33mtype[39m=[32m"range"[39m
+          [33mvalue[39m=[32m"50"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"vx-colorpicker__presets"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#ef4444"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(239, 68, 68);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#f97316"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(249, 115, 22);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#eab308"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(234, 179, 8);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#22c55e"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(34, 197, 94);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#06b6d4"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(6, 182, 212);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#3b82f6"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(59, 130, 246);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#8b5cf6"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(139, 92, 246);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#ec4899"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(236, 72, 153);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#64748b"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(100, 116, 139);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#0f172a"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(15, 23, 42);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#ffffff"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(255, 255, 255);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"#f8fafc"[39m
+            [33mclass[39m=[32m"vx-colorpicker__preset"[39m
+            [33mstyle[39m=[32m"background: rgb(248, 250, 252);"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m/>[39m
+        [36m</div>[39m
+        [36m<button[39m
+          [33mclass[39m=[32m"vx-colorpicker__close"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [0mDone[0m
+        [36m</button>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m getElementError node_modules/@testing-library/dom/dist/query-helpers.js:[2m20:35[22m[39m
+[90m [2m❯[22m getMultipleElementsFoundError node_modules/@testing-library/dom/dist/query-helpers.js:[2m23:10[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m55:13[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/__tests__/ColorPicker.test.tsx:[2m82:19[22m[39m
+    [90m 80|[39m     }
+    [90m 81|[39m     // Just verify the onChange could be called or panel is still pres…
+    [90m 82|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByRole[39m([32m'button'[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 83|[39m   })[33m;[39m
+    [90m 84|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/CommandPalette.test.tsx[2m > [22mCommandPalette[2m > [22mrenders search input when open=true
+[41m[1m FAIL [22m[49m src/components/__tests__/CommandPalette.test.tsx[2m > [22mCommandPalette[2m > [22mshows all entries when no search input
+[41m[1m FAIL [22m[49m src/components/__tests__/CommandPalette.test.tsx[2m > [22mCommandPalette[2m > [22mfilters entries on search
+[41m[1m FAIL [22m[49m src/components/__tests__/CommandPalette.test.tsx[2m > [22mCommandPalette[2m > [22mcalls onClose on Escape
+[41m[1m FAIL [22m[49m src/components/__tests__/CommandPalette.test.tsx[2m > [22mCommandPalette[2m > [22mcalls onSelect when entry clicked
+[41m[1m FAIL [22m[49m src/components/__tests__/CommandPalette.test.tsx[2m > [22mCommandPalette[2m > [22mcalls onSelect on Enter for highlighted item
+[41m[1m FAIL [22m[49m src/components/__tests__/CommandPalette.test.tsx[2m > [22mCommandPalette[2m > [22mnavigates with ArrowDown/ArrowUp
+[31m[1mTypeError[22m: item?.scrollIntoView is not a function[39m
+[36m [2m❯[22m src/components/CommandPalette.tsx:[2m91:11[22m[39m
+    [90m 89|[39m   [34museEffect[39m(() [33m=>[39m {
+    [90m 90|[39m     const item = listRef.current?.children[activeIdx] as HTMLElement |…
+    [90m 91|[39m     item[33m?.[39m[34mscrollIntoView[39m({ block[33m:[39m [32m'nearest'[39m })[33m;[39m
+    [90m   |[39m           [31m^[39m
+    [90m 92|[39m   }[33m,[39m [activeIdx])[33m;[39m
+    [90m 93|[39m
+[90m [2m❯[22m Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:[2m25989:20[22m[39m
+[90m [2m❯[22m runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:[2m874:13[22m[39m
+[90m [2m❯[22m commitHookEffectListMount node_modules/react-dom/cjs/react-dom-client.development.js:[2m13249:29[22m[39m
+[90m [2m❯[22m commitHookPassiveMountEffects node_modules/react-dom/cjs/react-dom-client.development.js:[2m13336:11[22m[39m
+[90m [2m❯[22m commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom-client.development.js:[2m15484:13[22m[39m
+[90m [2m❯[22m recursivelyTraversePassiveMountEffects node_modules/react-dom/cjs/react-dom-client.development.js:[2m15439:11[22m[39m
+[90m [2m❯[22m commitPassiveMountOnFiber node_modules/react-dom/cjs/react-dom-client.development.js:[2m15519:11[22m[39m
+[90m [2m❯[22m flushPassiveEffects node_modules/react-dom/cjs/react-dom-client.development.js:[2m18432:9[22m[39m
+[90m [2m❯[22m node_modules/react-dom/cjs/react-dom-client.development.js:[2m17923:15[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/DatePicker.test.tsx[2m > [22mDatePicker[2m > [22mcalls onChange when date selected
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called at least once[39m
+[36m [2m❯[22m src/components/__tests__/DatePicker.test.tsx:[2m60:22[22m[39m
+    [90m 58|[39m     const days = screen.getAllByRole('button').filter((btn) => /^\d+$/…
+    [90m 59|[39m     [35mawait[39m userEvent[33m.[39m[34mclick[39m(days[[34m0[39m])[33m;[39m
+    [90m 60|[39m     [34mexpect[39m(onChange)[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m   |[39m                      [31m^[39m
+    [90m 61|[39m   })[33m;[39m
+    [90m 62|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/FileUpload.test.tsx[2m > [22mFileUpload[2m > [22mrenders a file input zone
+[31m[1mTestingLibraryElementError[22m: Unable to find an accessible element with the role "presentation"
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Upload files, click or drag and drop":
+  [36m<div[31m
+    [33maria-label[31m=[32m"Upload files, click or drag and drop"[31m
+    [33mclass[31m=[32m"vx-file-upload__zone"[31m
+    [33mrole[31m=[32m"button"[31m
+    [33mtabindex[31m=[32m"0"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[31m
+    [33mclass[31m=[32m"vx-file-upload__text"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"vx-file-upload"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33maria-label[31m=[32m"Upload files, click or drag and drop"[31m
+        [33mclass[31m=[32m"vx-file-upload__zone"[31m
+        [33mrole[31m=[32m"button"[31m
+        [33mtabindex[31m=[32m"0"[31m
+      [36m>[31m
+        [36m<svg[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"lucide lucide-upload vx-file-upload__icon"[31m
+          [33mfill[31m=[32m"none"[31m
+          [33mheight[31m=[32m"24"[31m
+          [33mstroke[31m=[32m"currentColor"[31m
+          [33mstroke-linecap[31m=[32m"round"[31m
+          [33mstroke-linejoin[31m=[32m"round"[31m
+          [33mstroke-width[31m=[32m"2"[31m
+          [33mviewBox[31m=[32m"0 0 24 24"[31m
+          [33mwidth[31m=[32m"24"[31m
+          [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+        [36m>[31m
+          [36m<path[31m
+            [33md[31m=[32m"M12 3v12"[31m
+          [36m/>[31m
+          [36m<path[31m
+            [33md[31m=[32m"m17 8-5-5-5 5"[31m
+          [36m/>[31m
+          [36m<path[31m
+            [33md[31m=[32m"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"[31m
+          [36m/>[31m
+        [36m</svg>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"vx-file-upload__text"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"vx-file-upload__link"[31m
+          [36m>[31m
+            [0mClick to upload[0m
+          [36m</span>[31m
+          [0m or drag and drop[0m
+        [36m</p>[31m
+        [36m<input[31m
+          [33maria-hidden[31m=[32m"true"[31m
+          [33mclass[31m=[32m"vx-file-upload__input"[31m
+          [33mtabindex[31m=[32m"-1"[31m
+          [33mtype[31m=[32m"file"[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/__tests__/FileUpload.test.tsx:[2m8:19[22m[39m
+    [90m  6|[39m   [34mit[39m([32m'renders a file input zone'[39m[33m,[39m () [33m=>[39m {
+    [90m  7|[39m     [34mrender[39m([33m<[39m[33mFileUpload[39m [33monFiles[39m[33m=[39m[33m{[39mvi[33m.[39m[34mfn[39m()[33m}[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m  8|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByRole[39m([32m'presentation'[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m  9|[39m   })[33m;[39m
+    [90m 10|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/FileUpload.test.tsx[2m > [22mFileUpload[2m > [22mis disabled when disabled prop set
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"data-disabled"[32m[31m[2m, [22m[32m[32m"true"[32m[31m[2m) // element.getAttribute("data-disabled") === "true"[22m
+
+Expected the element to have attribute:
+[32m  data-disabled="true"[31m
+Received:
+[31m  null[31m[39m
+[36m [2m❯[22m src/components/__tests__/FileUpload.test.tsx:[2m29:18[22m[39m
+    [90m 27|[39m     const { container } = render(<FileUpload onFiles={vi.fn()} disable…
+    [90m 28|[39m     [35mconst[39m zone [33m=[39m container[33m.[39m[34mquerySelector[39m([32m'.vx-file-upload'[39m)[33m;[39m
+    [90m 29|[39m     [34mexpect[39m(zone)[33m.[39m[34mtoHaveAttribute[39m([32m'data-disabled'[39m[33m,[39m [32m'true'[39m)[33m;[39m
+    [90m   |[39m                  [31m^[39m
+    [90m 30|[39m   })[33m;[39m
+    [90m 31|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/HoverCard.test.tsx[2m > [22mHoverCard[2m > [22mshows card on hover
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m src/components/__tests__/HoverCard.test.tsx:[2m24:3[22m[39m
+    [90m 22|[39m   })[33m;[39m
+    [90m 23|[39m
+    [90m 24|[39m   [34mit[39m([32m'shows card on hover'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   |[39m   [31m^[39m
+    [90m 25|[39m     [35mconst[39m user [33m=[39m userEvent[33m.[39m[34msetup[39m({ delay[33m:[39m [35mnull[39m })[33m;[39m
+    [90m 26|[39m     vi[33m.[39m[34museFakeTimers[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/HoverCard.test.tsx[2m > [22mHoverCard[2m > [22mhides card on mouse leave
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m src/components/__tests__/HoverCard.test.tsx:[2m38:3[22m[39m
+    [90m 36|[39m   })[33m;[39m
+    [90m 37|[39m
+    [90m 38|[39m   [34mit[39m([32m'hides card on mouse leave'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   |[39m   [31m^[39m
+    [90m 39|[39m     [35mconst[39m user [33m=[39m userEvent[33m.[39m[34msetup[39m({ delay[33m:[39m [35mnull[39m })[33m;[39m
+    [90m 40|[39m     vi[33m.[39m[34museFakeTimers[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/LanguageSwitcher.test.tsx[2m > [22mLanguageSwitcher[2m > [22mswitches locale on option click
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).not.toBeInTheDocument()[22m
+
+[31mexpected document not to contain element, found <ul
+  aria-label="Language"
+  class="vx-lang-drop__menu"
+  role="listbox"
+>
+  <li
+    aria-selected="true"
+    role="option"
+  >
+    <button
+      class="vx-lang-drop__item vx-lang-drop__item--active"
+      type="button"
+    >
+      English
+      <span
+        aria-hidden="true"
+        class="vx-lang-drop__check"
+      >
+        ✓
+      </span>
+    </button>
+  </li>
+  <li
+    aria-selected="false"
+    role="option"
+  >
+    <button
+      class="vx-lang-drop__item"
+      type="button"
+    >
+      中文
+    </button>
+  </li>
+</ul> instead[31m[39m
+[36m [2m❯[22m src/components/__tests__/LanguageSwitcher.test.tsx:[2m64:47[22m[39m
+    [90m 62|[39m     [35mawait[39m userEvent[33m.[39m[34mclick[39m(options[[34m0[39m])[33m;[39m
+    [90m 63|[39m     [90m// Dropdown should close[39m
+    [90m 64|[39m     [34mexpect[39m(screen[33m.[39m[34mqueryByRole[39m([32m'listbox'[39m))[33m.[39mnot[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   |[39m                                               [31m^[39m
+    [90m 65|[39m   })[33m;[39m
+    [90m 66|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/Rating.test.tsx[2m > [22mRating[2m > [22mshows label when provided
+[31m[1mTestingLibraryElementError[22m[39m: Unable to find an element with the text: Rating. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33maria-label[39m=[32m"Rating"[39m
+      [33mclass[39m=[32m"vx-rating vx-rating--md"[39m
+      [33mrole[39m=[32m"group"[39m
+    [36m>[39m
+      [36m<button[39m
+        [33maria-label[39m=[32m"1 star"[39m
+        [33maria-pressed[39m=[32m"false"[39m
+        [33mclass[39m=[32m"vx-rating__star"[39m
+        [33mtabindex[39m=[32m"0"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [36m<svg[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mfill[39m=[32m"none"[39m
+          [33mheight[39m=[32m"20"[39m
+          [33mviewBox[39m=[32m"0 0 20 20"[39m
+          [33mwidth[39m=[32m"20"[39m
+        [36m>[39m
+          [36m<path[39m
+            [33md[39m=[32m"M10 1.5l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.77l-4.77 2.44.91-5.32L2.27 7.12l5.34-.78L10 1.5z"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.2"[39m
+          [36m/>[39m
+        [36m</svg>[39m
+      [36m</button>[39m
+      [36m<button[39m
+        [33maria-label[39m=[32m"2 stars"[39m
+        [33maria-pressed[39m=[32m"false"[39m
+        [33mclass[39m=[32m"vx-rating__star"[39m
+        [33mtabindex[39m=[32m"0"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [36m<svg[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mfill[39m=[32m"none"[39m
+          [33mheight[39m=[32m"20"[39m
+          [33mviewBox[39m=[32m"0 0 20 20"[39m
+          [33mwidth[39m=[32m"20"[39m
+        [36m>[39m
+          [36m<path[39m
+            [33md[39m=[32m"M10 1.5l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.77l-4.77 2.44.91-5.32L2.27 7.12l5.34-.78L10 1.5z"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.2"[39m
+          [36m/>[39m
+        [36m</svg>[39m
+      [36m</button>[39m
+      [36m<button[39m
+        [33maria-label[39m=[32m"3 stars"[39m
+        [33maria-pressed[39m=[32m"false"[39m
+        [33mclass[39m=[32m"vx-rating__star"[39m
+        [33mtabindex[39m=[32m"0"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [36m<svg[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mfill[39m=[32m"none"[39m
+          [33mheight[39m=[32m"20"[39m
+          [33mviewBox[39m=[32m"0 0 20 20"[39m
+          [33mwidth[39m=[32m"20"[39m
+        [36m>[39m
+          [36m<path[39m
+            [33md[39m=[32m"M10 1.5l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.77l-4.77 2.44.91-5.32L2.27 7.12l5.34-.78L10 1.5z"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.2"[39m
+          [36m/>[39m
+        [36m</svg>[39m
+      [36m</button>[39m
+      [36m<button[39m
+        [33maria-label[39m=[32m"4 stars"[39m
+        [33maria-pressed[39m=[32m"false"[39m
+        [33mclass[39m=[32m"vx-rating__star"[39m
+        [33mtabindex[39m=[32m"0"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [36m<svg[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mfill[39m=[32m"none"[39m
+          [33mheight[39m=[32m"20"[39m
+          [33mviewBox[39m=[32m"0 0 20 20"[39m
+          [33mwidth[39m=[32m"20"[39m
+        [36m>[39m
+          [36m<path[39m
+            [33md[39m=[32m"M10 1.5l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.77l-4.77 2.44.91-5.32L2.27 7.12l5.34-.78L10 1.5z"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.2"[39m
+          [36m/>[39m
+        [36m</svg>[39m
+      [36m</button>[39m
+      [36m<button[39m
+        [33maria-label[39m=[32m"5 stars"[39m
+        [33maria-pressed[39m=[32m"false"[39m
+        [33mclass[39m=[32m"vx-rating__star"[39m
+        [33mtabindex[39m=[32m"0"[39m
+        [33mtype[39m=[32m"button"[39m
+      [36m>[39m
+        [36m<svg[39m
+          [33maria-hidden[39m=[32m"true"[39m
+          [33mfill[39m=[32m"none"[39m
+          [33mheight[39m=[32m"20"[39m
+          [33mviewBox[39m=[32m"0 0 20 20"[39m
+          [33mwidth[39m=[32m"20"[39m
+        [36m>[39m
+          [36m<path[39m
+            [33md[39m=[32m"M10 1.5l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 13.77l-4.77 2.44.91-5.32L2.27 7.12l5.34-.78L10 1.5z"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"1.2"[39m
+          [36m/>[39m
+        [36m</svg>[39m
+      [36m</button>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/__tests__/Rating.test.tsx:[2m19:19[22m[39m
+    [90m 17|[39m   [34mit[39m([32m'shows label when provided'[39m[33m,[39m () [33m=>[39m {
+    [90m 18|[39m     [34mrender[39m([33m<[39m[33mRating[39m [33mlabel[39m[33m=[39m[32m"Rating"[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 19|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByText[39m([32m'Rating'[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 20|[39m   })[33m;[39m
+    [90m 21|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/Rating.test.tsx[2m > [22mRating[2m > [22mis readonly when readOnly=true
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toBeDisabled()[22m
+
+Received element is not disabled:
+  [31m<button
+  aria-label="1 star"
+  aria-pressed="true"
+  class="vx-rating__star vx-rating__star--active"
+  tabindex="-1"
+  type="button"
+/>[31m[39m
+[36m [2m❯[22m src/components/__tests__/Rating.test.tsx:[2m46:19[22m[39m
+    [90m 44|[39m     [34mrender[39m([33m<[39m[33mRating[39m [33mreadOnly[39m [33mvalue[39m[33m=[39m[33m{[39m[34m3[39m[33m}[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 45|[39m     screen[33m.[39m[34mgetAllByRole[39m([32m'button'[39m)[33m.[39m[34mforEach[39m((btn) [33m=>[39m {
+    [90m 46|[39m       [34mexpect[39m(btn)[33m.[39m[34mtoBeDisabled[39m()[33m;[39m
+    [90m   |[39m                   [31m^[39m
+    [90m 47|[39m     })[33m;[39m
+    [90m 48|[39m   })[33m;[39m
+[90m [2m❯[22m src/components/__tests__/Rating.test.tsx:[2m45:35[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/Table.test.tsx[2m > [22mTable[2m > [22mshows loading state
+[31m[1mError[22m: [2mexpect([22m[31mreceived[31m[2m).toBeInTheDocument()[22m
+
+[31mreceived[31m value must be an HTMLElement or an SVGElement.
+Received has type:  Null
+Received has value: [31mnull[31m[39m
+[36m [2m❯[22m src/components/__tests__/Table.test.tsx:[2m80:59[22m[39m
+    [90m 78|[39m   [34mit[39m([32m'shows loading state'[39m[33m,[39m () [33m=>[39m {
+    [90m 79|[39m     const { container } = render(<Table columns={columns} data={data} …
+    [90m 80|[39m     expect(container.querySelector('.vx-table__loading')).toBeInTheDoc…
+    [90m   |[39m                                                           [31m^[39m
+    [90m 81|[39m   })[33m;[39m
+    [90m 82|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/TagInput.test.tsx[2m > [22mTagInput[2m > [22mremoves tag when remove button clicked
+[31m[1mTestingLibraryElementError[22m: Unable to find an accessible element with the role "button" and name `/remove react/i`
+
+Here are the accessible roles:
+
+  button:
+
+  Name "Remove tag react":
+  [36m<button[31m
+    [33maria-label[31m=[32m"Remove tag react"[31m
+    [33mclass[31m=[32m"vx-tag-input__remove"[31m
+    [33mtype[31m=[32m"button"[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Tag input":
+  [36m<input[31m
+    [33maria-label[31m=[32m"Tag input"[31m
+    [33mclass[31m=[32m"vx-tag-input__input"[31m
+    [33mplaceholder[31m=[32m""[31m
+    [33mvalue[31m=[32m""[31m
+  [36m/>[31m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"vx-tag-input"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"vx-tag-input__wrap"[31m
+      [36m>[31m
+        [36m<span[31m
+          [33mclass[31m=[32m"vx-tag-input__tag"[31m
+        [36m>[31m
+          [0mreact[0m
+          [36m<button[31m
+            [33maria-label[31m=[32m"Remove tag react"[31m
+            [33mclass[31m=[32m"vx-tag-input__remove"[31m
+            [33mtype[31m=[32m"button"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33maria-hidden[31m=[32m"true"[31m
+              [33mclass[31m=[32m"lucide lucide-x"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"11"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"11"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M18 6 6 18"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"m6 6 12 12"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+          [36m</button>[31m
+        [36m</span>[31m
+        [36m<input[31m
+          [33maria-label[31m=[32m"Tag input"[31m
+          [33mclass[31m=[32m"vx-tag-input__input"[31m
+          [33mplaceholder[31m=[32m""[31m
+          [33mvalue[31m=[32m""[31m
+        [36m/>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/components/__tests__/TagInput.test.tsx:[2m39:30[22m[39m
+    [90m 37|[39m   [34mit[39m([32m'removes tag when remove button clicked'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m 38|[39m     [34mrender[39m([33m<[39m[33mTagInput[39m [33mdefaultValue[39m[33m=[39m[33m{[39m[[32m'react'[39m][33m}[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 39|[39m     const removeBtn = screen.getByRole('button', { name: /remove react…
+    [90m   |[39m                              [31m^[39m
+    [90m 40|[39m     [35mawait[39m userEvent[33m.[39m[34mclick[39m(removeBtn)[33m;[39m
+    [90m 41|[39m     [34mexpect[39m(screen[33m.[39m[34mqueryByText[39m([32m'react'[39m))[33m.[39mnot[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/ThemeProvider.test.tsx[2m > [22mThemeProvider[2m > [22mallows setting a different theme by name
+[31m[1mAssertionError[22m: expected 'light' to be 'mint' // Object.is equality[39m
+
+Expected: [32m"[7mmin[27mt"[39m
+Received: [31m"[7mligh[27mt"[39m
+
+[36m [2m❯[22m src/components/__tests__/ThemeProvider.test.tsx:[2m42:56[22m[39m
+    [90m 40|[39m       screen[33m.[39m[34mgetByRole[39m([32m'button'[39m[33m,[39m { name[33m:[39m [32m'Set Mint'[39m })[33m.[39m[34mclick[39m()[33m;[39m
+    [90m 41|[39m     })[33m;[39m
+    [90m 42|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByTestId[39m([32m'theme-id'[39m)[33m.[39mtextContent)[33m.[39m[34mtoBe[39m([32m'mint'[39m)[33m;[39m
+    [90m   |[39m                                                        [31m^[39m
+    [90m 43|[39m   })[33m;[39m
+    [90m 44|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/ThemeProvider.test.tsx[2m > [22mThemeProvider[2m > [22muses initial defaultTheme from prop
+[31m[1mAssertionError[22m: expected 'light' to be 'sunset' // Object.is equality[39m
+
+Expected: [32m"[7msunse[27mt"[39m
+Received: [31m"[7mligh[27mt"[39m
+
+[36m [2m❯[22m src/components/__tests__/ThemeProvider.test.tsx:[2m51:56[22m[39m
+    [90m 49|[39m       [33m<[39m[33m/[39m[33mThemeProvider[39m[33m>[39m[33m,[39m
+    [90m 50|[39m     )[33m;[39m
+    [90m 51|[39m     [34mexpect[39m(screen[33m.[39m[34mgetByTestId[39m([32m'theme-id'[39m)[33m.[39mtextContent)[33m.[39m[34mtoBe[39m([32m'sunset'[39m)[33m;[39m
+    [90m   |[39m                                                        [31m^[39m
+    [90m 52|[39m   })[33m;[39m
+    [90m 53|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/TimePicker.test.tsx[2m > [22mTimePicker[2m > [22mcalls onChange when time is confirmed
+[31m[1mAssertionError[22m: expected "vi.fn()" to be called at least once[39m
+[36m [2m❯[22m src/components/__tests__/TimePicker.test.tsx:[2m84:24[22m[39m
+    [90m 82|[39m     [35mif[39m (okBtn) {
+    [90m 83|[39m       [35mawait[39m userEvent[33m.[39m[34mclick[39m(okBtn)[33m;[39m
+    [90m 84|[39m       [34mexpect[39m(onChange)[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m 85|[39m     }
+    [90m 86|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/Tooltip.test.tsx[2m > [22mTooltip[2m > [22mshows tooltip on hover
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m src/components/__tests__/Tooltip.test.tsx:[2m24:3[22m[39m
+    [90m 22|[39m   })[33m;[39m
+    [90m 23|[39m
+    [90m 24|[39m   [34mit[39m([32m'shows tooltip on hover'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   |[39m   [31m^[39m
+    [90m 25|[39m     [35mconst[39m user [33m=[39m userEvent[33m.[39m[34msetup[39m({ delay[33m:[39m [35mnull[39m })[33m;[39m
+    [90m 26|[39m     vi[33m.[39m[34museFakeTimers[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/31]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/__tests__/Tooltip.test.tsx[2m > [22mTooltip[2m > [22mhides tooltip on mouse leave
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m src/components/__tests__/Tooltip.test.tsx:[2m38:3[22m[39m
+    [90m 36|[39m   })[33m;[39m
+    [90m 37|[39m
+    [90m 38|[39m   [34mit[39m([32m'hides tooltip on mouse leave'[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m   |[39m   [31m^[39m
+    [90m 39|[39m     [35mconst[39m user [33m=[39m userEvent[33m.[39m[34msetup[39m({ delay[33m:[39m [35mnull[39m })[33m;[39m
+    [90m 40|[39m     vi[33m.[39m[34museFakeTimers[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/31]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m17 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (68)[39m
+[2m      Tests [22m [1m[31m30 failed[39m[22m[2m | [22m[1m[32m647 passed[39m[22m[90m (677)[39m
+[2m   Start at [22m 11:27:14
+[2m   Duration [22m 12.45s[2m (transform 1.06s, setup 2.65s, import 7.23s, tests 36.38s, environment 30.92s)[22m
+
