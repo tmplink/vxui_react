@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DatePicker } from '../DatePicker';
+import { Dialog } from '../Dialog';
+import { Button } from '../Button';
 
 describe('DatePicker', () => {
   it('renders a trigger button', () => {
@@ -69,5 +71,33 @@ describe('DatePicker', () => {
     render(<DatePicker disabled />);
     await userEvent.click(screen.getByRole('button'));
     expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+  });
+
+  it('closes calendar with Escape key', async () => {
+    render(<DatePicker />);
+    await userEvent.click(screen.getByRole('button'));
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+  });
+
+  // Regression: pressing Escape while the DatePicker calendar is open inside a Dialog
+  // should close the calendar only, leaving the Dialog open.
+  it('Escape closes the calendar without closing the parent Dialog', async () => {
+    render(
+      <Dialog trigger={<Button>Open dialog</Button>} title="Pick a date">
+        <DatePicker />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open dialog' }));
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: /select date/i }));
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 });

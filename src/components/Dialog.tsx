@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useRef, type ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { cx } from '../lib/cx';
@@ -36,12 +36,14 @@ export function Dialog({
   closable = true,
   ...props
 }: DialogProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
   return (
     <DialogPrimitive.Root {...props}>
       <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className="vx-dialog__overlay" />
         <DialogPrimitive.Content
+          ref={contentRef}
           className={cx(
             'vx-dialog__content',
             size !== 'md' && `vx-dialog__content--${size}`,
@@ -49,6 +51,18 @@ export function Dialog({
             scrollable && 'vx-dialog__content--scrollable',
             className,
           )}
+          onEscapeKeyDown={(e) => {
+            // Radix registers at document-level; use our ref to query the actual content element.
+            const el = contentRef.current;
+            if (!el) return;
+            const hasOpenInline = Boolean(el.querySelector(
+              '.vx-datepicker__popover, .vx-timepicker__popover, .vx-colorpicker__panel',
+            ));
+            const hasOpenPortal = el.dataset.hasOpenPortal === '1';
+            if (hasOpenInline || hasOpenPortal) {
+              e.preventDefault();
+            }
+          }}
         >
           <div className="vx-dialog__header">
             <div>

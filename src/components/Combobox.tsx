@@ -68,6 +68,7 @@ export function Combobox({
     width: number;
     direction: 'down' | 'up';
   } | null>(null);
+  const [portalInDialog, setPortalInDialog] = useState(false);
 
   const selectedOption = options.find((o) => o.value === value);
   const filtered = options.filter((o) =>
@@ -95,7 +96,7 @@ export function Combobox({
       if (!inWrap && !inDropdown) setOpen(false);
     };
     const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
     };
     document.addEventListener('mousedown', onOutside);
     document.addEventListener('touchstart', onOutside, { passive: true });
@@ -117,12 +118,14 @@ export function Combobox({
   useLayoutEffect(() => {
     if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
       setDropPos(null);
+      setPortalInDialog(false);
       return;
     }
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 280 && spaceAbove > spaceBelow ? 'up' : 'down';
+    setPortalInDialog(Boolean(wrapRef.current?.closest('.vx-dialog__content')));
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
@@ -144,6 +147,20 @@ export function Combobox({
       window.removeEventListener('resize', close);
     };
   }, [open, dropPos]);
+
+  // When this portaled dropdown is open inside a Dialog, mark the dialog content
+  // so its onEscapeKeyDown handler can prevent the dialog from closing prematurely.
+  useEffect(() => {
+    if (!portalInDialog) return;
+    const dialog = wrapRef.current?.closest('.vx-dialog__content') as HTMLElement | null;
+    if (!dialog) return;
+    if (open) {
+      dialog.dataset.hasOpenPortal = '1';
+    } else {
+      delete dialog.dataset.hasOpenPortal;
+    }
+    return () => { delete dialog.dataset.hasOpenPortal; };
+  }, [open, portalInDialog]);
 
   const select = (option: ComboboxOption) => {
     if (option.disabled) return;
@@ -201,7 +218,11 @@ export function Combobox({
         const dropdownNode = (
           <div
             ref={dropdownRef}
-            className={cx('vx-combobox__dropdown', dropPos?.direction === 'up' && 'vx-combobox__dropdown--up')}
+            className={cx(
+              'vx-combobox__dropdown',
+              dropPos?.direction === 'up' && 'vx-combobox__dropdown--up',
+              dropPos && portalInDialog && 'vx-combobox__dropdown--in-dialog',
+            )}
             style={dropPos ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width } : undefined}
           >
             {showSearch && (
