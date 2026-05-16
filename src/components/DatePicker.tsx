@@ -59,7 +59,7 @@ export function DatePicker({
       if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
     };
     const keyHandler = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
     };
     document.addEventListener('mousedown', handler);
     document.addEventListener('touchstart', handler, { passive: true });

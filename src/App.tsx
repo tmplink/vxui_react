@@ -55,7 +55,9 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  ColorPicker,
   Combobox,
+  DatePicker,
   Dialog,
   DropdownMenu,
   Input,
@@ -2314,6 +2316,36 @@ function DesktopApp() {
             >
               <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>
                 {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
+              </div>
+            </Dialog>
+
+            <Dialog
+              trigger={<Button variant="secondary">{isZh ? '表单对话框' : 'Form in dialog'}</Button>}
+              title={isZh ? '新建部署' : 'New deployment'}
+              description={isZh ? '下拉框、日期选择器等表单控件在对话框内可正常展开和交互。' : 'Dropdowns, date pickers and other form controls open correctly inside a dialog.'}
+              footer={
+                <>
+                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
+                  <Button>{isZh ? '创建' : 'Create'}</Button>
+                </>
+              }
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '4px 0' }}>
+                <Input label={isZh ? '项目名称' : 'Project name'} placeholder={isZh ? '输入名称…' : 'Enter name…'} />
+                <Combobox
+                  label={isZh ? '部署环境' : 'Environment'}
+                  placeholder={isZh ? '选择环境…' : 'Select environment…'}
+                  searchPlaceholder={isZh ? '搜索…' : 'Search…'}
+                  options={[
+                    { value: 'prod', label: isZh ? '生产' : 'Production' },
+                    { value: 'staging', label: isZh ? '预发布' : 'Staging' },
+                    { value: 'preview', label: isZh ? '预览' : 'Preview' },
+                    { value: 'dev', label: isZh ? '开发' : 'Development' },
+                  ]}
+                />
+                <DatePicker label={isZh ? '上线日期' : 'Launch date'} />
+                <TimePicker label={isZh ? '部署时间' : 'Deploy time'} />
+                <ColorPicker label={isZh ? '标签颜色' : 'Label color'} />
               </div>
             </Dialog>
 

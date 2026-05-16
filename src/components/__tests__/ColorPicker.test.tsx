@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ColorPicker } from '../ColorPicker';
+import { Dialog } from '../Dialog';
+import { Button } from '../Button';
 
 describe('ColorPicker', () => {
   it('renders a trigger button', () => {
@@ -82,5 +84,33 @@ describe('ColorPicker', () => {
     }
     // Just verify the trigger is still present
     expect(screen.getByRole('button', { name: /current color/i })).toBeInTheDocument();
+  });
+
+  it('closes panel with Escape key', async () => {
+    render(<ColorPicker />);
+    await userEvent.click(screen.getByRole('button'));
+    expect(document.querySelector('.vx-colorpicker__panel')).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+    expect(document.querySelector('.vx-colorpicker__panel')).not.toBeInTheDocument();
+  });
+
+  // Regression: pressing Escape while the ColorPicker panel is open inside a Dialog
+  // should close the panel only, leaving the Dialog open.
+  it('Escape closes the panel without closing the parent Dialog', async () => {
+    render(
+      <Dialog trigger={<Button>Open dialog</Button>} title="Pick a color">
+        <ColorPicker />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open dialog' }));
+    expect(screen.getByRole('dialog', { name: 'Pick a color' })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: /current color/i }));
+    expect(document.querySelector('.vx-colorpicker__panel')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    expect(document.querySelector('.vx-colorpicker__panel')).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'Pick a color' })).toBeInTheDocument();
   });
 });

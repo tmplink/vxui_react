@@ -192,4 +192,24 @@ describe('Combobox', () => {
     const dropdown = document.body.querySelector('.vx-combobox__dropdown');
     expect(dropdown).toHaveClass('vx-combobox__dropdown--in-dialog');
   });
+
+  // Regression: pressing Escape while a Combobox dropdown is open inside a Dialog
+  // should close the dropdown only, leaving the Dialog open.
+  it('Escape closes the dropdown without closing the parent Dialog', async () => {
+    render(
+      <Dialog trigger={<Button>Open dialog</Button>} title="Pick a framework">
+        <Combobox options={OPTIONS} placeholder="Pick framework" />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open dialog' }));
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Pick framework' }));
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
 });

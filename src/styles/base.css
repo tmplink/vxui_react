@@ -1770,7 +1770,8 @@ a {
   .vx-multiselect__dropdown,
   .vx-dropdown__menu,
   .vx-datepicker__popover,
-  .vx-timepicker__popover
+  .vx-timepicker__popover,
+  .vx-colorpicker__panel
 ) {
   overflow: visible;
 }
@@ -1855,7 +1856,8 @@ a {
   .vx-multiselect__dropdown,
   .vx-dropdown__menu,
   .vx-datepicker__popover,
-  .vx-timepicker__popover
+  .vx-timepicker__popover,
+  .vx-colorpicker__panel
 ) {
   overflow-y: visible;
 }

@@ -96,7 +96,7 @@ export function Combobox({
       if (!inWrap && !inDropdown) setOpen(false);
     };
     const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
     };
     document.addEventListener('mousedown', onOutside);
     document.addEventListener('touchstart', onOutside, { passive: true });
@@ -147,6 +147,20 @@ export function Combobox({
       window.removeEventListener('resize', close);
     };
   }, [open, dropPos]);
+
+  // When this portaled dropdown is open inside a Dialog, mark the dialog content
+  // so its onEscapeKeyDown handler can prevent the dialog from closing prematurely.
+  useEffect(() => {
+    if (!portalInDialog) return;
+    const dialog = wrapRef.current?.closest('.vx-dialog__content') as HTMLElement | null;
+    if (!dialog) return;
+    if (open) {
+      dialog.dataset.hasOpenPortal = '1';
+    } else {
+      delete dialog.dataset.hasOpenPortal;
+    }
+    return () => { delete dialog.dataset.hasOpenPortal; };
+  }, [open, portalInDialog]);
 
   const select = (option: ComboboxOption) => {
     if (option.disabled) return;

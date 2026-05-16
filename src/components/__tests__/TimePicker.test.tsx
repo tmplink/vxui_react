@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TimePicker } from '../TimePicker';
+import { Dialog } from '../Dialog';
+import { Button } from '../Button';
 
 describe('TimePicker', () => {
   it('renders an input-like trigger', () => {
@@ -87,4 +89,32 @@ describe('TimePicker', () => {
     render(<TimePicker disabled />);
     expect(screen.getByRole('button')).toBeDisabled();
   });
-});
+
+  it('closes panel with Escape key', async () => {
+    render(<TimePicker />);
+    await userEvent.click(screen.getByRole('button'));
+    expect(screen.getByRole('spinbutton', { name: /hour/i })).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('spinbutton', { name: /hour/i })).not.toBeInTheDocument();
+  });
+
+  // Regression: pressing Escape while the TimePicker panel is open inside a Dialog
+  // should close the panel only, leaving the Dialog open.
+  it('Escape closes the panel without closing the parent Dialog', async () => {
+    render(
+      <Dialog trigger={<Button>Open dialog</Button>} title="Pick a time">
+        <TimePicker placeholder="Select time" />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open dialog' }));
+    expect(screen.getByRole('dialog', { name: 'Pick a time' })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Select time' }));
+    expect(screen.getByRole('spinbutton', { name: /hour/i })).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('spinbutton', { name: /hour/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'Pick a time' })).toBeInTheDocument();
+  });
+});;

@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Dialog } from '../Dialog';
 import { Button } from '../Button';
+import { DatePicker } from '../DatePicker';
 
 const defaultProps = {
   trigger: <Button>Open</Button>,
@@ -93,5 +94,32 @@ describe('Dialog', () => {
     render(<Dialog {...defaultProps} className="my-custom" />);
     await userEvent.click(screen.getByRole('button', { name: 'Open' }));
     expect(screen.getByRole('dialog')).toHaveClass('my-custom');
+  });
+
+  it('closes on Escape key when no child overlay is open', async () => {
+    render(<Dialog {...defaultProps} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  // Regression: Dialog must NOT close on Escape when an inline child panel is open.
+  it('does not close on Escape when a child DatePicker calendar is open', async () => {
+    render(
+      <Dialog trigger={<Button>Open</Button>} title="Pick a date">
+        <DatePicker />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    expect(screen.getByRole('dialog', { name: 'Pick a date' })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: /select date/i }));
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'Pick a date' })).toBeInTheDocument();
   });
 });
