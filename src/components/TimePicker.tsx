@@ -234,7 +234,11 @@ export function TimePicker({
             <button
               type="button"
               className="vx-timepicker__done"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                // If no value has been committed yet, commit the currently displayed time.
+                if (!current) commit(h, m, s);
+                setOpen(false);
+              }}
             >
               Done
             </button>

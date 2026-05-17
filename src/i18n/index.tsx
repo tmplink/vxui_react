@@ -546,10 +546,10 @@ export const en: Translations = {
       section: 'Components',
       title: 'Form Controls',
       description:
-        'A complete set of form primitives: single-line inputs, multi-line textarea, native select, searchable single-select (Combobox), multi-select with tag display (MultiSelect), and time selection (TimePicker). All share the same label / hint / error layout system.',
+        'A complete set of form primitives: single-line inputs, multi-line textarea, searchable single-select (Select), multi-select with tag display (MultiSelect), and time selection (TimePicker). All share the same label / hint / error layout system.',
       guidance: [
         'Always pair form controls with visible labels in admin surfaces.',
-        'Use Combobox for single-select with optional search; set `searchable={N}` to show the search input only when options exceed N.',
+        'Use Select for single-select with optional search; set `searchable={N}` to show the search input only when options exceed N.',
         'Use MultiSelect when users need to pick several values from a bounded list.',
         'TimePicker supports 24-hour format and an optional seconds column via the `seconds` prop.',
         'Short helper text is better than placeholder-only instruction.',
@@ -1073,10 +1073,10 @@ export const zh: Translations = {
       section: '组件',
       title: '表单控件',
       description:
-        '完整的表单原语集：单行输入框、多行文本域、原生选择框、可搜索单选下拉（Combobox）、带标签显示的多选下拉（MultiSelect）和时间选择器（TimePicker）。所有组件共享统一的 label / hint / error 布局体系。',
+        '完整的表单原语集：单行输入框、多行文本域、可搜索单选下拉（Select）、带标签显示的多选下拉（MultiSelect）和时间选择器（TimePicker）。所有组件共享统一的 label / hint / error 布局体系。',
       guidance: [
         '在管理界面中，表单控件始终应配有可见标签。',
-        '使用 Combobox 实现单选下拉；通过 `searchable={N}` 可设为仅当选项超过 N 条时显示搜索框。',
+        '使用 Select 实现单选下拉；通过 `searchable={N}` 可设为仅当选项超过 N 条时显示搜索框。',
         '当用户需要从有限列表中选择多个值时，使用 MultiSelect。',
         'TimePicker 支持 24 小时制，通过 `seconds` prop 可启用秒选择列。',
         '简短的辅助文本优于仅依赖 placeholder 的说明。',

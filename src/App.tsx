@@ -56,7 +56,6 @@ import {
   CardTitle,
   Checkbox,
   ColorPicker,
-  Combobox,
   DatePicker,
   Dialog,
   DropdownMenu,
@@ -579,13 +578,13 @@ export function ActionCard() {
   );
 }`,
   'form-controls': String.raw`import { useState } from 'react';
-import { Combobox, Input, MultiSelect, Select, Textarea, TimePicker } from 'vxui-react';
+import { Input, MultiSelect, Select, Textarea, TimePicker } from 'vxui-react';
 
 export function ProjectForm() {
   const [env, setEnv] = useState<string | undefined>(undefined);
   const [stack, setStack] = useState(['react', 'typescript']);
   const [deployTime, setDeployTime] = useState('');
-  // Stacking verification — two Comboboxes one below the other
+  // Stacking verification — two Selects one below the other
   const [regionA, setRegionA] = useState<string | undefined>(undefined);
   const [regionB, setRegionB] = useState<string | undefined>(undefined);
 
@@ -600,14 +599,18 @@ export function ProjectForm() {
     <form style={{ display: 'grid', gap: 16 }}>
       <Input label="Project name" placeholder="Northwind migration" />
 
-      <Select label="Release track" defaultValue="stable">
-        <option value="stable">Stable</option>
-        <option value="preview">Preview</option>
-        <option value="internal">Internal</option>
-      </Select>
+      <Select
+        label="Release track"
+        defaultValue="stable"
+        options={[
+          { value: 'stable', label: 'Stable' },
+          { value: 'preview', label: 'Preview' },
+          { value: 'internal', label: 'Internal' },
+        ]}
+      />
 
       {/* searchable={4}: show search only when options > 4 */}
-      <Combobox
+      <Select
         label="Environment"
         value={env}
         onChange={setEnv}
@@ -651,19 +654,19 @@ export function ProjectForm() {
       />
 
       {/*
-       * Stacking test: when two Comboboxes are placed directly one above the
+      * Stacking test: when two Selects are placed directly one above the
        * other, the first dropdown must render above the second field without
        * z-index bleed. Dropdowns are portaled to document.body on desktop
        * (> 640 px) so they always escape any stacking-context ancestor.
        */}
-      <Combobox
+      <Select
         label="Source region"
         value={regionA}
         onChange={setRegionA}
         placeholder="Select region…"
         options={REGIONS}
       />
-      <Combobox
+      <Select
         label="Target region"
         value={regionB}
         onChange={setRegionB}
@@ -1220,9 +1223,9 @@ function DesktopApp() {
   const [sliderValue, setSliderValue] = useState(68);
   const [paginationPage, setPaginationPage] = useState(4);
   const [multiSelectValue, setMultiSelectValue] = useState<string[]>(['react', 'typescript']);
-  const [comboboxEnv, setComboboxEnv] = useState<string | undefined>(undefined);
-  const [comboboxRegionA, setComboboxRegionA] = useState<string | undefined>(undefined);
-  const [comboboxRegionB, setComboboxRegionB] = useState<string | undefined>(undefined);
+  const [selectEnv, setSelectEnv] = useState<string | undefined>(undefined);
+  const [selectRegionA, setSelectRegionA] = useState<string | undefined>(undefined);
+  const [selectRegionB, setSelectRegionB] = useState<string | undefined>(undefined);
   const [timeValue, setTimeValue] = useState<string | undefined>(undefined);
 
   const copy = isZh
@@ -2046,16 +2049,19 @@ function DesktopApp() {
             <Select
               label={copy.releaseLabel}
               value={releaseTrack}
-              onChange={(event) => setReleaseTrack(event.target.value as ReleaseTrack)}
-            >
-              <option value="stable">{copy.releaseOptions.stable}</option>
-              <option value="preview">{copy.releaseOptions.preview}</option>
-              <option value="internal">{copy.releaseOptions.internal}</option>
-            </Select>
-            <Combobox
+              onChange={(value) => {
+                if (value) setReleaseTrack(value as ReleaseTrack);
+              }}
+              options={[
+                { value: 'stable', label: copy.releaseOptions.stable },
+                { value: 'preview', label: copy.releaseOptions.preview },
+                { value: 'internal', label: copy.releaseOptions.internal },
+              ]}
+            />
+            <Select
               label={isZh ? '部署环境' : 'Environment'}
-              value={comboboxEnv}
-              onChange={setComboboxEnv}
+              value={selectEnv}
+              onChange={setSelectEnv}
               clearable
               searchable={4}
               placeholder={isZh ? '选择环境…' : 'Select environment…'}
@@ -2104,10 +2110,10 @@ function DesktopApp() {
                 {isZh ? '堆叠验证 · 打开第一个下拉，确认第二个字段不被遮穿' : 'Stacking · open the first dropdown, the second field must stay visible'}
               </p>
               <div style={{ display: 'grid', gap: 12 }}>
-                <Combobox
+                <Select
                   label={isZh ? '来源区域' : 'Source region'}
-                  value={comboboxRegionA}
-                  onChange={setComboboxRegionA}
+                  value={selectRegionA}
+                  onChange={setSelectRegionA}
                   placeholder={isZh ? '选择区域…' : 'Select region…'}
                   options={[
                     { value: 'us-east-1', label: 'US East – N. Virginia' },
@@ -2116,10 +2122,10 @@ function DesktopApp() {
                     { value: 'ap-southeast-1', label: 'Asia Pacific – Singapore' },
                   ]}
                 />
-                <Combobox
+                <Select
                   label={isZh ? '目标区域' : 'Target region'}
-                  value={comboboxRegionB}
-                  onChange={setComboboxRegionB}
+                  value={selectRegionB}
+                  onChange={setSelectRegionB}
                   placeholder={isZh ? '选择区域…' : 'Select region…'}
                   options={[
                     { value: 'us-east-1', label: 'US East – N. Virginia' },
@@ -2322,7 +2328,7 @@ function DesktopApp() {
             <Dialog
               trigger={<Button variant="secondary">{isZh ? '表单对话框' : 'Form in dialog'}</Button>}
               title={isZh ? '新建部署' : 'New deployment'}
-              description={isZh ? '下拉框、日期选择器等表单控件在对话框内可正常展开和交互。' : 'Dropdowns, date pickers and other form controls open correctly inside a dialog.'}
+              description={isZh ? '单选下拉、多选下拉、日期选择器等表单控件在对话框内可正常展开和交互。' : 'Single-selects, multi-selects, date pickers and other form controls open correctly inside a dialog.'}
               footer={
                 <>
                   <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
@@ -2332,7 +2338,7 @@ function DesktopApp() {
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '4px 0' }}>
                 <Input label={isZh ? '项目名称' : 'Project name'} placeholder={isZh ? '输入名称…' : 'Enter name…'} />
-                <Combobox
+                <Select
                   label={isZh ? '部署环境' : 'Environment'}
                   placeholder={isZh ? '选择环境…' : 'Select environment…'}
                   searchPlaceholder={isZh ? '搜索…' : 'Search…'}
@@ -2341,6 +2347,18 @@ function DesktopApp() {
                     { value: 'staging', label: isZh ? '预发布' : 'Staging' },
                     { value: 'preview', label: isZh ? '预览' : 'Preview' },
                     { value: 'dev', label: isZh ? '开发' : 'Development' },
+                  ]}
+                />
+                <MultiSelect
+                  label={isZh ? '部署模块' : 'Deployment scope'}
+                  placeholder={isZh ? '选择模块…' : 'Select scope…'}
+                  searchPlaceholder={isZh ? '搜索模块…' : 'Search scope…'}
+                  clearable
+                  options={[
+                    { value: 'web', label: isZh ? 'Web 前端' : 'Web frontend' },
+                    { value: 'api', label: isZh ? 'API 服务' : 'API service' },
+                    { value: 'worker', label: isZh ? '异步任务' : 'Background jobs' },
+                    { value: 'mobile', label: isZh ? '移动端' : 'Mobile app' },
                   ]}
                 />
                 <DatePicker label={isZh ? '上线日期' : 'Launch date'} />
@@ -2531,11 +2549,18 @@ function DesktopApp() {
                   ))}
                 </div>
                 <div className="vx-doc-control-grid vx-doc-control-grid--single">
-                  <Select label={copy.releaseLabel} value={releaseTrack} onChange={(event) => setReleaseTrack(event.target.value as ReleaseTrack)}>
-                    <option value="stable">{copy.releaseOptions.stable}</option>
-                    <option value="preview">{copy.releaseOptions.preview}</option>
-                    <option value="internal">{copy.releaseOptions.internal}</option>
-                  </Select>
+                  <Select
+                    label={copy.releaseLabel}
+                    value={releaseTrack}
+                    onChange={(value) => {
+                      if (value) setReleaseTrack(value as ReleaseTrack);
+                    }}
+                    options={[
+                      { value: 'stable', label: copy.releaseOptions.stable },
+                      { value: 'preview', label: copy.releaseOptions.preview },
+                      { value: 'internal', label: copy.releaseOptions.internal },
+                    ]}
+                  />
                 </div>
               </CardContent>
             </Card>

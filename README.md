@@ -94,11 +94,15 @@ export function ProjectForm() {
     <form style={{ display: 'grid', gap: 16 }}>
       <Input label="Project name" placeholder="Northwind migration" />
 
-      <Select label="Release track" defaultValue="stable">
-        <option value="stable">Stable</option>
-        <option value="preview">Preview</option>
-        <option value="internal">Internal</option>
-      </Select>
+      <Select
+        label="Release track"
+        defaultValue="stable"
+        options={[
+          { value: 'stable', label: 'Stable' },
+          { value: 'preview', label: 'Preview' },
+          { value: 'internal', label: 'Internal' },
+        ]}
+      />
 
       <Textarea
         label="Summary"
@@ -179,7 +183,7 @@ export function Root({ children }: { children: React.ReactNode }) {
 ## 当前包含
 
 - **Layout**: AppShell、Card、Separator、Breadcrumb、Pagination、Resizable、ScrollArea
-- **Forms**: Input、Select、Checkbox、Radio、Textarea、Slider、Switch、NumberInput、TagInput、ColorPicker、DatePicker、FileUpload、Form、Rating、Combobox
+- **Forms**: Input、Select、Checkbox、Radio、Textarea、Slider、Switch、NumberInput、TagInput、ColorPicker、DatePicker、FileUpload、Form、Rating
 - **Feedback**: Alert、AlertDialog、Toast、Progress、Skeleton、Spinner、Stepper、Timeline、EmptyState
 - **Overlay**: Dialog、Sheet、Popover、DropdownMenu、ContextMenu、Tooltip、HoverCard、CommandPalette、Menubar、NavigationMenu
 - **Data Display**: Avatar、Table、Badge、Tabs、Accordion、TreeView、Carousel、Calendar

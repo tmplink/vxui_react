@@ -62,7 +62,7 @@ export type { HeadingProps } from '../components/Heading';
 
 // Form components
 export { Select } from '../components/Select';
-export type { SelectProps } from '../components/Select';
+export type { SelectProps, SelectOption } from '../components/Select';
 export { Checkbox } from '../components/Checkbox';
 export type { CheckboxProps } from '../components/Checkbox';
 
@@ -140,10 +140,6 @@ export { Calendar } from '../components/Calendar';
 export type { CalendarProps } from '../components/Calendar';
 export { DatePicker } from '../components/DatePicker';
 export type { DatePickerProps } from '../components/DatePicker';
-
-// New: Combobox
-export { Combobox } from '../components/Combobox';
-export type { ComboboxProps, ComboboxOption } from '../components/Combobox';
 
 // New: MultiSelect
 export { MultiSelect } from '../components/MultiSelect';
