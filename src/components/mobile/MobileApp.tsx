@@ -76,7 +76,6 @@ import {
   useToast,
   useTheme,
   LanguageSwitcher,
-  Combobox,
   MultiSelect,
   TimePicker,
   SegmentedControl,
@@ -274,10 +273,10 @@ export function MobileApp() {
   const [sliderVal, setSliderVal] = useState(42);
   const [paginationPage, setPaginationPage] = useState(1);
   const [mobileTab, setMobileTab] = useState<'home' | 'search' | 'alerts' | 'profile'>('home');
-  const [comboboxVal, setComboboxVal] = useState('');
+  const [selectVal, setSelectVal] = useState<string | undefined>(undefined);
   const [multiSelectVal, setMultiSelectVal] = useState<string[]>([]);
   const [timeVal, setTimeVal] = useState('');
-  const [releaseTrackVal, setReleaseTrackVal] = useState('');
+  const [releaseTrackVal, setReleaseTrackVal] = useState<string | undefined>(undefined);
   const [dateVal, setDateVal] = useState<Date | undefined>();
   const [numVal, setNumVal] = useState(1);
   const [tagVal, setTagVal] = useState<string[]>(['react', 'vxui']);
@@ -506,7 +505,7 @@ export function MobileApp() {
         return (
           <div className="vx-stack">
             <Input label="Project name" placeholder="vxui-docs" />
-            <Combobox
+            <Select
               label="Release track"
               value={releaseTrackVal}
               onChange={setReleaseTrackVal}
@@ -517,10 +516,10 @@ export function MobileApp() {
                 { value: 'internal', label: 'Internal' },
               ]}
             />
-            <Combobox
+            <Select
               label="Environment"
-              value={comboboxVal}
-              onChange={setComboboxVal}
+              value={selectVal}
+              onChange={setSelectVal}
               clearable
               searchable={4}
               placeholder="Select environment…"
@@ -556,11 +555,16 @@ export function MobileApp() {
               onChange={setDateVal}
               placeholder="Pick a date"
             />
-            <Select label="Native select (system UI)" hint="Wraps a native &lt;select&gt; element with custom styling.">
-              <option value="a">Option A</option>
-              <option value="b">Option B</option>
-              <option value="c">Option C</option>
-            </Select>
+            <Select
+              label="Approval lane"
+              hint="Single-select uses the same custom overlay behavior across mobile and desktop."
+              defaultValue="review"
+              options={[
+                { value: 'review', label: 'Review' },
+                { value: 'staged', label: 'Staged rollout' },
+                { value: 'urgent', label: 'Urgent hotfix' },
+              ]}
+            />
             <NumberInput label="Quantity" value={numVal} onChange={setNumVal} min={0} max={99} />
             <TagInput label="Labels" value={tagVal} onChange={setTagVal} placeholder="Add label…" />
             <FileUpload label="Attachments" multiple />

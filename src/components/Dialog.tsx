@@ -56,10 +56,18 @@ export function Dialog({
             const el = contentRef.current;
             if (!el) return;
             const hasOpenInline = Boolean(el.querySelector(
-              '.vx-datepicker__popover, .vx-timepicker__popover, .vx-colorpicker__panel',
+              '.vx-select__dropdown, .vx-multiselect__dropdown, .vx-datepicker__popover, .vx-timepicker__popover, .vx-colorpicker__panel',
             ));
             const hasOpenPortal = el.dataset.hasOpenPortal === '1';
             if (hasOpenInline || hasOpenPortal) {
+              e.preventDefault();
+            }
+          }}
+          onPointerDownOutside={(e) => {
+            // Prevent the dialog from closing when a pointer-down event happens inside
+            // a portaled dropdown (Select / MultiSelect) that belongs to this dialog.
+            const el = contentRef.current;
+            if (el?.dataset.hasOpenPortal === '1') {
               e.preventDefault();
             }
           }}

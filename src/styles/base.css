@@ -69,7 +69,7 @@
 
   /* ── Control size tokens ───────────────────────────────────────────
      These drive the unified height / padding / font-size across all
-     interactive controls: Button, Input, Select, Combobox, DatePicker,
+    interactive controls: Button, Input, Select, DatePicker,
      TimePicker, MultiSelect, NumberInput, ColorPicker, etc.
   ─────────────────────────────────────────────────────────────────── */
   --vx-ctrl-h-sm:  36px;
@@ -1766,7 +1766,7 @@ a {
 }
 /* When an inline popover is open inside the dialog, allow it to overflow */
 .vx-dialog__content:has(
-  .vx-combobox__dropdown,
+  .vx-select__dropdown,
   .vx-multiselect__dropdown,
   .vx-dropdown__menu,
   .vx-datepicker__popover,
@@ -1852,7 +1852,7 @@ a {
 }
 /* When a dropdown is open inside a scrollable dialog, temporarily allow overflow */
 .vx-dialog__content--scrollable .vx-dialog__body:has(
-  .vx-combobox__dropdown,
+  .vx-select__dropdown,
   .vx-multiselect__dropdown,
   .vx-dropdown__menu,
   .vx-datepicker__popover,
@@ -2021,7 +2021,7 @@ a {
 }
 
 /* ── Inline control row ────────────────────────────────────────────────────
-   Aligns Button + Input + Select + Combobox etc. side-by-side without
+  Aligns Button + Input + Select etc. side-by-side without
    extra wrapper tweaks.  All children share the same baseline height tier.
 
    Usage:
@@ -2044,7 +2044,6 @@ a {
 .vx-ctrl-row > .vx-field-group,
 .vx-ctrl-row > .vx-input,
 .vx-ctrl-row > .vx-select,
-.vx-ctrl-row > .vx-combobox,
 .vx-ctrl-row > .vx-datepicker,
 .vx-ctrl-row > .vx-number-input,
 .vx-ctrl-row > .vx-multiselect,
@@ -3194,43 +3193,6 @@ a {
 [data-theme-name='black-gold'] .vx-timepicker__col-item--selected,
 [data-theme-name='black-gold'] .vx-timepicker__done {
   color: #09090f;
-}
-
-/* ── Select ────────────────────────────────────────── */
-.vx-select {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.vx-select__field {
-  width: 100%;
-  appearance: none;
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
-  border-radius: var(--vx-radius);
-  color: var(--vx-text);
-  font-size: var(--vx-ctrl-fs-md);
-  min-height: var(--vx-ctrl-h-md);
-  padding: 0 2.25rem 0 var(--vx-ctrl-px-md);
-  outline: none;
-  cursor: pointer;
-  transition: border-color 150ms, box-shadow 150ms;
-}
-.vx-select__field:focus {
-  border-color: var(--vx-primary);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 20%, transparent);
-}
-.vx-select__field:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.vx-select__arrow {
-  position: absolute;
-  right: 0.75rem;
-  pointer-events: none;
-  color: var(--vx-text-muted);
-  display: flex;
-  align-items: center;
 }
 
 /* ── Checkbox ──────────────────────────────────────── */
@@ -7154,14 +7116,14 @@ a {
   bottom: calc(100% + 6px);
 }
 
-/* ── Combobox ──────────────────────────────────────────────── */
-.vx-combobox {
+/* ── Select ────────────────────────────────────────────────── */
+.vx-select {
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.vx-combobox__trigger {
+.vx-select__trigger {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -7177,49 +7139,49 @@ a {
   width: 100%;
   transition: border-color 140ms;
 }
-.vx-combobox__trigger:hover:not(:disabled) {
+.vx-select__trigger:hover:not(:disabled) {
   border-color: var(--vx-border-strong);
 }
-.vx-combobox__trigger--invalid {
+.vx-select__trigger--invalid {
   border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border));
 }
-.vx-combobox__trigger--disabled {
+.vx-select__trigger--disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-.vx-combobox__value {
+.vx-select__value {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.vx-combobox__value--placeholder {
+.vx-select__value--placeholder {
   color: var(--vx-text-muted);
 }
-.vx-combobox__icons {
+.vx-select__icons {
   display: flex;
   align-items: center;
   gap: 4px;
   flex-shrink: 0;
   color: var(--vx-text-muted);
 }
-.vx-combobox__clear {
+.vx-select__clear {
   display: flex;
   align-items: center;
   cursor: pointer;
   color: var(--vx-text-muted);
   transition: color 100ms;
 }
-.vx-combobox__clear:hover {
+.vx-select__clear:hover {
   color: var(--vx-text);
 }
-.vx-combobox__chevron {
+.vx-select__chevron {
   transition: transform 160ms;
 }
-.vx-combobox__chevron--open {
+.vx-select__chevron--open {
   transform: rotate(180deg);
 }
-.vx-combobox__dropdown {
+.vx-select__dropdown {
   position: fixed;
   z-index: var(--vx-z-menu);
   background: var(--vx-glass-bg);
@@ -7231,17 +7193,17 @@ a {
   animation: vx-fade-in 140ms ease;
   overflow: hidden;
 }
-.vx-combobox__dropdown--in-dialog {
+.vx-select__dropdown--in-dialog {
   z-index: calc(var(--vx-z-dialog) + 1);
 }
-.vx-combobox__dropdown--up {
+.vx-select__dropdown--up {
   /* direction handled by inline style from portal */
 }
-.vx-combobox__search-wrap {
+.vx-select__search-wrap {
   padding: 8px 8px 4px;
   border-bottom: 1px solid var(--vx-border);
 }
-.vx-combobox__search {
+.vx-select__search {
   width: 100%;
   padding: 6px 10px;
   border-radius: 8px;
@@ -7250,18 +7212,18 @@ a {
   color: var(--vx-text);
   font-size: 13px;
 }
-.vx-combobox__search:focus {
+.vx-select__search:focus {
   outline: none;
   border-color: var(--vx-primary);
 }
-.vx-combobox__list {
+.vx-select__list {
   list-style: none;
   margin: 0;
   padding: 4px;
   max-height: 220px;
   overflow-y: auto;
 }
-.vx-combobox__option {
+.vx-select__option {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -7273,18 +7235,18 @@ a {
   cursor: pointer;
   transition: background 100ms;
 }
-.vx-combobox__option:hover:not(.vx-combobox__option--disabled) {
+.vx-select__option:hover:not(.vx-select__option--disabled) {
   background: var(--vx-bg-accent);
 }
-.vx-combobox__option--selected {
+.vx-select__option--selected {
   color: var(--vx-primary);
   font-weight: 500;
 }
-.vx-combobox__option--disabled {
+.vx-select__option--disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
-.vx-combobox__empty {
+.vx-select__empty {
   padding: 12px 10px;
   font-size: 13px;
   color: var(--vx-text-muted);
@@ -8815,8 +8777,8 @@ a {
   .vx-number-input__btn             { min-height: 44px; }
   .vx-number-input__field           { font-size: 16px; }
 
-  /* ── Combobox / DatePicker / TimePicker / MultiSelect ── */
-  .vx-combobox__trigger             { min-height: 44px; font-size: 16px; }
+  /* ── Select / DatePicker / TimePicker / MultiSelect ── */
+  .vx-select__trigger               { min-height: 44px; font-size: 16px; }
   .vx-datepicker__trigger           { min-height: 44px; font-size: 16px; }
   .vx-timepicker__trigger           { min-height: 44px; height: 44px; font-size: 16px; }
   .vx-timepicker__value             { font-size: 16px; }
@@ -8839,7 +8801,7 @@ a {
 
 /* ─────────────────────────────────────────────────────────────
    Mobile bottom-sheet for dropdown overlays (≤ 640 px)
-   • Combobox / MultiSelect / TimePicker slide up as a full-width
+  • Select / MultiSelect / TimePicker slide up as a full-width
      bottom sheet instead of an inline floating dropdown.
    • Handle bar via ::before (absolute, top-centre of sheet).
    • Semi-transparent backdrop via ::after (fixed, full-viewport,
@@ -8849,7 +8811,7 @@ a {
    ───────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   /* ── Sheet container ── */
-  .vx-combobox__dropdown,
+  .vx-select__dropdown,
   .vx-multiselect__dropdown,
   .vx-timepicker__popover,
   .vx-datepicker__popover,
@@ -8878,7 +8840,7 @@ a {
   }
 
   /* Always bottom (override --up direction flip on mobile) */
-  .vx-combobox__dropdown--up,
+  .vx-select__dropdown--up,
   .vx-multiselect__dropdown--up,
   .vx-timepicker__popover--up,
   .vx-datepicker__popover--up {
@@ -8887,7 +8849,7 @@ a {
   }
 
   /* Handle bar */
-  .vx-combobox__dropdown::before,
+  .vx-select__dropdown::before,
   .vx-multiselect__dropdown::before,
   .vx-timepicker__popover::before,
   .vx-datepicker__popover::before,
@@ -8907,7 +8869,7 @@ a {
   /* Backdrop — placed on the wrapper (outside the sheet's stacking
      context) so it appears below the sheet, not on top of it.
      z-index: sheet - 1 puts it above the page but below the sheet. */
-  .vx-combobox:has(.vx-combobox__dropdown)::after,
+  .vx-select:has(.vx-select__dropdown)::after,
   .vx-multiselect:has(.vx-multiselect__dropdown)::after,
   .vx-timepicker:has(.vx-timepicker__popover)::after,
   .vx-datepicker:has(.vx-datepicker__popover)::after,
@@ -8921,7 +8883,7 @@ a {
   }
 
   /* ── Scrollable list ── */
-  .vx-combobox__list,
+  .vx-select__list,
   .vx-multiselect__list {
     max-height: none;
     flex: 1;
@@ -8931,7 +8893,7 @@ a {
   }
 
   /* ── Larger touch targets for options ── */
-  .vx-combobox__option {
+  .vx-select__option {
     min-height: 52px;
     padding: 12px 16px;
     font-size: 15px;
@@ -8945,7 +8907,7 @@ a {
   }
 
   /* ── Search input ── */
-  .vx-combobox__search,
+  .vx-select__search,
   .vx-multiselect__search {
     font-size: 16px;
     padding: 10px 14px;

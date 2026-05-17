@@ -147,7 +147,7 @@ import { Shell, ShellSidebar, ShellContent } from 'vxui-react';
 - **Rating** — Star rating input
 - **DatePicker** — Calendar-based date picker
 - **ColorPicker** — Color swatch/hex picker
-- **Combobox** — Autocomplete combo input (Radix UI)
+- **Select** — Searchable single-select input with custom overlay behavior
 - **Form** — Form wrapper with validation helpers
 
 ### Overlays & Popovers

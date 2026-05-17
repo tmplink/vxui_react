@@ -1,32 +1,264 @@
-import type { SelectHTMLAttributes } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useId } from 'react';
+import { createPortal } from 'react-dom';
+import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
 
-export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string;
-  hint?: string;
-  placeholder?: string;
+export interface SelectOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
 }
 
-export function Select({ className, label, hint, placeholder, children, ...props }: SelectProps) {
+export interface SelectProps {
+  options: SelectOption[];
+  value?: string;
+  defaultValue?: string;
+  onChange?: (value: string | undefined) => void;
+  placeholder?: string;
+  searchPlaceholder?: string;
+  label?: string;
+  hint?: string;
+  error?: string;
+  disabled?: boolean;
+  clearable?: boolean;
+  emptyText?: string;
+  searchable?: boolean | number;
+  className?: string;
+}
+
+export function Select({
+  options,
+  value: controlledValue,
+  defaultValue,
+  onChange,
+  placeholder = 'Select...',
+  searchPlaceholder = 'Search...',
+  label,
+  hint,
+  error,
+  disabled,
+  clearable = false,
+  emptyText = 'No results',
+  searchable = true,
+  className,
+}: SelectProps) {
+  const isControlled = controlledValue !== undefined;
+  const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
+  const value = isControlled ? controlledValue : internalValue;
+
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const listboxId = useId();
+
+  const [dropPos, setDropPos] = useState<{
+    top?: number;
+    bottom?: number;
+    left: number;
+    width: number;
+    direction: 'down' | 'up';
+  } | null>(null);
+  const [portalInDialog, setPortalInDialog] = useState(false);
+
+  const selectedOption = options.find((option) => option.value === value);
+  const filtered = options.filter((option) =>
+    option.label.toLowerCase().includes(search.toLowerCase()),
+  );
+  const showSearch =
+    typeof searchable === 'number' ? options.length > searchable : searchable;
+
+  useEffect(() => {
+    if (!open) {
+      setSearch('');
+      return;
+    }
+    if (showSearch) {
+      const timeoutId = setTimeout(() => searchRef.current?.focus(), 0);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [open, showSearch]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onOutside = (event: Event) => {
+      const inWrap = wrapRef.current?.contains(event.target as Node);
+      const inDropdown = dropdownRef.current?.contains(event.target as Node);
+      if (!inWrap && !inDropdown) setOpen(false);
+    };
+    const onKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onOutside);
+    document.addEventListener('touchstart', onOutside, { passive: true });
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onOutside);
+      document.removeEventListener('touchstart', onOutside);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  useLayoutEffect(() => {
+    if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
+      setDropPos(null);
+      setPortalInDialog(false);
+      return;
+    }
+    const rect = triggerRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const direction = spaceBelow < 280 && spaceAbove > spaceBelow ? 'up' : 'down';
+    setPortalInDialog(Boolean(wrapRef.current?.closest('.vx-dialog__content')));
+    setDropPos(
+      direction === 'down'
+        ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
+        : { bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width, direction },
+    );
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !dropPos || portalInDialog) return;
+    const close = (event: Event) => {
+      if (dropdownRef.current?.contains(event.target as Node)) return;
+      setOpen(false);
+    };
+    window.addEventListener('scroll', close, { capture: true, passive: true });
+    window.addEventListener('resize', close);
+    return () => {
+      window.removeEventListener('scroll', close, { capture: true });
+      window.removeEventListener('resize', close);
+    };
+  }, [open, dropPos, portalInDialog]);
+
+  const handleSelect = (option: SelectOption) => {
+    if (option.disabled) return;
+    if (!isControlled) setInternalValue(option.value);
+    onChange?.(option.value);
+    setOpen(false);
+  };
+
+  const clear = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (!isControlled) setInternalValue(undefined);
+    onChange?.(undefined);
+  };
+
   return (
-    <label className="vx-field-group">
+    <div ref={wrapRef} className={cx('vx-select', open && 'vx-select--open', className)}>
       {label ? <span className="vx-field-group__label">{label}</span> : null}
-      <span className={cx('vx-select', className)}>
-        <select className="vx-select__field" {...props}>
-          {placeholder ? (
-            <option value="" disabled>
-              {placeholder}
-            </option>
-          ) : null}
-          {children}
-        </select>
-        <span className="vx-select__arrow" aria-hidden="true">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+      <button
+        ref={triggerRef}
+        type="button"
+        className={cx(
+          'vx-select__trigger',
+          error && 'vx-select__trigger--invalid',
+          disabled && 'vx-select__trigger--disabled',
+        )}
+        onClick={() => !disabled && setOpen((isOpen) => !isOpen)}
+        disabled={disabled}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={listboxId}
+      >
+        <span className={cx('vx-select__value', !selectedOption && 'vx-select__value--placeholder')}>
+          {selectedOption?.label ?? placeholder}
         </span>
-      </span>
-      {hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-    </label>
+        <span className="vx-select__icons">
+          {clearable && selectedOption && (
+            <span
+              className="vx-select__clear"
+              onClick={clear}
+              role="button"
+              aria-label="Clear selection"
+            >
+              <X size={14} />
+            </span>
+          )}
+          <ChevronDown
+            size={14}
+            className={cx('vx-select__chevron', open && 'vx-select__chevron--open')}
+          />
+        </span>
+      </button>
+      {error ? <span className="vx-field-group__error">{error}</span> : null}
+      {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
+      {open && (() => {
+        const shouldPortal = Boolean(dropPos && !portalInDialog);
+        const dropdownStyle = shouldPortal && dropPos
+          ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width }
+          : dropPos && portalInDialog
+            ? {
+                position: 'absolute' as const,
+                left: 0,
+                width: '100%',
+                top: dropPos.direction === 'down' ? 'calc(100% + 4px)' : undefined,
+                bottom: dropPos.direction === 'up' ? 'calc(100% + 4px)' : undefined,
+              }
+            : undefined;
+        const dropdownNode = (
+          <div
+            ref={dropdownRef}
+            className={cx(
+              'vx-select__dropdown',
+              dropPos?.direction === 'up' && 'vx-select__dropdown--up',
+              dropPos && portalInDialog && 'vx-select__dropdown--in-dialog',
+            )}
+            style={dropdownStyle}
+          >
+            {showSearch && (
+              <div className="vx-select__search-wrap">
+                <input
+                  ref={searchRef}
+                  type="text"
+                  className="vx-select__search"
+                  placeholder={searchPlaceholder}
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                  aria-label={searchPlaceholder}
+                />
+              </div>
+            )}
+            <ul id={listboxId} className="vx-select__list" role="listbox" aria-label={label ?? 'Options'}>
+              {filtered.length === 0 ? (
+                <li className="vx-select__empty">{emptyText}</li>
+              ) : (
+                filtered.map((option) => (
+                  <li
+                    key={option.value}
+                    className={cx(
+                      'vx-select__option',
+                      option.value === value && 'vx-select__option--selected',
+                      option.disabled && 'vx-select__option--disabled',
+                    )}
+                    role="option"
+                    aria-selected={option.value === value}
+                    aria-disabled={option.disabled}
+                    onClick={() => handleSelect(option)}
+                  >
+                    <span>{option.label}</span>
+                    {option.value === value ? <Check size={14} /> : null}
+                  </li>
+                ))
+              )}
+            </ul>
+          </div>
+        );
+        return shouldPortal ? createPortal(dropdownNode, document.body) : dropdownNode;
+      })()}
+    </div>
   );
 }

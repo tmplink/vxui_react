@@ -123,9 +123,9 @@ export function MultiSelect({
     );
   }, [open]);
 
-  // Close portaled dropdown on scroll/resize (but not when scrolling inside it)
+  // Close fixed-position dropdown on scroll/resize (but not when scrolling inside it)
   useEffect(() => {
-    if (!open || !dropPos) return;
+    if (!open || !dropPos || portalInDialog) return;
     const close = (e: Event) => {
       if (dropdownRef.current?.contains(e.target as Node)) return;
       setOpen(false);
@@ -136,21 +136,7 @@ export function MultiSelect({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos]);
-
-  // When this portaled dropdown is open inside a Dialog, mark the dialog content
-  // so its onEscapeKeyDown handler can prevent the dialog from closing prematurely.
-  useEffect(() => {
-    if (!portalInDialog) return;
-    const dialog = wrapRef.current?.closest('.vx-dialog__content') as HTMLElement | null;
-    if (!dialog) return;
-    if (open) {
-      dialog.dataset.hasOpenPortal = '1';
-    } else {
-      delete dialog.dataset.hasOpenPortal;
-    }
-    return () => { delete dialog.dataset.hasOpenPortal; };
-  }, [open, portalInDialog]);
+  }, [open, dropPos, portalInDialog]);
 
   const toggle = (option: MultiSelectOption) => {
     if (option.disabled) return;
@@ -244,6 +230,18 @@ export function MultiSelect({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (() => {
+        const shouldPortal = Boolean(dropPos && !portalInDialog);
+        const dropdownStyle = shouldPortal
+          ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width }
+          : dropPos && portalInDialog
+            ? {
+                position: 'absolute' as const,
+                left: 0,
+                width: '100%',
+                top: dropPos.direction === 'down' ? 'calc(100% + 4px)' : undefined,
+                bottom: dropPos.direction === 'up' ? 'calc(100% + 4px)' : undefined,
+              }
+            : undefined;
         const dropdownNode = (
           <div
             ref={dropdownRef}
@@ -252,7 +250,7 @@ export function MultiSelect({
               dropPos?.direction === 'up' && 'vx-multiselect__dropdown--up',
               dropPos && portalInDialog && 'vx-multiselect__dropdown--in-dialog',
             )}
-            style={dropPos ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width } : undefined}
+            style={dropdownStyle}
           >
             <div className="vx-multiselect__search-wrap">
               <input
@@ -295,7 +293,7 @@ export function MultiSelect({
             </ul>
           </div>
         );
-        return dropPos ? createPortal(dropdownNode, document.body) : dropdownNode;
+        return shouldPortal ? createPortal(dropdownNode, document.body) : dropdownNode;
       })()}
     </div>
   );
