@@ -1,10 +1,16 @@
 import { useRef, type ReactNode } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
+import { useScrollbarSync } from '../hooks/useScrollbarSync';
 import { cx } from '../lib/cx';
 
 export type DialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export type DialogPadding = 'none' | 'sm' | 'md' | 'lg';
+export type DialogPlacement =
+  | 'center'
+  | 'top' | 'right' | 'bottom' | 'left'
+  | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'
+  | 'top-half' | 'right-half' | 'bottom-half' | 'left-half';
 
 export interface DialogProps extends Pick<DialogPrimitive.DialogProps, 'defaultOpen' | 'onOpenChange' | 'open'> {
   trigger: ReactNode;
@@ -17,10 +23,37 @@ export interface DialogProps extends Pick<DialogPrimitive.DialogProps, 'defaultO
   size?: DialogSize;
   /** Inner padding preset. Default: 'md' */
   padding?: DialogPadding;
-  /** Allow the body to scroll when content overflows. Default: false */
+  /** Dialog placement preset. Default: 'center' */
+  placement?: DialogPlacement;
+  /** Allow the body to scroll when content overflows. Default: true */
   scrollable?: boolean;
   /** Show the close (×) button. Default: true */
   closable?: boolean;
+}
+
+function DialogBody({ children, scrollable }: { children: ReactNode; scrollable: boolean }) {
+  const scrollHostRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useScrollbarSync(scrollHostRef, scrollRef, scrollable);
+
+  return (
+    <div
+      ref={scrollHostRef}
+      className="vx-dialog__body-wrap vx-scroll-host"
+      data-scrollable="false"
+      data-scrollbar-state="hidden"
+    >
+      <div ref={scrollRef} className={cx('vx-dialog__body', scrollable && 'vx-scroll-hide-native')}>
+        {children}
+      </div>
+      {scrollable ? (
+        <span className="vx-overlay-scrollbar" aria-hidden="true">
+          <span className="vx-overlay-scrollbar__thumb" />
+        </span>
+      ) : null}
+    </div>
+  );
 }
 
 export function Dialog({
@@ -32,11 +65,13 @@ export function Dialog({
   className,
   size = 'md',
   padding,
-  scrollable = false,
+  placement = 'center',
+  scrollable = true,
   closable = true,
   ...props
 }: DialogProps) {
   const contentRef = useRef<HTMLDivElement>(null);
+
   return (
     <DialogPrimitive.Root {...props}>
       <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
@@ -47,6 +82,7 @@ export function Dialog({
           className={cx(
             'vx-dialog__content',
             size !== 'md' && `vx-dialog__content--${size}`,
+            placement !== 'center' && `vx-dialog__content--${placement}`,
             padding && `vx-dialog__content--pad-${padding}`,
             scrollable && 'vx-dialog__content--scrollable',
             className,
@@ -87,10 +123,16 @@ export function Dialog({
               </DialogPrimitive.Close>
             ) : null}
           </div>
-          <div className="vx-dialog__body">{children}</div>
+          <DialogBody scrollable={scrollable}>{children}</DialogBody>
           {footer ? <div className="vx-dialog__footer">{footer}</div> : null}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
   );
 }
+
+/**
+ * Wraps any child element so that clicking it closes the parent Dialog.
+ * Usage: <DialogClose asChild><Button>Cancel</Button></DialogClose>
+ */
+export const DialogClose = DialogPrimitive.Close;

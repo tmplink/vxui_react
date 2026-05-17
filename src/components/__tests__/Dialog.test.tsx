@@ -7,6 +7,7 @@ import { DatePicker } from '../DatePicker';
 const defaultProps = {
   trigger: <Button>Open</Button>,
   title: 'Test dialog',
+  description: 'Dialog description for accessibility coverage.',
   children: <p>Dialog body content</p>,
 };
 
@@ -61,10 +62,21 @@ describe('Dialog', () => {
     expect(screen.getByRole('dialog')).toHaveClass('vx-dialog__content--scrollable');
   });
 
-  it('does not apply scrollable class by default', async () => {
+  it('applies scrollable behavior by default', async () => {
     render(<Dialog {...defaultProps} />);
     await userEvent.click(screen.getByRole('button', { name: 'Open' }));
-    expect(screen.getByRole('dialog')).not.toHaveClass('vx-dialog__content--scrollable');
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveClass('vx-dialog__content--scrollable');
+    expect(dialog.querySelector('.vx-dialog__body-wrap.vx-scroll-host')).toBeInTheDocument();
+    expect(dialog.querySelector('.vx-overlay-scrollbar')).toBeInTheDocument();
+  });
+
+  it('does not apply scrollable class when scrollable=false', async () => {
+    render(<Dialog {...defaultProps} scrollable={false} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).not.toHaveClass('vx-dialog__content--scrollable');
+    expect(dialog.querySelector('.vx-overlay-scrollbar')).not.toBeInTheDocument();
   });
 
   it.each([
@@ -82,6 +94,31 @@ describe('Dialog', () => {
     render(<Dialog {...defaultProps} size="md" />);
     await userEvent.click(screen.getByRole('button', { name: 'Open' }));
     expect(screen.getByRole('dialog')).not.toHaveClass('vx-dialog__content--md');
+  });
+
+  it.each([
+    ['top', 'vx-dialog__content--top'],
+    ['right', 'vx-dialog__content--right'],
+    ['bottom', 'vx-dialog__content--bottom'],
+    ['left', 'vx-dialog__content--left'],
+    ['top-left', 'vx-dialog__content--top-left'],
+    ['top-right', 'vx-dialog__content--top-right'],
+    ['bottom-left', 'vx-dialog__content--bottom-left'],
+    ['bottom-right', 'vx-dialog__content--bottom-right'],
+    ['top-half', 'vx-dialog__content--top-half'],
+    ['right-half', 'vx-dialog__content--right-half'],
+    ['bottom-half', 'vx-dialog__content--bottom-half'],
+    ['left-half', 'vx-dialog__content--left-half'],
+  ] as const)('applies placement class for placement="%s"', async (placement, expectedClass) => {
+    render(<Dialog {...defaultProps} placement={placement} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    expect(screen.getByRole('dialog')).toHaveClass(expectedClass);
+  });
+
+  it('does not apply a placement modifier class for the default center placement', async () => {
+    render(<Dialog {...defaultProps} placement="center" />);
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    expect(screen.getByRole('dialog')).not.toHaveClass('vx-dialog__content--center');
   });
 
   it('applies padding variant classes', async () => {
@@ -107,7 +144,11 @@ describe('Dialog', () => {
   // Regression: Dialog must NOT close on Escape when an inline child panel is open.
   it('does not close on Escape when a child DatePicker calendar is open', async () => {
     render(
-      <Dialog trigger={<Button>Open</Button>} title="Pick a date">
+      <Dialog
+        trigger={<Button>Open</Button>}
+        title="Pick a date"
+        description="Keep the dialog open while the nested date picker is active."
+      >
         <DatePicker />
       </Dialog>,
     );

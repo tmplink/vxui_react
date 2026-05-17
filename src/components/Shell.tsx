@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, forwardRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { useScrollbarSync } from '../hooks/useScrollbarSync';
 import { cx } from '../lib/cx';
 import { useViewport } from '../lib/viewport';
 import { Button } from './Button';
@@ -28,71 +29,6 @@ export interface ShellNavSection {
   key?: string;
   title?: string;
   items: ShellNavItem[];
-}
-
-// ---------- Internal scrollbar sync hook ----------
-
-function useScrollbarSync(
-  hostRef: { current: HTMLElement | null },
-  scrollRef: { current: HTMLElement | null },
-) {
-  useEffect(() => {
-    const host = hostRef.current;
-    const scroll = scrollRef.current;
-    if (!host || !scroll) return;
-
-    let hideTimer: number | undefined;
-
-    const syncThumb = () => {
-      const isScrollable = scroll.scrollHeight > scroll.clientHeight + 1;
-      host.dataset.scrollable = isScrollable ? 'true' : 'false';
-
-      if (!isScrollable) {
-        host.dataset.scrollbarState = 'hidden';
-        host.style.setProperty('--vx-scrollbar-thumb-height', '0px');
-        host.style.setProperty('--vx-scrollbar-thumb-offset', '0px');
-        return;
-      }
-
-      const trackHeight = Math.max(host.clientHeight - 16, 0);
-      const thumbHeight = Math.max((scroll.clientHeight / scroll.scrollHeight) * trackHeight, 36);
-      const maxScrollTop = scroll.scrollHeight - scroll.clientHeight;
-      const maxThumbOffset = Math.max(trackHeight - thumbHeight, 0);
-      const thumbOffset = maxScrollTop > 0 ? (scroll.scrollTop / maxScrollTop) * maxThumbOffset : 0;
-
-      host.style.setProperty('--vx-scrollbar-thumb-height', `${thumbHeight}px`);
-      host.style.setProperty('--vx-scrollbar-thumb-offset', `${thumbOffset}px`);
-
-      if (host.dataset.scrollbarState !== 'active') {
-        host.dataset.scrollbarState = 'hidden';
-      }
-    };
-
-    const showThumb = () => {
-      if (host.dataset.scrollable !== 'true') return;
-      host.dataset.scrollbarState = 'active';
-      if (hideTimer !== undefined) window.clearTimeout(hideTimer);
-      hideTimer = window.setTimeout(() => {
-        host.dataset.scrollbarState = 'hidden';
-      }, 640);
-    };
-
-    const handleScroll = () => { syncThumb(); showThumb(); };
-
-    syncThumb();
-    scroll.addEventListener('scroll', handleScroll, { passive: true });
-
-    const ro = new ResizeObserver(() => syncThumb());
-    ro.observe(host);
-    ro.observe(scroll);
-
-    return () => {
-      scroll.removeEventListener('scroll', handleScroll);
-      ro.disconnect();
-      if (hideTimer !== undefined) window.clearTimeout(hideTimer);
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 }
 
 // ---------- Shell ----------

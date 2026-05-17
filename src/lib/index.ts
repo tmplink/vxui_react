@@ -36,7 +36,8 @@ export type {
 export { Badge } from '../components/Badge';
 export { Button } from '../components/Button';
 export { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/Card';
-export { Dialog } from '../components/Dialog';
+export { Dialog, DialogClose } from '../components/Dialog';
+export type { DialogProps, DialogSize, DialogPadding, DialogPlacement } from '../components/Dialog';
 export { Input } from '../components/Input';
 export { Switch } from '../components/Switch';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/Tabs';

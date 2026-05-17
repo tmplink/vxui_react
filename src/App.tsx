@@ -58,6 +58,7 @@ import {
   ColorPicker,
   DatePicker,
   Dialog,
+  DialogClose,
   DropdownMenu,
   Input,
   MultiSelect,
@@ -818,7 +819,7 @@ export function SyncStatus({ loading = false }: { loading?: boolean }) {
     </div>
   );
 }`,
-  overlays: String.raw`import { Button, Dialog, DropdownMenu, Popover } from 'vxui-react';
+  overlays: String.raw`import { Button, Dialog, DropdownMenu, Popover, Textarea } from 'vxui-react';
 
 export function OverlayExamples() {
   return (
@@ -835,6 +836,54 @@ export function OverlayExamples() {
         }
       >
         This project will be removed permanently.
+      </Dialog>
+
+      {/* Edge placement */}
+      <Dialog placement="right" title="Right edge" trigger={<Button variant="secondary">Right edge</Button>} footer={<Button variant="ghost">Close</Button>}>
+        Dialog anchored to the right edge of the screen.
+      </Dialog>
+
+      {/* Corner placement */}
+      <Dialog placement="top-right" title="Top-right corner" trigger={<Button variant="secondary">Top-right corner</Button>} footer={<Button variant="ghost">Close</Button>}>
+        Dialog anchored to the top-right corner of the screen.
+      </Dialog>
+
+      {/* Half-screen placement */}
+      <Dialog placement="right-half" title="Right half-screen" trigger={<Button variant="secondary">Right half-screen</Button>} footer={<Button variant="ghost">Close</Button>}>
+        Dialog fills the right half of the viewport.
+      </Dialog>
+
+      <Dialog
+        trigger={<Button variant="secondary">Tall content</Button>}
+        title="Pre-launch checklist"
+        description="Dialogs now auto-scroll with the same overlay scrollbar treatment as the sidebar."
+        footer={
+          <>
+            <Button variant="ghost">Review later</Button>
+            <Button>Approve launch</Button>
+          </>
+        }
+      >
+        <div style={{ display: 'grid', gap: 12 }}>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              style={{
+                display: 'grid',
+                gap: 8,
+                padding: 12,
+                border: '1px solid var(--vx-border)',
+                borderRadius: 12,
+              }}
+            >
+              <strong>{'Step ' + (index + 1)}</strong>
+              <p style={{ margin: 0, color: 'var(--vx-text-secondary)', lineHeight: 1.6 }}>
+                Verify owners, rollout thresholds, fallback plans, and monitoring coverage before launch.
+              </p>
+              <Textarea label="Notes" rows={3} placeholder="Capture review notes..." />
+            </div>
+          ))}
+        </div>
       </Dialog>
 
       <Popover content={<div>Show context without leaving the current page.</div>}>
@@ -2325,6 +2374,63 @@ function DesktopApp() {
               </div>
             </Dialog>
 
+            {/* ── Placement showcase ── */}
+            {(
+              [
+                {
+                  label: isZh ? '边缘停靠' : 'Edge',
+                  items: [
+                    { p: 'top' as const, zh: '靠上', en: 'Top' },
+                    { p: 'right' as const, zh: '靠右', en: 'Right' },
+                    { p: 'bottom' as const, zh: '靠下', en: 'Bottom' },
+                    { p: 'left' as const, zh: '靠左', en: 'Left' },
+                  ],
+                },
+                {
+                  label: isZh ? '角落停靠' : 'Corner',
+                  items: [
+                    { p: 'top-left' as const, zh: '左上角', en: 'Top-left' },
+                    { p: 'top-right' as const, zh: '右上角', en: 'Top-right' },
+                    { p: 'bottom-left' as const, zh: '左下角', en: 'Bottom-left' },
+                    { p: 'bottom-right' as const, zh: '右下角', en: 'Bottom-right' },
+                  ],
+                },
+                {
+                  label: isZh ? '半屏停靠' : 'Half-screen',
+                  items: [
+                    { p: 'top-half' as const, zh: '上半屏', en: 'Top half' },
+                    { p: 'right-half' as const, zh: '右半屏', en: 'Right half' },
+                    { p: 'bottom-half' as const, zh: '下半屏', en: 'Bottom half' },
+                    { p: 'left-half' as const, zh: '左半屏', en: 'Left half' },
+                  ],
+                },
+              ]
+            ).map((group) => (
+              <div key={group.label} style={{ width: '100%', display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--vx-text-secondary)', minWidth: 64, flexShrink: 0 }}>
+                  {group.label}
+                </span>
+                {group.items.map(({ p, zh, en }) => (
+                  <Dialog
+                    key={p}
+                    placement={p}
+                    title={isZh ? zh : en}
+                    description={
+                      isZh
+                        ? '定位预设仅在宽屏设备上生效，移动端回退至居中布局。'
+                        : 'Placement is only active on large screens; mobile falls back to center.'
+                    }
+                    trigger={<Button variant="secondary">{isZh ? zh : en}</Button>}
+                    footer={<DialogClose asChild><Button variant="ghost">{isZh ? '关闭' : 'Close'}</Button></DialogClose>}
+                  >
+                    <p style={{ margin: 0, color: 'var(--vx-text-secondary)', lineHeight: 1.6 }}>
+                      {isZh ? `对话框当前定位：${zh}。` : `Dialog placement: ${en.toLowerCase()}.`}
+                    </p>
+                  </Dialog>
+                ))}
+              </div>
+            ))}
+
             <Dialog
               trigger={<Button variant="secondary">{isZh ? '表单对话框' : 'Form in dialog'}</Button>}
               title={isZh ? '新建部署' : 'New deployment'}
@@ -2364,6 +2470,91 @@ function DesktopApp() {
                 <DatePicker label={isZh ? '上线日期' : 'Launch date'} />
                 <TimePicker label={isZh ? '部署时间' : 'Deploy time'} />
                 <ColorPicker label={isZh ? '标签颜色' : 'Label color'} />
+              </div>
+            </Dialog>
+
+            <Dialog
+              trigger={<Button variant="secondary">{isZh ? '超高内容' : 'Tall content'}</Button>}
+              title={isZh ? '发布前检查清单' : 'Pre-launch checklist'}
+              description={
+                isZh
+                  ? '此示例故意放入超高内容，用于验证对话框会自动出现与边栏一致的滚动条。'
+                  : 'This example intentionally uses tall content so you can verify the dialog auto-enables the same scrollbar treatment as the sidebar.'
+              }
+              footer={
+                <>
+                  <Button variant="ghost">{isZh ? '稍后处理' : 'Review later'}</Button>
+                  <Button>{isZh ? '确认上线' : 'Approve launch'}</Button>
+                </>
+              }
+            >
+              <div style={{ display: 'grid', gap: 14, padding: '4px 0' }}>
+                {[
+                  {
+                    title: isZh ? '配置审查' : 'Configuration review',
+                    body: isZh
+                      ? '确认环境变量、回源地址、CDN 规则以及静态资源版本已与本次发布单一致。'
+                      : 'Verify environment variables, origin targets, CDN rules, and static asset versions match the current release record.',
+                  },
+                  {
+                    title: isZh ? '数据库变更' : 'Database changes',
+                    body: isZh
+                      ? '核对迁移脚本顺序、回滚方案、只读窗口以及关键索引重建的预计耗时。'
+                      : 'Check migration order, rollback coverage, read-only windows, and estimated rebuild time for critical indexes.',
+                  },
+                  {
+                    title: isZh ? '接口兼容性' : 'API compatibility',
+                    body: isZh
+                      ? '确认前端、移动端和合作方调用的版本窗口仍然重叠，避免出现跨端字段不兼容。'
+                      : 'Confirm web, mobile, and partner integrations still share a compatible API window to avoid cross-client field drift.',
+                  },
+                  {
+                    title: isZh ? '监控与告警' : 'Monitoring and alerts',
+                    body: isZh
+                      ? '检查错误率、延迟、队列积压、支付回调与消息投递指标是否都已接入本次看板。'
+                      : 'Review error rate, latency, queue backlog, payment callback, and message delivery metrics in the release dashboard.',
+                  },
+                  {
+                    title: isZh ? '人工验收' : 'Manual QA',
+                    body: isZh
+                      ? '逐项确认登录、下单、退款、搜索、通知、权限切换等关键链路在真实账号下可用。'
+                      : 'Manually verify login, checkout, refunds, search, notifications, and permission switching with real accounts.',
+                  },
+                  {
+                    title: isZh ? '灰度策略' : 'Rollout strategy',
+                    body: isZh
+                      ? '定义 5%、20%、50%、100% 的放量节奏，并明确每个阶段的中止阈值与负责人。'
+                      : 'Define 5%, 20%, 50%, and 100% rollout stages with explicit stop thresholds and owners for each stage.',
+                  },
+                ].map((section, index) => (
+                  <div
+                    key={section.title}
+                    style={{
+                      display: 'grid',
+                      gap: 6,
+                      padding: '12px 14px',
+                      borderRadius: 12,
+                      border: '1px solid var(--vx-border)',
+                      background: 'color-mix(in srgb, var(--vx-surface) 86%, transparent)',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+                      <strong style={{ fontSize: 14 }}>{section.title}</strong>
+                      <Badge variant={index % 2 === 0 ? 'accent' : 'warning'}>
+                        {isZh ? `步骤 ${index + 1}` : `Step ${index + 1}`}
+                      </Badge>
+                    </div>
+                    <p style={{ margin: 0, color: 'var(--vx-text-secondary)', lineHeight: 1.6, fontSize: 14 }}>
+                      {section.body}
+                    </p>
+                    <Textarea
+                      label={isZh ? '执行备注' : 'Execution notes'}
+                      placeholder={isZh ? '记录负责人、时间点和风险判断…' : 'Capture owner, timing, and risk notes…'}
+                      rows={3}
+                      resize="vertical"
+                    />
+                  </div>
+                ))}
               </div>
             </Dialog>
 

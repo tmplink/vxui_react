@@ -1739,6 +1739,26 @@ a {
   to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
+@keyframes vx-dialog-in-top {
+  from { opacity: 0; transform: translate(-50%, -10px) scale(0.98); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+
+@keyframes vx-dialog-in-right {
+  from { opacity: 0; transform: translate(10px, -50%) scale(0.98); }
+  to { opacity: 1; transform: translateY(-50%); }
+}
+
+@keyframes vx-dialog-in-bottom {
+  from { opacity: 0; transform: translate(-50%, 10px) scale(0.98); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+
+@keyframes vx-dialog-in-left {
+  from { opacity: 0; transform: translate(-10px, -50%) scale(0.98); }
+  to { opacity: 1; transform: translateY(-50%); }
+}
+
 @keyframes vx-opacity-in {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -1796,10 +1816,20 @@ a {
   font-size: 14px;
 }
 
-.vx-dialog__body {
-  flex: 1;
+.vx-dialog__body-wrap {
+  flex: 1 1 auto;
   min-height: 0;
   margin: 18px 0 22px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.vx-dialog__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .vx-dialog__footer {
@@ -1845,10 +1875,152 @@ a {
   max-height: calc(100dvh - 32px);
 }
 
+@keyframes vx-dialog-in-top-left {
+  from { opacity: 0; transform: translate(-8px, -8px) scale(0.98); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes vx-dialog-in-top-right {
+  from { opacity: 0; transform: translate(8px, -8px) scale(0.98); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes vx-dialog-in-bottom-left {
+  from { opacity: 0; transform: translate(-8px, 8px) scale(0.98); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes vx-dialog-in-bottom-right {
+  from { opacity: 0; transform: translate(8px, 8px) scale(0.98); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes vx-dialog-in-top-half {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes vx-dialog-in-right-half {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes vx-dialog-in-bottom-half {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes vx-dialog-in-left-half {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Dialog placement variants – only active on large screens (≥ 768 px).
+   On smaller viewports the dialog falls back to the default center layout. */
+@media (min-width: 768px) {
+  /* ── Edge placements ──────────────────────────────────────────── */
+  .vx-dialog__content--top {
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: vx-dialog-in-top 150ms ease;
+  }
+  .vx-dialog__content--right {
+    top: 50%;
+    right: 16px;
+    left: auto;
+    transform: translateY(-50%);
+    animation: vx-dialog-in-right 150ms ease;
+  }
+  .vx-dialog__content--bottom {
+    top: auto;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: vx-dialog-in-bottom 150ms ease;
+  }
+  .vx-dialog__content--left {
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    animation: vx-dialog-in-left 150ms ease;
+  }
+  /* ── Corner placements ────────────────────────────────────────── */
+  .vx-dialog__content--top-left {
+    top: 16px;
+    left: 16px;
+    right: auto;
+    transform: none;
+    animation: vx-dialog-in-top-left 150ms ease;
+  }
+  .vx-dialog__content--top-right {
+    top: 16px;
+    right: 16px;
+    left: auto;
+    transform: none;
+    animation: vx-dialog-in-top-right 150ms ease;
+  }
+  .vx-dialog__content--bottom-left {
+    top: auto;
+    bottom: 16px;
+    left: 16px;
+    right: auto;
+    transform: none;
+    animation: vx-dialog-in-bottom-left 150ms ease;
+  }
+  .vx-dialog__content--bottom-right {
+    top: auto;
+    bottom: 16px;
+    right: 16px;
+    left: auto;
+    transform: none;
+    animation: vx-dialog-in-bottom-right 150ms ease;
+  }
+  /* ── Half-screen placements ──────────────────────────────────── */
+  .vx-dialog__content--top-half {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 100%;
+    max-height: 50dvh;
+    transform: none;
+    border-radius: 0 0 16px 16px;
+    animation: vx-dialog-in-top-half 150ms ease;
+  }
+  .vx-dialog__content--right-half {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: 50vw;
+    max-height: 100dvh;
+    transform: none;
+    border-radius: 16px 0 0 16px;
+    animation: vx-dialog-in-right-half 150ms ease;
+  }
+  .vx-dialog__content--bottom-half {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 50dvh;
+    transform: none;
+    border-radius: 16px 16px 0 0;
+    animation: vx-dialog-in-bottom-half 150ms ease;
+  }
+  .vx-dialog__content--left-half {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: auto;
+    width: 50vw;
+    max-height: 100dvh;
+    transform: none;
+    border-radius: 0 16px 16px 0;
+    animation: vx-dialog-in-left-half 150ms ease;
+  }
+}
+
 /* Scrollable body */
 .vx-dialog__content--scrollable .vx-dialog__body {
   overflow-y: auto;
   overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 /* When a dropdown is open inside a scrollable dialog, temporarily allow overflow */
 .vx-dialog__content--scrollable .vx-dialog__body:has(
