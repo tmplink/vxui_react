@@ -105,17 +105,18 @@ export function MultiSelect({
   }, [open]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || !dropPos) return;
     const el = dialogContentRef.current;
     if (!el) return;
     el.dataset.hasOpenPortal = '1';
     return () => { delete el.dataset.hasOpenPortal; };
-  }, [open]);
+  }, [open, dropPos]);
 
   // Compute fixed position for desktop (>640px). Mobile uses inline CSS bottom-sheet.
   useLayoutEffect(() => {
     if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
       setDropPos(null);
+      dialogContentRef.current = null;
       return;
     }
     const rect = triggerRef.current.getBoundingClientRect();

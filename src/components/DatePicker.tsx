@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { cx } from '../lib/cx';
 import { Calendar } from './Calendar';
-import { useDropDirection } from '../hooks/useDropDirection';
 
 function formatDate(date: Date): string {
   return date.toLocaleDateString();
@@ -51,12 +51,22 @@ export function DatePicker({
   const selected = isControlled ? controlledValue : internalValue;
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
-  const dropDirection = useDropDirection(wrapRef, open, 320);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const dialogContentRef = useRef<HTMLElement | null>(null);
+  const [dropPos, setDropPos] = useState<{
+    top?: number;
+    bottom?: number;
+    left: number;
+    direction: 'down' | 'up';
+  } | null>(null);
 
   useEffect(() => {
     if (!open) return;
     const handler = (e: Event) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      const inWrap = wrapRef.current?.contains(e.target as Node);
+      const inPopover = popoverRef.current?.contains(e.target as Node);
+      if (!inWrap && !inPopover) setOpen(false);
     };
     const keyHandler = (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
@@ -77,6 +87,46 @@ export function DatePicker({
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
+  useEffect(() => {
+    if (!open || !dropPos) return;
+    const el = dialogContentRef.current;
+    if (!el) return;
+    el.dataset.hasOpenPortal = '1';
+    return () => { delete el.dataset.hasOpenPortal; };
+  }, [open, dropPos]);
+
+  useLayoutEffect(() => {
+    if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
+      setDropPos(null);
+      dialogContentRef.current = null;
+      return;
+    }
+    const rect = triggerRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const direction = spaceBelow < 320 && spaceAbove > spaceBelow ? 'up' : 'down';
+    dialogContentRef.current = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content') ?? null;
+    setDropPos(
+      direction === 'down'
+        ? { top: rect.bottom + 6, left: rect.left, direction }
+        : { bottom: window.innerHeight - rect.top + 6, left: rect.left, direction },
+    );
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !dropPos) return;
+    const close = (event: Event) => {
+      if (popoverRef.current?.contains(event.target as Node)) return;
+      setOpen(false);
+    };
+    window.addEventListener('scroll', close, { capture: true, passive: true });
+    window.addEventListener('resize', close);
+    return () => {
+      window.removeEventListener('scroll', close, { capture: true });
+      window.removeEventListener('resize', close);
+    };
+  }, [open, dropPos]);
+
   const handleSelect = (date: Date) => {
     if (!isControlled) setInternalValue(date);
     onChange?.(date);
@@ -87,6 +137,7 @@ export function DatePicker({
     <div ref={wrapRef} className={cx('vx-datepicker', className)}>
       {label ? <span className="vx-field-group__label">{label}</span> : null}
       <button
+        ref={triggerRef}
         type="button"
         className={cx(
           'vx-datepicker__trigger',
@@ -105,8 +156,23 @@ export function DatePicker({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open ? (
-        <div className={cx('vx-datepicker__popover', dropDirection === 'up' && 'vx-datepicker__popover--up')} role="dialog" aria-label="Date picker">
+      {open ? (() => {
+        const shouldPortal = Boolean(dropPos);
+        const popoverStyle = dropPos
+          ? { position: 'fixed' as const, top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, pointerEvents: 'auto' as const }
+          : undefined;
+        const popoverNode = (
+        <div
+          ref={popoverRef}
+          className={cx(
+            'vx-datepicker__popover',
+            dropPos?.direction === 'up' && 'vx-datepicker__popover--up',
+            Boolean(dialogContentRef.current) && 'vx-datepicker__popover--in-dialog',
+          )}
+          role="dialog"
+          aria-label="Date picker"
+          style={popoverStyle}
+        >
           <Calendar
             value={selected}
             onChange={handleSelect}
@@ -115,7 +181,9 @@ export function DatePicker({
             weekStartsOnMonday={weekStartsOnMonday}
           />
         </div>
-      ) : null}
+        );
+        return shouldPortal ? createPortal(popoverNode, document.body) : popoverNode;
+      })() : null}
     </div>
   );
 }

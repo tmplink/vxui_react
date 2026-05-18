@@ -7290,6 +7290,9 @@ a {
   z-index: var(--vx-z-menu);
   animation: vx-fade-in 140ms ease;
 }
+.vx-datepicker__popover--in-dialog {
+  z-index: calc(var(--vx-z-dialog) + 1);
+}
 .vx-datepicker__popover--up {
   top: auto;
   bottom: calc(100% + 6px);
@@ -7690,6 +7693,9 @@ a {
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   padding: 12px 12px 10px;
   min-width: 160px;
+}
+.vx-timepicker__popover--in-dialog {
+  z-index: calc(var(--vx-z-dialog) + 1);
 }
 .vx-timepicker__popover--up {
   top: auto;
