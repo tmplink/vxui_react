@@ -4,7 +4,32 @@ import { DatePicker } from '../DatePicker';
 import { Dialog } from '../Dialog';
 import { Button } from '../Button';
 
+const originalMatchMedia = window.matchMedia;
+
+function mockMaxWidth640(matches: boolean) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: vi.fn((query: string) => ({
+      matches: query === '(max-width: 640px)' ? matches : false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
 describe('DatePicker', () => {
+  afterEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
+    });
+  });
+
   it('renders a trigger button', () => {
     render(<DatePicker />);
     expect(screen.getByRole('button')).toBeInTheDocument();
@@ -79,6 +104,23 @@ describe('DatePicker', () => {
     expect(screen.getByRole('grid')).toBeInTheDocument();
     await userEvent.keyboard('{Escape}');
     expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+  });
+
+  it('portals the calendar above Dialog even in a narrow viewport', async () => {
+    mockMaxWidth640(true);
+
+    render(
+      <Dialog trigger={<Button>Open dialog</Button>} title="Pick a date">
+        <DatePicker />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open dialog' }));
+    await userEvent.click(screen.getByRole('button', { name: /select date/i }));
+
+    const popover = document.body.querySelector('.vx-datepicker__popover');
+    expect(popover).toHaveClass('vx-datepicker__popover--in-dialog');
+    expect(screen.getByRole('dialog', { name: 'Pick a date' })).not.toContainElement(popover);
   });
 
   // Regression: pressing Escape while the DatePicker calendar is open inside a Dialog

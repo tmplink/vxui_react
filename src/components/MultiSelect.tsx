@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useLayoutEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
+import { getDialogPopoverContext } from '../lib/dialogPopover';
 
 export interface MultiSelectOption {
   value: string;
@@ -99,7 +100,8 @@ export function MultiSelect({
   }, [open]);
 
   useEffect(() => {
-    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    const { shouldInline } = getDialogPopoverContext(wrapRef.current);
+    if (!open || !shouldInline) return;
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
@@ -112,18 +114,19 @@ export function MultiSelect({
     return () => { delete el.dataset.hasOpenPortal; };
   }, [open, dropPos]);
 
-  // Compute fixed position for desktop (>640px). Mobile uses inline CSS bottom-sheet.
+  // Use an inline mobile sheet only outside Dialog so dialog popovers can escape clipping.
   useLayoutEffect(() => {
-    if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
+    const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
+    if (!open || !triggerRef.current || shouldInline) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
     }
+    dialogContentRef.current = dialogContent;
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 300 && spaceAbove > spaceBelow ? 'up' : 'down';
-    dialogContentRef.current = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content') ?? null;
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }

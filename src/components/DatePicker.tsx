@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../lib/cx';
+import { getDialogPopoverContext } from '../lib/dialogPopover';
 import { Calendar } from './Calendar';
 
 function formatDate(date: Date): string {
@@ -82,7 +83,8 @@ export function DatePicker({
   }, [open]);
 
   useEffect(() => {
-    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    const { shouldInline } = getDialogPopoverContext(wrapRef.current);
+    if (!open || !shouldInline) return;
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
@@ -96,16 +98,17 @@ export function DatePicker({
   }, [open, dropPos]);
 
   useLayoutEffect(() => {
-    if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
+    const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
+    if (!open || !triggerRef.current || shouldInline) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
     }
+    dialogContentRef.current = dialogContent;
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 320 && spaceAbove > spaceBelow ? 'up' : 'down';
-    dialogContentRef.current = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content') ?? null;
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 6, left: rect.left, direction }
