@@ -1819,7 +1819,8 @@ a {
 .vx-dialog__body-wrap {
   flex: 1 1 auto;
   min-height: 0;
-  margin: 18px 0 22px;
+  margin: 14px -4px 18px;
+  padding: 4px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1829,6 +1830,8 @@ a {
 .vx-dialog__body {
   flex: 1 1 auto;
   min-height: 0;
+  margin: -4px;
+  padding: 4px;
   overflow: hidden;
 }
 
