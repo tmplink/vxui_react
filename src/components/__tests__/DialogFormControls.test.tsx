@@ -47,9 +47,9 @@ describe('Dialog form controls', () => {
     const dialog = await openDialog();
 
     await userEvent.click(within(dialog).getByRole('button', { name: 'Select environment' }));
-    await userEvent.click(within(dialog).getByRole('option', { name: 'Production' }));
+    await userEvent.click(screen.getByRole('option', { name: 'Production' }));
 
-    expect(within(dialog).queryByRole('listbox')).not.toBeInTheDocument();
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     expect(within(dialog).getByRole('button', { name: 'Production' })).toBeInTheDocument();
     expect(screen.getByRole('dialog', { name: 'Deploy form' })).toBeInTheDocument();
   });
@@ -62,7 +62,7 @@ describe('Dialog form controls', () => {
     const dialog = await openDialog();
 
     await userEvent.click(within(dialog).getByRole('button', { name: 'Select scope' }));
-    await userEvent.click(within(dialog).getByRole('option', { name: 'API service' }));
+    await userEvent.click(screen.getByRole('option', { name: 'API service' }));
 
     const selectedTag = dialog.querySelector('.vx-multiselect__tag');
     expect(selectedTag).toHaveTextContent('API service');

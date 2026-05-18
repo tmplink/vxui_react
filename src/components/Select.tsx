@@ -61,7 +61,7 @@ export function Select({
     width: number;
     direction: 'down' | 'up';
   } | null>(null);
-  const [portalInDialog, setPortalInDialog] = useState(false);
+  const dialogContentRef = useRef<HTMLElement | null>(null);
 
   const selectedOption = options.find((option) => option.value === value);
   const filtered = options.filter((option) =>
@@ -112,17 +112,24 @@ export function Select({
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const el = dialogContentRef.current;
+    if (!el) return;
+    el.dataset.hasOpenPortal = '1';
+    return () => { delete el.dataset.hasOpenPortal; };
+  }, [open]);
+
   useLayoutEffect(() => {
     if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
       setDropPos(null);
-      setPortalInDialog(false);
       return;
     }
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 280 && spaceAbove > spaceBelow ? 'up' : 'down';
-    setPortalInDialog(Boolean(wrapRef.current?.closest('.vx-dialog__content')));
+    dialogContentRef.current = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content') ?? null;
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
@@ -131,7 +138,7 @@ export function Select({
   }, [open]);
 
   useEffect(() => {
-    if (!open || !dropPos || portalInDialog) return;
+    if (!open || !dropPos) return;
     const close = (event: Event) => {
       if (dropdownRef.current?.contains(event.target as Node)) return;
       setOpen(false);
@@ -142,7 +149,7 @@ export function Select({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos, portalInDialog]);
+  }, [open, dropPos]);
 
   const handleSelect = (option: SelectOption) => {
     if (option.disabled) return;
@@ -197,25 +204,17 @@ export function Select({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (() => {
-        const shouldPortal = Boolean(dropPos && !portalInDialog);
-        const dropdownStyle = shouldPortal && dropPos
-          ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width }
-          : dropPos && portalInDialog
-            ? {
-                position: 'absolute' as const,
-                left: 0,
-                width: '100%',
-                top: dropPos.direction === 'down' ? 'calc(100% + 4px)' : undefined,
-                bottom: dropPos.direction === 'up' ? 'calc(100% + 4px)' : undefined,
-              }
-            : undefined;
+        const shouldPortal = Boolean(dropPos);
+        const dropdownStyle = dropPos
+          ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width, pointerEvents: 'auto' as const }
+          : undefined;
         const dropdownNode = (
           <div
             ref={dropdownRef}
             className={cx(
               'vx-select__dropdown',
               dropPos?.direction === 'up' && 'vx-select__dropdown--up',
-              dropPos && portalInDialog && 'vx-select__dropdown--in-dialog',
+              Boolean(dialogContentRef.current) && 'vx-select__dropdown--in-dialog',
             )}
             style={dropdownStyle}
           >

@@ -63,7 +63,7 @@ export function MultiSelect({
     width: number;
     direction: 'down' | 'up';
   } | null>(null);
-  const [portalInDialog, setPortalInDialog] = useState(false);
+  const dialogContentRef = useRef<HTMLElement | null>(null);
 
   const filtered = options.filter((o) =>
     o.label.toLowerCase().includes(search.toLowerCase()),
@@ -104,18 +104,25 @@ export function MultiSelect({
     return () => { document.body.style.overflow = ''; };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const el = dialogContentRef.current;
+    if (!el) return;
+    el.dataset.hasOpenPortal = '1';
+    return () => { delete el.dataset.hasOpenPortal; };
+  }, [open]);
+
   // Compute fixed position for desktop (>640px). Mobile uses inline CSS bottom-sheet.
   useLayoutEffect(() => {
     if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
       setDropPos(null);
-      setPortalInDialog(false);
       return;
     }
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 300 && spaceAbove > spaceBelow ? 'up' : 'down';
-    setPortalInDialog(Boolean(wrapRef.current?.closest('.vx-dialog__content')));
+    dialogContentRef.current = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content') ?? null;
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
@@ -125,7 +132,7 @@ export function MultiSelect({
 
   // Close fixed-position dropdown on scroll/resize (but not when scrolling inside it)
   useEffect(() => {
-    if (!open || !dropPos || portalInDialog) return;
+    if (!open || !dropPos) return;
     const close = (e: Event) => {
       if (dropdownRef.current?.contains(e.target as Node)) return;
       setOpen(false);
@@ -136,7 +143,7 @@ export function MultiSelect({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos, portalInDialog]);
+  }, [open, dropPos]);
 
   const toggle = (option: MultiSelectOption) => {
     if (option.disabled) return;
@@ -230,25 +237,17 @@ export function MultiSelect({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (() => {
-        const shouldPortal = Boolean(dropPos && !portalInDialog);
+        const shouldPortal = Boolean(dropPos);
         const dropdownStyle = shouldPortal
-          ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width }
-          : dropPos && portalInDialog
-            ? {
-                position: 'absolute' as const,
-                left: 0,
-                width: '100%',
-                top: dropPos.direction === 'down' ? 'calc(100% + 4px)' : undefined,
-                bottom: dropPos.direction === 'up' ? 'calc(100% + 4px)' : undefined,
-              }
-            : undefined;
+          ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width, pointerEvents: 'auto' as const }
+          : undefined;
         const dropdownNode = (
           <div
             ref={dropdownRef}
             className={cx(
               'vx-multiselect__dropdown',
               dropPos?.direction === 'up' && 'vx-multiselect__dropdown--up',
-              dropPos && portalInDialog && 'vx-multiselect__dropdown--in-dialog',
+              Boolean(dialogContentRef.current) && 'vx-multiselect__dropdown--in-dialog',
             )}
             style={dropdownStyle}
           >

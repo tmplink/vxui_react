@@ -1,6 +1,6 @@
 # VXUI React
 
-> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.2.1.
+> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.3.0.
 
 VXUI React provides layout shells, navigation, form controls, data display, overlays, and mobile components. It relies solely on CSS custom properties (design tokens) for theming — no Tailwind, no CSS-in-JS. Radix UI primitives are used for accessibility-critical components (dialogs, menus, tooltips, etc.).
 
