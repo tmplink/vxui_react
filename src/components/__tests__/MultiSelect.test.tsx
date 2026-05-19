@@ -12,7 +12,32 @@ const OPTIONS = [
   { value: 'angular', label: 'Angular' },
 ];
 
+const originalMatchMedia = window.matchMedia;
+
+function mockMaxWidth640(matches: boolean) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: vi.fn((query: string) => ({
+      matches: query === '(max-width: 640px)' ? matches : false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
 describe('MultiSelect', () => {
+  afterEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
+    });
+  });
+
   it('renders with placeholder text', () => {
     render(<MultiSelect options={OPTIONS} placeholder="Pick frameworks" />);
     expect(screen.getByText('Pick frameworks')).toBeInTheDocument();
@@ -180,6 +205,23 @@ describe('MultiSelect', () => {
 
     const dropdown = document.body.querySelector('.vx-multiselect__dropdown');
     expect(dropdown).toHaveClass('vx-multiselect__dropdown--in-dialog');
+  });
+
+  it('portals the dropdown above Dialog even in a narrow viewport', async () => {
+    mockMaxWidth640(true);
+
+    render(
+      <Dialog trigger={<Button>Open</Button>} title="Pick frameworks">
+        <MultiSelect options={OPTIONS} placeholder="Pick frameworks" />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Pick frameworks' }));
+
+    const dropdown = document.body.querySelector('.vx-multiselect__dropdown');
+    expect(dropdown).toHaveClass('vx-multiselect__dropdown--in-dialog');
+    expect(screen.getByRole('dialog')).not.toContainElement(dropdown);
   });
 
   // Regression: pressing Escape while a MultiSelect dropdown is open inside a Dialog

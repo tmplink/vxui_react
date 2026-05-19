@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../lib/cx';
+import { getDialogPopoverContext } from '../lib/dialogPopover';
 
 function pad(n: number): string {
   return String(n).padStart(2, '0');
@@ -185,7 +186,8 @@ export function TimePicker({
   }, [open]);
 
   useEffect(() => {
-    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    const { shouldInline } = getDialogPopoverContext(wrapRef.current);
+    if (!open || !shouldInline) return;
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
@@ -199,16 +201,17 @@ export function TimePicker({
   }, [open, dropPos]);
 
   useLayoutEffect(() => {
-    if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
+    const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
+    if (!open || !triggerRef.current || shouldInline) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
     }
+    dialogContentRef.current = dialogContent;
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 220 && spaceAbove > spaceBelow ? 'up' : 'down';
-    dialogContentRef.current = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content') ?? null;
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 4, left: rect.left, direction }

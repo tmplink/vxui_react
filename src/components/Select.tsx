@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useLayoutEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
+import { getDialogPopoverContext } from '../lib/dialogPopover';
 
 export interface SelectOption {
   value: string;
@@ -105,7 +106,8 @@ export function Select({
   }, [open]);
 
   useEffect(() => {
-    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
+    const { shouldInline } = getDialogPopoverContext(wrapRef.current);
+    if (!open || !shouldInline) return;
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = '';
@@ -121,16 +123,17 @@ export function Select({
   }, [open, dropPos]);
 
   useLayoutEffect(() => {
-    if (!open || !triggerRef.current || window.matchMedia('(max-width: 640px)').matches) {
+    const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
+    if (!open || !triggerRef.current || shouldInline) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
     }
+    dialogContentRef.current = dialogContent;
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const direction = spaceBelow < 280 && spaceAbove > spaceBelow ? 'up' : 'down';
-    dialogContentRef.current = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content') ?? null;
     setDropPos(
       direction === 'down'
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }

@@ -4,7 +4,32 @@ import { TimePicker } from '../TimePicker';
 import { Dialog } from '../Dialog';
 import { Button } from '../Button';
 
+const originalMatchMedia = window.matchMedia;
+
+function mockMaxWidth640(matches: boolean) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: vi.fn((query: string) => ({
+      matches: query === '(max-width: 640px)' ? matches : false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
 describe('TimePicker', () => {
+  afterEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
+    });
+  });
+
   it('renders an input-like trigger', () => {
     render(<TimePicker />);
     // TimePicker renders a button/input as trigger
@@ -96,6 +121,23 @@ describe('TimePicker', () => {
     expect(screen.getByRole('spinbutton', { name: /hour/i })).toBeInTheDocument();
     await userEvent.keyboard('{Escape}');
     expect(screen.queryByRole('spinbutton', { name: /hour/i })).not.toBeInTheDocument();
+  });
+
+  it('portals the panel above Dialog even in a narrow viewport', async () => {
+    mockMaxWidth640(true);
+
+    render(
+      <Dialog trigger={<Button>Open dialog</Button>} title="Pick a time">
+        <TimePicker placeholder="Select time" />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open dialog' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Select time' }));
+
+    const popover = document.body.querySelector('.vx-timepicker__popover');
+    expect(popover).toHaveClass('vx-timepicker__popover--in-dialog');
+    expect(screen.getByRole('dialog', { name: 'Pick a time' })).not.toContainElement(popover);
   });
 
   // Regression: pressing Escape while the TimePicker panel is open inside a Dialog

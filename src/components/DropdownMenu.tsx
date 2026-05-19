@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode, KeyboardEvent } from 'react';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { cx } from '../lib/cx';
 
 export interface DropdownMenuItemProps {
@@ -39,6 +39,29 @@ export function DropdownMenu({
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
   const wrapRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const [actualAlign, setActualAlign] = useState(align);
+
+  // 初始化 / 重置方向
+  useLayoutEffect(() => {
+    if (open) {
+      setActualAlign(align);
+    }
+  }, [open, align]);
+
+  // 渲染后检测是否溢出屏幕，自动翻转
+  useLayoutEffect(() => {
+    if (!open || !menuRef.current) return;
+    const rect = menuRef.current.getBoundingClientRect();
+    const safeEdge = 8; // 屏幕边缘安全距离
+    
+    if (actualAlign === 'left' && rect.right > window.innerWidth - safeEdge) {
+      setActualAlign('right');
+    } else if (actualAlign === 'right' && rect.left < safeEdge) {
+      setActualAlign('left');
+    }
+  }, [open, actualAlign]);
 
   const setOpen = useCallback((value: boolean) => {
     if (!isControlled) setInternalOpen(value);
@@ -70,7 +93,7 @@ export function DropdownMenu({
         {trigger}
       </div>
       {open ? (
-        <div className={cx('vx-dropdown__menu', `vx-dropdown__menu--${align}`)} role="menu">
+        <div ref={menuRef} className={cx('vx-dropdown__menu', `vx-dropdown__menu--${actualAlign}`)} role="menu">
           {allGroups.map((group, gi) => (
             <div key={gi} className="vx-dropdown__group">
               {group.label ? <div className="vx-dropdown__group-label">{group.label}</div> : null}

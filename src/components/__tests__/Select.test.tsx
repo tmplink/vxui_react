@@ -13,7 +13,32 @@ const OPTIONS = [
   { value: 'solid', label: 'Solid' },
 ];
 
+const originalMatchMedia = window.matchMedia;
+
+function mockMaxWidth640(matches: boolean) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: vi.fn((query: string) => ({
+      matches: query === '(max-width: 640px)' ? matches : false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
 describe('Select', () => {
+  afterEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
+    });
+  });
+
   it('renders with placeholder text', () => {
     render(<Select options={OPTIONS} placeholder="Pick a framework" />);
     expect(screen.getByText('Pick a framework')).toBeInTheDocument();
@@ -189,6 +214,23 @@ describe('Select', () => {
 
     const dropdown = document.body.querySelector('.vx-select__dropdown');
     expect(dropdown).toHaveClass('vx-select__dropdown--in-dialog');
+  });
+
+  it('portals the dropdown above Dialog even in a narrow viewport', async () => {
+    mockMaxWidth640(true);
+
+    render(
+      <Dialog trigger={<Button>Open</Button>} title="Pick a framework">
+        <Select options={OPTIONS} placeholder="Pick framework" />
+      </Dialog>,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Pick framework' }));
+
+    const dropdown = document.body.querySelector('.vx-select__dropdown');
+    expect(dropdown).toHaveClass('vx-select__dropdown--in-dialog');
+    expect(screen.getByRole('dialog')).not.toContainElement(dropdown);
   });
 
   it('Escape closes the dropdown without closing the parent Dialog', async () => {
