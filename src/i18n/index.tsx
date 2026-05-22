@@ -535,7 +535,7 @@ export const en: Translations = {
       section: 'Components',
       title: 'Elements',
       description:
-        'Buttons, badges, and cards should feel quiet by default. The primary action can be loud; everything else should support it.',
+        'Button, Badge, Text, Heading, CodeBlock, and LanguageSwitcher form the atomic foundation of the UI.',
       guidance: [
         'One primary action per area is usually enough.',
         'Use badges for compact status or category metadata, not decoration.',
@@ -603,7 +603,7 @@ export const en: Translations = {
       section: 'Components',
       title: 'Feedback Components',
       description:
-        'Spinner, Progress, Alert, and Skeleton give users clear signals about loading states, results, and missing content.',
+        'Alert, Progress, Skeleton, Spinner, Stepper, and Toast indicate application state without blocking layouts.',
       guidance: [
         'Use Spinner for short indeterminate waits; Progress for deterministic operations.',
         'Prefer Alert over toast for persistent or page-level status messages.',
@@ -614,7 +614,7 @@ export const en: Translations = {
       section: 'Components',
       title: 'Overlays',
       description:
-        'Tooltip, Popover, and DropdownMenu layer transient content above the page without navigating away.',
+        'Dialog, AlertDialog, ContextMenu, HoverCard, Tooltip, Popover, and DropdownMenu layer transient content and actions above the page.',
       guidance: [
         'Tooltips are for supplementary text only — never interactive content.',
         'Popovers can contain forms and rich content; they require explicit close triggers.',
@@ -625,7 +625,7 @@ export const en: Translations = {
       section: 'Components',
       title: 'Navigation & Layout',
       description:
-        'Breadcrumb, Pagination, Accordion, and Separator handle location, paging, and structural rhythm.',
+        'Tabs, Accordion, Breadcrumb, Menubar, NavigationMenu, ScrollArea, Separator, Resizable, and Sheet structure content hierarchically.',
       guidance: [
         'Breadcrumb mirrors route depth — omit it on single-level pages.',
         'Pagination should show page count so users understand the data set size.',
@@ -636,7 +636,7 @@ export const en: Translations = {
       section: 'Components',
       title: 'Data Display',
       description:
-        'Avatar and Table present user identity and structured data with clear hierarchy.',
+        'Avatar, Card, Badge, Table, Carousel, Timeline, TreeView, and EmptyState present rich data compactly.',
       guidance: [
         'Avatar should always have an accessible label, even when showing an image.',
         'Table supports sortable columns — delegate sort state up when the data is server-side.',
@@ -647,11 +647,12 @@ export const en: Translations = {
       section: 'Components',
       title: 'Form Inputs',
       description:
-        'Select, Checkbox, RadioGroup, Textarea, and Slider extend the form vocabulary beyond text inputs.',
+        'Select, Checkbox, Radio, Textarea, Switch, Slider, Input, Label, NumberInput, TagInput, ColorPicker, DatePicker, FileUpload, Rating, Toggle, SegmentedControl, and Calendar extend the form vocabulary beyond text inputs.',
       guidance: [
         'Group radio buttons with RadioGroup to share name and semantics.',
         'Slider is ideal for numeric ranges; pair it with showValue for immediate feedback.',
         'Textarea defaults to vertical resize — disable resize only in fixed-height containers.',
+        'Use Switch for immediate state toggles (like settings), and Checkbox for form submissions or multi-selections.',
       ],
     },
     mobile: {
@@ -1062,7 +1063,7 @@ export const zh: Translations = {
     elements: {
       section: '组件',
       title: '基础元素',
-      description: '按钮、徽章和卡片默认应保持低调。主要操作可以突出，其余元素应配合支撑。',
+      description: 'Button、Badge、Text、Heading、CodeBlock 和 LanguageSwitcher 构成 UI 的原子基础。',
       guidance: [
         '每个区域通常一个主操作就足够了。',
         '徽章用于紧凑的状态或分类元数据，而非纯装饰。',
@@ -1129,7 +1130,7 @@ export const zh: Translations = {
       section: '组件',
       title: '反馈组件',
       description:
-        'Spinner、Progress、Alert 和 Skeleton 为用户提供关于加载状态、结果和缺失内容的清晰信号。',
+        'Alert、Progress、Skeleton、Spinner、Stepper 和 Toast 在不阻塞布局的情况下指示应用状态。',
       guidance: [
         '对短暂的不确定等待使用 Spinner；对确定性操作使用 Progress。',
         '对持久性或页面级状态消息，优先使用 Alert 而非 Toast。',
@@ -1139,7 +1140,7 @@ export const zh: Translations = {
     overlays: {
       section: '组件',
       title: '浮层',
-      description: 'Tooltip、Popover 和 DropdownMenu 在页面上方叠加临时内容，无需跳转。',
+      description: 'Dialog、AlertDialog、ContextMenu、HoverCard、Tooltip、Popover 和 DropdownMenu 在页面上方将临时内容和操作置于上方。',
       guidance: [
         'Tooltip 仅用于补充文本，绝不放置可交互内容。',
         'Popover 可包含表单和富内容；需要明确的关闭触发器。',
@@ -1149,7 +1150,7 @@ export const zh: Translations = {
     'nav-layout': {
       section: '组件',
       title: '导航与布局',
-      description: 'Breadcrumb、Pagination、Accordion 和 Separator 处理位置、分页和结构节奏。',
+      description: 'Tabs、Accordion、Breadcrumb、Menubar、NavigationMenu、ScrollArea、Separator、Resizable 和 Sheet 以层级方式构筑内容。',
       guidance: [
         'Breadcrumb 反映路由深度——单层页面可省略。',
         'Pagination 应显示总页数，让用户了解数据集大小。',
@@ -1159,7 +1160,7 @@ export const zh: Translations = {
     'data-display': {
       section: '组件',
       title: '数据展示',
-      description: 'Avatar 和 Table 以清晰的层级呈现用户身份和结构化数据。',
+      description: 'Avatar、Card、Badge、Table、Carousel、Timeline、TreeView 和 EmptyState 紧凑地呈现丰富数据。',
       guidance: [
         'Avatar 即使在显示图片时也应始终具有无障碍标签。',
         'Table 支持可排序列——数据来自服务端时应将排序状态提升。',
@@ -1170,11 +1171,12 @@ export const zh: Translations = {
       section: '组件',
       title: '表单输入',
       description:
-        'Select、Checkbox、RadioGroup、Textarea 和 Slider 将表单词汇扩展到文本输入之外。',
+        'Select、Checkbox、Radio、Textarea、Switch、Slider、Input、Label、NumberInput、TagInput、ColorPicker、DatePicker、FileUpload、Rating、Toggle、SegmentedControl 和 Calendar 将表单词汇扩展到文本输入之外。',
       guidance: [
         '使用 RadioGroup 包裹单选按钮，共享 name 和语义。',
         'Slider 适合数值范围；配合 showValue 可获得即时反馈。',
         'Textarea 默认纵向可拖拽——仅在固定高度容器中禁用 resize。',
+        '使用 Switch 并在交互后立即生效（例如设置开启或关闭），使用 Checkbox 用于表单提交或多项选择。',
       ],
     },
     mobile: {

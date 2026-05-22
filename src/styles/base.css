@@ -1698,7 +1698,7 @@ a {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  background: var(--vx-border-strong);
+  background: color-mix(in srgb, var(--vx-text) 16%, transparent);
   cursor: pointer;
   appearance: none;
   transition: background 160ms ease;

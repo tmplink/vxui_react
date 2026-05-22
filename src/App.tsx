@@ -83,6 +83,34 @@ import {
   TimePicker,
   useTheme,
   useToast,
+  AlertDialog,
+  Breadcrumb,
+  Calendar,
+  Carousel,
+  ContextMenu,
+  EmptyState,
+  FileUpload,
+  Heading,
+  HoverCard,
+  Menubar,
+  NavigationMenu,
+  NumberInput,
+  Rating,
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+  ScrollArea,
+  Separator,
+  Spinner,
+  Stepper,
+  Switch,
+  TagInput,
+  Text,
+  Timeline,
+  Toast,
+  Tooltip,
+  TreeView,
+  Toggle,
   useViewport,
 } from './lib';
 
@@ -561,6 +589,7 @@ export function ButtonExamples() {
   );
 }`,
   elements: String.raw`import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from 'vxui-react';
+import { Text, Heading } from 'vxui-react';
 
 export function ActionCard() {
   return (
@@ -678,7 +707,7 @@ export function ProjectForm() {
   );
 }`,
   'form-inputs': String.raw`import { useState } from 'react';
-import { Checkbox, Radio, RadioGroup, Slider, Switch } from 'vxui-react';
+import { Checkbox, Radio, RadioGroup, Slider, Switch, NumberInput, TagInput, FileUpload, Rating, Calendar, AlertDialog, ContextMenu, HoverCard, Tooltip, Spinner, Stepper, Breadcrumb, Menubar, NavigationMenu, ScrollArea, Separator, ResizablePanelGroup, ResizablePanel, ResizableHandle, Carousel, Timeline, TreeView, EmptyState, Text, Heading, Toggle } from 'vxui-react';
 
 export function PreferencesForm() {
   const [realtimeAlerts, setRealtimeAlerts] = useState(true);
@@ -803,7 +832,7 @@ export function PublishButton() {
     </Button>
   );
 }`,
-  feedback: String.raw`import { Alert, Progress, Skeleton } from 'vxui-react';
+  feedback: String.raw`import { Alert, Progress, Skeleton, Spinner, Stepper } from 'vxui-react';
 
 export function SyncStatus({ loading = false }: { loading?: boolean }) {
   if (loading) {
@@ -819,7 +848,7 @@ export function SyncStatus({ loading = false }: { loading?: boolean }) {
     </div>
   );
 }`,
-  overlays: String.raw`import { Button, Dialog, DropdownMenu, Popover, Textarea } from 'vxui-react';
+  overlays: String.raw`import { Button, Dialog, DropdownMenu, Popover, Textarea, AlertDialog, ContextMenu, HoverCard, Tooltip } from 'vxui-react';
 
 export function OverlayExamples() {
   return (
@@ -901,7 +930,7 @@ export function OverlayExamples() {
     </div>
   );
 }`,
-  'nav-layout': String.raw`import { Accordion } from 'vxui-react';
+  'nav-layout': String.raw`import { Accordion, Breadcrumb, Menubar, NavigationMenu, ScrollArea, Separator, ResizablePanelGroup, ResizablePanel, ResizableHandle } from 'vxui-react';
 
 const items = [
   {
@@ -919,7 +948,7 @@ const items = [
 export function InformationArchitecture() {
   return <Accordion items={items} defaultOpen={['route-tree']} />;
 }`,
-  'data-display': String.raw`import { Avatar, Badge, Table } from 'vxui-react';
+  'data-display': String.raw`import { Avatar, Badge, Table, Carousel, Timeline, TreeView, EmptyState } from 'vxui-react';
 
 type TeamRow = {
   role: string;
@@ -2085,6 +2114,16 @@ function DesktopApp() {
             <Alert title={isZh ? '统一风格' : 'Unified styling'} variant="info">
               {isZh ? '基础元素在所有页面共享同一套颜色、圆角和交互节奏。' : 'Core elements now share the same color, radius, and interaction rhythm across the whole app.'}
             </Alert>
+
+            <div className="vx-doc-preview-stack__group">
+              <Heading level={1}>{isZh ? 'H1 标题' : 'Heading 1'}</Heading>
+              <Heading level={2}>{isZh ? 'H2 标题' : 'Heading 2'}</Heading>
+              <Heading level={3}>{isZh ? 'H3 标题' : 'Heading 3'}</Heading>
+              <Text variant="lead">{isZh ? '大段文本 - 用于特别强调。' : 'Lead text - used for special emphasis.'}</Text>
+              <Text variant="muted">{isZh ? '次要文本 - 提供补充信息。' : 'Muted text - provides supplemental information.'}</Text>
+              <Text weight="medium">{isZh ? 'Medium 加粗文本。' : 'Medium weight text.'}</Text>
+            </div>
+
           </div>
         );
       case 'form-controls':
@@ -2243,6 +2282,23 @@ function DesktopApp() {
               showValue
               value={sliderValue}
             />
+            <div className="vx-doc-preview-stack__group" style={{ marginTop: 24 }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <Toggle data-state="on">{isZh ? '自动保存' : 'Auto-save'}</Toggle>
+                <Toggle>{isZh ? '多标签模式' : 'Multiple tabs'}</Toggle>
+              </div>
+              <Switch defaultChecked label={isZh ? '开启实验性功能' : 'Enable experimental features'} />
+              <NumberInput min={0} max={100} defaultValue={10} label={isZh ? '阈值' : 'Threshold'} />
+              <TagInput placeholder={isZh ? '添加标签...' : 'Add tag...'} defaultValue={['React', 'Vite']} />
+              <FileUpload maxFiles={3} label={isZh ? '上传附件' : 'Upload attachments'} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label className="vx-label">{isZh ? '评分' : 'Rating'}</label>
+                <Rating defaultValue={4} />
+              </div>
+              <div style={{ marginTop: 8 }}>
+                <Calendar mode="single" />
+              </div>
+            </div>
           </div>
         );
       case 'navigation':
@@ -2352,6 +2408,18 @@ function DesktopApp() {
             <div className="vx-doc-skeleton-grid">
               <Skeleton lines={3} variant="text" />
               <Skeleton height={92} />
+            </div>
+            <div className="vx-doc-preview-stack__group">
+              <div className="vx-doc-preview-inline">
+                <Spinner size="sm" />
+                <Spinner size="md" />
+                <Spinner size="lg" />
+              </div>
+              <Stepper currentStep={2} steps={[
+                { title: 'Step 1' },
+                { title: 'Step 2' },
+                { title: 'Step 3' }
+              ]} />
             </div>
           </div>
         );
@@ -2575,10 +2643,52 @@ function DesktopApp() {
                 { label: isZh ? '查看错误页' : 'Open error page', icon: <AlertTriangle size={14} />, onClick: () => navigate({ view: 'error' }) },
               ]}
             />
+            {/* Added missing overlays */}
+            <AlertDialog
+              trigger={<Button variant="outline">{isZh ? '警告框' : 'Alert Dialog'}</Button>}
+              title={isZh ? '确定吗？' : 'Are you sure?'}
+              description={isZh ? '此操作无法撤销。' : 'This action cannot be undone.'}
+            />
+            
+            <ContextMenu trigger={<div style={{ padding: '0.5rem 1rem', border: '1px dashed var(--vx-border)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '右键点击' : 'Right click'}</div>}>
+              <DropdownMenu.Item>{isZh ? '复制' : 'Copy'}</DropdownMenu.Item>
+              <DropdownMenu.Item>{isZh ? '粘贴' : 'Paste'}</DropdownMenu.Item>
+            </ContextMenu>
+            
+            <HoverCard trigger={<Button variant="ghost">{isZh ? '悬停我' : 'Hover me'}</Button>}>
+              <div style={{ padding: 12 }}>{isZh ? '悬停卡片内容。' : 'Hover card content.'}</div>
+            </HoverCard>
+            
+            
+              <Tooltip text={isZh ? '这是一个工具提示' : 'This is a tooltip'}>
+                <Button variant="ghost">{isZh ? '工具提示' : 'Tooltip'}</Button>
+              </Tooltip>
+            
           </div>
         );
       case 'nav-layout':
         return (
+
+          <div className="vx-doc-preview-stack">
+            <Breadcrumb items={[{ label: 'Home' }, { label: 'Components' }, { label: 'Navigation' }]} />
+            <Menubar items={[
+              { label: 'File', minWidth: 150, children: [
+                { label: 'New', shortcut: '⌘N' },
+                { label: 'Open...', shortcut: '⌘O' },
+                { type: 'separator' },
+                { label: 'Exit', danger: True }
+              ]},
+              { label: 'Edit', children: [
+                { label: 'Undo', shortcut: '⌘Z' },
+                { label: 'Redo', shortcut: '⇧⌘Z' }
+              ]}
+            ]} />
+            
+            <Separator />
+            
+            <ScrollArea style={{ height: 100, border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-md)', padding: 16 }}>
+              {isZh ? '此区域展示了 ScrollArea 组件的用法。' * 20 : 'This area demonstrates the usage of the ScrollArea component. ' * 20}
+            </ScrollArea>
           <Accordion
             defaultOpen={['hierarchy']}
             items={[
@@ -2599,6 +2709,7 @@ function DesktopApp() {
               },
             ]}
           />
+          </div>
         );
       case 'data-display':
         return (
@@ -2624,6 +2735,36 @@ function DesktopApp() {
                 { name: isZh ? '模板页' : 'Templates', scope: isZh ? '公共入口' : 'Public entry points', status: isZh ? '已统一' : 'Unified', variant: 'warning' as const },
               ]}
             />
+            <div className="vx-doc-preview-stack__group">
+              <EmptyState 
+                title={isZh ? '暂无数据' : 'No data found'} 
+                description={isZh ? '请尝试调整筛选条件' : 'Try adjusting your filters'} 
+                action={<Button variant="secondary">{isZh ? '清空筛选' : 'Clear filters'}</Button>} 
+              />
+            </div>
+            
+            <Timeline items={[
+              { title: isZh ? '已创建' : 'Created', description: isZh ? '已在系统中记录' : 'Recorded in system', timestamp: '10:00 AM' },
+              { title: isZh ? '处理中' : 'Processing', description: isZh ? '后台正在处理' : 'Background processing running', timestamp: '10:05 AM' },
+              { title: isZh ? '已完成' : 'Completed', description: isZh ? '所有步骤已结束' : 'All steps finished', timestamp: '10:15 AM' }
+            ]} />
+            
+            <TreeView data={[
+              { id: '1', label: 'src', children: [
+                { id: '2', label: 'components' },
+                { id: '3', label: 'utils' }
+              ]}
+            ]} />
+            
+            <div style={{ marginTop: 24 }}>
+              <Carousel 
+                items={[
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, background: 'var(--vx-surface-elevated)', borderRadius: 'var(--vx-radius-md)' }}>Slide 1</div>,
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, background: 'var(--vx-surface-elevated)', borderRadius: 'var(--vx-radius-md)' }}>Slide 2</div>,
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, background: 'var(--vx-surface-elevated)', borderRadius: 'var(--vx-radius-md)' }}>Slide 3</div>
+                ]} 
+              />
+            </div>
           </div>
         );
       case 'mobile':
