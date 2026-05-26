@@ -100,7 +100,7 @@ function TreeNodeItem({ node, depth, selected, expanded, onSelect, onToggle }: T
 }
 
 export function TreeView({
-  nodes,
+  nodes = [],
   selected: controlledSelected,
   defaultSelected,
   onSelect,

@@ -2049,8 +2049,6 @@ a {
 
 .vx-toast__viewport {
   position: fixed;
-  right: 18px;
-  bottom: 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -2059,6 +2057,38 @@ a {
   padding: 0;
   list-style: none;
   z-index: var(--vx-z-toast);
+}
+
+.vx-toast__viewport--top-right {
+  top: 18px;
+  right: 18px;
+}
+
+.vx-toast__viewport--bottom-right {
+  bottom: 18px;
+  right: 18px;
+}
+
+.vx-toast__viewport--top-left {
+  top: 18px;
+  left: 18px;
+}
+
+.vx-toast__viewport--bottom-left {
+  bottom: 18px;
+  left: 18px;
+}
+
+.vx-toast__viewport--top-center {
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.vx-toast__viewport--bottom-center {
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .vx-toast {
@@ -2073,6 +2103,11 @@ a {
   -webkit-backdrop-filter: var(--vx-glass-filter);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   animation: vx-toast-in 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.vx-toast--no-desc {
+  align-items: center;
+  padding: 12px 12px 12px 16px;
 }
 
 @keyframes vx-toast-in {

@@ -6,10 +6,20 @@ import { cx } from '../lib/cx';
 
 type ToastTone = 'info' | 'success' | 'warning' | 'danger';
 
+export type ToastPlacement =
+  | 'top-right'
+  | 'top-left'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'top-center'
+  | 'bottom-center';
+
 interface ToastInput {
   title: string;
   description?: string;
   tone?: ToastTone;
+  duration?: number;
+  closable?: boolean;
 }
 
 interface ToastItem extends ToastInput {
@@ -31,7 +41,12 @@ const TONE_ICONS: Record<ToastTone, ReactNode> = {
   danger: <AlertCircle size={15} />,
 };
 
-export function ToastProvider({ children }: { children: ReactNode }) {
+export interface ToastProviderProps {
+  children: ReactNode;
+  placement?: ToastPlacement;
+}
+
+export function ToastProvider({ children, placement = 'bottom-right' }: ToastProviderProps) {
   const [items, setItems] = useState<ToastItem[]>([]);
 
   const value = useMemo<ToastContextValue>(
@@ -50,8 +65,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {items.map((item) => (
           <ToastPrimitive.Root
             key={item.id}
-            className={cx('vx-toast', `vx-toast--${item.tone ?? 'info'}`)}
-            duration={4500}
+            className={cx('vx-toast', `vx-toast--${item.tone ?? 'info'}`, !item.description && 'vx-toast--no-desc')}
+            duration={item.duration ?? 4500}
             open
             onOpenChange={(open) => {
               if (!open) {
@@ -72,12 +87,14 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 </ToastPrimitive.Description>
               ) : null}
             </div>
-            <ToastPrimitive.Close className="vx-toast__close" aria-label="Dismiss notification">
-              <X size={14} />
-            </ToastPrimitive.Close>
+            {item.closable !== false && (
+              <ToastPrimitive.Close className="vx-toast__close" aria-label="Dismiss notification">
+                <X size={14} />
+              </ToastPrimitive.Close>
+            )}
           </ToastPrimitive.Root>
         ))}
-        <ToastPrimitive.Viewport className="vx-toast__viewport" />
+        <ToastPrimitive.Viewport className={cx('vx-toast__viewport', `vx-toast__viewport--${placement}`)} />
       </ToastPrimitive.Provider>
     </ToastContext.Provider>
   );

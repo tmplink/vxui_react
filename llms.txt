@@ -1,6 +1,6 @@
 # VXUI React
 
-> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.3.1.
+> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.3.2.
 
 VXUI React provides layout shells, navigation, form controls, data display, overlays, and mobile components. It relies solely on CSS custom properties (design tokens) for theming — no Tailwind, no CSS-in-JS. Radix UI primitives are used for accessibility-critical components (dialogs, menus, tooltips, etc.).
 
@@ -159,7 +159,7 @@ import { Shell, ShellSidebar, ShellContent } from 'vxui-react';
 - **HoverCard** — Rich hover preview card (Radix UI)
 
 ### Feedback & Status
-- **Toast** — Ephemeral notification (info / success / warning / danger tones)
+- **Toast** — Ephemeral notification (info / success / warning / danger tones). Supports configurable duration, global placement layout, and optional hideable close button.
 - **Alert** — Inline alert banner (info / success / warning / danger)
 - **Progress** — Linear progress bar (determinate and indeterminate)
 - **Spinner** — Loading spinner

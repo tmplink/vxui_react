@@ -597,6 +597,7 @@ export const en: Translations = {
         'Use success and info to confirm background actions.',
         'Escalate blocking or destructive states to dialogs instead of stacking toasts.',
         'Avoid repeating the same message on every page transition.',
+        'Provide only a title when possible for a clean, compact layout.',
       ],
     },
     feedback: {
@@ -1124,6 +1125,7 @@ export const zh: Translations = {
         '使用 success 和 info 确认后台操作。',
         '将阻塞性或破坏性状态升级为对话框，而非堆叠 Toast。',
         '避免在每次页面切换时重复相同消息。',
+        '在可用的情况下尽量只提供标题，享受更为紧凑、极简的纯标题排版。'
       ],
     },
     feedback: {

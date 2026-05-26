@@ -1575,6 +1575,8 @@ function DesktopApp() {
         secondary: '开始安装',
         pathTitle: '推荐顺序',
         pathBody: '首次接入建议按照 介绍 -> 安装 -> 组件 -> 模板 -> 响应式 的顺序浏览。',
+        aiTipTitle: 'AI 辅助开发',
+        aiTipBody: '提示：项目的根目录下提供了 llms.txt 文件，供协助开发的 AI（如 ChatGPT、GitHub Copilot）快速阅读，以了解本项目的大纲与使用指南。',
         indexTitle: 'Documentation Index',
         indexLead: '五个标准入口覆盖整个文档库，避免把概念、接入方式和页面模板混在一起。',
         sectionsTitle: '按章节浏览',
@@ -1618,6 +1620,8 @@ function DesktopApp() {
         secondary: 'Start installation',
         pathTitle: 'Recommended order',
         pathBody: 'For a first pass, follow Introduction -> Installation -> Components -> Templates -> Responsive.',
+        aiTipTitle: 'AI-assisted development',
+        aiTipBody: 'Tip: An llms.txt file is provided in the root directory to help AI assistants (like ChatGPT or GitHub Copilot) quickly grasp the framework\'s API and structure.',
         indexTitle: 'Documentation Index',
         indexLead: 'Five standard entry points cover the whole library so concepts, setup, and page examples no longer compete on the same screen.',
         sectionsTitle: 'Browse by Section',
@@ -2368,30 +2372,62 @@ function DesktopApp() {
         );
       case 'toasts':
         return (
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
-            <Button
-              onClick={() =>
-                push({
-                  tone: 'info',
-                  title: isZh ? '文档树已同步' : 'Docs tree synced',
-                  description: isZh ? '所有页面都已映射到统一的响应式壳层。' : 'Every page is now mapped to the unified responsive shell.',
-                })
-              }
-            >
-              {isZh ? '信息提示' : 'Info toast'}
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() =>
-                push({
-                  tone: 'success',
-                  title: isZh ? '路由更新完成' : 'Route update complete',
-                  description: isZh ? '桌面端、平板和手机已共享同一套页面定义。' : 'Desktop, tablet, and phone now share one page definition set.',
-                })
-              }
-            >
-              {isZh ? '成功提示' : 'Success toast'}
-            </Button>
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Button
+                onClick={() =>
+                  push({
+                    tone: 'info',
+                    title: isZh ? '文档树已同步' : 'Docs tree synced',
+                    description: isZh ? '所有页面都已映射到统一的响应式壳层。' : 'Every page is now mapped to the unified responsive shell.',
+                  })
+                }
+              >
+                {isZh ? '带描述提示' : 'Toast with desc'}
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  push({
+                    tone: 'success',
+                    title: isZh ? '路由更新完成' : 'Route update complete',
+                  })
+                }
+              >
+                {isZh ? '纯标题提示' : 'Title only toast'}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() =>
+                  push({
+                    tone: 'warning',
+                    title: isZh ? '无关闭按钮' : 'No close button',
+                    description: isZh ? '该通知会自动消失或者由代码关闭，禁止手动点击关闭。' : 'It goes away automatically, without an X button.',
+                    closable: false,
+                  })
+                }
+              >
+                {isZh ? '不可手动关闭' : 'Unclosable'}
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  push({
+                    tone: 'danger',
+                    title: isZh ? '短暂停留' : 'Short duration',
+                    description: isZh ? '1 秒后自动隐藏' : 'Will disappear in 1s',
+                    duration: 1000,
+                  })
+                }
+              >
+                {isZh ? '1秒即焚' : '1s duration'}
+              </Button>
+            </div>
+            <Alert title={isZh ? 'Toast 定位与参数' : 'Toast Features'} variant="info">
+              {isZh 
+                ? '在顶层挂载 <ToastProvider placement="top-center"> 即可更改全局弹出位置；push 时可使用 duration 覆盖展示时长，或使用 closable: false 隐藏关闭按钮。'
+                : 'Configure global placement via <ToastProvider placement="top-center">. Override duration or hide close button (closable: false) directly in push().'}
+            </Alert>
           </div>
         );
       case 'feedback':
@@ -2650,17 +2686,23 @@ function DesktopApp() {
               description={isZh ? '此操作无法撤销。' : 'This action cannot be undone.'}
             />
             
-            <ContextMenu trigger={<div style={{ padding: '0.5rem 1rem', border: '1px dashed var(--vx-border)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '右键点击' : 'Right click'}</div>}>
-              <DropdownMenu.Item>{isZh ? '复制' : 'Copy'}</DropdownMenu.Item>
-              <DropdownMenu.Item>{isZh ? '粘贴' : 'Paste'}</DropdownMenu.Item>
+            <ContextMenu
+              items={[
+                { label: isZh ? '复制' : 'Copy' },
+                { label: isZh ? '粘贴' : 'Paste' }
+              ]}
+            >
+              <div style={{ padding: '0.5rem 1rem', border: '1px dashed var(--vx-border)', borderRadius: 'var(--vx-radius-md)' }}>
+                {isZh ? '右键点击' : 'Right click'}
+              </div>
             </ContextMenu>
             
-            <HoverCard trigger={<Button variant="ghost">{isZh ? '悬停我' : 'Hover me'}</Button>}>
-              <div style={{ padding: 12 }}>{isZh ? '悬停卡片内容。' : 'Hover card content.'}</div>
+            <HoverCard content={<div style={{ padding: 12 }}>{isZh ? '悬停卡片内容。' : 'Hover card content.'}</div>}>
+              <Button variant="ghost">{isZh ? '悬停我' : 'Hover me'}</Button>
             </HoverCard>
             
             
-              <Tooltip text={isZh ? '这是一个工具提示' : 'This is a tooltip'}>
+              <Tooltip content={isZh ? '这是一个工具提示' : 'This is a tooltip'}>
                 <Button variant="ghost">{isZh ? '工具提示' : 'Tooltip'}</Button>
               </Tooltip>
             
@@ -2749,7 +2791,7 @@ function DesktopApp() {
               { title: isZh ? '已完成' : 'Completed', description: isZh ? '所有步骤已结束' : 'All steps finished', timestamp: '10:15 AM' }
             ]} />
             
-            <TreeView data={[
+            <TreeView nodes={[
               { id: '1', label: 'src', children: [
                 { id: '2', label: 'components' },
                 { id: '3', label: 'utils' }
@@ -2849,9 +2891,14 @@ function DesktopApp() {
                 {docsHomeCopy.secondary}
               </Button>
             </div>
-            <Alert title={docsHomeCopy.pathTitle} variant="info">
-              {docsHomeCopy.pathBody}
-            </Alert>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <Alert title={docsHomeCopy.pathTitle} variant="info">
+                {docsHomeCopy.pathBody}
+              </Alert>
+              <Alert title={docsHomeCopy.aiTipTitle} variant="info">
+                {docsHomeCopy.aiTipBody}
+              </Alert>
+            </div>
           </div>
         </section>
 

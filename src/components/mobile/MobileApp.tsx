@@ -842,8 +842,12 @@ export function MobileApp() {
       case 'toasts':
         return (
           <div className="vx-stack">
-            <Button onClick={() => push({ tone: 'info', title: 'Docs synced', description: 'Showcase index updated.' })}>Info toast</Button>
-            <Button variant="secondary" onClick={() => push({ tone: 'success', title: 'Build complete', description: 'Bundle compiled.' })}>Success toast</Button>
+            <Button onClick={() => push({ tone: 'info', title: 'Docs synced', description: 'Showcase index updated.' })}>Toast with desc</Button>
+            <Button variant="secondary" onClick={() => push({ tone: 'success', title: 'Build complete' })}>Title only toast</Button>
+            <Button variant="outline" onClick={() => push({ tone: 'warning', title: 'No close button', closable: false })}>Unclosable toast</Button>
+            <Alert title="Global Placement & Options" variant="info">
+              Set `placement="top-center"` on `{'<ToastProvider>'}` for global position. Pass `duration` or `closable: false` when pushing a toast.
+            </Alert>
           </div>
         );
       case 'mobile':

@@ -54,6 +54,7 @@ export function DropdownMenu({
   useLayoutEffect(() => {
     if (!open || !menuRef.current) return;
     const rect = menuRef.current.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) return; // Ignore in JSDOM
     const safeEdge = 8; // 屏幕边缘安全距离
     
     if (actualAlign === 'left' && rect.right > window.innerWidth - safeEdge) {
