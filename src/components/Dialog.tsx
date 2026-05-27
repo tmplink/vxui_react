@@ -29,6 +29,8 @@ export interface DialogProps extends Pick<DialogPrimitive.DialogProps, 'defaultO
   scrollable?: boolean;
   /** Show the close (×) button. Default: true */
   closable?: boolean;
+  /** When true, the dialog will be displayed in fullscreen mode. Default: false */
+  fullscreen?: boolean;
 }
 
 function DialogBody({ children, scrollable }: { children: ReactNode; scrollable: boolean }) {
@@ -68,6 +70,7 @@ export function Dialog({
   placement = 'center',
   scrollable = true,
   closable = true,
+  fullscreen = false,
   ...props
 }: DialogProps) {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -81,6 +84,7 @@ export function Dialog({
           ref={contentRef}
           className={cx(
             'vx-dialog__content',
+            fullscreen && 'vx-dialog__content--fullscreen',
             size !== 'md' && `vx-dialog__content--${size}`,
             placement !== 'center' && `vx-dialog__content--${placement}`,
             padding && `vx-dialog__content--pad-${padding}`,

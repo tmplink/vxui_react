@@ -882,6 +882,12 @@ export function OverlayExamples() {
         Dialog fills the right half of the viewport.
       </Dialog>
 
+      {/* Fullscreen mode – ideal for mobile devices */}
+      <Dialog fullscreen title="Fullscreen Dialog" trigger={<Button variant="secondary">Fullscreen (mobile)</Button>} footer={<Button variant="ghost">Close</Button>}>
+        <p>This dialog opens in fullscreen mode, perfect for mobile devices.</p>
+        <p style={{ color: 'var(--vx-text-secondary)', marginTop: 8 }}>Try resizing your browser window to mobile width to see the fullscreen effect.</p>
+      </Dialog>
+
       <Dialog
         trigger={<Button variant="secondary">Tall content</Button>}
         title="Pre-launch checklist"
@@ -2441,6 +2447,26 @@ function DesktopApp() {
                 {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
               </div>
             </Dialog>
+
+            {/* ── Fullscreen mode ── */}
+            <div style={{ width: '100%', display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--vx-text-secondary)', minWidth: 64, flexShrink: 0 }}>
+                {isZh ? '全屏模式' : 'Fullscreen'}
+              </span>
+              <Dialog
+                fullscreen
+                title={isZh ? '全屏对话框' : 'Fullscreen Dialog'}
+                description={isZh ? '适用于移动设备的全屏显示模式' : 'Fullscreen mode ideal for mobile devices'}
+                trigger={<Button variant="secondary">{isZh ? '全屏对话框' : 'Fullscreen'}</Button>}
+                footer={<DialogClose asChild><Button variant="ghost">{isZh ? '关闭' : 'Close'}</Button></DialogClose>}
+              >
+                <div style={{ padding: '4px 0', lineHeight: 1.6, color: 'var(--vx-text-secondary)' }}>
+                  <p>{isZh ? '此对话框以全屏模式打开，占据整个视口。' : 'This dialog opens in fullscreen mode, occupying the entire viewport.'}</p>
+                  <p>{isZh ? '在移动设备上使用时，可以提供更好的用户体验。' : 'This provides an improved user experience when used on mobile devices.'}</p>
+                  <p style={{ marginTop: 12 }}>{isZh ? '当前视口大小：' : 'Current viewport size: '}{`${window.innerWidth} × ${window.innerHeight}`}</p>
+                </div>
+              </Dialog>
+            </div>
 
             {/* ── Placement showcase ── */}
             {(
