@@ -24,7 +24,8 @@
     "**/*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "llms.txt"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

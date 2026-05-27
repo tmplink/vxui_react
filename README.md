@@ -1,8 +1,17 @@
-# VXUI React · v1.3.1
+# VXUI React · v1.3.3
 
 **官网**：[ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**：[tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [English](README.en.md)
 
 VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用 UI 组件库。
+
+## 🚀 更新公告
+
+> **v1.3.3** — 2025-05
+> - 新增 [`llms.txt`](llms.txt) — AI 知识库文件，AI 工具可直接读取以获取组件文档
+> - 包体积优化，移除了冗余依赖
+> - 修复了多个组件的样式兼容性问题
+
+查看完整更新日志请访问 [GitHub Releases](https://github.com/tmplink/vxui_react/releases)。
 
 文档内容现在按流行 UI 框架的写法组织：先给安装方式，再给最小可运行示例，最后给分场景的组件代码。
 
