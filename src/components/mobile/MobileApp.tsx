@@ -684,6 +684,21 @@ export function MobileApp() {
             >
               <p style={{ fontSize: '0.875rem', color: 'var(--vx-text-secondary)', margin: 0 }}>This project will be permanently removed.</p>
             </Dialog>
+            <Dialog
+              fullscreen
+              trigger={<Button variant="secondary" size="sm">Fullscreen Dialog</Button>}
+              title="Fullscreen Mode"
+              description="Ideal for mobile devices"
+              footer={<Button variant="ghost">Close</Button>}
+            >
+              <div style={{ fontSize: '0.875rem', color: 'var(--vx-text-secondary)', lineHeight: 1.6 }}>
+                <p style={{ margin: 0 }}>This dialog opens in fullscreen mode, occupying the entire viewport.</p>
+                <p style={{ marginTop: 12 }}>Perfect for mobile devices where screen space is limited.</p>
+                <div style={{ marginTop: 16, padding: 12, background: 'var(--vx-bg-accent)', borderRadius: 'var(--vx-radius)', fontSize: '0.8rem' }}>
+                  <strong>Viewport:</strong> {window.innerWidth} × {window.innerHeight}
+                </div>
+              </div>
+            </Dialog>
             <AlertDialog
               trigger={<Button variant="danger" size="sm">Delete account</Button>}
               title="Delete your account?"

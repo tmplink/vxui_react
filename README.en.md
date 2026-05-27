@@ -184,6 +184,26 @@ Use `useTheme()` at runtime to read the current theme or call `setTheme('ocean')
 - **Forms**: Input, Select, Checkbox, Radio, Textarea, Slider, Switch, NumberInput, TagInput, ColorPicker, DatePicker, FileUpload, Form, Rating
 - **Feedback**: Alert, AlertDialog, Toast, Progress, Skeleton, Spinner, Stepper, Timeline, EmptyState
 - **Overlay**: Dialog, Sheet, Popover, DropdownMenu, ContextMenu, Tooltip, HoverCard, CommandPalette, Menubar, NavigationMenu
+
+### Dialog Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| trigger | ReactNode | **required** | Element that triggers opening the dialog |
+| title | string | **required** | Dialog title |
+| description | string | — | Optional description below the title |
+| children | ReactNode | **required** | Dialog body content |
+| footer | ReactNode | — | Footer action area |
+| size | 'sm' \| 'md' \| 'lg' \| 'xl' \| 'full' | 'md' | Width preset |
+| placement | 'center' \| 'top' \| 'right' \| 'bottom' \| 'left' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' \| 'top-half' \| 'right-half' \| 'bottom-half' \| 'left-half' | 'center' | Screen position (desktop only) |
+| padding | 'none' \| 'sm' \| 'md' \| 'lg' | 'md' | Inner padding preset |
+| scrollable | boolean | true | Enable scroll when content overflows |
+| closable | boolean | true | Show close button (×) |
+| **fullscreen** | **boolean** | **false** | **Fullscreen mode: occupies the entire viewport, ideal for mobile devices** |
+| className | string | — | Additional CSS class |
+| defaultOpen | boolean | false | Whether the dialog is open by default |
+| open | boolean | — | Controlled open state |
+| onOpenChange | (open: boolean) => void | — | Open state change handler |
 - **Data Display**: Avatar, Table, Badge, Tabs, Accordion, TreeView, Carousel, Calendar
 - **Typography**: Heading, Text, Label, CodeBlock
 - **Mobile**: MobileShell, BottomNav, ActionSheet, MobileDrawer, MobileList

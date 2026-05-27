@@ -186,6 +186,26 @@ export function Root({ children }: { children: React.ReactNode }) {
 - **Forms**: Input、Select、Checkbox、Radio、Textarea、Slider、Switch、NumberInput、TagInput、ColorPicker、DatePicker、FileUpload、Form、Rating
 - **Feedback**: Alert、AlertDialog、Toast、Progress、Skeleton、Spinner、Stepper、Timeline、EmptyState
 - **Overlay**: Dialog、Sheet、Popover、DropdownMenu、ContextMenu、Tooltip、HoverCard、CommandPalette、Menubar、NavigationMenu
+
+### Dialog 属性
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| trigger | ReactNode | 必填 | 触发打开对话框的元素 |
+| title | string | 必填 | 对话框标题 |
+| description | string | — | 标题下方的描述文字 |
+| children | ReactNode | 必填 | 对话框内容 |
+| footer | ReactNode | — | 底部操作区 |
+| size | 'sm' \| 'md' \| 'lg' \| 'xl' \| 'full' | 'md' | 宽度预设 |
+| placement | 'center' \| 'top' \| 'right' \| 'bottom' \| 'left' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right' \| 'top-half' \| 'right-half' \| 'bottom-half' \| 'left-half' | 'center' | 屏幕位置（仅桌面端） |
+| padding | 'none' \| 'sm' \| 'md' \| 'lg' | 'md' | 内边距预设 |
+| scrollable | boolean | true | 内容溢出时是否可滚动 |
+| closable | boolean | true | 是否显示关闭按钮（×） |
+| **fullscreen** | **boolean** | **false** | **全屏模式：启用后对话框将占据整个视口，适用于移动设备** |
+| className | string | — | 额外 CSS 类名 |
+| defaultOpen | boolean | false | 默认是否打开 |
+| open | boolean | — | 受控打开状态 |
+| onOpenChange | (open: boolean) => void | — | 打开状态变化回调 |
 - **Data Display**: Avatar、Table、Badge、Tabs、Accordion、TreeView、Carousel、Calendar
 - **Typography**: Heading、Text、Label、CodeBlock
 - **Mobile**: MobileShell、BottomNav、ActionSheet、MobileDrawer、MobileList
