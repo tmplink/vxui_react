@@ -296,7 +296,7 @@ export function MultiSelect({
             </ul>
           </div>
         );
-        return shouldPortal ? createPortal(dropdownNode, document.body) : dropdownNode;
+        return shouldPortal ? createPortal(dropdownNode, dialogContentRef.current ?? document.body) : dropdownNode;
       })()}
     </div>
   );
