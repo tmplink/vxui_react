@@ -124,7 +124,7 @@ describe('TimePicker', () => {
     expect(screen.queryByRole('spinbutton', { name: /hour/i })).not.toBeInTheDocument();
   });
 
-  it('portals the panel above Dialog even in a narrow viewport', async () => {
+  it('renders inline (bottom sheet) instead of portal on narrow viewport', async () => {
     mockMaxWidth640(true);
 
     render(
@@ -136,10 +136,11 @@ describe('TimePicker', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Open dialog' }));
     await userEvent.click(screen.getByRole('button', { name: 'Select time' }));
 
+    // On narrow viewports, the popover is rendered inline (not portaled)
+    // so it does NOT get the --in-dialog class; CSS media queries handle
+    // the bottom sheet styling instead.
     const popover = document.body.querySelector('.vx-timepicker__popover');
-    expect(popover).toHaveClass('vx-timepicker__popover--in-dialog');
-    // The popover is portaled into the dialog content so it renders on top;
-    // verify it exists in the DOM (class check above already does).
+    expect(popover).not.toHaveClass('vx-timepicker__popover--in-dialog');
     expect(popover).toBeInTheDocument();
   });
 

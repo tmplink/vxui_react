@@ -207,7 +207,7 @@ describe('MultiSelect', () => {
     expect(dropdown).toHaveClass('vx-multiselect__dropdown--in-dialog');
   });
 
-  it('portals the dropdown above Dialog even in a narrow viewport', async () => {
+  it('renders inline (bottom sheet) instead of portal on narrow viewport', async () => {
     mockMaxWidth640(true);
 
     render(
@@ -219,10 +219,11 @@ describe('MultiSelect', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Open' }));
     await userEvent.click(screen.getByRole('button', { name: 'Pick frameworks' }));
 
+    // On narrow viewports, the dropdown is rendered inline (not portaled)
+    // so it does NOT get the --in-dialog class; CSS media queries handle
+    // the bottom sheet styling instead.
     const dropdown = document.body.querySelector('.vx-multiselect__dropdown');
-    expect(dropdown).toHaveClass('vx-multiselect__dropdown--in-dialog');
-    // The dropdown is portaled into the dialog content so it renders on top;
-    // verify it exists in the DOM (class check above already does).
+    expect(dropdown).not.toHaveClass('vx-multiselect__dropdown--in-dialog');
     expect(dropdown).toBeInTheDocument();
   });
 
