@@ -1,4 +1,4 @@
-# VXUI React · v1.3.3
+# VXUI React · v1.3.5
 
 **Website**: [ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**: [tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [中文](README.md)
 
@@ -6,10 +6,8 @@ VXUI React is a general-purpose React UI component library designed for admin pa
 
 ## 🚀 Changelog
 
-> **v1.3.3** — 2025-05
-> - Added [`llms.txt`](llms.txt) — AI knowledge base file for AI tools to read component documentation directly
-> - Bundle size optimization, removed redundant dependencies
-> - Fixed style compatibility issues across multiple components
+> **v1.3.5** — 2025-05
+> - Version bump
 
 See full changelog at [GitHub Releases](https://github.com/tmplink/vxui_react/releases).
 
