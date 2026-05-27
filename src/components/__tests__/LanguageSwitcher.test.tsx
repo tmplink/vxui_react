@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { I18nProvider } from '../../i18n';
@@ -55,14 +55,17 @@ describe('LanguageSwitcher', () => {
   });
 
   it('switches locale on option click', async () => {
+    const user = userEvent.setup();
     render(<WrappedSwitcher />);
-    await userEvent.click(screen.getByRole('button', { name: /switch language/i }));
+    await user.click(screen.getByRole('button', { name: /switch language/i }));
     const options = screen.getAllByRole('option');
     // Click the button inside the first option
     const btn = options[0].querySelector('button')!;
-    await userEvent.click(btn);
-    // Dropdown should close
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    await user.click(btn);
+    // Dropdown should close — use waitFor to allow React re-renders to settle
+    await waitFor(() => {
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    });
   });
 
   it('applies sidebar variant class', () => {

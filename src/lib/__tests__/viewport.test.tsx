@@ -7,7 +7,26 @@ function ViewportConsumer({ onValue }: { onValue: (v: ReturnType<typeof useViewp
 }
 
 describe('ViewportProvider & useViewport', () => {
-  it('provides desktop by default (jsdom window.innerWidth = 1024)', () => {
+  const originalScreen = window.screen;
+
+  beforeEach(() => {
+    // Mock window.screen with default desktop dimensions
+    Object.defineProperty(window, 'screen', {
+      writable: true,
+      configurable: true,
+      value: { width: 1920, height: 1080 },
+    });
+  });
+
+  afterEach(() => {
+    Object.defineProperty(window, 'screen', {
+      writable: true,
+      configurable: true,
+      value: originalScreen,
+    });
+  });
+
+  it('provides desktop by default (physical screen 1920x1080)', () => {
     let value: ReturnType<typeof useViewport> | undefined;
     render(
       <ViewportProvider>
@@ -20,9 +39,13 @@ describe('ViewportProvider & useViewport', () => {
     expect(value!.isTablet).toBe(false);
   });
 
-  it('detects phone when innerWidth ≤ 767', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 375 });
-    Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 667 });
+  it('detects phone when physical screen is narrow (aspect ratio < 0.7)', () => {
+    // iPhone-like dimensions: 390x844 → aspect ratio ~0.46
+    Object.defineProperty(window, 'screen', {
+      writable: true,
+      configurable: true,
+      value: { width: 390, height: 844 },
+    });
 
     let value: ReturnType<typeof useViewport> | undefined;
     render(
@@ -32,14 +55,15 @@ describe('ViewportProvider & useViewport', () => {
     );
     expect(value!.isPhone).toBe(true);
     expect(value!.viewport).toBe('phone');
-
-    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1024 });
-    Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 768 });
   });
 
-  it('detects tablet when innerWidth is 768-1023', () => {
-    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 900 });
-    Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 600 });
+  it('detects tablet when physical screen is wider (aspect ratio >= 0.7)', () => {
+    // iPad-like dimensions: 768x1024 → aspect ratio ~0.75
+    Object.defineProperty(window, 'screen', {
+      writable: true,
+      configurable: true,
+      value: { width: 768, height: 1024 },
+    });
 
     let value: ReturnType<typeof useViewport> | undefined;
     render(
@@ -48,12 +72,59 @@ describe('ViewportProvider & useViewport', () => {
       </ViewportProvider>,
     );
     expect(value!.isTablet).toBe(true);
-
-    Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1024 });
-    Object.defineProperty(window, 'innerHeight', { writable: true, configurable: true, value: 768 });
+    expect(value!.viewport).toBe('tablet');
   });
 
-  it('updates viewport on window resize', () => {
+  it('provides screenWidth, screenHeight, and aspectRatio', () => {
+    Object.defineProperty(window, 'screen', {
+      writable: true,
+      configurable: true,
+      value: { width: 390, height: 844 },
+    });
+
+    let value: ReturnType<typeof useViewport> | undefined;
+    render(
+      <ViewportProvider>
+        <ViewportConsumer onValue={(v) => { value = v; }} />
+      </ViewportProvider>,
+    );
+    expect(value!.screenWidth).toBe(390);
+    expect(value!.screenHeight).toBe(844);
+    expect(value!.aspectRatio).toBeCloseTo(390 / 844, 4);
+  });
+
+  it('does NOT detect phone when desktop browser is resized (physical screen is large)', () => {
+    // Physical screen is desktop-sized, even if innerWidth is small
+    Object.defineProperty(window, 'screen', {
+      writable: true,
+      configurable: true,
+      value: { width: 2560, height: 1440 },
+    });
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 375,
+    });
+
+    let value: ReturnType<typeof useViewport> | undefined;
+    render(
+      <ViewportProvider>
+        <ViewportConsumer onValue={(v) => { value = v; }} />
+      </ViewportProvider>,
+    );
+    // Should still be desktop because physical screen is large
+    expect(value!.isDesktop).toBe(true);
+    expect(value!.isPhone).toBe(false);
+  });
+
+  it('updates viewport when screen dimensions change', () => {
+    // Start with desktop
+    Object.defineProperty(window, 'screen', {
+      writable: true,
+      configurable: true,
+      value: { width: 1920, height: 1080 },
+    });
+
     let value: ReturnType<typeof useViewport> | undefined;
     render(
       <ViewportProvider>
@@ -62,27 +133,22 @@ describe('ViewportProvider & useViewport', () => {
     );
     expect(value!.isDesktop).toBe(true);
 
+    // Simulate screen dimension change (e.g., device connection)
     act(() => {
-      Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 400 });
+      Object.defineProperty(window, 'screen', {
+        writable: true,
+        configurable: true,
+        value: { width: 390, height: 844 },
+      });
       window.dispatchEvent(new Event('resize'));
     });
     expect(value!.isPhone).toBe(true);
-
-    // Restore
-    act(() => {
-      Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1024 });
-      window.dispatchEvent(new Event('resize'));
-    });
   });
 
   it('throws when useViewport used outside ViewportProvider', () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    // useViewport uses a context with default values so it won't throw,
-    // just return defaults
     let value: ReturnType<typeof useViewport> | undefined;
     render(<ViewportConsumer onValue={(v) => { value = v; }} />);
     // context default is desktop
     expect(value!.viewport).toBe('desktop');
-    consoleSpy.mockRestore();
   });
 });

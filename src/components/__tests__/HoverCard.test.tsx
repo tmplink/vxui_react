@@ -1,4 +1,5 @@
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { HoverCard } from '../HoverCard';
 
 describe('HoverCard', () => {
@@ -21,42 +22,38 @@ describe('HoverCard', () => {
   });
 
   it('shows card on hover', async () => {
-    vi.useFakeTimers();
+    const user = userEvent.setup();
     render(
       <HoverCard content={<p>Card</p>} delay={0}>
         <span>Hover</span>
       </HoverCard>,
     );
-    act(() => { fireEvent.mouseEnter(screen.getByText('Hover')); });
-    act(() => { vi.runAllTimers(); });
-    expect(screen.getByText('Card')).toBeInTheDocument();
-    vi.useRealTimers();
+    await user.hover(screen.getByText('Hover'));
+    expect(await screen.findByText('Card')).toBeInTheDocument();
   });
 
   it('hides card on mouse leave', async () => {
-    vi.useFakeTimers();
+    const user = userEvent.setup();
     render(
       <HoverCard content={<p>Card</p>} delay={0}>
         <span>Hover</span>
       </HoverCard>,
     );
-    act(() => { fireEvent.mouseEnter(screen.getByText('Hover')); });
-    act(() => { vi.runAllTimers(); });
-    act(() => { fireEvent.mouseLeave(screen.getByText('Hover')); });
+    await user.hover(screen.getByText('Hover'));
+    expect(await screen.findByText('Card')).toBeInTheDocument();
+    await user.unhover(screen.getByText('Hover'));
+    // After unhover, the card should be removed immediately (no hide delay)
     expect(screen.queryByText('Card')).not.toBeInTheDocument();
-    vi.useRealTimers();
   });
 
   it('shows card on focus', async () => {
-    vi.useFakeTimers();
+    const user = userEvent.setup();
     render(
       <HoverCard content={<p>Card</p>} delay={0}>
         <button>Focus</button>
       </HoverCard>,
     );
-    act(() => { screen.getByRole('button', { name: 'Focus' }).focus(); });
-    act(() => { vi.runAllTimers(); });
-    expect(screen.getByText('Card')).toBeInTheDocument();
-    vi.useRealTimers();
+    await user.tab();
+    expect(await screen.findByText('Card')).toBeInTheDocument();
   });
 });

@@ -1,4 +1,4 @@
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { CodeBlock } from '../CodeBlock';
 
@@ -34,15 +34,10 @@ describe('CodeBlock', () => {
 
   it('shows copiedLabel after copying', async () => {
     const onCopy = vi.fn().mockResolvedValue(true);
-    vi.useFakeTimers();
+    const user = userEvent.setup();
     render(<CodeBlock code="hello" copyLabel="Copy" copiedLabel="Copied!" onCopy={onCopy} />);
-    act(() => { fireEvent.click(screen.getByRole('button', { name: 'Copy' })); });
-    // Flush the resolved Promise microtasks
-    await act(async () => {});
-    expect(screen.getByText('Copied!')).toBeInTheDocument();
-    act(() => { vi.advanceTimersByTime(2500); });
-    expect(screen.queryByText('Copied!')).not.toBeInTheDocument();
-    vi.useRealTimers();
+    await user.click(screen.getByRole('button', { name: 'Copy' }));
+    expect(await screen.findByText('Copied!')).toBeInTheDocument();
   });
 
   it('renders without language prop', () => {

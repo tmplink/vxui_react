@@ -1,4 +1,5 @@
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Tooltip } from '../Tooltip';
 
 describe('Tooltip', () => {
@@ -21,43 +22,38 @@ describe('Tooltip', () => {
   });
 
   it('shows tooltip on hover', async () => {
-    vi.useFakeTimers();
+    const user = userEvent.setup();
     render(
       <Tooltip content="Help text" delay={0}>
         <button>Hover me</button>
       </Tooltip>,
     );
-    act(() => { fireEvent.mouseEnter(screen.getByRole('button', { name: 'Hover me' })); });
-    act(() => { vi.runAllTimers(); });
-    expect(screen.getByRole('tooltip')).toBeInTheDocument();
-    vi.useRealTimers();
+    await user.hover(screen.getByRole('button', { name: 'Hover me' }));
+    expect(await screen.findByRole('tooltip')).toBeInTheDocument();
   });
 
   it('hides tooltip on mouse leave', async () => {
-    vi.useFakeTimers();
+    const user = userEvent.setup();
     render(
       <Tooltip content="Help text" delay={0}>
         <button>Hover me</button>
       </Tooltip>,
     );
-    act(() => { fireEvent.mouseEnter(screen.getByRole('button', { name: 'Hover me' })); });
-    act(() => { vi.runAllTimers(); });
-    act(() => { fireEvent.mouseLeave(screen.getByRole('button', { name: 'Hover me' })); });
+    await user.hover(screen.getByRole('button', { name: 'Hover me' }));
+    expect(await screen.findByRole('tooltip')).toBeInTheDocument();
+    await user.unhover(screen.getByRole('button', { name: 'Hover me' }));
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
-    vi.useRealTimers();
   });
 
   it('shows tooltip on focus', async () => {
-    vi.useFakeTimers();
+    const user = userEvent.setup();
     render(
       <Tooltip content="Focus tip" delay={0}>
         <button>Focus me</button>
       </Tooltip>,
     );
-    act(() => { screen.getByRole('button', { name: 'Focus me' }).focus(); });
-    act(() => { vi.runAllTimers(); });
-    expect(screen.getByRole('tooltip')).toBeInTheDocument();
-    vi.useRealTimers();
+    await user.tab();
+    expect(await screen.findByRole('tooltip')).toBeInTheDocument();
   });
 
   it('forwards className', () => {

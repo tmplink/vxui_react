@@ -17,7 +17,9 @@ describe('Calendar', () => {
   it('shows current month', () => {
     const date = new Date(2024, 0, 15); // Jan 15 2024
     render(<Calendar value={date} onChange={vi.fn()} />);
-    expect(screen.getByText(/January/i)).toBeInTheDocument();
+    // The grid's aria-label contains the month and year; check for the year
+    // because the month name is locale-dependent (January vs 一月 etc.)
+    expect(screen.getByRole('grid', { name: /2024/ })).toBeInTheDocument();
   });
 
   it('calls onChange when a day is selected', async () => {

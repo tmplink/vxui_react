@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/vitest';
+import '@testing-library/jest-dom';
 
 // ResizeObserver mock
 globalThis.ResizeObserver = class ResizeObserver {
@@ -8,12 +8,25 @@ globalThis.ResizeObserver = class ResizeObserver {
 };
 
 // hasPointerCapture mock for Radix UI components
-Element.prototype.hasPointerCapture ??= () => false;
-Element.prototype.setPointerCapture ??= () => undefined;
-Element.prototype.releasePointerCapture ??= () => undefined;
+if (typeof Element.prototype.hasPointerCapture !== 'function') {
+  Object.defineProperty(Element.prototype, 'hasPointerCapture', { value: () => false, writable: true, configurable: true });
+}
+if (typeof Element.prototype.setPointerCapture !== 'function') {
+  Object.defineProperty(Element.prototype, 'setPointerCapture', { value: () => undefined, writable: true, configurable: true });
+}
+if (typeof Element.prototype.releasePointerCapture !== 'function') {
+  Object.defineProperty(Element.prototype, 'releasePointerCapture', { value: () => undefined, writable: true, configurable: true });
+}
 
-// scrollIntoView mock for jsdom
-Element.prototype.scrollIntoView ??= () => undefined;
+// scrollIntoView mock for jsdom — use defineProperty to avoid issues
+// with non-writable properties in newer jsdom versions.
+if (typeof Element.prototype.scrollIntoView !== 'function') {
+  Object.defineProperty(Element.prototype, 'scrollIntoView', {
+    value: () => undefined,
+    writable: true,
+    configurable: true,
+  });
+}
 
 // crypto.randomUUID mock
 if (!crypto.randomUUID) {

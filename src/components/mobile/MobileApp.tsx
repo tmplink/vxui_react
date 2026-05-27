@@ -630,17 +630,30 @@ export function MobileApp() {
             </div>
           </div>
         );
-      case 'feedback':
+      case 'feedback': {
+        const isZh = locale === 'zh';
         return (
           <div className="vx-stack">
-            <div className="vx-inline" style={{ alignItems: 'center' }}>
-              <Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" />
-            </div>
-            <Progress label="Uploading" showLabel value={68} />
-            <Progress label="Processing" indeterminate />
-            <Alert variant="info" title="New version available">vxUI 1.1 ships now.</Alert>
-            <Alert variant="success" title="Build complete" onClose={() => {}} />
+            <Alert variant="info" title={isZh ? '迁移进度' : 'Migration progress'}>
+              {isZh ? '响应式壳层、模板页面和文档内容库已经收敛到同一套运行时。' : 'The responsive shell, template pages, and docs library now share the same runtime.'}
+            </Alert>
+            <Progress label={isZh ? '默认' : 'Default'} showLabel value={sliderVal} />
+            <Progress label={isZh ? '成功' : 'Success'} showLabel value={sliderVal} variant="success" />
+            <Progress label={isZh ? '警告' : 'Warning'} showLabel value={sliderVal} variant="warning" />
+            <Progress label={isZh ? '危险' : 'Danger'} showLabel value={sliderVal} variant="danger" />
             <div className="vx-stack vx-stack--tight">
+              <div className="vx-inline" style={{ alignItems: 'center' }}>
+                <Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" />
+              </div>
+              <Stepper currentStep={stepperStep} steps={[
+                { label: isZh ? '步骤 1' : 'Step 1' },
+                { label: isZh ? '步骤 2' : 'Step 2' },
+                { label: isZh ? '步骤 3' : 'Step 3' }
+              ]} />
+              <div className="vx-inline" style={{ gap: 8 }}>
+                <Button size="sm" variant="secondary" onClick={() => setStepperStep(Math.max(0, stepperStep - 1))}>{isZh ? '上一步' : 'Back'}</Button>
+                <Button size="sm" onClick={() => setStepperStep(Math.min(2, stepperStep + 1))}>{isZh ? '下一步' : 'Next'}</Button>
+              </div>
               <Skeleton variant="text" lines={2} />
               <div className="vx-inline">
                 <Skeleton variant="circle" width={40} height={40} />
@@ -652,87 +665,187 @@ export function MobileApp() {
             </div>
           </div>
         );
-      case 'overlays':
+      }
+      case 'overlays': {
+        const isZh = locale === 'zh';
         return (
           <div className="vx-stack">
-            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
-              <Tooltip content="Primary action" placement="top">
-                <Button size="sm">Hover (top)</Button>
-              </Tooltip>
-              <Tooltip content="Right" placement="right">
-                <Button size="sm" variant="secondary">Right</Button>
-              </Tooltip>
-            </div>
-            <Separator />
-            <Popover content={<div className="vx-stack vx-stack--tight"><p style={{ fontSize: '0.875rem', margin: 0 }}>Popover content</p><Button size="sm">Confirm</Button></div>}>
-              <Button variant="secondary" size="sm">Open popover</Button>
-            </Popover>
-            <Separator />
-            <DropdownMenu
-              trigger={<Button variant="secondary" size="sm">Actions ▾</Button>}
-              groups={[
-                { items: [{ label: 'Edit', shortcut: '⌘E', onClick: () => {} }, { label: 'Duplicate', onClick: () => {} }] },
-                { items: [{ label: 'Archive', onClick: () => {} }, { label: 'Delete', danger: true, onClick: () => {} }] },
-              ]}
-            />
-            <Separator />
+            {/* Basic Dialog */}
             <Dialog
-              trigger={<Button variant="secondary" size="sm">Open Dialog</Button>}
-              title="Delete project"
-              description="This action removes access for the whole team."
-              footer={<><Button variant="ghost">Cancel</Button><Button variant="danger">Delete</Button></>}
+              trigger={<Button variant="secondary" size="sm">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
+              title={isZh ? '删除项目' : 'Delete project'}
+              description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
+              footer={
+                <>
+                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
+                  <Button variant="danger">{isZh ? '删除' : 'Delete'}</Button>
+                </>
+              }
             >
-              <p style={{ fontSize: '0.875rem', color: 'var(--vx-text-secondary)', margin: 0 }}>This project will be permanently removed.</p>
-            </Dialog>
-            <Dialog
-              fullscreen
-              trigger={<Button variant="secondary" size="sm">Fullscreen Dialog</Button>}
-              title="Fullscreen Mode"
-              description="Ideal for mobile devices"
-              footer={<Button variant="ghost">Close</Button>}
-            >
-              <div style={{ fontSize: '0.875rem', color: 'var(--vx-text-secondary)', lineHeight: 1.6 }}>
-                <p style={{ margin: 0 }}>This dialog opens in fullscreen mode, occupying the entire viewport.</p>
-                <p style={{ marginTop: 12 }}>Perfect for mobile devices where screen space is limited.</p>
-                <div style={{ marginTop: 16, padding: 12, background: 'var(--vx-bg-accent)', borderRadius: 'var(--vx-radius)', fontSize: '0.8rem' }}>
-                  <strong>Viewport:</strong> {window.innerWidth} × {window.innerHeight}
-                </div>
+              <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>
+                {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
               </div>
             </Dialog>
-            <AlertDialog
-              trigger={<Button variant="danger" size="sm">Delete account</Button>}
-              title="Delete your account?"
-              description="This action cannot be undone. All your data will be permanently removed."
-              confirmLabel="Yes, delete"
-              cancelLabel="Cancel"
-              variant="danger"
+
+            {/* Fullscreen mode */}
+            <Dialog
+              fullscreen
+              title={isZh ? '全屏表单' : 'Fullscreen Form'}
+              description={isZh ? '全屏模式下包含表单控件，用于验证滚动条和表单控件交互' : 'Fullscreen form with form controls to verify scrollbar and form control behavior'}
+              trigger={<Button variant="secondary" size="sm">{isZh ? '全屏表单' : 'Fullscreen Form'}</Button>}
+              footer={<Button variant="ghost">{isZh ? '关闭' : 'Close'}</Button>}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '4px 0' }}>
+                <Input
+                  label={isZh ? '项目名称' : 'Project name'}
+                  placeholder={isZh ? '输入项目名称…' : 'Enter project name…'}
+                />
+                <Select
+                  label={isZh ? '部署环境' : 'Environment'}
+                  placeholder={isZh ? '选择环境…' : 'Select environment…'}
+                  options={[
+                    { value: 'prod', label: isZh ? '生产' : 'Production' },
+                    { value: 'staging', label: isZh ? '预发布' : 'Staging' },
+                    { value: 'preview', label: isZh ? '预览' : 'Preview' },
+                    { value: 'dev', label: isZh ? '开发' : 'Development' },
+                  ]}
+                />
+                <MultiSelect
+                  label={isZh ? '部署模块' : 'Deployment scope'}
+                  placeholder={isZh ? '选择模块…' : 'Select scope…'}
+                  clearable
+                  options={[
+                    { value: 'web', label: isZh ? 'Web 前端' : 'Web frontend' },
+                    { value: 'api', label: isZh ? 'API 服务' : 'API service' },
+                    { value: 'worker', label: isZh ? '异步任务' : 'Background jobs' },
+                    { value: 'mobile', label: isZh ? '移动端' : 'Mobile app' },
+                  ]}
+                />
+                <DatePicker label={isZh ? '上线日期' : 'Launch date'} />
+                <TimePicker label={isZh ? '部署时间' : 'Deploy time'} />
+                <Textarea
+                  label={isZh ? '备注' : 'Notes'}
+                  placeholder={isZh ? '输入备注…' : 'Enter notes…'}
+                  rows={3}
+                />
+              </div>
+            </Dialog>
+
+            {/* Form in dialog */}
+            <Dialog
+              trigger={<Button variant="secondary" size="sm">{isZh ? '表单对话框' : 'Form in dialog'}</Button>}
+              title={isZh ? '新建部署' : 'New deployment'}
+              description={isZh ? '表单控件在对话框内可正常展开和交互。' : 'Form controls open correctly inside a dialog.'}
+              footer={
+                <>
+                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
+                  <Button>{isZh ? '创建' : 'Create'}</Button>
+                </>
+              }
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '4px 0' }}>
+                <Input label={isZh ? '项目名称' : 'Project name'} placeholder={isZh ? '输入名称…' : 'Enter name…'} />
+                <Select
+                  label={isZh ? '部署环境' : 'Environment'}
+                  placeholder={isZh ? '选择环境…' : 'Select environment…'}
+                  options={[
+                    { value: 'prod', label: isZh ? '生产' : 'Production' },
+                    { value: 'staging', label: isZh ? '预发布' : 'Staging' },
+                    { value: 'preview', label: isZh ? '预览' : 'Preview' },
+                    { value: 'dev', label: isZh ? '开发' : 'Development' },
+                  ]}
+                />
+                <MultiSelect
+                  label={isZh ? '部署模块' : 'Deployment scope'}
+                  placeholder={isZh ? '选择模块…' : 'Select scope…'}
+                  clearable
+                  options={[
+                    { value: 'web', label: isZh ? 'Web 前端' : 'Web frontend' },
+                    { value: 'api', label: isZh ? 'API 服务' : 'API service' },
+                    { value: 'worker', label: isZh ? '异步任务' : 'Background jobs' },
+                    { value: 'mobile', label: isZh ? '移动端' : 'Mobile app' },
+                  ]}
+                />
+                <DatePicker label={isZh ? '上线日期' : 'Launch date'} />
+                <TimePicker label={isZh ? '部署时间' : 'Deploy time'} />
+                <ColorPicker label={isZh ? '标签颜色' : 'Label color'} />
+              </div>
+            </Dialog>
+
+            <Separator />
+
+            {/* Tooltip */}
+            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
+              <Tooltip content={isZh ? '主要操作' : 'Primary action'} placement="top">
+                <Button size="sm">{isZh ? '悬停 (上)' : 'Hover (top)'}</Button>
+              </Tooltip>
+              <Tooltip content={isZh ? '右侧' : 'Right'} placement="right">
+                <Button size="sm" variant="secondary">{isZh ? '右侧' : 'Right'}</Button>
+              </Tooltip>
+            </div>
+
+            {/* Popover */}
+            <Separator />
+            <Popover content={<div className="vx-stack vx-stack--tight"><p style={{ fontSize: '0.875rem', margin: 0 }}>{isZh ? 'Popover 用于补充上下文，而不是承载另一套页面层级。' : 'Popover adds context instead of carrying a second page hierarchy.'}</p></div>}>
+              <Button variant="secondary" size="sm">{isZh ? '打开弹出' : 'Open popover'}</Button>
+            </Popover>
+
+            {/* DropdownMenu */}
+            <Separator />
+            <DropdownMenu
+              trigger={<Button variant="secondary" size="sm">{isZh ? '更多操作' : 'More actions'}</Button>}
+              items={[
+                { label: isZh ? '打开首页' : 'Open home', onClick: () => {} },
+                { label: isZh ? '打开文档' : 'Open docs', onClick: () => {} },
+                { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} },
+              ]}
             />
+
+            {/* AlertDialog */}
+            <Separator />
+            <AlertDialog
+              trigger={<Button variant="outline" size="sm">{isZh ? '警告框' : 'Alert Dialog'}</Button>}
+              title={isZh ? '确定吗？' : 'Are you sure?'}
+              description={isZh ? '此操作无法撤销。' : 'This action cannot be undone.'}
+            />
+
+            {/* Sheet */}
+            <Separator />
             <Sheet
-              trigger={<Button variant="secondary" size="sm">Open Sheet</Button>}
-              title="Notifications"
-              description="Manage your notification preferences."
+              trigger={<Button variant="secondary" size="sm">{isZh ? '打开抽屉' : 'Open Sheet'}</Button>}
+              title={isZh ? '通知设置' : 'Notifications'}
+              description={isZh ? '管理您的通知偏好。' : 'Manage your notification preferences.'}
               side="bottom"
             >
-              <p style={{ fontSize: '0.875rem', margin: 0, color: 'var(--vx-text-secondary)' }}>Sheet content goes here.</p>
+              <div className="vx-stack">
+                <Switch label={isZh ? '邮件通知' : 'Email notifications'} checked={alertsEnabled} onCheckedChange={setAlertsEnabled} />
+                <Switch label={isZh ? '推送通知' : 'Push notifications'} checked={checkboxA} onCheckedChange={setCheckboxA} />
+                <Switch label={isZh ? '短信通知' : 'SMS notifications'} checked={checkboxB} onCheckedChange={setCheckboxB} />
+              </div>
             </Sheet>
-            <HoverCard
-              content={<div style={{ fontSize: '0.875rem', padding: '4px 0' }}>Detailed info on hover / focus</div>}
-            >
-              <Button variant="ghost" size="sm">HoverCard ↗</Button>
+
+            {/* HoverCard */}
+            <Separator />
+            <HoverCard content={<div style={{ fontSize: '0.875rem', padding: '4px 0' }}>{isZh ? '悬停卡片内容。' : 'Hover card content.'}</div>}>
+              <Button variant="ghost" size="sm">{isZh ? '悬停我' : 'Hover me'}</Button>
             </HoverCard>
+
+            {/* ContextMenu */}
+            <Separator />
             <ContextMenu
               items={[
-                { label: 'Copy', onClick: () => {} },
-                { label: 'Paste', onClick: () => {} },
-                { label: 'Delete', danger: true, onClick: () => {} },
+                { label: isZh ? '复制' : 'Copy', onClick: () => {} },
+                { label: isZh ? '粘贴' : 'Paste', onClick: () => {} },
+                { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} },
               ]}
             >
               <div style={{ padding: '12px', border: '1px dashed var(--vx-border)', borderRadius: 'var(--vx-radius)', fontSize: '0.875rem', color: 'var(--vx-text-secondary)', textAlign: 'center' }}>
-                Right-click / long-press
+                {isZh ? '右键点击 / 长按' : 'Right-click / long-press'}
               </div>
             </ContextMenu>
           </div>
         );
+      }
       case 'nav-layout':
         return (
           <div className="vx-stack">
@@ -775,7 +888,8 @@ export function MobileApp() {
             />
           </div>
         );
-      case 'data-display':
+      case 'data-display': {
+        const isZh = locale === 'zh';
         return (
           <div className="vx-stack">
             <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center', gap: '0.5rem' }}>
@@ -852,8 +966,16 @@ export function MobileApp() {
               onSelect={id => setTreeSelected(id)}
               defaultExpanded={['lib', 'components']}
             />
+            <Separator />
+            <EmptyState
+              icon={<AlertTriangle size={22} />}
+              title={isZh ? '暂无数据' : 'No data found'}
+              description={isZh ? '请尝试调整筛选条件' : 'Try adjusting your filters'}
+              action={<Button variant="secondary" size="sm">{isZh ? '清空筛选' : 'Clear filters'}</Button>}
+            />
           </div>
         );
+      }
       case 'toasts':
         return (
           <div className="vx-stack">
@@ -1034,31 +1156,55 @@ export function MobileApp() {
             </Button>
           </div>
         );
-      case 'command-palette':
+      case 'command-palette': {
+        const isZh = locale === 'zh';
         return (
           <div className="vx-stack">
-            <Alert variant="info" title="Keyboard first">
-              Press ⌘K (Mac) or Ctrl+K (Windows) to open the command palette from anywhere without reaching for the mouse.
+            <div className="vx-inline vx-inline--wrap">
+              <Button onClick={() => push({ tone: 'info', title: isZh ? '搜索' : 'Search', description: isZh ? '命令面板功能在此演示。' : 'Command palette demo.' })}>
+                {isZh ? '打开搜索' : 'Open search'}
+              </Button>
+            </div>
+            <Alert variant="info" title={isZh ? '键盘优先' : 'Keyboard first'}>
+              {isZh
+                ? '按下 ⌘K（Mac）或 Ctrl+K（Windows）即可随时唤起命令面板，无需鼠标。'
+                : 'Press ⌘K (Mac) or Ctrl+K (Windows) to open the palette from anywhere without reaching for the mouse.'}
             </Alert>
           </div>
         );
-      case 'code-block':
+      }
+      case 'code-block': {
+        const isZh = locale === 'zh';
         return (
-          <pre className="vx-docs-code" style={{ fontSize: 11, overflowX: 'auto' }}>
-            {`import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>Click me</Button>;\n}`}
-          </pre>
+          <div className="vx-stack">
+            <pre className="vx-docs-code" style={{ fontSize: 11, overflowX: 'auto' }}>
+              {isZh
+                ? `import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>点击我</Button>;\n}`
+                : `import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>Click me</Button>;\n}`}
+            </pre>
+            <Alert variant="info" title={isZh ? '代码块' : 'Code block'}>
+              {isZh
+                ? 'CodeBlock 组件支持语法高亮和代码复制功能。'
+                : 'The CodeBlock component supports syntax highlighting and code copying.'}
+            </Alert>
+          </div>
         );
-      case 'language-switcher':
+      }
+      case 'language-switcher': {
+        const isZh = locale === 'zh';
         return (
           <div className="vx-stack">
             <div className="vx-inline">
               <LanguageSwitcher variant="inline" />
             </div>
-            <Alert variant="info" title="Global language switch">
-              Switching locale updates all UI copy across the entire docs surface without a page reload.
+            <Alert variant="info" title={isZh ? '全局语言切换' : 'Global language switch'}>
+              {isZh
+                ? '切换语言后，文档内所有 UI 文案（包括顶栏和导航）同步更新，无需刷新页面。'
+                : 'Switching locale updates all UI copy — including the topbar and nav — across the entire docs surface without a page reload.'}
             </Alert>
           </div>
         );
+      }
       default:
         return null;
     }

@@ -17,19 +17,56 @@ export interface ViewportContextValue {
   /** True when the device is in the tablet width range AND screen orientation is portrait */
   isTabletPortrait: boolean;
   isDesktop: boolean;
+  /** The actual screen width in CSS pixels */
+  screenWidth: number;
+  /** The actual screen height in CSS pixels */
+  screenHeight: number;
+  /** Aspect ratio: width / height (0-1 for portrait, >1 for landscape) */
+  aspectRatio: number;
 }
 
 // ─── Breakpoints ────────────────────────────────────────────────────────────
 
-const PHONE_MAX = 767;   // ≤ 767px  → phone
-const TABLET_MAX = 1023; // 768–1023px → tablet
+// Physical screen width threshold (CSS pixels)
+// Devices with physical width > 1000px are considered desktops
+const PHONE_MAX_WIDTH = 1000;
 
+/**
+ * Detects device type based on screen physical dimensions and aspect ratio.
+ *
+ * Detection logic:
+ * 1. Use PHYSICAL screen size (window.screen) to determine device category
+ *    - This prevents false positives when desktop browsers are resized
+ * 2. Physical width ≤ 1000px → phone or tablet (depends on orientation)
+ * 3. Physical width > 1000px → desktop (even if viewport is small)
+ *
+ * Note: window.screen.width/height returns physical screen dimensions in CSS pixels.
+ * These values do NOT change when the device rotates or the browser window resizes.
+ */
 function resolveViewport(): ViewportType {
   if (typeof window === 'undefined') return 'desktop';
-  const w = window.innerWidth;
-  if (w <= PHONE_MAX) return 'phone';
-  if (w <= TABLET_MAX) return 'tablet';
-  return 'desktop';
+  
+  // Use PHYSICAL screen dimensions for device detection
+  const physicalWidth = window.screen.width;
+  const physicalHeight = window.screen.height;
+  
+  // If physical width > 1000px, it's definitely not a phone
+  // (desktop browsers might be resized, but physical screen stays large)
+  if (physicalWidth > PHONE_MAX_WIDTH) {
+    return 'desktop';
+  }
+  
+  // Physical width ≤ 1000px: could be phone or tablet
+  // Use aspect ratio to differentiate:
+  // - Phones are typically narrow (aspect ratio < 0.7)
+  // - Tablets are wider (aspect ratio >= 0.7)
+  const aspectRatio = physicalWidth / physicalHeight;
+  
+  if (aspectRatio < 0.7) {
+    return 'phone';
+  }
+  
+  return 'tablet';
 }
 
 // ─── Context ─────────────────────────────────────────────────────────────────
@@ -40,6 +77,9 @@ const ViewportContext = createContext<ViewportContextValue>({
   isTablet: false,
   isTabletPortrait: false,
   isDesktop: true,
+  screenWidth: 0,
+  screenHeight: 0,
+  aspectRatio: 0,
 });
 
 // ─── Provider ────────────────────────────────────────────────────────────────
@@ -68,10 +108,33 @@ export function ViewportProvider({ children }: ViewportProviderProps) {
     };
 
     window.addEventListener('resize', onResize, { passive: true });
+
+    // Listen for orientation changes using matchMedia (more reliable than orientationchange event)
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      const portraitQuery = window.matchMedia('(orientation: portrait)');
+      const handleOrientationChange = () => {
+        const nextPortrait = portraitQuery.matches;
+        setPortrait((prev) => (prev === nextPortrait ? prev : nextPortrait));
+        // Re-evaluate viewport type after orientation change
+        const next = resolveViewport();
+        setViewport((prev) => (prev === next ? prev : next));
+      };
+
+      portraitQuery.addEventListener('change', handleOrientationChange);
+      return () => {
+        window.removeEventListener('resize', onResize);
+        portraitQuery.removeEventListener('change', handleOrientationChange);
+      };
+    }
+
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
   const isTablet = viewport === 'tablet';
+
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+  const aspectRatio = screenWidth / screenHeight;
 
   const value: ViewportContextValue = {
     viewport,
@@ -79,6 +142,9 @@ export function ViewportProvider({ children }: ViewportProviderProps) {
     isTablet,
     isTabletPortrait: isTablet && portrait,
     isDesktop: viewport === 'desktop',
+    screenWidth,
+    screenHeight,
+    aspectRatio,
   };
 
   return (
