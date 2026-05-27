@@ -1,9 +1,23 @@
 import { useViewport } from '../lib/viewport';
 
 /**
- * Returns true when the current viewport is 'phone' (≤767px).
- * Thin alias over useViewport() kept for backward-compat.
+ * Returns true when the device is detected as a phone based on:
+ * 1. Physical screen width ≤ 1000px (CSS pixels)
+ * 2. Portrait orientation (height > width)
+ *
+ * This avoids false positives from desktop browsers resized to small widths.
  */
 export function useIsMobile(): boolean {
-  return useViewport().isPhone;
+  const { isPhone, screenWidth, aspectRatio } = useViewport();
+  
+  // Primary detection: useViewport() already determined it's a phone
+  if (isPhone) return true;
+  
+  // Additional check: portrait device with phone-like aspect ratio (< 0.75)
+  // and narrow width (< 1000px) is likely a phone even if viewport says otherwise
+  if (aspectRatio > 0 && aspectRatio < 0.75 && screenWidth <= 1000) {
+    return true;
+  }
+  
+  return false;
 }
