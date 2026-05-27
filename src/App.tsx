@@ -2454,15 +2454,80 @@ function DesktopApp() {
               </span>
               <Dialog
                 fullscreen
-                title={isZh ? '全屏对话框' : 'Fullscreen Dialog'}
-                description={isZh ? '适用于移动设备的全屏显示模式' : 'Fullscreen mode ideal for mobile devices'}
-                trigger={<Button variant="secondary">{isZh ? '全屏对话框' : 'Fullscreen'}</Button>}
+                title={isZh ? '全屏表单' : 'Fullscreen Form'}
+                description={isZh ? '全屏模式下包含下拉框和超长内容，用于验证滚动条和表单控件交互' : 'Fullscreen form with Select dropdowns and long content to verify scrollbar and form control behavior'}
+                trigger={<Button variant="secondary">{isZh ? '全屏表单' : 'Fullscreen Form'}</Button>}
                 footer={<DialogClose asChild><Button variant="ghost">{isZh ? '关闭' : 'Close'}</Button></DialogClose>}
               >
-                <div style={{ padding: '4px 0', lineHeight: 1.6, color: 'var(--vx-text-secondary)' }}>
-                  <p>{isZh ? '此对话框以全屏模式打开，占据整个视口。' : 'This dialog opens in fullscreen mode, occupying the entire viewport.'}</p>
-                  <p>{isZh ? '在移动设备上使用时，可以提供更好的用户体验。' : 'This provides an improved user experience when used on mobile devices.'}</p>
-                  <p style={{ marginTop: 12 }}>{isZh ? '当前视口大小：' : 'Current viewport size: '}{`${window.innerWidth} × ${window.innerHeight}`}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '4px 0' }}>
+                  <Input
+                    label={isZh ? '项目名称' : 'Project name'}
+                    placeholder={isZh ? '输入项目名称…' : 'Enter project name…'}
+                  />
+
+                  <Select
+                    label={isZh ? '部署环境' : 'Environment'}
+                    placeholder={isZh ? '选择环境…' : 'Select environment…'}
+                    searchPlaceholder={isZh ? '搜索…' : 'Search…'}
+                    options={[
+                      { value: 'prod', label: isZh ? '生产' : 'Production' },
+                      { value: 'staging', label: isZh ? '预发布' : 'Staging' },
+                      { value: 'preview', label: isZh ? '预览' : 'Preview' },
+                      { value: 'dev', label: isZh ? '开发' : 'Development' },
+                      { value: 'test', label: isZh ? '测试' : 'Testing' },
+                      { value: 'sandbox', label: isZh ? '沙箱' : 'Sandbox' },
+                    ]}
+                  />
+
+                  <MultiSelect
+                    label={isZh ? '部署模块' : 'Deployment scope'}
+                    placeholder={isZh ? '选择模块…' : 'Select scope…'}
+                    searchPlaceholder={isZh ? '搜索模块…' : 'Search scope…'}
+                    clearable
+                    options={[
+                      { value: 'web', label: isZh ? 'Web 前端' : 'Web frontend' },
+                      { value: 'api', label: isZh ? 'API 服务' : 'API service' },
+                      { value: 'worker', label: isZh ? '异步任务' : 'Background jobs' },
+                      { value: 'mobile', label: isZh ? '移动端' : 'Mobile app' },
+                      { value: 'database', label: isZh ? '数据库' : 'Database' },
+                      { value: 'cache', label: isZh ? '缓存' : 'Cache' },
+                    ]}
+                  />
+
+                  <DatePicker label={isZh ? '上线日期' : 'Launch date'} />
+                  <TimePicker label={isZh ? '部署时间' : 'Deploy time'} />
+
+                  {/* ── 超长内容：用于验证滚动条 ── */}
+                  <div style={{ borderTop: '1px solid var(--vx-border)', paddingTop: 16 }}>
+                    <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--vx-text-muted)', margin: '0 0 12px' }}>
+                      {isZh ? '超长内容 — 验证滚动条' : 'Long content — scrollbar verification'}
+                    </p>
+                    {Array.from({ length: 8 }).map((_, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          display: 'grid',
+                          gap: 8,
+                          padding: 12,
+                          border: '1px solid var(--vx-border)',
+                          borderRadius: 12,
+                          marginBottom: 12,
+                        }}
+                      >
+                        <strong>{isZh ? `章节 ${index + 1}` : `Section ${index + 1}`}</strong>
+                        <p style={{ margin: 0, color: 'var(--vx-text-secondary)', lineHeight: 1.6, fontSize: 14 }}>
+                          {isZh
+                            ? '这是一段超长内容，用于验证全屏对话框中的滚动条是否正常工作。当内容超出可视区域时，对话框应该显示滚动条，并且下拉框等浮层控件不应该被裁剪。'
+                            : 'This is long content used to verify that the scrollbar works correctly in fullscreen dialog mode. When content exceeds the visible area, the dialog should show a scrollbar, and overlay controls like dropdowns should not be clipped.'}
+                        </p>
+                        <Textarea
+                          label={isZh ? '备注' : 'Notes'}
+                          placeholder={isZh ? '输入备注…' : 'Enter notes…'}
+                          rows={2}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </Dialog>
             </div>
