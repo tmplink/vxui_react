@@ -71,7 +71,7 @@ export function BottomNav({ items, className }: BottomNavProps) {
             className={cx(
               'vxm-bottomnav__item',
               item.active && 'vxm-bottomnav__item--active',
-              item.submenu?.length && openKey === item.key && 'vxm-bottomnav__item--submenu-open',
+              Boolean(item.submenu?.length && openKey === item.key) && 'vxm-bottomnav__item--submenu-open',
             )}
             onClick={() => handleItemClick(item)}
             aria-current={item.active ? 'page' : undefined}

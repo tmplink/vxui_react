@@ -179,7 +179,7 @@ interface SearchBoxProps {
   onFocus?: () => void;
   placeholder?: string;
   ariaLabel?: string;
-  inputRef?: React.RefObject<HTMLInputElement>;
+  inputRef?: React.RefObject<HTMLInputElement | null>;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -755,7 +755,7 @@ export function MobileApp() {
                   { label: 'Button', onClick: () => selectPage('button') },
                   { label: 'Form Controls', onClick: () => selectPage('form-controls') },
                 ]},
-                { label: 'Mobile', onClick: () => selectPage('mobile'), active: activePage === 'mobile' },
+                { label: 'Mobile', onClick: () => selectPage('mobile'), active: (activePage as string) === 'mobile' },
               ]}
             />
             <Separator />
