@@ -107,7 +107,6 @@ import {
   TagInput,
   Text,
   Timeline,
-  Toast,
   Tooltip,
   TreeView,
   Toggle,
@@ -175,7 +174,7 @@ interface ViewerSession {
 
 const SESSION_STORAGE_KEY = 'vxui-react-auth-session';
 
-type NavGroupItem = PageKey | { type: 'submenu'; key: string; i18nKey: 'forms'; pages: PageKey[]; icon: JSX.Element };
+type NavGroupItem = PageKey | { type: 'submenu'; key: string; i18nKey: 'forms'; pages: PageKey[]; icon: React.ReactNode };
 
 const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> = [
   { key: 'gettingStarted', items: ['introduction'] },
@@ -2125,7 +2124,7 @@ function DesktopApp() {
               <Heading level={1}>{isZh ? 'H1 标题' : 'Heading 1'}</Heading>
               <Heading level={2}>{isZh ? 'H2 标题' : 'Heading 2'}</Heading>
               <Heading level={3}>{isZh ? 'H3 标题' : 'Heading 3'}</Heading>
-              <Text variant="lead">{isZh ? '大段文本 - 用于特别强调。' : 'Lead text - used for special emphasis.'}</Text>
+              <Text variant="secondary">{isZh ? '大段文本 - 用于特别强调。' : 'Lead text - used for special emphasis.'}</Text>
               <Text variant="muted">{isZh ? '次要文本 - 提供补充信息。' : 'Muted text - provides supplemental information.'}</Text>
               <Text weight="medium">{isZh ? 'Medium 加粗文本。' : 'Medium weight text.'}</Text>
             </div>
@@ -2296,13 +2295,13 @@ function DesktopApp() {
               <Switch defaultChecked label={isZh ? '开启实验性功能' : 'Enable experimental features'} />
               <NumberInput min={0} max={100} defaultValue={10} label={isZh ? '阈值' : 'Threshold'} />
               <TagInput placeholder={isZh ? '添加标签...' : 'Add tag...'} defaultValue={['React', 'Vite']} />
-              <FileUpload maxFiles={3} label={isZh ? '上传附件' : 'Upload attachments'} />
+              <FileUpload multiple label={isZh ? '上传附件' : 'Upload attachments'} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label className="vx-label">{isZh ? '评分' : 'Rating'}</label>
                 <Rating defaultValue={4} />
               </div>
               <div style={{ marginTop: 8 }}>
-                <Calendar mode="single" />
+                <Calendar />
               </div>
             </div>
           </div>
@@ -2422,9 +2421,9 @@ function DesktopApp() {
                 <Spinner size="lg" />
               </div>
               <Stepper currentStep={2} steps={[
-                { title: 'Step 1' },
-                { title: 'Step 2' },
-                { title: 'Step 3' }
+                { label: 'Step 1' },
+                { label: 'Step 2' },
+                { label: 'Step 3' }
               ]} />
             </div>
           </div>
@@ -2676,17 +2675,19 @@ function DesktopApp() {
               description={isZh ? '此操作无法撤销。' : 'This action cannot be undone.'}
             />
             
-            <ContextMenu trigger={<div style={{ padding: '0.5rem 1rem', border: '1px dashed var(--vx-border)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '右键点击' : 'Right click'}</div>}>
-              <DropdownMenu.Item>{isZh ? '复制' : 'Copy'}</DropdownMenu.Item>
-              <DropdownMenu.Item>{isZh ? '粘贴' : 'Paste'}</DropdownMenu.Item>
+            <ContextMenu items={[
+              { label: isZh ? '复制' : 'Copy' },
+              { label: isZh ? '粘贴' : 'Paste' },
+            ]}>
+              <div style={{ padding: '0.5rem 1rem', border: '1px dashed var(--vx-border)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '右键点击' : 'Right click'}</div>
             </ContextMenu>
             
-            <HoverCard trigger={<Button variant="ghost">{isZh ? '悬停我' : 'Hover me'}</Button>}>
-              <div style={{ padding: 12 }}>{isZh ? '悬停卡片内容。' : 'Hover card content.'}</div>
+            <HoverCard content={<div style={{ padding: 12 }}>{isZh ? '悬停卡片内容。' : 'Hover card content.'}</div>}>
+              <Button variant="ghost">{isZh ? '悬停我' : 'Hover me'}</Button>
             </HoverCard>
             
             
-              <Tooltip text={isZh ? '这是一个工具提示' : 'This is a tooltip'}>
+              <Tooltip content={isZh ? '这是一个工具提示' : 'This is a tooltip'}>
                 <Button variant="ghost">{isZh ? '工具提示' : 'Tooltip'}</Button>
               </Tooltip>
             
@@ -2697,14 +2698,13 @@ function DesktopApp() {
 
           <div className="vx-doc-preview-stack">
             <Breadcrumb items={[{ label: 'Home' }, { label: 'Components' }, { label: 'Navigation' }]} />
-            <Menubar items={[
-              { label: 'File', minWidth: 150, children: [
+            <Menubar menus={[
+              { label: 'File', items: [
                 { label: 'New', shortcut: '⌘N' },
                 { label: 'Open...', shortcut: '⌘O' },
-                { type: 'separator' },
-                { label: 'Exit', danger: True }
+                { label: 'Exit', danger: true }
               ]},
-              { label: 'Edit', children: [
+              { label: 'Edit', items: [
                 { label: 'Undo', shortcut: '⌘Z' },
                 { label: 'Redo', shortcut: '⇧⌘Z' }
               ]}
@@ -2713,7 +2713,7 @@ function DesktopApp() {
             <Separator />
             
             <ScrollArea style={{ height: 100, border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-md)', padding: 16 }}>
-              {isZh ? '此区域展示了 ScrollArea 组件的用法。' * 20 : 'This area demonstrates the usage of the ScrollArea component. ' * 20}
+              {isZh ? '此区域展示了 ScrollArea 组件的用法。'.repeat(20) : 'This area demonstrates the usage of the ScrollArea component. '.repeat(20)}
             </ScrollArea>
           <Accordion
             defaultOpen={['hierarchy']}
@@ -2770,12 +2770,12 @@ function DesktopApp() {
             </div>
             
             <Timeline items={[
-              { title: isZh ? '已创建' : 'Created', description: isZh ? '已在系统中记录' : 'Recorded in system', timestamp: '10:00 AM' },
-              { title: isZh ? '处理中' : 'Processing', description: isZh ? '后台正在处理' : 'Background processing running', timestamp: '10:05 AM' },
-              { title: isZh ? '已完成' : 'Completed', description: isZh ? '所有步骤已结束' : 'All steps finished', timestamp: '10:15 AM' }
+              { title: isZh ? '已创建' : 'Created', description: isZh ? '已在系统中记录' : 'Recorded in system', time: '10:00 AM' },
+              { title: isZh ? '处理中' : 'Processing', description: isZh ? '后台正在处理' : 'Background processing running', time: '10:05 AM' },
+              { title: isZh ? '已完成' : 'Completed', description: isZh ? '所有步骤已结束' : 'All steps finished', time: '10:15 AM' }
             ]} />
             
-            <TreeView data={[
+            <TreeView nodes={[
               { id: '1', label: 'src', children: [
                 { id: '2', label: 'components' },
                 { id: '3', label: 'utils' }

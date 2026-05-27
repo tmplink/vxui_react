@@ -242,7 +242,7 @@ export function MultiSelect({
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
       {open && (() => {
         const shouldPortal = Boolean(dropPos);
-        const dropdownStyle = shouldPortal
+        const dropdownStyle = shouldPortal && dropPos
           ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width, pointerEvents: 'auto' as const }
           : undefined;
         const dropdownNode = (
