@@ -9057,14 +9057,9 @@ a {
     box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.14);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    z-index: var(--vx-z-sheet);
-  }
-
-  /* When inside a dialog, the dropdown must stack above the dialog overlay.
-     --vx-z-dialog-overlay is 500, --vx-z-dialog is 510, so use dialog + 1. */
-  .vx-select__dropdown--in-dialog,
-  .vx-multiselect__dropdown--in-dialog {
-    z-index: calc(var(--vx-z-dialog) + 1);
+    z-index: var(--vx-z-toast);
+    animation: vx-sheet-slide-up 300ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+    will-change: transform;
   }
 
   /* Always bottom (override --up direction flip on mobile) */
@@ -9096,7 +9091,7 @@ a {
 
   /* Backdrop — placed on the wrapper (outside the sheet's stacking
      context) so it appears below the sheet, not on top of it.
-     z-index: sheet - 1 puts it above the page but below the sheet. */
+     z-index: toast - 1 puts it above the page but below the sheet. */
   .vx-select:has(.vx-select__dropdown)::after,
   .vx-multiselect:has(.vx-multiselect__dropdown)::after,
   .vx-timepicker:has(.vx-timepicker__popover)::after,
@@ -9106,8 +9101,17 @@ a {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.42);
-    z-index: calc(var(--vx-z-sheet) - 1);
+    z-index: calc(var(--vx-z-toast) - 1);
     pointer-events: none;
+  }
+
+  /* ── Closing animation ── */
+  .vx-select__dropdown--closing,
+  .vx-multiselect__dropdown--closing,
+  .vx-timepicker__popover--closing,
+  .vx-datepicker__popover--closing,
+  .vx-colorpicker__panel--closing {
+    animation: vx-sheet-slide-down 300ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
   }
 
   /* ── Scrollable list ── */
@@ -9190,5 +9194,10 @@ a {
 @keyframes vx-sheet-slide-up {
   from { transform: translateY(100%); }
   to   { transform: translateY(0); }
+}
+
+@keyframes vx-sheet-slide-down {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
 }
 

@@ -93,15 +93,25 @@ export function ColorPicker({
 
   const [hexInput, setHexInput] = useState(color);
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+
+  // Close with animation for mobile bottom sheet
+  const closeWithAnimation = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setClosing(false);
+      setOpen(false);
+    }, 300);
+  };
 
   useEffect(() => {
     if (!open) return;
     const handler = (e: Event) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) closeWithAnimation();
     };
     const keyHandler = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
+      if (e.key === 'Escape') { e.preventDefault(); closeWithAnimation(); }
     };
     document.addEventListener('mousedown', handler);
     document.addEventListener('touchstart', handler, { passive: true });
@@ -111,7 +121,7 @@ export function ColorPicker({
       document.removeEventListener('touchstart', handler);
       document.removeEventListener('keydown', keyHandler);
     };
-  }, [open]);
+  }, [open, closeWithAnimation]);
 
   useEffect(() => {
     if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
@@ -167,7 +177,7 @@ export function ColorPicker({
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
 
       {open && (
-        <div className="vx-colorpicker__panel" role="dialog" aria-label="Color picker">
+        <div className={cx('vx-colorpicker__panel', closing && 'vx-colorpicker__panel--closing')} role="dialog" aria-label="Color picker">
           {/* Hue slider */}
           <div className="vx-colorpicker__section-label">Hue</div>
           <input
@@ -228,7 +238,7 @@ export function ColorPicker({
           <button
             type="button"
             className="vx-colorpicker__close"
-            onClick={() => setOpen(false)}
+            onClick={closeWithAnimation}
           >
             Done
           </button>

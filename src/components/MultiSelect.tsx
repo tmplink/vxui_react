@@ -49,6 +49,7 @@ export function MultiSelect({
   const value = isControlled ? controlledValue : internalValue;
 
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [search, setSearch] = useState('');
   const wrapRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -79,15 +80,24 @@ export function MultiSelect({
     return () => clearTimeout(t);
   }, [open]);
 
+  // Close with animation for mobile bottom sheet
+  const closeWithAnimation = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setClosing(false);
+      setOpen(false);
+    }, 300);
+  };
+
   useEffect(() => {
     if (!open) return;
     const onOutside = (e: Event) => {
       const inWrap = wrapRef.current?.contains(e.target as Node);
       const inDropdown = dropdownRef.current?.contains(e.target as Node);
-      if (!inWrap && !inDropdown) setOpen(false);
+      if (!inWrap && !inDropdown) closeWithAnimation();
     };
     const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
+      if (e.key === 'Escape') { e.preventDefault(); closeWithAnimation(); }
     };
     document.addEventListener('mousedown', onOutside);
     document.addEventListener('touchstart', onOutside, { passive: true });
@@ -97,7 +107,7 @@ export function MultiSelect({
       document.removeEventListener('touchstart', onOutside);
       document.removeEventListener('keydown', onKey);
     };
-  }, [open]);
+  }, [open, closeWithAnimation]);
 
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
@@ -139,7 +149,7 @@ export function MultiSelect({
     if (!open || !dropPos) return;
     const close = (e: Event) => {
       if (dropdownRef.current?.contains(e.target as Node)) return;
-      setOpen(false);
+      closeWithAnimation();
     };
     window.addEventListener('scroll', close, { capture: true, passive: true });
     window.addEventListener('resize', close);
@@ -147,7 +157,7 @@ export function MultiSelect({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos]);
+  }, [open, dropPos, closeWithAnimation]);
 
   const toggle = (option: MultiSelectOption) => {
     if (option.disabled) return;
@@ -156,6 +166,7 @@ export function MultiSelect({
       : [...value, option.value];
     if (!isControlled) setInternalValue(next);
     onChange?.(next);
+    closeWithAnimation();
   };
 
   const removeTag = (e: React.MouseEvent, val: string) => {
@@ -250,6 +261,7 @@ export function MultiSelect({
             ref={dropdownRef}
             className={cx(
               'vx-multiselect__dropdown',
+              closing && 'vx-multiselect__dropdown--closing',
               dropPos?.direction === 'up' && 'vx-multiselect__dropdown--up',
               Boolean(dialogContentRef.current) && 'vx-multiselect__dropdown--in-dialog',
             )}

@@ -146,6 +146,7 @@ export function TimePicker({
   const [s, setS] = useState(parsed.s);
 
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -165,15 +166,24 @@ export function TimePicker({
     }
   }, [controlledValue]);
 
+  // Close with animation for mobile bottom sheet
+  const closeWithAnimation = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setClosing(false);
+      setOpen(false);
+    }, 300);
+  };
+
   useEffect(() => {
     if (!open) return;
     const handler = (e: Event) => {
       const inWrap = wrapRef.current?.contains(e.target as Node);
       const inPopover = popoverRef.current?.contains(e.target as Node);
-      if (!inWrap && !inPopover) setOpen(false);
+      if (!inWrap && !inPopover) closeWithAnimation();
     };
     const keyHandler = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
+      if (e.key === 'Escape') { e.preventDefault(); closeWithAnimation(); }
     };
     document.addEventListener('mousedown', handler);
     document.addEventListener('touchstart', handler, { passive: true });
@@ -183,7 +193,7 @@ export function TimePicker({
       document.removeEventListener('touchstart', handler);
       document.removeEventListener('keydown', keyHandler);
     };
-  }, [open]);
+  }, [open, closeWithAnimation]);
 
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
@@ -223,7 +233,7 @@ export function TimePicker({
     if (!open || !dropPos) return;
     const close = (event: Event) => {
       if (popoverRef.current?.contains(event.target as Node)) return;
-      setOpen(false);
+      closeWithAnimation();
     };
     window.addEventListener('scroll', close, { capture: true, passive: true });
     window.addEventListener('resize', close);
@@ -231,7 +241,7 @@ export function TimePicker({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos]);
+  }, [open, dropPos, closeWithAnimation]);
 
   const commit = useCallback(
     (nextH: number, nextM: number, nextS: number) => {
@@ -281,6 +291,7 @@ export function TimePicker({
           ref={popoverRef}
           className={cx(
             'vx-timepicker__popover',
+            closing && 'vx-timepicker__popover--closing',
             dropPos?.direction === 'up' && 'vx-timepicker__popover--up',
             Boolean(dialogContentRef.current) && 'vx-timepicker__popover--in-dialog',
           )}
@@ -306,7 +317,7 @@ export function TimePicker({
               onClick={() => {
                 // If no value has been committed yet, commit the currently displayed time.
                 if (!current) commit(h, m, s);
-                setOpen(false);
+                closeWithAnimation();
               }}
             >
               Done

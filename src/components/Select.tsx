@@ -48,6 +48,7 @@ export function Select({
   const value = isControlled ? controlledValue : internalValue;
 
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [search, setSearch] = useState('');
   const wrapRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -82,17 +83,26 @@ export function Select({
     }
   }, [open, showSearch]);
 
+  // Close with animation for mobile bottom sheet
+  const closeWithAnimation = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setClosing(false);
+      setOpen(false);
+    }, 300);
+  };
+
   useEffect(() => {
     if (!open) return;
     const onOutside = (event: Event) => {
       const inWrap = wrapRef.current?.contains(event.target as Node);
       const inDropdown = dropdownRef.current?.contains(event.target as Node);
-      if (!inWrap && !inDropdown) setOpen(false);
+      if (!inWrap && !inDropdown) closeWithAnimation();
     };
     const onKey = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
-        setOpen(false);
+        closeWithAnimation();
       }
     };
     document.addEventListener('mousedown', onOutside);
@@ -103,7 +113,7 @@ export function Select({
       document.removeEventListener('touchstart', onOutside);
       document.removeEventListener('keydown', onKey);
     };
-  }, [open]);
+  }, [open, closeWithAnimation]);
 
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
@@ -145,7 +155,7 @@ export function Select({
     if (!open || !dropPos) return;
     const close = (event: Event) => {
       if (dropdownRef.current?.contains(event.target as Node)) return;
-      setOpen(false);
+      closeWithAnimation();
     };
     window.addEventListener('scroll', close, { capture: true, passive: true });
     window.addEventListener('resize', close);
@@ -153,13 +163,13 @@ export function Select({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos]);
+  }, [open, dropPos, closeWithAnimation]);
 
   const handleSelect = (option: SelectOption) => {
     if (option.disabled) return;
     if (!isControlled) setInternalValue(option.value);
     onChange?.(option.value);
-    setOpen(false);
+    closeWithAnimation();
   };
 
   const clear = (event: React.MouseEvent) => {
@@ -217,6 +227,7 @@ export function Select({
             ref={dropdownRef}
             className={cx(
               'vx-select__dropdown',
+              closing && 'vx-select__dropdown--closing',
               dropPos?.direction === 'up' && 'vx-select__dropdown--up',
               Boolean(dialogContentRef.current) && 'vx-select__dropdown--in-dialog',
             )}
