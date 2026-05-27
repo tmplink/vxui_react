@@ -1,4 +1,4 @@
-# VXUI React · v1.3.5
+# VXUI React · v1.3.6
 
 **官网**：[ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**：[tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [English](README.en.md)
 
@@ -6,8 +6,9 @@ VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用
 
 ## 🚀 更新公告
 
-> **v1.3.5** — 2025-05
-> - 版本号更新
+> **v1.3.6** — 2025-05
+> - 优化组件中的 createPortal 调用，支持使用 dialogContentRef 作为目标元素
+> - 更新测试用例，优化用户交互模拟，增强组件可用性验证
 
 查看完整更新日志请访问 [GitHub Releases](https://github.com/tmplink/vxui_react/releases)。
 
