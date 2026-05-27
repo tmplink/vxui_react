@@ -88,7 +88,7 @@ export function CommandPalette({
   // Scroll active item into view
   useEffect(() => {
     const item = listRef.current?.children[activeIdx] as HTMLElement | undefined;
-    item?.scrollIntoView({ block: 'nearest' });
+    item?.scrollIntoView?.({ block: 'nearest' });
   }, [activeIdx]);
 
   const commit = useCallback(

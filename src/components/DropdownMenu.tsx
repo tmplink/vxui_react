@@ -54,6 +54,8 @@ export function DropdownMenu({
   useLayoutEffect(() => {
     if (!open || !menuRef.current) return;
     const rect = menuRef.current.getBoundingClientRect();
+    // Skip auto-flip when bounding rect has no meaningful dimensions (e.g. jsdom)
+    if (rect.width === 0 && rect.height === 0) return;
     const safeEdge = 8; // 屏幕边缘安全距离
     
     if (actualAlign === 'left' && rect.right > window.innerWidth - safeEdge) {

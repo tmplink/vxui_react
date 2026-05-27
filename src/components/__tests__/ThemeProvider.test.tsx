@@ -1,4 +1,4 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, useTheme, createTheme, themePresets } from '../ThemeProvider';
 
@@ -42,7 +42,9 @@ describe('ThemeProvider', () => {
     );
     const user = userEvent.setup();
     await user.click(screen.getByRole('button', { name: 'Set Mint' }));
-    expect(screen.getByTestId('theme-id').textContent).toBe('mint');
+    await waitFor(() => {
+      expect(screen.getByTestId('theme-id').textContent).toBe('mint');
+    });
   });
 
   it('uses initial defaultTheme from prop', () => {
