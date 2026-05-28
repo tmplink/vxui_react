@@ -118,6 +118,16 @@ export function Select({
     };
   }, [open, closeWithAnimation]);
 
+  // Mark dialog content when BottomSheet is open on mobile
+  useEffect(() => {
+    if (!open || !isMobile) return;
+    const dialogContent = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content');
+    if (dialogContent) {
+      dialogContent.dataset.hasOpenBottomSheet = '1';
+      return () => { delete dialogContent.dataset.hasOpenBottomSheet; };
+    }
+  }, [open, isMobile]);
+
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
     if (!open || !shouldInline) return;

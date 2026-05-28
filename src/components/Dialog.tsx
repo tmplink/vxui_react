@@ -105,9 +105,10 @@ export function Dialog({
           }}
           onPointerDownOutside={(e) => {
             // Prevent the dialog from closing when a pointer-down event happens inside
-            // a portaled dropdown (Select / MultiSelect) that belongs to this dialog.
+            // a portaled dropdown (Select / MultiSelect) that belongs to this dialog,
+            // or when a BottomSheet is open (mobile dropdown).
             const el = contentRef.current;
-            if (el?.dataset.hasOpenPortal === '1') {
+            if (el?.dataset.hasOpenPortal === '1' || el?.dataset.hasOpenBottomSheet === '1') {
               e.preventDefault();
             }
           }}
