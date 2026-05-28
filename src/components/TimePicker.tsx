@@ -370,6 +370,7 @@ export function TimePicker({
           draggable
           showConfirm
           onConfirm={handleConfirm}
+          inlineInDialog={Boolean(getDialogPopoverContext(wrapRef.current).dialogContent)}
         >
           {mobileSheetContent}
         </BottomSheet>

@@ -385,6 +385,7 @@ export function MultiSelect({
           showConfirm
           confirmDisabled={pendingValue.length === 0}
           onConfirm={handleConfirm}
+          inlineInDialog={Boolean(getDialogPopoverContext(wrapRef.current).dialogContent)}
         >
           {mobileSheetContent}
         </BottomSheet>

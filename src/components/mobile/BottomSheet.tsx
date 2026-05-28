@@ -201,7 +201,6 @@ export function BottomSheet({
       )}
       // 遮罩层仅做屏蔽，不响应点击关闭
       role="presentation"
-      aria-hidden="true"
     >
       <div
         ref={sheetRef}

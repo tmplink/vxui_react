@@ -341,6 +341,7 @@ export function Select({
           showConfirm
           confirmDisabled={pendingValue === undefined}
           onConfirm={handleConfirm}
+          inlineInDialog={Boolean(getDialogPopoverContext(wrapRef.current).dialogContent)}
         >
           {mobileSheetContent}
         </BottomSheet>
