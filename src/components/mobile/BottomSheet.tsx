@@ -213,21 +213,21 @@ export function BottomSheet({
         {draggable && (
           <div className="vxm-bottomsheet__handle" aria-hidden="true" />
         )}
+        {/* 右上角关闭按钮（始终可见） */}
+        <button
+          type="button"
+          className="vxm-bottomsheet__close"
+          onClick={handleClose}
+          aria-label="关闭"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
         {(title || description) && (
           <div className="vxm-bottomsheet__header">
             {title && <h3 className="vxm-bottomsheet__title">{title}</h3>}
             {description && <p className="vxm-bottomsheet__description">{description}</p>}
-            {/* 右上角关闭按钮 */}
-            <button
-              type="button"
-              className="vxm-bottomsheet__close"
-              onClick={handleClose}
-              aria-label="关闭"
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            </button>
           </div>
         )}
         <div className="vxm-bottomsheet__body">{children}</div>

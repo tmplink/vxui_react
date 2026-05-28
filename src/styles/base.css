@@ -2850,8 +2850,9 @@ a {
 }
 
 .vxm-bottomsheet {
+  position: relative;
   width: 100%;
-  max-height: 70dvh;
+  max-height: 90dvh;
   background: var(--vx-surface);
   border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
   border: 1px solid var(--vx-border);
@@ -2880,7 +2881,6 @@ a {
   padding: 4px 20px 12px;
   flex: 0 0 auto;
   border-bottom: 1px solid var(--vx-border);
-  position: relative;
 }
 
 .vxm-bottomsheet__title {
@@ -2893,8 +2893,8 @@ a {
 /* 右上角关闭按钮 */
 .vxm-bottomsheet__close {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 16px;
+  right: 16px;
   width: 32px;
   height: 32px;
   border: none;
