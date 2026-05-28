@@ -78,9 +78,12 @@ export function MultiSelect({
       setSearch('');
       return;
     }
-    const t = setTimeout(() => searchRef.current?.focus(), 0);
+    // 移动端需要延迟聚焦，等 BottomSheet 进入动画完成、body overflow 稳定后再聚焦
+    // 否则 iOS Safari 会在 body overflow 切换间隙触发视口调整，导致页面跳动
+    const delay = isMobile ? 350 : 0;
+    const t = setTimeout(() => searchRef.current?.focus(), delay);
     return () => clearTimeout(t);
-  }, [open]);
+  }, [open, isMobile]);
 
   // ─── 桌面端：点击外部 / Escape 关闭 ──────────────────────────────
   useEffect(() => {
