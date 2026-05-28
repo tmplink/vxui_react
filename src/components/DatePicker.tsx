@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../lib/cx';
 import { getDialogPopoverContext } from '../lib/dialogPopover';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { BottomSheet } from './mobile/BottomSheet';
 import { Calendar } from './Calendar';
 
 function formatDate(date: Date): string {
@@ -56,6 +58,7 @@ export function DatePicker({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const dialogContentRef = useRef<HTMLElement | null>(null);
+  const isMobile = useIsMobile();
   const [dropPos, setDropPos] = useState<{
     top?: number;
     bottom?: number;
@@ -109,7 +112,7 @@ export function DatePicker({
 
   useLayoutEffect(() => {
     const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
-    if (!open || !triggerRef.current || shouldInline) {
+    if (!open || !triggerRef.current || shouldInline || isMobile) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
@@ -124,7 +127,7 @@ export function DatePicker({
         ? { top: rect.bottom + 6, left: rect.left, direction }
         : { bottom: window.innerHeight - rect.top + 6, left: rect.left, direction },
     );
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     if (!open || !dropPos) return;
@@ -145,6 +148,19 @@ export function DatePicker({
     onChange?.(date);
     closeWithAnimation();
   };
+
+  // Mobile BottomSheet content
+  const mobileSheetContent = (
+    <>
+      <Calendar
+        value={selected}
+        onChange={handleSelect}
+        min={min}
+        max={max}
+        weekStartsOnMonday={weekStartsOnMonday}
+      />
+    </>
+  );
 
   return (
     <div ref={wrapRef} className={cx('vx-datepicker', className)}>
@@ -169,7 +185,8 @@ export function DatePicker({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open ? (() => {
+      {/* Desktop popover - fixed position */}
+      {open && !isMobile && (() => {
         const shouldPortal = Boolean(dropPos);
         const popoverStyle = dropPos
           ? { position: 'fixed' as const, top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, pointerEvents: 'auto' as const }
@@ -197,7 +214,19 @@ export function DatePicker({
         </div>
         );
         return shouldPortal ? createPortal(popoverNode, dialogContentRef.current ?? document.body) : popoverNode;
-      })() : null}
+      })()}
+      {/* Mobile BottomSheet */}
+      {isMobile && open && (
+        <BottomSheet
+          open={open}
+          onClose={closeWithAnimation}
+          title={label || 'Select date'}
+          draggable
+          closeOnOverlayClick
+        >
+          {mobileSheetContent}
+        </BottomSheet>
+      )}
     </div>
   );
 }

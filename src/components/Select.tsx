@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
 import { getDialogPopoverContext } from '../lib/dialogPopover';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { BottomSheet } from './mobile/BottomSheet';
 
 export interface SelectOption {
   value: string;
@@ -55,6 +57,7 @@ export function Select({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
+  const isMobile = useIsMobile();
 
   const [dropPos, setDropPos] = useState<{
     top?: number;
@@ -134,7 +137,7 @@ export function Select({
 
   useLayoutEffect(() => {
     const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
-    if (!open || !triggerRef.current || shouldInline) {
+    if (!open || !triggerRef.current || shouldInline || isMobile) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
@@ -149,7 +152,7 @@ export function Select({
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
         : { bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width, direction },
     );
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     if (!open || !dropPos) return;
@@ -177,6 +180,48 @@ export function Select({
     if (!isControlled) setInternalValue(undefined);
     onChange?.(undefined);
   };
+
+  // Mobile BottomSheet content
+  const mobileSheetContent = (
+    <>
+      {showSearch && (
+        <div className="vx-select__search-wrap">
+          <input
+            ref={searchRef}
+            type="text"
+            className="vx-select__search"
+            placeholder={searchPlaceholder}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            aria-label={searchPlaceholder}
+          />
+        </div>
+      )}
+      <ul id={listboxId} className="vx-select__list" role="listbox" aria-label={label ?? 'Options'}>
+        {filtered.length === 0 ? (
+          <li className="vx-select__empty">{emptyText}</li>
+        ) : (
+          filtered.map((option) => (
+            <li
+              key={option.value}
+              className={cx(
+                'vx-select__option',
+                option.value === value && 'vx-select__option--selected',
+                option.disabled && 'vx-select__option--disabled',
+              )}
+              role="option"
+              aria-selected={option.value === value}
+              aria-disabled={option.disabled}
+              onClick={() => handleSelect(option)}
+            >
+              <span>{option.label}</span>
+              {option.value === value ? <Check size={14} /> : null}
+            </li>
+          ))
+        )}
+      </ul>
+    </>
+  );
 
   return (
     <div ref={wrapRef} className={cx('vx-select', open && 'vx-select--open', className)}>
@@ -217,7 +262,8 @@ export function Select({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open && (() => {
+      {/* Desktop dropdown - fixed position */}
+      {open && !isMobile && (() => {
         const shouldPortal = Boolean(dropPos);
         const dropdownStyle = dropPos
           ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width, pointerEvents: 'auto' as const }
@@ -273,6 +319,18 @@ export function Select({
         );
         return shouldPortal ? createPortal(dropdownNode, dialogContentRef.current ?? document.body) : dropdownNode;
       })()}
+      {/* Mobile BottomSheet */}
+      {isMobile && (
+        <BottomSheet
+          open={open}
+          onClose={closeWithAnimation}
+          title={label || placeholder}
+          draggable
+          closeOnOverlayClick
+        >
+          {mobileSheetContent}
+        </BottomSheet>
+      )}
     </div>
   );
 }
