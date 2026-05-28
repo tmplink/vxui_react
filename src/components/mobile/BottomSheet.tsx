@@ -121,9 +121,17 @@ export function BottomSheet({
   }, [phase]);
 
   // ─── 拖拽手势 ──────────────────────────────────────────────────
+  const handleRef = useRef<HTMLDivElement>(null);
+
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (!draggable) return;
-    startYRef.current = e.touches[0].clientY;
+    // 仅当触摸起点在拖拽手柄上时才启动拖拽
+    const handleEl = handleRef.current;
+    if (!handleEl) return;
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!target || !handleEl.contains(target)) return;
+    startYRef.current = touch.clientY;
     draggedRef.current = 0;
     setDragging(true);
   }, [draggable]);
@@ -211,7 +219,7 @@ export function BottomSheet({
       >
         {/* 拖动把手 */}
         {draggable && (
-          <div className="vxm-bottomsheet__handle" aria-hidden="true" />
+          <div ref={handleRef} className="vxm-bottomsheet__handle" aria-hidden="true" />
         )}
         {/* 右上角关闭按钮（始终可见） */}
         <button

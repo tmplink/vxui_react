@@ -2862,9 +2862,6 @@ a {
   display: flex;
   flex-direction: column;
   will-change: transform;
-  touch-action: pan-y;
-  user-select: none;
-  -webkit-user-select: none;
 }
 
 .vxm-bottomsheet__handle {
@@ -2937,6 +2934,8 @@ a {
   -webkit-overflow-scrolling: touch;
   padding: 8px 0;
   flex: 1 1 auto;
+  user-select: auto;
+  -webkit-user-select: auto;
 }
 
 /* ── BottomSheet Footer ──────────────────────────────────────── */
