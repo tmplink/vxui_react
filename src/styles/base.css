@@ -7601,7 +7601,7 @@ a {
   /* direction handled by inline style from portal */
 }
 .vx-select__search-wrap {
-  padding: 8px 8px 4px;
+  padding: 0px 8px 8px;
   border-bottom: 1px solid var(--vx-border);
 }
 .vx-select__search {
