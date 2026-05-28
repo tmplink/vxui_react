@@ -2838,8 +2838,15 @@ a {
   background: rgba(0, 0, 0, 0.42);
   display: flex;
   align-items: flex-end;
-  animation: vxm-bottomsheet-overlay-in 200ms ease forwards;
   pointer-events: auto;
+}
+
+.vxm-bottomsheet__overlay--entering {
+  animation: vxm-bottomsheet-overlay-in 200ms ease forwards;
+}
+
+.vxm-bottomsheet__overlay--exiting {
+  animation: vxm-bottomsheet-overlay-out 200ms ease forwards;
 }
 
 .vxm-bottomsheet {
@@ -2853,7 +2860,6 @@ a {
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
   display: flex;
   flex-direction: column;
-  animation: vxm-bottomsheet-in 300ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
   will-change: transform;
   touch-action: pan-y;
   user-select: none;
@@ -2874,12 +2880,48 @@ a {
   padding: 4px 20px 12px;
   flex: 0 0 auto;
   border-bottom: 1px solid var(--vx-border);
+  position: relative;
 }
 
 .vxm-bottomsheet__title {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
+  color: var(--vx-text);
+}
+
+/* 右上角关闭按钮 */
+.vxm-bottomsheet__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--vx-radius);
+  background: transparent;
+  color: var(--vx-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.vxm-bottomsheet__close svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+}
+
+.vxm-bottomsheet__close:hover {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+
+.vxm-bottomsheet__close:active {
+  background: var(--vx-bg-accent);
   color: var(--vx-text);
 }
 
@@ -2897,14 +2939,55 @@ a {
   flex: 1 1 auto;
 }
 
+/* ── BottomSheet Footer ──────────────────────────────────────── */
+.vxm-bottomsheet__footer {
+  display: flex;
+  justify-content: center;
+  padding: 8px 20px max(env(safe-area-inset-bottom, 0px), 16px);
+  flex: 0 0 auto;
+  border-top: 1px solid var(--vx-border);
+}
+
+.vxm-bottomsheet__confirm {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: var(--vx-radius);
+  background: var(--vx-primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vxm-bottomsheet__confirm:active {
+  background: var(--vx-primary-strong);
+}
+
+.vxm-bottomsheet__confirm:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 @keyframes vxm-bottomsheet-overlay-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
+@keyframes vxm-bottomsheet-overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 @keyframes vxm-bottomsheet-in {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
+}
+
+@keyframes vxm-bottomsheet-out {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
 }
 
 /* MobileList */
@@ -7270,6 +7353,35 @@ a {
   user-select: none;
   min-width: 264px;
 }
+
+/* BottomSheet 内的 Calendar 移除边框和圆角 */
+.vxm-bottomsheet__body .vx-calendar {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.vxm-bottomsheet__body .vx-calendar__header {
+  padding: 16px 16px 8px;
+}
+
+.vxm-bottomsheet__body .vx-calendar__grid {
+  padding: 0 16px 16px;
+}
+
+.vxm-bottomsheet__body .vx-calendar__nav-btn {
+  width: 36px;
+  height: 36px;
+}
+
+.vxm-bottomsheet__body .vx-calendar__cell {
+  height: 40px;
+  font-size: 14px;
+}
+
 .vx-calendar__header {
   display: flex;
   align-items: center;

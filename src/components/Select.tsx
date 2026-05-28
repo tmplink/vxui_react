@@ -50,7 +50,6 @@ export function Select({
   const value = isControlled ? controlledValue : internalValue;
 
   const [open, setOpen] = useState(false);
-  const [closing, setClosing] = useState(false);
   const [search, setSearch] = useState('');
   const wrapRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -86,26 +85,18 @@ export function Select({
     }
   }, [open, showSearch]);
 
-  // Close with animation for mobile bottom sheet
-  const closeWithAnimation = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      setOpen(false);
-    }, 300);
-  };
-
+  // ─── 桌面端：点击外部 / Escape 关闭 ──────────────────────────────
   useEffect(() => {
-    if (!open) return;
+    if (!open || isMobile) return;
     const onOutside = (event: Event) => {
       const inWrap = wrapRef.current?.contains(event.target as Node);
       const inDropdown = dropdownRef.current?.contains(event.target as Node);
-      if (!inWrap && !inDropdown) closeWithAnimation();
+      if (!inWrap && !inDropdown) setOpen(false);
     };
     const onKey = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
-        closeWithAnimation();
+        setOpen(false);
       }
     };
     document.addEventListener('mousedown', onOutside);
@@ -116,16 +107,6 @@ export function Select({
       document.removeEventListener('touchstart', onOutside);
       document.removeEventListener('keydown', onKey);
     };
-  }, [open, closeWithAnimation]);
-
-  // Mark dialog content when BottomSheet is open on mobile
-  useEffect(() => {
-    if (!open || !isMobile) return;
-    const dialogContent = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content');
-    if (dialogContent) {
-      dialogContent.dataset.hasOpenBottomSheet = '1';
-      return () => { delete dialogContent.dataset.hasOpenBottomSheet; };
-    }
   }, [open, isMobile]);
 
   useEffect(() => {
@@ -168,7 +149,7 @@ export function Select({
     if (!open || !dropPos) return;
     const close = (event: Event) => {
       if (dropdownRef.current?.contains(event.target as Node)) return;
-      closeWithAnimation();
+      setOpen(false);
     };
     window.addEventListener('scroll', close, { capture: true, passive: true });
     window.addEventListener('resize', close);
@@ -176,19 +157,41 @@ export function Select({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos, closeWithAnimation]);
+  }, [open, dropPos]);
 
+  // ─── 桌面端：选中即关 ────────────────────────────────────────────
   const handleSelect = (option: SelectOption) => {
     if (option.disabled) return;
     if (!isControlled) setInternalValue(option.value);
     onChange?.(option.value);
-    closeWithAnimation();
+    setOpen(false);
   };
 
   const clear = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (!isControlled) setInternalValue(undefined);
     onChange?.(undefined);
+  };
+
+  // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
+  const [pendingValue, setPendingValue] = useState<string | undefined>(value);
+
+  // 打开 BottomSheet 时，同步 pendingValue 为当前值
+  useEffect(() => {
+    if (open && isMobile) {
+      setPendingValue(value);
+    }
+  }, [open, isMobile, value]);
+
+  const handlePendingSelect = (option: SelectOption) => {
+    if (option.disabled) return;
+    setPendingValue(option.value);
+  };
+
+  const handleConfirm = () => {
+    if (!isControlled) setInternalValue(pendingValue);
+    onChange?.(pendingValue);
+    // BottomSheet 自主关闭
   };
 
   // Mobile BottomSheet content
@@ -216,16 +219,16 @@ export function Select({
               key={option.value}
               className={cx(
                 'vx-select__option',
-                option.value === value && 'vx-select__option--selected',
+                option.value === pendingValue && 'vx-select__option--selected',
                 option.disabled && 'vx-select__option--disabled',
               )}
               role="option"
-              aria-selected={option.value === value}
+              aria-selected={option.value === pendingValue}
               aria-disabled={option.disabled}
-              onClick={() => handleSelect(option)}
+              onClick={() => handlePendingSelect(option)}
             >
               <span>{option.label}</span>
-              {option.value === value ? <Check size={14} /> : null}
+              {option.value === pendingValue ? <Check size={14} /> : null}
             </li>
           ))
         )}
@@ -283,7 +286,6 @@ export function Select({
             ref={dropdownRef}
             className={cx(
               'vx-select__dropdown',
-              closing && 'vx-select__dropdown--closing',
               dropPos?.direction === 'up' && 'vx-select__dropdown--up',
               Boolean(dialogContentRef.current) && 'vx-select__dropdown--in-dialog',
             )}
@@ -333,10 +335,12 @@ export function Select({
       {isMobile && (
         <BottomSheet
           open={open}
-          onClose={closeWithAnimation}
+          onClose={() => setOpen(false)}
           title={label || placeholder}
           draggable
-          closeOnOverlayClick
+          showConfirm
+          confirmDisabled={pendingValue === undefined}
+          onConfirm={handleConfirm}
         >
           {mobileSheetContent}
         </BottomSheet>

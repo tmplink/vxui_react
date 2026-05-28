@@ -51,7 +51,6 @@ export function MultiSelect({
   const value = isControlled ? controlledValue : internalValue;
 
   const [open, setOpen] = useState(false);
-  const [closing, setClosing] = useState(false);
   const [search, setSearch] = useState('');
   const wrapRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -83,24 +82,16 @@ export function MultiSelect({
     return () => clearTimeout(t);
   }, [open]);
 
-  // Close with animation for mobile bottom sheet
-  const closeWithAnimation = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      setOpen(false);
-    }, 300);
-  };
-
+  // ─── 桌面端：点击外部 / Escape 关闭 ──────────────────────────────
   useEffect(() => {
-    if (!open) return;
+    if (!open || isMobile) return;
     const onOutside = (e: Event) => {
       const inWrap = wrapRef.current?.contains(e.target as Node);
       const inDropdown = dropdownRef.current?.contains(e.target as Node);
-      if (!inWrap && !inDropdown) closeWithAnimation();
+      if (!inWrap && !inDropdown) setOpen(false);
     };
     const onKey = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); closeWithAnimation(); }
+      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
     };
     document.addEventListener('mousedown', onOutside);
     document.addEventListener('touchstart', onOutside, { passive: true });
@@ -110,16 +101,6 @@ export function MultiSelect({
       document.removeEventListener('touchstart', onOutside);
       document.removeEventListener('keydown', onKey);
     };
-  }, [open, closeWithAnimation]);
-
-  // Mark dialog content when BottomSheet is open on mobile
-  useEffect(() => {
-    if (!open || !isMobile) return;
-    const dialogContent = wrapRef.current?.closest<HTMLElement>('.vx-dialog__content');
-    if (dialogContent) {
-      dialogContent.dataset.hasOpenBottomSheet = '1';
-      return () => { delete dialogContent.dataset.hasOpenBottomSheet; };
-    }
   }, [open, isMobile]);
 
   useEffect(() => {
@@ -162,7 +143,7 @@ export function MultiSelect({
     if (!open || !dropPos) return;
     const close = (e: Event) => {
       if (dropdownRef.current?.contains(e.target as Node)) return;
-      closeWithAnimation();
+      setOpen(false);
     };
     window.addEventListener('scroll', close, { capture: true, passive: true });
     window.addEventListener('resize', close);
@@ -170,8 +151,9 @@ export function MultiSelect({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos, closeWithAnimation]);
+  }, [open, dropPos]);
 
+  // ─── 桌面端：选中即关 ────────────────────────────────────────────
   const toggle = (option: MultiSelectOption) => {
     if (option.disabled) return;
     const next = value.includes(option.value)
@@ -179,7 +161,7 @@ export function MultiSelect({
       : [...value, option.value];
     if (!isControlled) setInternalValue(next);
     onChange?.(next);
-    closeWithAnimation();
+    setOpen(false);
   };
 
   const removeTag = (e: React.MouseEvent, val: string) => {
@@ -202,6 +184,31 @@ export function MultiSelect({
     return acc;
   }, {});
 
+  // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
+  const [pendingValue, setPendingValue] = useState<string[]>(value);
+
+  // 打开 BottomSheet 时，同步 pendingValue 为当前值
+  useEffect(() => {
+    if (open && isMobile) {
+      setPendingValue(value);
+    }
+  }, [open, isMobile, value]);
+
+  const handlePendingToggle = (option: MultiSelectOption) => {
+    if (option.disabled) return;
+    setPendingValue((prev) =>
+      prev.includes(option.value)
+        ? prev.filter((v) => v !== option.value)
+        : [...prev, option.value],
+    );
+  };
+
+  const handleConfirm = () => {
+    if (!isControlled) setInternalValue(pendingValue);
+    onChange?.(pendingValue);
+    // BottomSheet 自主关闭
+  };
+
   // Mobile BottomSheet content
   const mobileSheetContent = (
     <>
@@ -221,7 +228,7 @@ export function MultiSelect({
           <li className="vx-multiselect__empty">{emptyText}</li>
         ) : (
           filtered.map((option) => {
-            const isSelected = value.includes(option.value);
+            const isSelected = pendingValue.includes(option.value);
             return (
               <li
                 key={option.value}
@@ -233,7 +240,7 @@ export function MultiSelect({
                 role="option"
                 aria-selected={isSelected}
                 aria-disabled={option.disabled}
-                onClick={() => toggle(option)}
+                onClick={() => handlePendingToggle(option)}
               >
                 <span className={cx('vx-multiselect__checkbox', isSelected && 'vx-multiselect__checkbox--checked')}>
                   {isSelected ? <Check size={11} /> : null}
@@ -320,7 +327,6 @@ export function MultiSelect({
             ref={dropdownRef}
             className={cx(
               'vx-multiselect__dropdown',
-              closing && 'vx-multiselect__dropdown--closing',
               dropPos?.direction === 'up' && 'vx-multiselect__dropdown--up',
               Boolean(dialogContentRef.current) && 'vx-multiselect__dropdown--in-dialog',
             )}
@@ -373,10 +379,12 @@ export function MultiSelect({
       {isMobile && (
         <BottomSheet
           open={open}
-          onClose={closeWithAnimation}
+          onClose={() => setOpen(false)}
           title={label || placeholder}
           draggable
-          closeOnOverlayClick
+          showConfirm
+          confirmDisabled={pendingValue.length === 0}
+          onConfirm={handleConfirm}
         >
           {mobileSheetContent}
         </BottomSheet>

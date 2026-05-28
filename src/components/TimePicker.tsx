@@ -148,7 +148,6 @@ export function TimePicker({
   const [s, setS] = useState(parsed.s);
 
   const [open, setOpen] = useState(false);
-  const [closing, setClosing] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -169,24 +168,16 @@ export function TimePicker({
     }
   }, [controlledValue]);
 
-  // Close with animation for mobile bottom sheet
-  const closeWithAnimation = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      setOpen(false);
-    }, 300);
-  };
-
+  // ─── 桌面端：点击外部 / Escape 关闭 ──────────────────────────────
   useEffect(() => {
-    if (!open) return;
+    if (!open || isMobile) return;
     const handler = (e: Event) => {
       const inWrap = wrapRef.current?.contains(e.target as Node);
       const inPopover = popoverRef.current?.contains(e.target as Node);
-      if (!inWrap && !inPopover) closeWithAnimation();
+      if (!inWrap && !inPopover) setOpen(false);
     };
     const keyHandler = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); closeWithAnimation(); }
+      if (e.key === 'Escape') { e.preventDefault(); setOpen(false); }
     };
     document.addEventListener('mousedown', handler);
     document.addEventListener('touchstart', handler, { passive: true });
@@ -196,7 +187,7 @@ export function TimePicker({
       document.removeEventListener('touchstart', handler);
       document.removeEventListener('keydown', keyHandler);
     };
-  }, [open, closeWithAnimation]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
@@ -236,7 +227,7 @@ export function TimePicker({
     if (!open || !dropPos) return;
     const close = (event: Event) => {
       if (popoverRef.current?.contains(event.target as Node)) return;
-      closeWithAnimation();
+      setOpen(false);
     };
     window.addEventListener('scroll', close, { capture: true, passive: true });
     window.addEventListener('resize', close);
@@ -244,7 +235,7 @@ export function TimePicker({
       window.removeEventListener('scroll', close, { capture: true });
       window.removeEventListener('resize', close);
     };
-  }, [open, dropPos, closeWithAnimation]);
+  }, [open, dropPos]);
 
   const commit = useCallback(
     (nextH: number, nextM: number, nextS: number) => {
@@ -261,32 +252,43 @@ export function TimePicker({
 
   const displayValue = current ?? (open ? formatTime(h, m, s, seconds) : undefined);
 
+  // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
+  const [pendingH, setPendingH] = useState(parsed.h);
+  const [pendingM, setPendingM] = useState(parsed.m);
+  const [pendingS, setPendingS] = useState(parsed.s);
+
+  // 打开 BottomSheet 时，同步 pending 值为当前值
+  useEffect(() => {
+    if (open && isMobile) {
+      const p = current ? parseTime(current) : { h: 12, m: 0, s: 0 };
+      setPendingH(p.h);
+      setPendingM(p.m);
+      setPendingS(p.s);
+    }
+  }, [open, isMobile, current]);
+
+  const handlePendingH = (val: number) => setPendingH(val);
+  const handlePendingM = (val: number) => setPendingM(val);
+  const handlePendingS = (val: number) => setPendingS(val);
+
+  const handleConfirm = () => {
+    commit(pendingH, pendingM, pendingS);
+    // BottomSheet 自主关闭
+  };
+
   // Mobile BottomSheet content
   const mobileSheetContent = (
     <>
       <div className="vx-timepicker__columns">
-        <SpinnerColumn value={h} min={0} max={23} onChange={handleH} label="Hours" />
+        <SpinnerColumn value={pendingH} min={0} max={23} onChange={handlePendingH} label="Hours" />
         <span className="vx-timepicker__sep">:</span>
-        <SpinnerColumn value={m} min={0} max={59} onChange={handleM} label="Minutes" />
+        <SpinnerColumn value={pendingM} min={0} max={59} onChange={handlePendingM} label="Minutes" />
         {seconds && (
           <>
             <span className="vx-timepicker__sep">:</span>
-            <SpinnerColumn value={s} min={0} max={59} onChange={handleS} label="Seconds" />
+            <SpinnerColumn value={pendingS} min={0} max={59} onChange={handlePendingS} label="Seconds" />
           </>
         )}
-      </div>
-      <div className="vx-timepicker__footer">
-        <button
-          type="button"
-          className="vx-timepicker__done"
-          onClick={() => {
-            // If no value has been committed yet, commit the currently displayed time.
-            if (!current) commit(h, m, s);
-            closeWithAnimation();
-          }}
-        >
-          Done
-        </button>
       </div>
     </>
   );
@@ -325,7 +327,6 @@ export function TimePicker({
           ref={popoverRef}
           className={cx(
             'vx-timepicker__popover',
-            closing && 'vx-timepicker__popover--closing',
             dropPos?.direction === 'up' && 'vx-timepicker__popover--up',
             Boolean(dialogContentRef.current) && 'vx-timepicker__popover--in-dialog',
           )}
@@ -349,9 +350,8 @@ export function TimePicker({
               type="button"
               className="vx-timepicker__done"
               onClick={() => {
-                // If no value has been committed yet, commit the currently displayed time.
                 if (!current) commit(h, m, s);
-                closeWithAnimation();
+                setOpen(false);
               }}
             >
               Done
@@ -365,10 +365,11 @@ export function TimePicker({
       {isMobile && open && (
         <BottomSheet
           open={open}
-          onClose={closeWithAnimation}
+          onClose={() => setOpen(false)}
           title={label || 'Select time'}
           draggable
-          closeOnOverlayClick
+          showConfirm
+          onConfirm={handleConfirm}
         >
           {mobileSheetContent}
         </BottomSheet>
