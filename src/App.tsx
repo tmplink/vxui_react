@@ -3541,6 +3541,14 @@ function DesktopApp() {
 }
 
 export default function App() {
+  // Detect mobile preview paths (/m/*) and render MobileApp directly,
+  // bypassing Responsive's viewport-based selection (needed for iframes).
+  const isMobilePreview = typeof window !== 'undefined' && window.location.pathname.startsWith('/m');
+
+  if (isMobilePreview) {
+    return <MobileApp />;
+  }
+
   return (
     <Responsive
       desktop={<DesktopApp />}
