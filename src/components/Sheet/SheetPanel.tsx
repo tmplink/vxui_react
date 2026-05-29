@@ -110,9 +110,6 @@ export function SheetPanel({
         onClick={(e) => e.stopPropagation()}
         style={isSidePanel && width ? { width } : undefined}
       >
-        {/* 拖动把手（仅装饰性） */}
-        <div className="vx-sheet__handle" aria-hidden="true" />
-
         {/* 关闭按钮 */}
         {!action && showClose && (
           <button
