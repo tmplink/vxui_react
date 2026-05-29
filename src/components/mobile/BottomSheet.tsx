@@ -256,8 +256,15 @@ export function BottomSheet({
     </div>
   );
 
-  // 如果需要在 Dialog 内渲染到 dialogContent 中
-  if (inlineInDialog) {
+  // 移动设备检测：屏幕宽度 ≤ 1000px 且为竖屏
+  const isMobileDevice = () => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 1000 && window.innerHeight > window.innerWidth;
+  };
+
+  // 在移动设备上，BottomSheet 应该始终从屏幕最下方全屏弹出
+  // 忽略 inlineInDialog 设置，直接渲染到 document.body
+  if (inlineInDialog && !isMobileDevice()) {
     const dialogContent = document.querySelector('.vx-dialog__content');
     if (dialogContent) {
       return createPortal(sheetContent, dialogContent);
