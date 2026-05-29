@@ -2715,17 +2715,23 @@ a {
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* ActionSheet */
-.vxm-actionsheet__overlay {
+/* ── Sheet Mobile (Bottom & Action) ───────────────────────── */
+.vxm-actionsheet__overlay,
+.vxm-bottomsheet__overlay {
   position: fixed;
   inset: 0;
   z-index: var(--vx-z-sheet-overlay);
+  display: flex;
+  align-items: flex-end;
+}
+.vxm-actionsheet__overlay {
   background: var(--vx-glass-scrim);
   backdrop-filter: blur(14px) saturate(1.06);
   -webkit-backdrop-filter: blur(14px) saturate(1.06);
-  display: flex;
-  align-items: flex-end;
-  animation: vxm-overlay-in 180ms ease forwards;
+  animation: vx-fade-in 200ms ease forwards;
+}
+.vxm-actionsheet__overlay--exiting {
+  animation: vx-fade-out 200ms ease forwards;
 }
 
 .vxm-actionsheet {
@@ -2740,11 +2746,13 @@ a {
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
   display: flex;
   flex-direction: column;
-  animation: vxm-sheet-in 300ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
   will-change: transform;
-  touch-action: pan-x;
   user-select: none;
   -webkit-user-select: none;
+  animation: vxm-sheet-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+.vxm-actionsheet--exiting {
+  animation: vxm-sheet-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
 .vxm-actionsheet__handle {
@@ -2829,6 +2837,62 @@ a {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
 }
+@keyframes vxm-sheet-out {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+/* Sheet Desktop keyframes */
+@keyframes vx-sheet-slide-right-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes vx-sheet-slide-right-out {
+  from { transform: translateX(0);    opacity: 1; }
+  to   { transform: translateX(100%); opacity: 0; }
+}
+@keyframes vx-sheet-slide-left-in {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes vx-sheet-slide-left-out {
+  from { transform: translateX(0);     opacity: 1; }
+  to   { transform: translateX(-100%); opacity: 0; }
+}
+@keyframes vx-sheet-slide-top-in {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+@keyframes vx-sheet-slide-top-out {
+  from { transform: translateY(0);     opacity: 1; }
+  to   { transform: translateY(-100%); opacity: 0; }
+}
+@keyframes vx-sheet-slide-bottom-in {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes vx-sheet-slide-bottom-out {
+  from { transform: translateY(0);    opacity: 1; }
+  to   { transform: translateY(100%); opacity: 0; }
+}
+
+/* Sheet Drawer keyframes */
+@keyframes vxm-drawer-left-in {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+@keyframes vxm-drawer-left-out {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+@keyframes vxm-drawer-right-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes vxm-drawer-right-out {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
 
 /* ── BottomSheet ─────────────────────────────────────────────── */
 .vxm-bottomsheet__overlay {
@@ -2839,9 +2903,6 @@ a {
   display: flex;
   align-items: flex-end;
   pointer-events: auto;
-}
-
-.vxm-bottomsheet__overlay--entering {
   animation: vxm-bottomsheet-overlay-in 200ms ease forwards;
 }
 
@@ -2862,6 +2923,10 @@ a {
   display: flex;
   flex-direction: column;
   will-change: transform;
+  animation: vxm-bottomsheet-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+.vxm-bottomsheet--exiting {
+  animation: vxm-bottomsheet-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 .vxm-bottomsheet__handle {
   width: 36px;
@@ -3158,21 +3223,24 @@ a {
   padding: 12px;
 }
 
-/* ── MobileDrawer ─────────────────────────────────────────── */
+/* ── Sheet Drawer (Mobile) ────────────────────────────────── */
 .vxm-drawer__overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: var(--vx-z-sheet-overlay);
   display: flex;
 }
 
 .vxm-drawer__scrim {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  background: color-mix(in srgb, var(--vx-glass-scrim) calc(var(--vxm-overlay-opacity, 0.52) * 100%), transparent);
+  background: var(--vx-glass-scrim);
   backdrop-filter: blur(14px) saturate(1.06);
   -webkit-backdrop-filter: blur(14px) saturate(1.06);
-  transition: background 200ms ease;
+  animation: vx-fade-in 200ms ease forwards;
+}
+.vxm-drawer__scrim--exiting {
+  animation: vx-fade-out 200ms ease forwards;
 }
 
 .vxm-drawer {
@@ -3186,15 +3254,23 @@ a {
   display: flex;
   flex-direction: column;
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
-  animation: vxm-drawer-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
   will-change: transform;
-  touch-action: pan-y;
   overflow: hidden;
 }
 
-@keyframes vxm-drawer-in {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+.vxm-drawer--left {
+  animation: vxm-drawer-left-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+.vxm-drawer--left.vxm-drawer--exiting {
+  animation: vxm-drawer-left-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+.vxm-drawer--right {
+  margin-left: auto;
+  animation: vxm-drawer-right-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+.vxm-drawer--right.vxm-drawer--exiting {
+  animation: vxm-drawer-right-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
 .vxm-drawer__header {
@@ -3855,6 +3931,7 @@ a {
   animation: vx-fade-in 120ms ease;
 }
 @keyframes vx-fade-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes vx-fade-out { from { opacity: 1; } to { opacity: 0; } }
 .vx-tooltip--top    { bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); }
 .vx-tooltip--bottom { top: calc(100% + 6px); left: 50%; transform: translateX(-50%); }
 .vx-tooltip--left   { right: calc(100% + 6px); top: 50%; transform: translateY(-50%); }
@@ -8136,7 +8213,10 @@ a {
   color: var(--vx-danger);
 }
 
-/* ── Sheet ─────────────────────────────────────────────────── */
+/* ── Sheet ────────────────────────────────────────────────── */
+/* 统一组件，同时处理桌面端和移动端的所有方向 */
+
+/* Overlay — 遮罩层，阻止事件穿透到背景，但不响应点击关闭 */
 .vx-sheet__overlay {
   position: fixed;
   inset: 0;
@@ -8144,8 +8224,13 @@ a {
   backdrop-filter: blur(8px) saturate(1.08);
   -webkit-backdrop-filter: blur(8px) saturate(1.08);
   z-index: var(--vx-z-sheet-overlay);
-  animation: vx-fade-in 200ms ease;
+  animation: vx-fade-in 200ms ease forwards;
 }
+.vx-sheet__overlay--exiting {
+  animation: vx-fade-out 200ms ease forwards;
+}
+
+/* Sheet 面板 */
 .vx-sheet {
   position: fixed;
   z-index: var(--vx-z-sheet);
@@ -8156,84 +8241,165 @@ a {
   box-shadow: var(--vx-glass-shadow);
   display: flex;
   flex-direction: column;
+  outline: none;
 }
+
+/* ── 方向 ──────────────────────────────────────────────────── */
+
 .vx-sheet--right {
   top: 0;
   right: 0;
   bottom: 0;
   width: min(420px, 90vw);
   border-left: 1px solid var(--vx-glass-border);
-  animation: vx-sheet-slide-right 220ms ease;
+  animation: vx-sheet-slide-right-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
+.vx-sheet--right.vx-sheet--exiting {
+  animation: vx-sheet-slide-right-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
 .vx-sheet--left {
   top: 0;
   left: 0;
   bottom: 0;
   width: min(420px, 90vw);
   border-right: 1px solid var(--vx-glass-border);
-  animation: vx-sheet-slide-left 220ms ease;
+  animation: vx-sheet-slide-left-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
+.vx-sheet--left.vx-sheet--exiting {
+  animation: vx-sheet-slide-left-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
 .vx-sheet--top {
   top: 0;
   left: 0;
   right: 0;
   max-height: 60vh;
   border-bottom: 1px solid var(--vx-glass-border);
-  animation: vx-sheet-slide-top 220ms ease;
+  animation: vx-sheet-slide-top-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
+.vx-sheet--top.vx-sheet--exiting {
+  animation: vx-sheet-slide-top-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
 .vx-sheet--bottom {
   bottom: 0;
   left: 0;
   right: 0;
-  max-height: 60vh;
+  max-height: 90dvh;
   border-top: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
-  animation: vx-sheet-slide-bottom 220ms ease;
+  animation: vx-sheet-slide-bottom-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
-.vx-sheet__header {
+.vx-sheet--bottom.vx-sheet--exiting {
+  animation: vx-sheet-slide-bottom-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+/* action 变体 — 底部操作列表 */
+.vx-sheet--action {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 85dvh;
+  border-top: 1px solid var(--vx-glass-border);
+  border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
+  animation: vx-sheet-slide-bottom-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+.vx-sheet--action.vx-sheet--exiting {
+  animation: vx-sheet-slide-bottom-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+/* ── 装饰性把手 ────────────────────────────────────────────── */
+.vx-sheet__handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--vx-border-strong);
+  margin: 12px auto 8px;
+  flex: 0 0 auto;
+}
+
+/* ── 关闭按钮 ──────────────────────────────────────────────── */
+.vx-sheet__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--vx-radius);
+  background: transparent;
+  color: var(--vx-text-secondary);
+  cursor: pointer;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 20px 20px 0;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 160ms ease, color 160ms ease;
+  z-index: 1;
+}
+.vx-sheet__close:hover {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+
+/* ── 头部 ──────────────────────────────────────────────────── */
+.vx-sheet__header {
+  padding: 4px 20px 12px;
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--vx-border);
 }
 .vx-sheet__title {
   margin: 0;
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--vx-text);
 }
 .vx-sheet__description {
-  margin: 6px 0 0;
-  font-size: 14px;
+  margin: 4px 0 0;
+  font-size: 13px;
   color: var(--vx-text-secondary);
+  line-height: 1.5;
 }
+
+/* ── 内容 ──────────────────────────────────────────────────── */
 .vx-sheet__body {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 0;
 }
+.vx-sheet__body--action {
+  padding: 8px 0;
+}
+
+/* ── 底部（确认按钮） ────────────────────────────────────────── */
 .vx-sheet__footer {
-  padding: 14px 20px;
-  border-top: 1px solid var(--vx-border);
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+  justify-content: center;
+  padding: 8px 20px max(env(safe-area-inset-bottom, 0px), 16px);
+  flex: 0 0 auto;
+  border-top: 1px solid var(--vx-border);
 }
-@keyframes vx-sheet-slide-right {
-  from { transform: translateX(100%); opacity: 0; }
-  to   { transform: translateX(0);    opacity: 1; }
+.vx-sheet__confirm {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: var(--vx-radius);
+  background: var(--vx-primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-@keyframes vx-sheet-slide-left {
-  from { transform: translateX(-100%); opacity: 0; }
-  to   { transform: translateX(0);     opacity: 1; }
+.vx-sheet__confirm:active {
+  background: var(--vx-primary-strong);
 }
-@keyframes vx-sheet-slide-top {
-  from { transform: translateY(-100%); opacity: 0; }
-  to   { transform: translateY(0);     opacity: 1; }
-}
-@keyframes vx-sheet-slide-bottom {
-  from { transform: translateY(100%); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
+.vx-sheet__confirm:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* ── ScrollArea ────────────────────────────────────────────── */

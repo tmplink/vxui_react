@@ -101,6 +101,7 @@ import {
   ResizableHandle,
   ScrollArea,
   Separator,
+  Sheet,
   Spinner,
   Stepper,
   Switch,
@@ -2733,6 +2734,56 @@ function DesktopApp() {
                 { label: isZh ? '查看错误页' : 'Open error page', icon: <AlertTriangle size={14} />, onClick: () => navigate({ view: 'error' }) },
               ]}
             />
+            {/* Sheet */}
+            <div style={{ width: '100%', display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--vx-text-secondary)', minWidth: 64, flexShrink: 0 }}>
+                {isZh ? '抽屉' : 'Sheet'}
+              </span>
+              <Sheet
+                trigger={<Button variant="secondary" size="sm">{isZh ? '底部抽屉' : 'Bottom sheet'}</Button>}
+                title={isZh ? '通知设置' : 'Notifications'}
+                description={isZh ? '管理您的通知偏好。' : 'Manage your notification preferences.'}
+                side="bottom"
+              >
+                <div className="vx-stack">
+                  <Switch label={isZh ? '邮件通知' : 'Email notifications'} defaultChecked />
+                  <Switch label={isZh ? '推送通知' : 'Push notifications'} defaultChecked />
+                  <Switch label={isZh ? '短信通知' : 'SMS notifications'} />
+                </div>
+              </Sheet>
+              <Sheet
+                trigger={<Button variant="secondary" size="sm">{isZh ? '右侧抽屉' : 'Right sheet'}</Button>}
+                title={isZh ? '项目设置' : 'Project settings'}
+                description={isZh ? '快速调整项目配置。' : 'Quick project configuration.'}
+                side="right"
+              >
+                <div className="vx-stack">
+                  <Input label={isZh ? '项目名称' : 'Project name'} placeholder={isZh ? '输入名称…' : 'Enter name…'} />
+                  <Select
+                    label={isZh ? '可见性' : 'Visibility'}
+                    placeholder={isZh ? '选择…' : 'Select…'}
+                    options={[
+                      { value: 'public', label: isZh ? '公开' : 'Public' },
+                      { value: 'private', label: isZh ? '私有' : 'Private' },
+                      { value: 'internal', label: isZh ? '内部' : 'Internal' },
+                    ]}
+                  />
+                </div>
+              </Sheet>
+              <Sheet
+                trigger={<Button variant="secondary" size="sm">{isZh ? '左侧抽屉' : 'Left sheet'}</Button>}
+                title={isZh ? '导航' : 'Navigation'}
+                side="left"
+              >
+                <div className="vx-stack">
+                  <Button variant="ghost" style={{ justifyContent: 'flex-start' }}>{isZh ? '仪表盘' : 'Dashboard'}</Button>
+                  <Button variant="ghost" style={{ justifyContent: 'flex-start' }}>{isZh ? '项目' : 'Projects'}</Button>
+                  <Button variant="ghost" style={{ justifyContent: 'flex-start' }}>{isZh ? '团队' : 'Team'}</Button>
+                  <Button variant="ghost" style={{ justifyContent: 'flex-start' }}>{isZh ? '设置' : 'Settings'}</Button>
+                </div>
+              </Sheet>
+            </div>
+
             {/* Added missing overlays */}
             <AlertDialog
               trigger={<Button variant="outline">{isZh ? '警告框' : 'Alert Dialog'}</Button>}

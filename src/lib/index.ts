@@ -115,12 +115,8 @@ export { MobileShell, MobileTopBar, MobileIconButton } from '../components/mobil
 export type { MobileShellProps, MobileTopBarProps, MobileIconButtonProps } from '../components/mobile/MobileShell';
 export { BottomNav } from '../components/mobile/BottomNav';
 export type { BottomNavProps, BottomNavItem } from '../components/mobile/BottomNav';
-export { ActionSheet, ActionSheetItem } from '../components/mobile/ActionSheet';
-export type { ActionSheetProps, ActionSheetItemProps } from '../components/mobile/ActionSheet';
 export { MobileList, MobileListSection, MobileListItem } from '../components/mobile/MobileList';
 export type { MobileListSectionProps, MobileListItemProps } from '../components/mobile/MobileList';
-export { MobileDrawer, DrawerNavItem, DrawerNavSection } from '../components/mobile/MobileDrawer';
-export type { MobileDrawerProps, DrawerNavItemProps, DrawerNavSectionProps } from '../components/mobile/MobileDrawer';
 
 // New: Form primitives
 export { Label } from '../components/Label';
@@ -154,9 +150,15 @@ export type { TimePickerProps } from '../components/TimePicker';
 export { FileUpload } from '../components/FileUpload';
 export type { FileUploadProps, UploadedFile } from '../components/FileUpload';
 
-// New: Sheet
+// Sheet — 统一 Sheet 组件（替代 BottomSheet / ActionSheet / MobileDrawer / 旧 Sheet）
 export { Sheet } from '../components/Sheet';
-export type { SheetProps, SheetSide } from '../components/Sheet';
+export type { SheetProps, SheetSide, SheetVariant, SheetActionItemProps } from '../components/Sheet';
+
+// @deprecated 使用统一的 Sheet 组件替代
+export { ActionSheet, ActionSheetItem } from '../components/mobile/ActionSheet';
+export type { ActionSheetProps, ActionSheetItemProps } from '../components/mobile/ActionSheet';
+export { MobileDrawer, DrawerNavItem, DrawerNavSection } from '../components/mobile/MobileDrawer';
+export type { MobileDrawerProps, DrawerNavItemProps, DrawerNavSectionProps } from '../components/mobile/MobileDrawer';
 
 // New: Scroll Area
 export { ScrollArea } from '../components/ScrollArea';

@@ -34,9 +34,7 @@ import {
 } from 'lucide-react';
 import { MobileShell, MobileTopBar, MobileIconButton } from './MobileShell';
 import { BottomNav } from './BottomNav';
-import { ActionSheet, ActionSheetItem } from './ActionSheet';
 import { MobileList, MobileListSection, MobileListItem } from './MobileList';
-import { MobileDrawer, DrawerNavItem, DrawerNavSection } from './MobileDrawer';
 import { useI18n } from '../../i18n';
 import { getPrivacyPolicyContent, getTermsOfServiceContent } from '../pages/legalPageContent';
 import { getPublicHomeContent } from '../pages/homePageContent';
@@ -1566,9 +1564,10 @@ export function MobileApp() {
   // ── drawer ─────────────────────────────────────────────────────────────────
 
   const renderDrawer = () => (
-    <MobileDrawer
+    <Sheet
+      side="left"
       open={drawerOpen}
-      onClose={() => setDrawerOpen(false)}
+      onOpenChange={(v) => { if (!v) setDrawerOpen(false); }}
       header={
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--vx-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 13 }}>vx</div>
@@ -1589,24 +1588,26 @@ export function MobileApp() {
       }
     >
       {navSections.map(section => (
-        <DrawerNavSection
-          key={section.title}
-          title={section.title}
-          collapsible={section.collapsible}
-          defaultOpen={section.defaultOpen}
-        >
-          {section.items.map(item => (
-            <DrawerNavItem
-              key={item.key}
-              icon={item.icon}
-              label={item.label}
-              active={activePage === item.key}
-              onClick={() => selectPage(item.key as PageKey)}
-            />
-          ))}
-        </DrawerNavSection>
+        <div key={section.title} className="vxm-drawer-section">
+          {section.title && (
+            <div className="vxm-drawer-section__title">{section.title}</div>
+          )}
+          <div className="vxm-drawer-section__items">
+            {section.items.map(item => (
+              <button
+                key={item.key}
+                type="button"
+                className={'vxm-drawer-item' + (activePage === item.key ? ' vxm-drawer-item--active' : '')}
+                onClick={() => selectPage(item.key as PageKey)}
+              >
+                {item.icon && <span className="vxm-drawer-item__icon">{item.icon}</span>}
+                <span className="vxm-drawer-item__label">{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       ))}
-    </MobileDrawer>
+    </Sheet>
   );
 
   // ── bottom nav ─────────────────────────────────────────────────────────────
@@ -1662,31 +1663,32 @@ export function MobileApp() {
       >
         {renderContent()}
       </MobileShell>
-      <ActionSheet
+      <Sheet
+        variant="action"
         open={actionSheetOpen}
-        onClose={() => setActionSheetOpen(false)}
+        onOpenChange={(v) => { if (!v) setActionSheetOpen(false); }}
         title={mobileView === 'docs' ? (locale === 'zh' ? '页面操作' : 'Page actions') : (locale === 'zh' ? '快捷操作' : 'Quick actions')}
         description={mobileView === 'docs' ? (locale === 'zh' ? '为当前页面选择一个动作。' : 'Choose an action for this page.') : (locale === 'zh' ? '浏览首页、文档、账户与语言入口。' : 'Open home, docs, account, and language actions.')}
       >
         {mobileView === 'docs' ? (
           <>
-            <ActionSheetItem icon={<Star size={18} />} onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '收藏页面' : 'Bookmark page'}</ActionSheetItem>
-            <ActionSheetItem icon={<Download size={18} />} onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '下载 PDF' : 'Download PDF'}</ActionSheetItem>
-            <ActionSheetItem icon={<Trash2 size={18} />} destructive onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '清除历史' : 'Clear history'}</ActionSheetItem>
+            <Sheet.Item icon={<Star size={18} />} onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '收藏页面' : 'Bookmark page'}</Sheet.Item>
+            <Sheet.Item icon={<Download size={18} />} onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '下载 PDF' : 'Download PDF'}</Sheet.Item>
+            <Sheet.Item icon={<Trash2 size={18} />} destructive onClick={() => setActionSheetOpen(false)}>{locale === 'zh' ? '清除历史' : 'Clear history'}</Sheet.Item>
           </>
         ) : (
           <>
-            <ActionSheetItem icon={<FileCode2 size={18} />} onClick={() => { setActionSheetOpen(false); selectPage('introduction'); }}>{pp.navDocs}</ActionSheetItem>
-            <ActionSheetItem icon={<LogIn size={18} />} onClick={() => { setActionSheetOpen(false); setMobileView('login'); }}>{pp.navLogin}</ActionSheetItem>
-            <ActionSheetItem icon={<UserPlus size={18} />} onClick={() => { setActionSheetOpen(false); setMobileView('register'); }}>{pp.navSignup}</ActionSheetItem>
-            <ActionSheetItem icon={locale === 'zh' ? <Check size={18} /> : undefined} onClick={() => { setLocale('zh'); setActionSheetOpen(false); }}>中文</ActionSheetItem>
-            <ActionSheetItem icon={locale === 'en' ? <Check size={18} /> : undefined} onClick={() => { setLocale('en'); setActionSheetOpen(false); }}>English</ActionSheetItem>
-            <ActionSheetItem icon={<ShieldCheck size={18} />} onClick={() => { setActionSheetOpen(false); openLegalPage('privacy-policy'); }}>{pp.footerPrivacy}</ActionSheetItem>
-            <ActionSheetItem icon={<FileText size={18} />} onClick={() => { setActionSheetOpen(false); openLegalPage('terms-of-service'); }}>{t.pages['terms-of-service']}</ActionSheetItem>
-            <ActionSheetItem icon={<Smartphone size={18} />} onClick={() => { setActionSheetOpen(false); window.location.href = '/docs/introduction'; }}>{locale === 'zh' ? '桌面版文档' : 'Desktop docs'}</ActionSheetItem>
+            <Sheet.Item icon={<FileCode2 size={18} />} onClick={() => { setActionSheetOpen(false); selectPage('introduction'); }}>{pp.navDocs}</Sheet.Item>
+            <Sheet.Item icon={<LogIn size={18} />} onClick={() => { setActionSheetOpen(false); setMobileView('login'); }}>{pp.navLogin}</Sheet.Item>
+            <Sheet.Item icon={<UserPlus size={18} />} onClick={() => { setActionSheetOpen(false); setMobileView('register'); }}>{pp.navSignup}</Sheet.Item>
+            <Sheet.Item icon={locale === 'zh' ? <Check size={18} /> : undefined} onClick={() => { setLocale('zh'); setActionSheetOpen(false); }}>中文</Sheet.Item>
+            <Sheet.Item icon={locale === 'en' ? <Check size={18} /> : undefined} onClick={() => { setLocale('en'); setActionSheetOpen(false); }}>English</Sheet.Item>
+            <Sheet.Item icon={<ShieldCheck size={18} />} onClick={() => { setActionSheetOpen(false); openLegalPage('privacy-policy'); }}>{pp.footerPrivacy}</Sheet.Item>
+            <Sheet.Item icon={<FileText size={18} />} onClick={() => { setActionSheetOpen(false); openLegalPage('terms-of-service'); }}>{t.pages['terms-of-service']}</Sheet.Item>
+            <Sheet.Item icon={<Smartphone size={18} />} onClick={() => { setActionSheetOpen(false); window.location.href = '/docs/introduction'; }}>{locale === 'zh' ? '桌面版文档' : 'Desktop docs'}</Sheet.Item>
           </>
         )}
-      </ActionSheet>
+      </Sheet>
     </>
   );
 }

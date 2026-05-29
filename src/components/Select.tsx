@@ -4,7 +4,7 @@ import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
 import { getDialogPopoverContext } from '../lib/dialogPopover';
 import { useIsMobile } from '../hooks/useIsMobile';
-import { BottomSheet } from './mobile/BottomSheet';
+import { Sheet } from './Sheet';
 
 export interface SelectOption {
   value: string;
@@ -336,18 +336,17 @@ export function Select({
       })()}
       {/* Mobile BottomSheet */}
       {isMobile && (
-        <BottomSheet
+        <Sheet
+          side="bottom"
           open={open}
-          onClose={() => setOpen(false)}
+          onOpenChange={(v) => { if (!v) setOpen(false); }}
           title={label || placeholder}
-          draggable
           showConfirm
           confirmDisabled={pendingValue === undefined}
           onConfirm={handleConfirm}
-          inlineInDialog={Boolean(getDialogPopoverContext(wrapRef.current).dialogContent)}
         >
           {mobileSheetContent}
-        </BottomSheet>
+        </Sheet>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { cx } from '../lib/cx';
 import { getDialogPopoverContext } from '../lib/dialogPopover';
 import { useIsMobile } from '../hooks/useIsMobile';
-import { BottomSheet } from './mobile/BottomSheet';
+import { Sheet } from './Sheet';
 
 function pad(n: number): string {
   return String(n).padStart(2, '0');
@@ -363,17 +363,16 @@ export function TimePicker({
       })()}
       {/* Mobile BottomSheet */}
       {isMobile && open && (
-        <BottomSheet
+        <Sheet
+          side="bottom"
           open={open}
-          onClose={() => setOpen(false)}
+          onOpenChange={(v) => { if (!v) setOpen(false); }}
           title={label || 'Select time'}
-          draggable
           showConfirm
           onConfirm={handleConfirm}
-          inlineInDialog={Boolean(getDialogPopoverContext(wrapRef.current).dialogContent)}
         >
           {mobileSheetContent}
-        </BottomSheet>
+        </Sheet>
       )}
     </div>
   );

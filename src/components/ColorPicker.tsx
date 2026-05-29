@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { cx } from '../lib/cx';
-import { BottomSheet } from './mobile/BottomSheet';
+import { Sheet } from './Sheet';
 
 // ─── Utilities ─────────────────────────────────────────────────────────────
 function hexToHsl(hex: string): [number, number, number] {
@@ -284,16 +284,16 @@ export function ColorPicker({
       {/* 桌面端：使用原有面板 */}
       {!isMobileDevice() && open && desktopPanel}
 
-      {/* 移动端：使用 BottomSheet */}
+      {/* 移动端：使用 Sheet */}
       {isMobileDevice() && (
-        <BottomSheet
+        <Sheet
+          side="bottom"
           open={open}
-          onClose={() => setOpen(false)}
+          onOpenChange={(v) => { if (!v) setOpen(false); }}
           title="颜色选择器"
-          draggable
         >
           {mobileSheetContent}
-        </BottomSheet>
+        </Sheet>
       )}
     </div>
   );
