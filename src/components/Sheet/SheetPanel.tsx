@@ -23,6 +23,8 @@ export interface SheetPanelProps {
   confirmDisabled?: boolean;
   onConfirm?: () => void;
   onClose: () => void;
+  /** 点击遮罩层关闭 */
+  closeOnOverlayClick?: boolean;
   /** action 变体：使用操作列表样式（无关闭按钮、无确认按钮） */
   action?: boolean;
   /** 抽屉宽度（仅 left/right 有效） */
@@ -57,6 +59,7 @@ export function SheetPanel({
   confirmDisabled = false,
   onConfirm,
   onClose,
+  closeOnOverlayClick = true,
   action = false,
   width,
 }: SheetPanelProps) {
@@ -88,6 +91,7 @@ export function SheetPanel({
         'vx-sheet__overlay',
         phase === 'exiting' && 'vx-sheet__overlay--exiting',
       )}
+      onClick={closeOnOverlayClick ? onClose : undefined}
     >
       <div
         ref={contentRef}
@@ -103,6 +107,7 @@ export function SheetPanel({
           action && 'vx-sheet--action',
           className,
         )}
+        onClick={(e) => e.stopPropagation()}
         style={isSidePanel && width ? { width } : undefined}
       >
         {/* 拖动把手（仅装饰性） */}

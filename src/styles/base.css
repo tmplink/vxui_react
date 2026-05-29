@@ -2896,6 +2896,15 @@ a {
 }
 
 /* Sheet Desktop keyframes */
+@keyframes vx-sheet-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes vx-sheet-overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
 @keyframes vx-sheet-slide-right-in {
   from { transform: translateX(100%); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
@@ -8266,10 +8275,10 @@ a {
   backdrop-filter: blur(8px) saturate(1.08);
   -webkit-backdrop-filter: blur(8px) saturate(1.08);
   z-index: var(--vx-z-sheet-overlay);
-  animation: vx-fade-in 200ms ease forwards;
+  animation: vx-sheet-overlay-in 200ms ease both;
 }
 .vx-sheet__overlay--exiting {
-  animation: vx-fade-out 200ms ease forwards;
+  animation: vx-sheet-overlay-out 200ms ease both;
 }
 
 /* Sheet 面板 */
@@ -8293,10 +8302,10 @@ a {
   bottom: 0;
   width: min(420px, 90vw);
   border-left: 1px solid var(--vx-glass-border);
-  animation: vx-sheet-slide-right-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-right-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 .vx-sheet--right.vx-sheet--exiting {
-  animation: vx-sheet-slide-right-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-right-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
 .vx-sheet--left {
@@ -8305,10 +8314,10 @@ a {
   bottom: 0;
   width: min(420px, 90vw);
   border-right: 1px solid var(--vx-glass-border);
-  animation: vx-sheet-slide-left-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-left-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 .vx-sheet--left.vx-sheet--exiting {
-  animation: vx-sheet-slide-left-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-left-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
 .vx-sheet--top {
@@ -8317,10 +8326,10 @@ a {
   right: 0;
   max-height: 60vh;
   border-bottom: 1px solid var(--vx-glass-border);
-  animation: vx-sheet-slide-top-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-top-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 .vx-sheet--top.vx-sheet--exiting {
-  animation: vx-sheet-slide-top-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-top-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
 .vx-sheet--bottom {
@@ -8330,10 +8339,10 @@ a {
   max-height: 90dvh;
   border-top: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
-  animation: vx-sheet-slide-bottom-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-bottom-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 .vx-sheet--bottom.vx-sheet--exiting {
-  animation: vx-sheet-slide-bottom-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-bottom-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
 /* action 变体 — 底部操作列表 */
@@ -8345,10 +8354,10 @@ a {
   border-top: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
   padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
-  animation: vx-sheet-slide-bottom-in 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-bottom-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 .vx-sheet--action.vx-sheet--exiting {
-  animation: vx-sheet-slide-bottom-out 280ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: vx-sheet-slide-bottom-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
 }
 
 /* ── 装饰性把手 ────────────────────────────────────────────── */

@@ -35,6 +35,7 @@ export interface SheetProps {
 
   // ─── 行为 ───
   showClose?: boolean;
+  closeOnOverlayClick?: boolean;
   showConfirm?: boolean;
   confirmText?: string;
   confirmDisabled?: boolean;
@@ -115,6 +116,7 @@ export function Sheet({
   defaultOpen,
   onOpenChange,
   showClose = true,
+  closeOnOverlayClick = true,
   showConfirm = false,
   confirmText = '确认',
   confirmDisabled = false,
@@ -140,6 +142,7 @@ export function Sheet({
         footer={footer}
         className={className}
         showClose={variant === 'action' ? false : showClose}
+        closeOnOverlayClick={closeOnOverlayClick}
         showConfirm={showConfirm}
         confirmText={confirmText}
         confirmDisabled={confirmDisabled}
