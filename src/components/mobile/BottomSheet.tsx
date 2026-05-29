@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, type ReactNode } from 'react';
+import { useEffect, useRef, useState, useCallback, useLayoutEffect, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../lib/cx';
 
@@ -55,24 +55,33 @@ export function BottomSheet({
 
   // ─── 状态机：自主管理动画生命周期 ────────────────────────────────
   const [phase, setPhase] = useState<Phase>('hidden');
+  // 标记 entering 阶段是否已经渲染了初始状态（translateY(100%)）
+  const initialRenderRef = useRef(false);
 
   // open 从 false → true：启动进入动画
   useEffect(() => {
     if (open && phase === 'hidden') {
-      // 先设置 entering，此时 sheet 从 translateY(100%) 开始
+      initialRenderRef.current = false;
       setPhase('entering');
-      // 下一帧设置 visible，触发 transition 到 translateY(0)
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setPhase('visible');
-        });
-      });
     }
   }, [open, phase]);
 
+  // 当 phase 变为 entering 时，先用 layout effect 确保 DOM 已渲染 translateY(100%)
+  // 然后再切换到 visible 触发 transition
+  useLayoutEffect(() => {
+    if (phase === 'entering' && !initialRenderRef.current) {
+      // 标记初始渲染已完成，下一帧切换到 visible
+      initialRenderRef.current = true;
+      requestAnimationFrame(() => {
+        setPhase('visible');
+      });
+    }
+  }, [phase]);
+
   // 关闭流程：启动退出动画 → 动画结束后回调
+  // 允许从 entering 或 visible 阶段启动退出（用户在进入动画中点击关闭按钮）
   const startExiting = useCallback(() => {
-    if (phase !== 'visible') return;
+    if (phase !== 'visible' && phase !== 'entering') return;
     setPhase('exiting');
     setDragging(false);
   }, [phase]);
@@ -125,16 +134,19 @@ export function BottomSheet({
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     if (!draggable) return;
+    // 只在 visible 阶段允许拖拽
+    if (phase !== 'visible') return;
     // 仅当触摸起点在拖拽手柄上时才启动拖拽
     const handleEl = handleRef.current;
     if (!handleEl) return;
     const touch = e.touches[0];
-    const target = document.elementFromPoint(touch.clientX, touch.clientY);
-    if (!target || !handleEl.contains(target)) return;
+    // 使用 e.target 替代 elementFromPoint，更可靠
+    const target = e.target as Node;
+    if (!handleEl.contains(target)) return;
     startYRef.current = touch.clientY;
     draggedRef.current = 0;
     setDragging(true);
-  }, [draggable]);
+  }, [draggable, phase]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
     if (!draggable || !dragging) return;
@@ -174,22 +186,25 @@ export function BottomSheet({
   const showFooter = showConfirm;
 
   // 计算 sheet 的 translateY：
-  // - entering: 从底部滑入（translateY(100%) → translateY(0)）
-  // - visible: 正常位置（translateY(0) + 拖拽偏移）
-  // - exiting: 滑出到底部（translateY(0) → translateY(100%)）
+  // - entering: translateY(100%) — 初始状态，等待 useLayoutEffect 切换到 visible
+  // - visible: translateY(0) + 拖拽偏移 — transition 从 100% 过渡到 0
+  // - exiting: translateY(100%) — transition 从当前位置过渡到 100%
   const sheetTranslateY =
     phase === 'entering'
-      ? `calc(100% + ${translateY}px)`
+      ? '100%'
       : phase === 'exiting'
         ? '100%'
         : `${translateY}px`;
 
-  const sheetTransition = dragging
-    ? 'none'
-    : phase === 'entering'
-      ? 'transform 300ms cubic-bezier(0.32, 0.72, 0, 1)'
-      : phase === 'exiting'
-        ? 'transform 280ms cubic-bezier(0.32, 0.72, 0, 1)'
+  // entering 阶段：transition 设为 none，因为初始状态就是 translateY(100%)
+  // 当 useLayoutEffect 切换到 visible 时，transition 生效从 100% → 0
+  // visible 阶段：拖拽时 transition 为 none，否则为 280ms
+  // exiting 阶段：transition 从当前位置过渡到 100%
+  const sheetTransition =
+    phase === 'entering'
+      ? 'none'
+      : dragging
+        ? 'none'
         : 'transform 280ms cubic-bezier(0.32, 0.72, 0, 1)';
 
   const sheetContent = (

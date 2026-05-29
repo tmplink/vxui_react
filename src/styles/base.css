@@ -2863,7 +2863,6 @@ a {
   flex-direction: column;
   will-change: transform;
 }
-
 .vxm-bottomsheet__handle {
   width: 36px;
   height: 4px;
