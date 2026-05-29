@@ -1,10 +1,20 @@
-import type { ReactNode } from 'react';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
+import {
+  useRef,
+  useEffect,
+  useCallback,
+  useId,
+  type ReactNode,
+  type ReactElement,
+  type MouseEvent as ReactMouseEvent,
+} from 'react';
+import { createPortal } from 'react-dom';
+import { useDialogState } from '../hooks/useDialogState';
+import { useFocusTrap } from '../hooks/useFocusTrap';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { cx } from '../lib/cx';
 import { Button } from './Button';
 
-export interface AlertDialogProps
-  extends Pick<DialogPrimitive.DialogProps, 'defaultOpen' | 'onOpenChange' | 'open'> {
+export interface AlertDialogProps {
   trigger: ReactNode;
   title: string;
   description?: string;
@@ -14,7 +24,69 @@ export interface AlertDialogProps
   onCancel?: () => void;
   variant?: 'default' | 'danger';
   className?: string;
+  /** Controlled open state */
+  open?: boolean;
+  /** Default open state for uncontrolled mode */
+  defaultOpen?: boolean;
+  /** Callback when open state changes */
+  onOpenChange?: (open: boolean) => void;
 }
+
+// ── Element helpers ─────────────────────────────────────────────────────────
+
+function isValidElementWithRef(node: unknown): node is ReactElement & { ref?: unknown } {
+  return (
+    node !== null &&
+    node !== undefined &&
+    typeof node === 'object' &&
+    'type' in node &&
+    'props' in node
+  );
+}
+
+function cloneElementWithProps(
+  element: ReactElement,
+  extraProps: Record<string, unknown>,
+): ReactElement {
+  const { onClick: existingOnClick, ...existingProps } = element.props as Record<string, unknown>;
+
+  const mergedOnClick = (e: ReactMouseEvent) => {
+    if (typeof existingOnClick === 'function') {
+      existingOnClick(e);
+    }
+    if (typeof extraProps.onClick === 'function') {
+      (extraProps.onClick as (e: ReactMouseEvent) => void)(e);
+    }
+  };
+
+  return {
+    ...element,
+    props: {
+      ...existingProps,
+      ...extraProps,
+      onClick: mergedOnClick,
+    },
+  };
+}
+
+function TriggerWrapper({
+  trigger,
+  onOpen,
+}: {
+  trigger: ReactNode;
+  onOpen: () => void;
+}) {
+  if (isValidElementWithRef(trigger)) {
+    return cloneElementWithProps(trigger, { onClick: onOpen });
+  }
+  return (
+    <button type="button" onClick={onOpen}>
+      {trigger}
+    </button>
+  );
+}
+
+// ── Main AlertDialog component ──────────────────────────────────────────────
 
 export function AlertDialog({
   trigger,
@@ -26,38 +98,94 @@ export function AlertDialog({
   onCancel,
   variant = 'default',
   className,
-  ...props
+  open: openProp,
+  defaultOpen,
+  onOpenChange,
 }: AlertDialogProps) {
+  const { isOpen, open, close } = useDialogState({
+    open: openProp,
+    defaultOpen,
+    onOpenChange,
+  });
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const titleId = useId();
+  const descId = useId();
+
+  useBodyScrollLock(isOpen);
+  useFocusTrap(contentRef, { active: isOpen });
+
+  // Escape key closes the alert dialog
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        close();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, close]);
+
+  // Click overlay to close
+  const handleOverlayClick = useCallback(
+    (e: ReactMouseEvent) => {
+      if (e.target === e.currentTarget) {
+        close();
+      }
+    },
+    [close],
+  );
+
+  const handleConfirm = useCallback(() => {
+    onConfirm?.();
+    close();
+  }, [onConfirm, close]);
+
+  const handleCancel = useCallback(() => {
+    onCancel?.();
+    close();
+  }, [onCancel, close]);
+
   return (
-    <DialogPrimitive.Root {...props}>
-      <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className="vx-dialog__overlay" />
-        <DialogPrimitive.Content
-          className={cx('vx-alert-dialog__content', className)}
-          role="alertdialog"
-          aria-modal="true"
-        >
-          <DialogPrimitive.Title className="vx-alert-dialog__title">{title}</DialogPrimitive.Title>
-          {description ? (
-            <DialogPrimitive.Description className="vx-alert-dialog__description">
-              {description}
-            </DialogPrimitive.Description>
-          ) : null}
-          <div className="vx-alert-dialog__footer">
-            <DialogPrimitive.Close asChild>
-              <Button variant="secondary" onClick={onCancel}>
-                {cancelLabel}
-              </Button>
-            </DialogPrimitive.Close>
-            <DialogPrimitive.Close asChild>
-              <Button variant={variant === 'danger' ? 'danger' : 'solid'} onClick={onConfirm}>
-                {confirmLabel}
-              </Button>
-            </DialogPrimitive.Close>
-          </div>
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+    <>
+      <TriggerWrapper trigger={trigger} onOpen={open} />
+
+      {isOpen &&
+        createPortal(
+          <>
+            <div className="vx-dialog__overlay" onClick={handleOverlayClick} />
+            <div
+              ref={contentRef}
+              role="alertdialog"
+              aria-modal="true"
+              aria-labelledby={titleId}
+              aria-describedby={description ? descId : undefined}
+              tabIndex={-1}
+              className={cx('vx-alert-dialog__content', className)}
+            >
+              <h2 id={titleId} className="vx-alert-dialog__title">
+                {title}
+              </h2>
+              {description ? (
+                <p id={descId} className="vx-alert-dialog__description">
+                  {description}
+                </p>
+              ) : null}
+              <div className="vx-alert-dialog__footer">
+                <Button variant="secondary" onClick={handleCancel}>
+                  {cancelLabel}
+                </Button>
+                <Button variant={variant === 'danger' ? 'danger' : 'solid'} onClick={handleConfirm}>
+                  {confirmLabel}
+                </Button>
+              </div>
+            </div>
+          </>,
+          document.body,
+        )}
+    </>
   );
 }
