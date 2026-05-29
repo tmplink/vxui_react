@@ -9297,3 +9297,41 @@ a {
   }
 }
 
+/* ── ColorPicker BottomSheet (mobile) ──────────────────────────── */
+.vxm-colorpicker__sheet {
+  padding: 8px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vxm-colorpicker__sheet .vx-colorpicker__section-label {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.vxm-colorpicker__sheet .vx-colorpicker__hue-slider,
+.vxm-colorpicker__sheet .vx-colorpicker__sat-slider,
+.vxm-colorpicker__sheet .vx-colorpicker__lit-slider {
+  height: 40px;
+  border-radius: 99px;
+}
+
+.vxm-colorpicker__sheet .vx-colorpicker__hue-slider::-webkit-slider-thumb,
+.vxm-colorpicker__sheet .vx-colorpicker__sat-slider::-webkit-slider-thumb,
+.vxm-colorpicker__sheet .vx-colorpicker__lit-slider::-webkit-slider-thumb {
+  width: 24px;
+  height: 24px;
+}
+
+.vxm-colorpicker__sheet .vx-colorpicker__presets {
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.vxm-colorpicker__sheet .vx-colorpicker__preset {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 8px;
+}
+

@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { cx } from '../lib/cx';
+import { BottomSheet } from './mobile/BottomSheet';
 
 // ─── Utilities ─────────────────────────────────────────────────────────────
 function hexToHsl(hex: string): [number, number, number] {
@@ -93,41 +94,13 @@ export function ColorPicker({
 
   const [hexInput, setHexInput] = useState(color);
   const [open, setOpen] = useState(false);
-  const [closing, setClosing] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
-  // Close with animation for mobile bottom sheet
-  const closeWithAnimation = () => {
-    setClosing(true);
-    setTimeout(() => {
-      setClosing(false);
-      setOpen(false);
-    }, 300);
-  };
-
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: Event) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) closeWithAnimation();
-    };
-    const keyHandler = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); closeWithAnimation(); }
-    };
-    document.addEventListener('mousedown', handler);
-    document.addEventListener('touchstart', handler, { passive: true });
-    document.addEventListener('keydown', keyHandler);
-    return () => {
-      document.removeEventListener('mousedown', handler);
-      document.removeEventListener('touchstart', handler);
-      document.removeEventListener('keydown', keyHandler);
-    };
-  }, [open, closeWithAnimation]);
-
-  useEffect(() => {
-    if (!open || !window.matchMedia('(max-width: 640px)').matches) return;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
-  }, [open]);
+  // 移动设备检测：屏幕宽度 ≤ 1000px 且为竖屏
+  const isMobileDevice = useCallback(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 1000 && window.innerHeight > window.innerWidth;
+  }, []);
 
   const [h, s, l] = isValidHex(color) ? hexToHsl(color) : [0, 0, 50];
 
@@ -145,6 +118,138 @@ export function ColorPicker({
     setHexInput(v);
     if (isValidHex(v)) set(v);
   };
+
+  // ─── 桌面端面板 ──────────────────────────────────────────────────
+  const desktopPanel = (
+    <div className={cx('vx-colorpicker__panel')} role="dialog" aria-label="Color picker">
+      {/* Hue slider */}
+      <div className="vx-colorpicker__section-label">Hue</div>
+      <input
+        type="range"
+        className="vx-colorpicker__hue-slider"
+        min="0"
+        max="360"
+        value={h}
+        onChange={(e) => set(hslToHex(Number(e.target.value), s, l))}
+        aria-label="Hue"
+      />
+
+      {/* Saturation slider */}
+      <div className="vx-colorpicker__section-label">Saturation</div>
+      <input
+        type="range"
+        className="vx-colorpicker__sat-slider"
+        min="0"
+        max="100"
+        value={s}
+        style={{ '--vx-cp-hue': h } as React.CSSProperties}
+        onChange={(e) => set(hslToHex(h, Number(e.target.value), l))}
+        aria-label="Saturation"
+      />
+
+      {/* Lightness slider */}
+      <div className="vx-colorpicker__section-label">Lightness</div>
+      <input
+        type="range"
+        className="vx-colorpicker__lit-slider"
+        min="0"
+        max="100"
+        value={l}
+        style={{ '--vx-cp-hue': h, '--vx-cp-sat': `${s}%` } as React.CSSProperties}
+        onChange={(e) => set(hslToHex(h, s, Number(e.target.value)))}
+        aria-label="Lightness"
+      />
+
+      {/* Presets */}
+      {showPresets && (
+        <div className="vx-colorpicker__presets">
+          {presets.map((p) => (
+            <button
+              key={p}
+              type="button"
+              className={cx(
+                'vx-colorpicker__preset',
+                color.toLowerCase() === p.toLowerCase() && 'vx-colorpicker__preset--active',
+              )}
+              style={{ background: p }}
+              onClick={() => set(p)}
+              aria-label={p}
+            />
+          ))}
+        </div>
+      )}
+
+      <button
+        type="button"
+        className="vx-colorpicker__close"
+        onClick={() => setOpen(false)}
+      >
+        Done
+      </button>
+    </div>
+  );
+
+  // ─── 移动端 BottomSheet 内容 ─────────────────────────────────────
+  const mobileSheetContent = (
+    <div className="vxm-colorpicker__sheet">
+      {/* Hue slider */}
+      <div className="vx-colorpicker__section-label">Hue</div>
+      <input
+        type="range"
+        className="vx-colorpicker__hue-slider"
+        min="0"
+        max="360"
+        value={h}
+        onChange={(e) => set(hslToHex(Number(e.target.value), s, l))}
+        aria-label="Hue"
+      />
+
+      {/* Saturation slider */}
+      <div className="vx-colorpicker__section-label">Saturation</div>
+      <input
+        type="range"
+        className="vx-colorpicker__sat-slider"
+        min="0"
+        max="100"
+        value={s}
+        style={{ '--vx-cp-hue': h } as React.CSSProperties}
+        onChange={(e) => set(hslToHex(h, Number(e.target.value), l))}
+        aria-label="Saturation"
+      />
+
+      {/* Lightness slider */}
+      <div className="vx-colorpicker__section-label">Lightness</div>
+      <input
+        type="range"
+        className="vx-colorpicker__lit-slider"
+        min="0"
+        max="100"
+        value={l}
+        style={{ '--vx-cp-hue': h, '--vx-cp-sat': `${s}%` } as React.CSSProperties}
+        onChange={(e) => set(hslToHex(h, s, Number(e.target.value)))}
+        aria-label="Lightness"
+      />
+
+      {/* Presets */}
+      {showPresets && (
+        <div className="vx-colorpicker__presets">
+          {presets.map((p) => (
+            <button
+              key={p}
+              type="button"
+              className={cx(
+                'vx-colorpicker__preset',
+                color.toLowerCase() === p.toLowerCase() && 'vx-colorpicker__preset--active',
+              )}
+              style={{ background: p }}
+              onClick={() => set(p)}
+              aria-label={p}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div ref={wrapRef} className={cx('vx-colorpicker', className)}>
@@ -176,73 +281,19 @@ export function ColorPicker({
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
 
-      {open && (
-        <div className={cx('vx-colorpicker__panel', closing && 'vx-colorpicker__panel--closing')} role="dialog" aria-label="Color picker">
-          {/* Hue slider */}
-          <div className="vx-colorpicker__section-label">Hue</div>
-          <input
-            type="range"
-            className="vx-colorpicker__hue-slider"
-            min="0"
-            max="360"
-            value={h}
-            onChange={(e) => set(hslToHex(Number(e.target.value), s, l))}
-            aria-label="Hue"
-          />
+      {/* 桌面端：使用原有面板 */}
+      {!isMobileDevice() && open && desktopPanel}
 
-          {/* Saturation slider */}
-          <div className="vx-colorpicker__section-label">Saturation</div>
-          <input
-            type="range"
-            className="vx-colorpicker__sat-slider"
-            min="0"
-            max="100"
-            value={s}
-            style={{ '--vx-cp-hue': h } as React.CSSProperties}
-            onChange={(e) => set(hslToHex(h, Number(e.target.value), l))}
-            aria-label="Saturation"
-          />
-
-          {/* Lightness slider */}
-          <div className="vx-colorpicker__section-label">Lightness</div>
-          <input
-            type="range"
-            className="vx-colorpicker__lit-slider"
-            min="0"
-            max="100"
-            value={l}
-            style={{ '--vx-cp-hue': h, '--vx-cp-sat': `${s}%` } as React.CSSProperties}
-            onChange={(e) => set(hslToHex(h, s, Number(e.target.value)))}
-            aria-label="Lightness"
-          />
-
-          {/* Presets */}
-          {showPresets && (
-            <div className="vx-colorpicker__presets">
-              {presets.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  className={cx(
-                    'vx-colorpicker__preset',
-                    color.toLowerCase() === p.toLowerCase() && 'vx-colorpicker__preset--active',
-                  )}
-                  style={{ background: p }}
-                  onClick={() => set(p)}
-                  aria-label={p}
-                />
-              ))}
-            </div>
-          )}
-
-          <button
-            type="button"
-            className="vx-colorpicker__close"
-            onClick={closeWithAnimation}
-          >
-            Done
-          </button>
-        </div>
+      {/* 移动端：使用 BottomSheet */}
+      {isMobileDevice() && (
+        <BottomSheet
+          open={open}
+          onClose={() => setOpen(false)}
+          title="颜色选择器"
+          draggable
+        >
+          {mobileSheetContent}
+        </BottomSheet>
       )}
     </div>
   );
