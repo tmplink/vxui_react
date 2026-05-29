@@ -254,6 +254,10 @@ body,
   min-height: 100%;
 }
 
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   margin: 0;
   font-family: var(--vx-font);
@@ -265,13 +269,70 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-button,
-input {
+/* ── Reset browser default styles ─────────────────────────── */
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
   font: inherit;
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  outline: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6,
+p, figure, blockquote, dl, dd {
+  margin: 0;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+  padding: 0;
 }
 
 a {
   color: inherit;
+  text-decoration: none;
 }
 
 .vx-shell {
@@ -1490,9 +1551,6 @@ a {
   color: color-mix(in srgb, var(--vx-text-muted) 72%, transparent);
 }
 
-.vx-input__field:focus {
-  outline: none;
-}
 
 .vx-input--invalid {
   border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border));
@@ -1522,7 +1580,6 @@ a {
 .vx-input--underline:focus-within {
   border-bottom-color: var(--vx-primary);
   box-shadow: 0 1px 0 0 var(--vx-primary);
-  outline: none;
 }
 
 .vx-input--borderless {
@@ -1533,7 +1590,6 @@ a {
 
 .vx-input--borderless:focus-within {
   background: var(--vx-bg-accent);
-  outline: none;
 }
 
 /* Input sizes — aligned with --vx-ctrl-h-* tokens */
@@ -2598,9 +2654,6 @@ a {
   transition: color 120ms ease;
 }
 
-.vxm-bottomnav__item:focus {
-  outline: none;
-}
 
 .vxm-bottomnav__item:focus-visible {
   outline: none;
@@ -3751,7 +3804,6 @@ a {
   font-size: 0.875rem;
   font-family: inherit;
   padding: 0.5rem 0.75rem;
-  outline: none;
   transition: border-color 150ms, box-shadow 150ms;
   line-height: 1.5;
 }
@@ -3781,7 +3833,6 @@ a {
   height: 4px;
   border-radius: 9999px;
   background: var(--vx-border);
-  outline: none;
   cursor: pointer;
 }
 .vx-slider::-webkit-slider-thumb {
@@ -4306,7 +4357,6 @@ a {
   flex: 1;
   background: transparent;
   border: none;
-  outline: none;
   color: var(--vx-text);
   font-size: 1rem;
   font-family: inherit;
@@ -7408,9 +7458,6 @@ a {
   padding: 0 4px;
   -moz-appearance: textfield;
 }
-.vx-number-input__field:focus {
-  outline: none;
-}
 .vx-number-input__field::-webkit-inner-spin-button,
 .vx-number-input__field::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -7690,7 +7737,6 @@ a {
   font-size: 13px;
 }
 .vx-select__search:focus {
-  outline: none;
   border-color: var(--vx-primary);
 }
 .vx-select__list {
@@ -7882,7 +7928,6 @@ a {
   font-size: 13px;
 }
 .vx-multiselect__search:focus {
-  outline: none;
   border-color: var(--vx-primary);
 }
 .vx-multiselect__list {
@@ -8027,9 +8072,6 @@ a {
   gap: 2px;
   width: 52px;
   user-select: none;
-}
-.vx-timepicker__col:focus {
-  outline: none;
 }
 .vx-timepicker__col-btn {
   display: flex;
@@ -8241,7 +8283,6 @@ a {
   box-shadow: var(--vx-glass-shadow);
   display: flex;
   flex-direction: column;
-  outline: none;
 }
 
 /* ── 方向 ──────────────────────────────────────────────────── */
@@ -8983,7 +9024,6 @@ a {
   color: var(--vx-text);
   cursor: pointer;
   transition: background 100ms;
-  outline: none;
   padding-right: 8px;
 }
 .vx-tree__node:hover {
@@ -9101,7 +9141,6 @@ a {
   background: transparent;
   color: var(--vx-text);
   font-size: 14px;
-  outline: none;
   padding: 0;
 }
 .vx-tag-input__input::placeholder {
@@ -9150,7 +9189,6 @@ a {
   font-family: monospace;
 }
 .vx-colorpicker__hex-input:focus {
-  outline: none;
   border-color: var(--vx-primary);
 }
 .vx-colorpicker__panel {
@@ -9185,7 +9223,6 @@ a {
   width: 100%;
   height: 12px;
   border-radius: 99px;
-  outline: none;
   cursor: pointer;
   background: linear-gradient(to right,
     hsl(0,100%,50%), hsl(30,100%,50%), hsl(60,100%,50%), hsl(90,100%,50%),
@@ -9199,7 +9236,6 @@ a {
   width: 100%;
   height: 12px;
   border-radius: 99px;
-  outline: none;
   cursor: pointer;
   background: linear-gradient(to right,
     hsl(var(--vx-cp-hue, 0), 0%, 50%),
@@ -9211,7 +9247,6 @@ a {
   width: 100%;
   height: 12px;
   border-radius: 99px;
-  outline: none;
   cursor: pointer;
   background: linear-gradient(to right,
     hsl(var(--vx-cp-hue, 0), var(--vx-cp-sat, 100%), 0%),
