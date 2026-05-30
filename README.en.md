@@ -232,6 +232,4 @@ npm run typecheck
 # Build component library (for npm publish)
 npm run build
 
-# Build demo site (for Pages deployment, output to dist-demo/)
-npm run build:demo
 ```

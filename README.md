@@ -234,6 +234,4 @@ npm run typecheck
 # 构建组件库（用于 npm publish）
 npm run build
 
-# 构建演示站（用于 Pages 部署，输出至 dist-demo/）
-npm run build:demo
 ```

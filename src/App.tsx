@@ -196,6 +196,75 @@ const DOC_PAGE_KEYS = [
   'error-page',
   'privacy-policy',
   'terms-of-service',
+] as const;
+
+type PageKey = (typeof DOC_PAGE_KEYS)[number];
+type NavGroupKey = 'gettingStarted' | 'layout' | 'content' | 'forms' | 'components' | 'overlays' | 'navigation' | 'feedback' | 'templates' | 'mobile';
+type RouteView = 'home' | 'login' | 'register' | 'docs' | 'privacy-policy' | 'terms-of-service' | 'error';
+type ReleaseTrack = 'stable' | 'preview' | 'internal';
+
+interface AppRoute {
+  view: RouteView;
+  page?: PageKey;
+  path?: string;
+}
+
+interface PageDefinition {
+  section: string;
+  title: string;
+  description: string;
+  guidance: string[];
+  props?: Array<{
+    prop: string;
+    type: string;
+    default?: string;
+    required?: boolean;
+    description: string;
+  }>;
+}
+
+interface ViewerSession {
+  name: string;
+  mode: 'member' | 'guest';
+}
+
+const SESSION_STORAGE_KEY = 'vxui-react-auth-session';
+
+type NavGroupItem = PageKey | { type: 'submenu'; key: string; i18nKey: 'layout' | 'content' | 'elements' | 'forms' | 'inputs' | 'overlays' | 'navigation' | 'feedback'; pages: PageKey[]; icon: React.ReactNode };
+
+const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> = [
+  { key: 'gettingStarted', items: ['introduction'] },
+  { key: 'layout', items: ['quick-start', 'shell-sidebar', 'grid-page', 'nav-layout', 'scroll-area', 'separator', 'resizable'] },
+  { key: 'content', items: ['typography', 'badge', 'avatar', 'skeleton', 'card', 'code-block', 'language-switcher'] },
+  {
+    key: 'forms',
+    items: [
+      { type: 'submenu', key: 'inputs', i18nKey: 'inputs', pages: ['form-controls', 'form-inputs'], icon: <SlidersHorizontal size={16} /> },
+      'toggle', 'rating', 'label', 'date-pickers', 'file-upload', 'color-picker', 'form',
+    ],
+  },
+  {
+    key: 'components',
+    items: [
+      'button', 'elements', 'accordion', 'tabs', 'breadcrumb', 'pagination',
+      'stepper', 'progress', 'spinner', 'alert', 'toasts', 'table',
+      'data-list', 'timeline', 'tree-view', 'carousel', 'empty-states',
+    ],
+  },
+  {
+    key: 'overlays',
+    items: [
+      'dialog', 'sheet', 'popover', 'tooltip', 'hover-card',
+      'dropdown-menu', 'context-menu', 'command-palette',
+    ],
+  },
+  { key: 'navigation', items: ['navigation-menu', 'menubar'] },
+  { key: 'feedback', items: ['feedback'] },
+  {
+    key: 'templates',
+    items: ['home-page', 'login-page', 'register-page', 'error-page', 'privacy-policy', 'terms-of-service'],
+  },
+  { key: 'mobile', items: ['mobile', 'mobile-list'] },
 ];
 
 const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
