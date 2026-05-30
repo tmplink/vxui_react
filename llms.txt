@@ -160,6 +160,11 @@ import { Button } from 'vxui-react';
 | defaultOpen | boolean | false | Whether the dialog is open by default |
 | open | boolean | — | Controlled open state |
 | onOpenChange | (open: boolean) => void | — | Open state change handler |
+| onConfirm | () => void | — | Callback when confirm button is clicked; enables confirm/cancel footer |
+| onCancel | () => void | — | Callback when cancel button is clicked |
+| confirmLabel | string | "Confirm" | Label for the confirm button |
+| cancelLabel | string | "Cancel" | Label for the cancel button |
+| confirmVariant | 'solid' \| 'danger' | 'solid' | Visual variant of the confirm button |
 
 ## Component Index
 
@@ -198,7 +203,6 @@ import { Button } from 'vxui-react';
 
 ### Overlays & Popovers
 - **Dialog** — Modal dialog (Radix UI)
-- **AlertDialog** — Confirmation dialog with destructive action pattern
 - **Sheet** — Slide-in panel (drawer) from any edge
 - **Popover** — Floating content anchored to a trigger (Radix UI)
 - **Tooltip** — Short contextual hover label (Radix UI)
