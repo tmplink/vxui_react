@@ -93,7 +93,6 @@ import {
   TimePicker,
   useTheme,
   useToast,
-  AlertDialog,
   Breadcrumb,
   Calendar,
   Carousel,
@@ -180,7 +179,6 @@ const DOC_PAGE_KEYS = [
   'navigation',
   'feedback',
   'dialog',
-  'alert-dialog',
   'sheet',
   'popover',
   'tooltip',
@@ -198,75 +196,6 @@ const DOC_PAGE_KEYS = [
   'error-page',
   'privacy-policy',
   'terms-of-service',
-] as const;
-
-type PageKey = (typeof DOC_PAGE_KEYS)[number];
-type NavGroupKey = 'gettingStarted' | 'layout' | 'content' | 'forms' | 'components' | 'overlays' | 'navigation' | 'feedback' | 'templates' | 'mobile';
-type RouteView = 'home' | 'login' | 'register' | 'docs' | 'privacy-policy' | 'terms-of-service' | 'error';
-type ReleaseTrack = 'stable' | 'preview' | 'internal';
-
-interface AppRoute {
-  view: RouteView;
-  page?: PageKey;
-  path?: string;
-}
-
-interface PageDefinition {
-  section: string;
-  title: string;
-  description: string;
-  guidance: string[];
-  props?: Array<{
-    prop: string;
-    type: string;
-    default?: string;
-    required?: boolean;
-    description: string;
-  }>;
-}
-
-interface ViewerSession {
-  name: string;
-  mode: 'member' | 'guest';
-}
-
-const SESSION_STORAGE_KEY = 'vxui-react-auth-session';
-
-type NavGroupItem = PageKey | { type: 'submenu'; key: string; i18nKey: 'layout' | 'content' | 'elements' | 'forms' | 'inputs' | 'overlays' | 'navigation' | 'feedback'; pages: PageKey[]; icon: React.ReactNode };
-
-const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> = [
-  { key: 'gettingStarted', items: ['introduction'] },
-  { key: 'layout', items: ['quick-start', 'shell-sidebar', 'grid-page', 'nav-layout', 'scroll-area', 'separator', 'resizable'] },
-  { key: 'content', items: ['typography', 'badge', 'avatar', 'skeleton', 'card', 'code-block', 'language-switcher'] },
-  {
-    key: 'forms',
-    items: [
-      { type: 'submenu', key: 'inputs', i18nKey: 'inputs', pages: ['form-controls', 'form-inputs'], icon: <SlidersHorizontal size={16} /> },
-      'toggle', 'rating', 'label', 'date-pickers', 'file-upload', 'color-picker', 'form',
-    ],
-  },
-  {
-    key: 'components',
-    items: [
-      'button', 'elements', 'accordion', 'tabs', 'breadcrumb', 'pagination',
-      'stepper', 'progress', 'spinner', 'alert', 'toasts', 'table',
-      'data-list', 'timeline', 'tree-view', 'carousel', 'empty-states',
-    ],
-  },
-  {
-    key: 'overlays',
-    items: [
-      'dialog', 'alert-dialog', 'sheet', 'popover', 'tooltip', 'hover-card',
-      'dropdown-menu', 'context-menu', 'command-palette',
-    ],
-  },
-  { key: 'navigation', items: ['navigation-menu', 'menubar'] },
-  { key: 'feedback', items: ['feedback'] },
-  {
-    key: 'templates',
-    items: ['home-page', 'login-page', 'register-page', 'error-page', 'privacy-policy', 'terms-of-service'],
-  },
-  { key: 'mobile', items: ['mobile', 'mobile-list'] },
 ];
 
 const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
@@ -315,7 +244,6 @@ const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
   'navigation',
   'feedback',
   'dialog',
-  'alert-dialog',
   'sheet',
   'popover',
   'tooltip',
@@ -382,7 +310,6 @@ const pageIcons: Record<PageKey, ReactNode> = {
   navigation: <Compass size={16} />,
   feedback: <ShieldCheck size={16} />,
   dialog: <ChevronRight size={16} />,
-  'alert-dialog': <AlertTriangle size={16} />,
   sheet: <PanelRightClose size={16} />,
   popover: <ChevronRight size={16} />,
   tooltip: <ChevronRight size={16} />,
@@ -869,7 +796,7 @@ export function ProjectForm() {
   );
 }`,
   'form-inputs': String.raw`import { useState } from 'react';
-import { Checkbox, Radio, RadioGroup, Slider, Switch, NumberInput, TagInput, FileUpload, Rating, Calendar, AlertDialog, ContextMenu, HoverCard, Tooltip, Spinner, Stepper, Breadcrumb, Menubar, NavigationMenu, ScrollArea, Separator, ResizablePanelGroup, ResizablePanel, ResizableHandle, Carousel, Timeline, TreeView, EmptyState, Text, Heading, Toggle } from 'vxui-react';
+import { Checkbox, Radio, RadioGroup, Slider, Switch, NumberInput, TagInput, FileUpload, Rating, Calendar, ContextMenu, HoverCard, Tooltip, Spinner, Stepper, Breadcrumb, Menubar, NavigationMenu, ScrollArea, Separator, ResizablePanelGroup, ResizablePanel, ResizableHandle, Carousel, Timeline, TreeView, EmptyState, Text, Heading, Toggle } from 'vxui-react';
 
 export function PreferencesForm() {
   const [realtimeAlerts, setRealtimeAlerts] = useState(true);
@@ -1010,7 +937,7 @@ export function SyncStatus({ loading = false }: { loading?: boolean }) {
     </div>
   );
 }`,
-  overlays: String.raw`import { Button, Dialog, DropdownMenu, Popover, Textarea, AlertDialog, ContextMenu, HoverCard, Tooltip } from 'vxui-react';
+  overlays: String.raw`import { Button, Dialog, DropdownMenu, Popover, Textarea, ContextMenu, HoverCard, Tooltip } from 'vxui-react';
 
 export function OverlayExamples() {
   return (
@@ -1019,12 +946,9 @@ export function OverlayExamples() {
         trigger={<Button>Delete project</Button>}
         title="Delete project"
         description="This action removes access for the whole team."
-        footer={
-          <>
-            <Button variant="ghost">Cancel</Button>
-            <Button variant="danger">Delete</Button>
-          </>
-        }
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        confirmVariant="danger"
       >
         This project will be removed permanently.
       </Dialog>
@@ -1738,7 +1662,7 @@ export function DemoTabs() {
     </Tabs>
   );
 }`,
-  dialog: String.raw`import { Button, Dialog, DialogClose } from 'vxui-react';
+  dialog: String.raw`import { Button, Dialog } from 'vxui-react';
 
 export function DialogExample() {
   return (
@@ -1747,12 +1671,8 @@ export function DialogExample() {
         trigger={<Button>Open dialog</Button>}
         title="Confirm action"
         description="Please confirm this operation."
-        footer={
-          <>
-            <Button variant="ghost">Cancel</Button>
-            <Button>Confirm</Button>
-          </>
-        }
+        confirmLabel="Confirm"
+        cancelLabel="Cancel"
       >
         This action will be applied immediately.
       </Dialog>
@@ -1764,27 +1684,6 @@ export function DialogExample() {
       >
         A dialog anchored to the right edge.
       </Dialog>
-    </div>
-  );
-}`,
-  'alert-dialog': String.raw`import { AlertDialog, Button } from 'vxui-react';
-
-export function AlertDialogExample() {
-  return (
-    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-      <AlertDialog
-        trigger={<Button variant="danger">Delete item</Button>}
-        title="Are you sure?"
-        description="This action cannot be undone."
-        confirmLabel="Delete"
-        variant="danger"
-      />
-      <AlertDialog
-        trigger={<Button variant="secondary">Discard changes</Button>}
-        title="Discard changes?"
-        description="You have unsaved changes that will be lost."
-        confirmLabel="Discard"
-      />
     </div>
   );
 }`,
@@ -3182,12 +3081,9 @@ function DesktopApp() {
               trigger={<Button variant="secondary">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
               title={isZh ? '删除项目' : 'Delete project'}
               description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
-              footer={
-                <>
-                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
-                  <Button variant="danger">{isZh ? '删除' : 'Delete'}</Button>
-                </>
-              }
+              confirmLabel={isZh ? '删除' : 'Delete'}
+              cancelLabel={isZh ? '取消' : 'Cancel'}
+              confirmVariant="danger"
             >
               <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>
                 {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
@@ -3530,12 +3426,6 @@ function DesktopApp() {
               </Sheet>
             </div>
 
-            {/* Added missing overlays */}
-            <AlertDialog
-              trigger={<Button variant="outline">{isZh ? '警告框' : 'Alert Dialog'}</Button>}
-              title={isZh ? '确定吗？' : 'Are you sure?'}
-              description={isZh ? '此操作无法撤销。' : 'This action cannot be undone.'}
-            />
             
             <ContextMenu items={[
               { label: isZh ? '复制' : 'Copy' },
@@ -4138,12 +4028,8 @@ function DesktopApp() {
                 trigger={<Button>{isZh ? '打开对话框' : 'Open dialog'}</Button>}
                 title={isZh ? '确认操作' : 'Confirm action'}
                 description={isZh ? '请确认此操作。' : 'Please confirm this operation.'}
-                footer={
-                  <>
-                    <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
-                    <Button>{isZh ? '确认' : 'Confirm'}</Button>
-                  </>
-                }
+                confirmLabel={isZh ? '确认' : 'Confirm'}
+                cancelLabel={isZh ? '取消' : 'Cancel'}
               >
                 {isZh ? '此操作将立即生效。' : 'This action will be applied immediately.'}
               </Dialog>
@@ -4153,26 +4039,6 @@ function DesktopApp() {
               <Dialog size="sm" title={isZh ? '小尺寸确认' : 'Small confirmation'} trigger={<Button variant="ghost">{isZh ? '小号' : 'Small'}</Button>}>
                 {isZh ? '紧凑的确认对话框。' : 'A compact confirmation dialog.'}
               </Dialog>
-            </div>
-          </div>
-        );
-      case 'alert-dialog':
-        return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
-              <AlertDialog
-                trigger={<Button variant="danger">{isZh ? '删除项目' : 'Delete item'}</Button>}
-                title={isZh ? '确认删除？' : 'Are you sure?'}
-                description={isZh ? '此操作不可撤销。' : 'This action cannot be undone.'}
-                confirmLabel={isZh ? '删除' : 'Delete'}
-                variant="danger"
-              />
-              <AlertDialog
-                trigger={<Button variant="secondary">{isZh ? '丢弃更改' : 'Discard'}</Button>}
-                title={isZh ? '丢弃更改？' : 'Discard changes?'}
-                description={isZh ? '未保存的更改将丢失。' : 'You have unsaved changes that will be lost.'}
-                confirmLabel={isZh ? '丢弃' : 'Discard'}
-              />
             </div>
           </div>
         );

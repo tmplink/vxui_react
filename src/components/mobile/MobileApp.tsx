@@ -86,7 +86,6 @@ import {
   TimePicker,
   SegmentedControl,
   Dialog,
-  AlertDialog,
   DatePicker,
   NumberInput,
   TagInput,
@@ -171,7 +170,6 @@ type PageKey =
   | 'navigation'
   | 'feedback'
   | 'dialog'
-  | 'alert-dialog'
   | 'sheet'
   | 'popover'
   | 'tooltip'
@@ -520,7 +518,6 @@ export function MobileApp() {
       defaultOpen: false,
       items: [
         { key: 'dialog', label: t.pages.dialog, icon: <ChevronRight size={16} /> },
-        { key: 'alert-dialog', label: t.pages['alert-dialog'], icon: <AlertTriangle size={16} /> },
         { key: 'sheet', label: t.pages.sheet, icon: <PanelRightClose size={16} /> },
         { key: 'popover', label: t.pages.popover, icon: <ChevronRight size={16} /> },
         { key: 'tooltip', label: t.pages.tooltip, icon: <ChevronRight size={16} /> },
@@ -787,12 +784,9 @@ export function MobileApp() {
               trigger={<Button variant="secondary" size="sm">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
               title={isZh ? '删除项目' : 'Delete project'}
               description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
-              footer={
-                <>
-                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
-                  <Button variant="danger">{isZh ? '删除' : 'Delete'}</Button>
-                </>
-              }
+              confirmLabel={isZh ? '删除' : 'Delete'}
+              cancelLabel={isZh ? '取消' : 'Cancel'}
+              confirmVariant="danger"
             >
               <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>
                 {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
@@ -911,14 +905,6 @@ export function MobileApp() {
                 { label: isZh ? '打开文档' : 'Open docs', onClick: () => {} },
                 { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} },
               ]}
-            />
-
-            {/* AlertDialog */}
-            <Separator />
-            <AlertDialog
-              trigger={<Button variant="outline" size="sm">{isZh ? '警告框' : 'Alert Dialog'}</Button>}
-              title={isZh ? '确定吗？' : 'Are you sure?'}
-              description={isZh ? '此操作无法撤销。' : 'This action cannot be undone.'}
             />
 
             {/* Sheet */}
@@ -1748,29 +1734,14 @@ export function MobileApp() {
               trigger={<Button variant="secondary" size="sm">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
               title={isZh ? '删除项目' : 'Delete project'}
               description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
-              footer={
-                <>
-                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
-                  <Button variant="danger">{isZh ? '删除' : 'Delete'}</Button>
-                </>
-              }
+              confirmLabel={isZh ? '删除' : 'Delete'}
+              cancelLabel={isZh ? '取消' : 'Cancel'}
+              confirmVariant="danger"
             >
               <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>
                 {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
               </div>
             </Dialog>
-          </div>
-        );
-      }
-      case 'alert-dialog': {
-        const isZh = locale === 'zh';
-        return (
-          <div className="vx-stack">
-            <AlertDialog
-              trigger={<Button variant="outline" size="sm">{isZh ? '警告框' : 'Alert Dialog'}</Button>}
-              title={isZh ? '确定吗？' : 'Are you sure?'}
-              description={isZh ? '此操作无法撤销。' : 'This action cannot be undone.'}
-            />
           </div>
         );
       }
@@ -2388,7 +2359,6 @@ export function MobileApp() {
             { key: 'navigation', label: t.pages.navigation, icon: <Compass size={16} />, onSelect: () => { selectPage('navigation'); selectTab('docs'); } },
             { key: 'feedback', label: t.pages.feedback, icon: <ShieldCheck size={16} />, onSelect: () => { selectPage('feedback'); selectTab('docs'); } },
             { key: 'dialog', label: t.pages.dialog, icon: <ChevronRight size={16} />, onSelect: () => { selectPage('dialog'); selectTab('docs'); } },
-            { key: 'alert-dialog', label: t.pages['alert-dialog'], icon: <AlertTriangle size={16} />, onSelect: () => { selectPage('alert-dialog'); selectTab('docs'); } },
             { key: 'sheet', label: t.pages.sheet, icon: <PanelRightClose size={16} />, onSelect: () => { selectPage('sheet'); selectTab('docs'); } },
             { key: 'popover', label: t.pages.popover, icon: <ChevronRight size={16} />, onSelect: () => { selectPage('popover'); selectTab('docs'); } },
             { key: 'tooltip', label: t.pages.tooltip, icon: <ChevronRight size={16} />, onSelect: () => { selectPage('tooltip'); selectTab('docs'); } },

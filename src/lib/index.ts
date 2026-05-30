@@ -124,10 +124,6 @@ export type { LabelProps } from '../components/Label';
 export { Form, FormField, FormLabel, FormDescription, FormMessage, useFormField } from '../components/Form';
 export type { FormProps, FormFieldProps, FormLabelProps, FormDescriptionProps, FormMessageProps } from '../components/Form';
 
-// New: Alert Dialog
-export { AlertDialog } from '../components/AlertDialog';
-export type { AlertDialogProps } from '../components/AlertDialog';
-
 // New: Number Input
 export { NumberInput } from '../components/NumberInput';
 export type { NumberInputProps } from '../components/NumberInput';

@@ -685,16 +685,6 @@ export const en: Translations = {
         'Dialog traps focus and blocks interaction with the page behind it.',
       ],
     },
-    'alert-dialog': {
-      section: 'Overlays',
-      title: 'Alert Dialog',
-      description: 'A destructive-action confirmation dialog. Renders with a danger-styled confirm button and requires explicit user acknowledgement before proceeding.',
-      guidance: [
-        'Reserve AlertDialog for irreversible or destructive actions (delete, remove, discard).',
-        'The confirm button is always styled as danger; there is no neutral variant.',
-        'Always provide a clear description of what will happen so the user can make an informed choice.',
-      ],
-    },
     popover: {
       section: 'Overlays',
       title: 'Popover',
@@ -938,7 +928,7 @@ export const en: Translations = {
       section: 'Components',
       title: 'Overlays',
       description:
-        'Dialog, AlertDialog, ContextMenu, HoverCard, Tooltip, Popover, and DropdownMenu layer transient content and actions above the page.',
+        'Dialog, ContextMenu, HoverCard, Tooltip, Popover, and DropdownMenu layer transient content and actions above the page.',
       guidance: [
         'Tooltips are for supplementary text only — never interactive content.',
         'Popovers can contain forms and rich content; they require explicit close triggers.',
@@ -1815,16 +1805,6 @@ export const zh: Translations = {
         'Dialog 会捕获焦点并阻止与背景页面的交互。',
       ],
     },
-    'alert-dialog': {
-      section: '浮层',
-      title: '确认弹窗',
-      description: '用于破坏性操作确认的对话框。确认按钮始终为危险样式，用户需明确确认才能继续。',
-      guidance: [
-        '将 AlertDialog 保留给不可逆或破坏性操作（删除、移除、放弃）。',
-        '确认按钮始终为危险样式，无中性变体。',
-        '始终清晰描述即将发生的操作，让用户做出知情选择。',
-      ],
-    },
     popover: {
       section: '浮层',
       title: '弹出框',
@@ -2066,7 +2046,7 @@ export const zh: Translations = {
     overlays: {
       section: '组件',
       title: '浮层',
-      description: 'Dialog、AlertDialog、ContextMenu、HoverCard、Tooltip、Popover 和 DropdownMenu 在页面上方将临时内容和操作置于上方。',
+      description:         'Dialog、ContextMenu、HoverCard、Tooltip、Popover 和 DropdownMenu 在页面上方将临时内容和操作置于上方。',
       guidance: [
         'Tooltip 仅用于补充文本，绝不放置可交互内容。',
         'Popover 可包含表单和富内容；需要明确的关闭触发器。',

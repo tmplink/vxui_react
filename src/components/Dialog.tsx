@@ -19,6 +19,7 @@ import { useDialogState } from '../hooks/useDialogState';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { cx } from '../lib/cx';
+import { Button } from './Button';
 
 export type DialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export type DialogPadding = 'none' | 'sm' | 'md' | 'lg';
@@ -32,7 +33,7 @@ export interface DialogProps {
   trigger: ReactNode;
   title: string;
   description?: string;
-  children: ReactNode;
+  children?: ReactNode;
   footer?: ReactNode;
   className?: string;
   /** Dialog width preset. Default: 'md' */
@@ -53,6 +54,12 @@ export interface DialogProps {
   defaultOpen?: boolean;
   /** Callback when open state changes */
   onOpenChange?: (open: boolean) => void;
+  /** Built-in confirm/cancel buttons — shown when onConfirm is provided (unless footer is also given) */
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  confirmVariant?: 'solid' | 'danger';
 }
 
 // ── Dialog Context ──────────────────────────────────────────────────────────
@@ -196,12 +203,27 @@ export function Dialog({
   open: openProp,
   defaultOpen,
   onOpenChange,
+  onConfirm,
+  onCancel,
+  confirmLabel = 'Confirm',
+  cancelLabel = 'Cancel',
+  confirmVariant = 'solid',
 }: DialogProps) {
   const { isOpen, open, close } = useDialogState({
     open: openProp,
     defaultOpen,
     onOpenChange,
   });
+
+  const handleConfirm = useCallback(() => {
+    onConfirm?.();
+    close();
+  }, [onConfirm, close]);
+
+  const handleCancel = useCallback(() => {
+    onCancel?.();
+    close();
+  }, [onCancel, close]);
 
   const contentRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
@@ -253,6 +275,13 @@ export function Dialog({
   );
 
   const contextValue: DialogContextValue = { close, contentRef };
+
+  const renderFooter = footer ?? (onConfirm ? (
+    <>
+      <Button variant="secondary" onClick={handleCancel}>{cancelLabel}</Button>
+      <Button variant={confirmVariant === 'danger' ? 'danger' : 'solid'} onClick={handleConfirm}>{confirmLabel}</Button>
+    </>
+  ) : null);
 
   return (
     <>
@@ -311,8 +340,8 @@ export function Dialog({
                   </button>
                 ) : null}
               </div>
-              <DialogBody scrollable={scrollable}>{children}</DialogBody>
-              {footer ? <div className="vx-dialog__footer">{footer}</div> : null}
+              {children ? <DialogBody scrollable={scrollable}>{children}</DialogBody> : null}
+              {renderFooter ? <div className="vx-dialog__footer">{renderFooter}</div> : null}
             </div>
           </DialogContext.Provider>,
           document.body,
