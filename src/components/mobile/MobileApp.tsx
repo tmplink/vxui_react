@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import {
   AlertTriangle,
   Bell,
+  Boxes,
+  CalendarDays,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -9,28 +11,34 @@ import {
   FileCode2,
   FileText,
   FileX2,
+  Globe,
+  GripHorizontal,
   House,
   LayoutDashboard,
   List,
   LogIn,
   Menu,
+  Minus,
+  Navigation,
   Package2,
   Palette,
+  PanelRightClose,
   PanelsTopLeft,
   Search,
   ShieldCheck,
   SlidersHorizontal,
   Smartphone,
   Sparkles,
+  Star,
+  Tag,
   Trash2,
+  Upload,
   User,
   UserPlus,
+  X,
   Zap,
   Share2,
   Download,
-  Star,
-  Globe,
-  X,
 } from 'lucide-react';
 import { MobileShell, MobileTopBar, MobileIconButton } from './MobileShell';
 import { BottomNav } from './BottomNav';
@@ -98,6 +106,17 @@ import {
   ContextMenu,
   NavigationMenu,
   Menubar,
+  Heading,
+  Text,
+  Label,
+  Form,
+  FormField,
+  FormLabel,
+  FormDescription,
+  FormMessage,
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
 } from '../../lib';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -110,28 +129,66 @@ type PageKey =
   | 'quick-start'
   | 'shell-sidebar'
   | 'grid-page'
+  | 'nav-layout'
+  | 'scroll-area'
+  | 'separator'
+  | 'resizable'
+  | 'typography'
+  | 'badge'
+  | 'avatar'
+  | 'skeleton'
+  | 'card'
+  | 'code-block'
+  | 'language-switcher'
   | 'button'
   | 'elements'
   | 'form-controls'
   | 'form-inputs'
-  | 'navigation'
-  | 'data-list'
-  | 'empty-states'
+  | 'toggle'
+  | 'rating'
+  | 'label'
+  | 'date-pickers'
+  | 'file-upload'
+  | 'color-picker'
+  | 'form'
+  | 'accordion'
+  | 'tabs'
+  | 'breadcrumb'
+  | 'pagination'
+  | 'stepper'
+  | 'progress'
+  | 'spinner'
+  | 'alert'
   | 'toasts'
-  | 'feedback'
+  | 'table'
+  | 'data-list'
+  | 'timeline'
+  | 'tree-view'
+  | 'carousel'
+  | 'empty-states'
   | 'overlays'
-  | 'nav-layout'
   | 'data-display'
+  | 'navigation'
+  | 'feedback'
+  | 'dialog'
+  | 'alert-dialog'
+  | 'sheet'
+  | 'popover'
+  | 'tooltip'
+  | 'hover-card'
+  | 'dropdown-menu'
+  | 'context-menu'
+  | 'command-palette'
+  | 'navigation-menu'
+  | 'menubar'
   | 'mobile'
+  | 'mobile-list'
   | 'home-page'
   | 'login-page'
   | 'register-page'
   | 'error-page'
   | 'privacy-policy'
-  | 'terms-of-service'
-  | 'command-palette'
-  | 'code-block'
-  | 'language-switcher';
+  | 'terms-of-service';
 
 interface PageDefinition {
   section: string;
@@ -386,8 +443,7 @@ export function MobileApp() {
       collapsible: true,
       defaultOpen: true,
       items: [
-        { key: 'introduction', label: t.pages.introduction, icon: <House size={16} /> },
-        { key: 'quick-start', label: t.pages['quick-start'], icon: <Zap size={16} /> },
+        { key: 'introduction', label: t.pages.introduction, icon: <Compass size={16} /> },
       ],
     },
     {
@@ -395,8 +451,43 @@ export function MobileApp() {
       collapsible: true,
       defaultOpen: true,
       items: [
+        { key: 'quick-start', label: t.pages['quick-start'], icon: <Zap size={16} /> },
         { key: 'shell-sidebar', label: t.pages['shell-sidebar'], icon: <PanelsTopLeft size={16} /> },
         { key: 'grid-page', label: t.pages['grid-page'], icon: <LayoutDashboard size={16} /> },
+        { key: 'nav-layout', label: t.pages['nav-layout'], icon: <LayoutDashboard size={16} /> },
+        { key: 'scroll-area', label: t.pages['scroll-area'], icon: <FileText size={16} /> },
+        { key: 'separator', label: t.pages.separator, icon: <Minus size={16} /> },
+        { key: 'resizable', label: t.pages.resizable, icon: <GripHorizontal size={16} /> },
+      ],
+    },
+    {
+      title: t.nav.content,
+      collapsible: true,
+      defaultOpen: false,
+      items: [
+        { key: 'typography', label: t.pages.typography, icon: <FileText size={16} /> },
+        { key: 'badge', label: t.pages.badge, icon: <ShieldCheck size={16} /> },
+        { key: 'avatar', label: t.pages.avatar, icon: <User size={16} /> },
+        { key: 'skeleton', label: t.pages.skeleton, icon: <LayoutDashboard size={16} /> },
+        { key: 'card', label: t.pages.card, icon: <LayoutDashboard size={16} /> },
+        { key: 'code-block', label: t.pages['code-block'], icon: <FileCode2 size={16} /> },
+        { key: 'language-switcher', label: t.pages['language-switcher'], icon: <Globe size={16} /> },
+      ],
+    },
+    {
+      title: t.nav.forms,
+      collapsible: true,
+      defaultOpen: false,
+      items: [
+        { key: 'form-controls', label: t.pages['form-controls'], icon: <SlidersHorizontal size={16} /> },
+        { key: 'form-inputs', label: t.pages['form-inputs'], icon: <SlidersHorizontal size={16} /> },
+        { key: 'toggle', label: t.pages.toggle, icon: <SlidersHorizontal size={16} /> },
+        { key: 'rating', label: t.pages.rating, icon: <Star size={16} /> },
+        { key: 'label', label: t.pages.label, icon: <Tag size={16} /> },
+        { key: 'date-pickers', label: t.pages['date-pickers'], icon: <CalendarDays size={16} /> },
+        { key: 'file-upload', label: t.pages['file-upload'], icon: <Upload size={16} /> },
+        { key: 'color-picker', label: t.pages['color-picker'], icon: <Palette size={16} /> },
+        { key: 'form', label: t.pages.form, icon: <LayoutDashboard size={16} /> },
       ],
     },
     {
@@ -406,16 +497,47 @@ export function MobileApp() {
       items: [
         { key: 'button', label: t.pages.button, icon: <Sparkles size={16} /> },
         { key: 'elements', label: t.pages.elements, icon: <Package2 size={16} /> },
-        { key: 'form-controls', label: t.pages['form-controls'], icon: <SlidersHorizontal size={16} /> },
-        { key: 'form-inputs', label: t.pages['form-inputs'], icon: <SlidersHorizontal size={16} /> },
-        { key: 'overlays', label: t.pages.overlays, icon: <Package2 size={16} /> },
-        { key: 'data-display', label: t.pages['data-display'], icon: <List size={16} /> },
-        { key: 'navigation', label: t.pages.navigation, icon: <Compass size={16} /> },
+        { key: 'accordion', label: t.pages.accordion, icon: <List size={16} /> },
+        { key: 'tabs', label: t.pages.tabs, icon: <FileText size={16} /> },
+        { key: 'breadcrumb', label: t.pages.breadcrumb, icon: <List size={16} /> },
+        { key: 'pagination', label: t.pages.pagination, icon: <List size={16} /> },
+        { key: 'stepper', label: t.pages.stepper, icon: <List size={16} /> },
+        { key: 'progress', label: t.pages.progress, icon: <List size={16} /> },
+        { key: 'spinner', label: t.pages.spinner, icon: <List size={16} /> },
+        { key: 'alert', label: t.pages.alert, icon: <AlertTriangle size={16} /> },
+        { key: 'toasts', label: t.pages.toasts, icon: <Bell size={16} /> },
+        { key: 'table', label: t.pages.table, icon: <FileText size={16} /> },
         { key: 'data-list', label: t.pages['data-list'], icon: <List size={16} /> },
+        { key: 'timeline', label: t.pages.timeline, icon: <List size={16} /> },
+        { key: 'tree-view', label: t.pages['tree-view'], icon: <Boxes size={16} /> },
+        { key: 'carousel', label: t.pages.carousel, icon: <LayoutDashboard size={16} /> },
         { key: 'empty-states', label: t.pages['empty-states'], icon: <FileX2 size={16} /> },
+      ],
+    },
+    {
+      title: t.nav.overlays,
+      collapsible: true,
+      defaultOpen: false,
+      items: [
+        { key: 'dialog', label: t.pages.dialog, icon: <ChevronRight size={16} /> },
+        { key: 'alert-dialog', label: t.pages['alert-dialog'], icon: <AlertTriangle size={16} /> },
+        { key: 'sheet', label: t.pages.sheet, icon: <PanelRightClose size={16} /> },
+        { key: 'popover', label: t.pages.popover, icon: <ChevronRight size={16} /> },
+        { key: 'tooltip', label: t.pages.tooltip, icon: <ChevronRight size={16} /> },
+        { key: 'hover-card', label: t.pages['hover-card'], icon: <ChevronRight size={16} /> },
+        { key: 'dropdown-menu', label: t.pages['dropdown-menu'], icon: <ChevronRight size={16} /> },
+        { key: 'context-menu', label: t.pages['context-menu'], icon: <ChevronRight size={16} /> },
         { key: 'command-palette', label: t.pages['command-palette'], icon: <Search size={16} /> },
-        { key: 'code-block', label: t.pages['code-block'], icon: <FileCode2 size={16} /> },
-        { key: 'language-switcher', label: t.pages['language-switcher'], icon: <Globe size={16} /> },
+        { key: 'overlays', label: t.pages.overlays, icon: <Package2 size={16} /> },
+      ],
+    },
+    {
+      title: t.nav.navigation,
+      collapsible: true,
+      defaultOpen: false,
+      items: [
+        { key: 'navigation-menu', label: t.pages['navigation-menu'], icon: <Navigation size={16} /> },
+        { key: 'menubar', label: t.pages.menubar, icon: <Menu size={16} /> },
       ],
     },
     {
@@ -423,24 +545,7 @@ export function MobileApp() {
       collapsible: true,
       defaultOpen: true,
       items: [
-        { key: 'toasts', label: t.pages.toasts, icon: <Bell size={16} /> },
-        { key: 'feedback', label: t.pages.feedback, icon: <Bell size={16} /> },
-      ],
-    },
-    {
-      title: t.nav.navigation,
-      collapsible: true,
-      defaultOpen: true,
-      items: [
-        { key: 'nav-layout', label: t.pages['nav-layout'], icon: <Compass size={16} /> },
-      ],
-    },
-    {
-      title: t.nav.mobile,
-      collapsible: true,
-      defaultOpen: true,
-      items: [
-        { key: 'mobile', label: t.pages.mobile, icon: <Smartphone size={16} /> },
+        { key: 'feedback', label: t.pages.feedback, icon: <ShieldCheck size={16} /> },
       ],
     },
     {
@@ -454,6 +559,15 @@ export function MobileApp() {
         { key: 'error-page', label: t.pages['error-page'], icon: <AlertTriangle size={16} /> },
         { key: 'privacy-policy', label: t.pages['privacy-policy'], icon: <ShieldCheck size={16} /> },
         { key: 'terms-of-service', label: t.pages['terms-of-service'], icon: <FileText size={16} /> },
+      ],
+    },
+    {
+      title: t.nav.mobile,
+      collapsible: true,
+      defaultOpen: true,
+      items: [
+        { key: 'mobile', label: t.pages.mobile, icon: <Smartphone size={16} /> },
+        { key: 'mobile-list', label: t.pages['mobile-list'], icon: <List size={16} /> },
       ],
     },
   ];
@@ -1203,6 +1317,611 @@ export function MobileApp() {
           </div>
         );
       }
+      case 'scroll-area': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <ScrollArea maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
+              {Array.from({ length: 20 }, (_, i) => (
+                <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>
+                  {isZh ? `日志行 ${i + 1}` : `Log line ${i + 1}`}
+                </div>
+              ))}
+            </ScrollArea>
+          </div>
+        );
+      }
+      case 'separator': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              <span>{isZh ? '左' : 'Left'}</span>
+              <Separator orientation="vertical" style={{ height: 24 }} />
+              <span>{isZh ? '中' : 'Center'}</span>
+              <Separator orientation="vertical" style={{ height: 24 }} />
+              <span>{isZh ? '右' : 'Right'}</span>
+            </div>
+            <Separator />
+            <p>{isZh ? '水平分隔线上方内容' : 'Content above the horizontal separator.'}</p>
+          </div>
+        );
+      }
+      case 'resizable': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div style={{ height: 200, border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-lg)', overflow: 'hidden' }}>
+              <ResizablePanelGroup direction="horizontal">
+                <ResizablePanel defaultSize={50} minSize={20}>
+                  <div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--vx-surface)', color: 'var(--vx-text-secondary)' }}>
+                    {isZh ? '左侧面板' : 'Left panel'}
+                  </div>
+                </ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel defaultSize={50} minSize={20}>
+                  <div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--vx-surface)', color: 'var(--vx-text-secondary)' }}>
+                    {isZh ? '右侧面板' : 'Right panel'}
+                  </div>
+                </ResizablePanel>
+              </ResizablePanelGroup>
+            </div>
+          </div>
+        );
+      }
+      case 'typography': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Heading level={1}>{isZh ? '标题 1' : 'Heading 1'}</Heading>
+            <Heading level={2}>{isZh ? '标题 2' : 'Heading 2'}</Heading>
+            <Heading level={3}>{isZh ? '标题 3' : 'Heading 3'}</Heading>
+            <Text>{isZh ? '默认正文文本。' : 'Default body text.'}</Text>
+            <Text variant="secondary">{isZh ? '次级强调文本。' : 'Secondary emphasis text.'}</Text>
+            <Text variant="muted">{isZh ? '弱化辅助文本。' : 'Muted helper text.'}</Text>
+            <Text weight="bold">{isZh ? '加粗正文。' : 'Bold body text.'}</Text>
+          </div>
+        );
+      }
+      case 'badge': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap">
+              <Badge variant="accent">{isZh ? '新品' : 'New'}</Badge>
+              <Badge variant="success">{isZh ? '在线' : 'Live'}</Badge>
+              <Badge variant="warning">{isZh ? '测试版' : 'Beta'}</Badge>
+              <Badge variant="neutral">{isZh ? '草稿' : 'Draft'}</Badge>
+            </div>
+          </div>
+        );
+      }
+      case 'avatar': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
+              <Avatar src="https://i.pravatar.cc/80?u=1" name="Alex Morgan" size="xs" />
+              <Avatar src="https://i.pravatar.cc/80?u=2" name="Jamie Chen" size="sm" />
+              <Avatar src="https://i.pravatar.cc/80?u=3" name="Taylor Kim" size="md" />
+              <Avatar name="Sam Wilson" size="lg" />
+              <Avatar size="xl" />
+            </div>
+          </div>
+        );
+      }
+      case 'skeleton': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div style={{ display: 'grid', gap: 8, width: '100%' }}>
+              <Skeleton variant="rect" width="100%" height={100} />
+              <Skeleton variant="text" width="65%" />
+              <Skeleton variant="text" lines={2} />
+            </div>
+          </div>
+        );
+      }
+      case 'card': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap" style={{ gap: '0.5rem', alignItems: 'flex-start' }}>
+              <Card variant="default" padding="md">
+                <CardHeader><CardTitle>Default</CardTitle><CardDescription>Standard card surface.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+              <Card variant="elevated" padding="md" hoverable>
+                <CardHeader><CardTitle>Elevated</CardTitle><CardDescription>Interactive with hover lift.</CardDescription></CardHeader>
+                <CardContent>Hover over this card.</CardContent>
+              </Card>
+              <Card variant="outlined" padding="md">
+                <CardHeader><CardTitle>Outlined</CardTitle><CardDescription>Bordered surface.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+              <Card variant="flat" padding="md">
+                <CardHeader><CardTitle>Flat</CardTitle><CardDescription>No border or shadow.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+              <Card variant="ghost" padding="md">
+                <CardHeader><CardTitle>Ghost</CardTitle><CardDescription>Minimal presence.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+              <Card variant="filled" padding="md">
+                <CardHeader><CardTitle>Filled</CardTitle><CardDescription>Background fill.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+            </div>
+            <Alert variant="info" title={isZh ? '可组合的子组件' : 'Composable sub-components'}>
+              {isZh
+                ? 'Card 可与 CardHeader、CardTitle、CardDescription、CardContent 自由组合。'
+                : 'Card composes with CardHeader, CardTitle, CardDescription, and CardContent.'}
+            </Alert>
+          </div>
+        );
+      }
+      case 'toggle': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
+              <Toggle defaultPressed={false}><Text size="sm">{isZh ? '加粗' : 'Bold'}</Text></Toggle>
+              <Toggle><Text size="sm">{isZh ? '斜体' : 'Italic'}</Text></Toggle>
+              <Toggle><Text size="sm">{isZh ? '下划线' : 'Underline'}</Text></Toggle>
+            </div>
+            <ToggleGroup
+              type="single"
+              defaultValue="grid"
+              items={[
+                { value: 'grid', label: isZh ? '网格' : 'Grid' },
+                { value: 'list', label: isZh ? '列表' : 'List' },
+                { value: 'table', label: isZh ? '表格' : 'Table' },
+              ]}
+            />
+          </div>
+        );
+      }
+      case 'rating': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline" style={{ flexDirection: 'column', gap: 16 }}>
+              <Rating defaultValue={3.5} allowHalf />
+              <Rating defaultValue={4} size="sm" />
+              <Rating defaultValue={5} size="lg" readOnly />
+            </div>
+          </div>
+        );
+      }
+      case 'label': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack" style={{ maxWidth: 320 }}>
+            <div style={{ display: 'grid', gap: 4 }}>
+              <Label required>{isZh ? '电子邮箱' : 'Email'}</Label>
+              <Input placeholder="name@example.com" />
+            </div>
+            <div style={{ display: 'grid', gap: 4 }}>
+              <Label>{isZh ? '备注（选填）' : 'Notes (optional)'}</Label>
+              <Input placeholder={isZh ? '添加备注...' : 'Add notes...'} />
+            </div>
+          </div>
+        );
+      }
+      case 'date-pickers': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack" style={{ maxWidth: 320 }}>
+            <DatePicker label={isZh ? '开始日期' : 'Start date'} />
+            <DatePicker label={isZh ? '结束日期' : 'End date'} weekStartsOnMonday />
+          </div>
+        );
+      }
+      case 'file-upload': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack" style={{ maxWidth: 480 }}>
+            <FileUpload
+              multiple
+              label={isZh ? '上传附件' : 'Upload attachments'}
+              hint={isZh ? '支持多文件上传，单文件最大 10MB' : 'Multiple files allowed, up to 10MB each'}
+              accept="image/*,.pdf"
+            />
+          </div>
+        );
+      }
+      case 'color-picker': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack" style={{ maxWidth: 480 }}>
+            <ColorPicker label={isZh ? '主题色' : 'Theme color'} />
+          </div>
+        );
+      }
+      case 'form': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Form style={{ display: 'grid', gap: 16, maxWidth: 400 }}>
+              <FormField>
+                <FormLabel required>{isZh ? '邮箱' : 'Email'}</FormLabel>
+                <FormDescription>{isZh ? '我们不会分享你的邮箱。' : 'We will never share your email.'}</FormDescription>
+                <Input type="email" placeholder="name@example.com" />
+                <FormMessage />
+              </FormField>
+              <FormField>
+                <FormLabel required>{isZh ? '密码' : 'Password'}</FormLabel>
+                <Input type="password" placeholder="••••••••" />
+                <FormMessage />
+              </FormField>
+              <Button type="submit">{isZh ? '提交' : 'Submit'}</Button>
+            </Form>
+          </div>
+        );
+      }
+      case 'accordion': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Accordion
+              defaultOpen={['getting-started']}
+              items={[
+                { key: 'getting-started', title: isZh ? '快速开始' : 'Getting Started', content: isZh ? '安装包并配置 Provider。' : 'Install the package and set up providers.' },
+                { key: 'components', title: isZh ? '组件库' : 'Components', content: isZh ? '按分类浏览全部组件。' : 'Browse the full component library organized by category.' },
+                { key: 'templates', title: isZh ? '页面模板' : 'Templates', content: isZh ? '可直接引入项目的预置页面布局。' : 'Pre-built page layouts you can drop into your app.' },
+              ]}
+            />
+          </div>
+        );
+      }
+      case 'tabs': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Tabs defaultValue="preview">
+              <TabsList>
+                <TabsTrigger value="preview">{isZh ? '预览' : 'Preview'}</TabsTrigger>
+                <TabsTrigger value="code">{isZh ? '代码' : 'Code'}</TabsTrigger>
+                <TabsTrigger value="props">{isZh ? '属性' : 'Props'}</TabsTrigger>
+              </TabsList>
+              <TabsContent value="preview">{isZh ? '实时预览组件效果。' : 'Preview the component in real time.'}</TabsContent>
+              <TabsContent value="code">{isZh ? '查看源代码并复制到项目中使用。' : 'View the source code and copy it into your project.'}</TabsContent>
+              <TabsContent value="props">{isZh ? '浏览完整的 API 参考。' : 'Browse the full API reference with descriptions.'}</TabsContent>
+            </Tabs>
+          </div>
+        );
+      }
+      case 'breadcrumb': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Breadcrumb
+              items={[
+                { label: isZh ? '首页' : 'Home', href: '#' },
+                { label: isZh ? '组件' : 'Components', href: '#' },
+                { label: isZh ? '导航' : 'Navigation' },
+              ]}
+            />
+          </div>
+        );
+      }
+      case 'pagination': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Pagination page={paginationPage} total={48} pageSize={10} onChange={setPaginationPage} />
+          </div>
+        );
+      }
+      case 'stepper': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Stepper
+              currentStep={1}
+              steps={[
+                { label: isZh ? '规划' : 'Plan', description: isZh ? '定义需求' : 'Define requirements' },
+                { label: isZh ? '开发' : 'Build', description: isZh ? '实现功能' : 'Implement features' },
+                { label: isZh ? '发布' : 'Launch', description: isZh ? '部署上线' : 'Deploy to production' },
+              ]}
+            />
+          </div>
+        );
+      }
+      case 'progress': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Progress label={isZh ? '默认' : 'Default'} showLabel value={sliderVal} />
+            <Progress label={isZh ? '成功' : 'Success'} showLabel value={sliderVal} variant="success" />
+            <Progress label={isZh ? '警告' : 'Warning'} showLabel value={sliderVal} variant="warning" />
+            <Progress label={isZh ? '危险' : 'Danger'} showLabel value={sliderVal} variant="danger" />
+          </div>
+        );
+      }
+      case 'spinner': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
+            <Spinner size="sm" />
+            <Spinner size="md" />
+            <Spinner size="lg" />
+          </div>
+        );
+      }
+      case 'alert': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Alert title={isZh ? '提示信息' : 'Information'} variant="info">
+              {isZh ? '这是一条提示信息。' : 'This is an informational message.'}
+            </Alert>
+            <Alert title={isZh ? '操作成功' : 'Success'} variant="success">
+              {isZh ? '操作已成功完成。' : 'Operation completed successfully.'}
+            </Alert>
+            <Alert title={isZh ? '请注意' : 'Warning'} variant="warning">
+              {isZh ? '请检查后再继续。' : 'Please review before proceeding.'}
+            </Alert>
+            <Alert title={isZh ? '错误' : 'Error'} variant="danger">
+              {isZh ? '出错了，请重试。' : 'Something went wrong. Please try again.'}
+            </Alert>
+          </div>
+        );
+      }
+      case 'table': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Table
+              columns={[
+                { key: 'name', header: isZh ? '名称' : 'Name', accessor: (row: { name: string }) => row.name },
+                { key: 'role', header: isZh ? '角色' : 'Role', accessor: (row: { role: string }) => row.role },
+                { key: 'status', header: isZh ? '状态' : 'Status', accessor: (row: { status: string }) => <Badge variant={(row.status === 'Active' ? 'success' : 'warning') as 'success' | 'warning'}>{row.status}</Badge> },
+              ]}
+              data={[
+                { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: 'Active' },
+                { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: 'Active' },
+                { name: 'Cora Lin', role: isZh ? '产品经理' : 'PM', status: 'Inactive' },
+              ]}
+              striped
+              bordered
+            />
+          </div>
+        );
+      }
+      case 'timeline': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Timeline
+              items={[
+                { title: isZh ? '订单已创建' : 'Order created', time: '09:42', status: 'success' },
+                { title: isZh ? '支付成功' : 'Payment confirmed', time: '09:43', status: 'info' },
+                { title: isZh ? '配送中' : 'Shipping', time: '10:15', status: 'warning' },
+                { title: isZh ? '已签收' : 'Delivered', time: '14:30', status: 'default' },
+              ]}
+            />
+          </div>
+        );
+      }
+      case 'tree-view': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <TreeView
+              nodes={[
+                {
+                  id: 'src', label: 'src',
+                  children: [
+                    { id: 'components', label: 'components', children: [{ id: 'btn', label: 'Button.tsx' }, { id: 'card', label: 'Card.tsx' }] },
+                    { id: 'pages', label: 'pages', children: [{ id: 'home', label: 'Home.tsx' }, { id: 'about', label: 'About.tsx' }] },
+                  ],
+                },
+                { id: 'public', label: 'public', children: [{ id: 'index', label: 'index.html' }] },
+              ]}
+              defaultExpanded={['src', 'components', 'pages']}
+            />
+          </div>
+        );
+      }
+      case 'carousel': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Carousel
+              items={[
+                <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
+                <div key="2" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-3)' }}>{isZh ? '第二张' : 'Slide 2'}</div>,
+                <div key="3" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第三张' : 'Slide 3'}</div>,
+              ]}
+              showDots
+              showArrows
+            />
+          </div>
+        );
+      }
+      case 'dialog': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Dialog
+              trigger={<Button variant="secondary" size="sm">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
+              title={isZh ? '删除项目' : 'Delete project'}
+              description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
+              footer={
+                <>
+                  <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
+                  <Button variant="danger">{isZh ? '删除' : 'Delete'}</Button>
+                </>
+              }
+            >
+              <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>
+                {isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}
+              </div>
+            </Dialog>
+          </div>
+        );
+      }
+      case 'alert-dialog': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <AlertDialog
+              trigger={<Button variant="outline" size="sm">{isZh ? '警告框' : 'Alert Dialog'}</Button>}
+              title={isZh ? '确定吗？' : 'Are you sure?'}
+              description={isZh ? '此操作无法撤销。' : 'This action cannot be undone.'}
+            />
+          </div>
+        );
+      }
+      case 'sheet': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap">
+              <Sheet
+                trigger={<Button>{isZh ? '打开面板' : 'Open panel'}</Button>}
+                title={isZh ? '侧滑面板' : 'Sheet panel'}
+                description={isZh ? '这是从右侧滑入的面板。' : 'This panel slides in from the right.'}
+                side="right"
+              >
+                <div style={{ padding: 16 }}>{isZh ? '面板内容' : 'Panel content'}</div>
+              </Sheet>
+            </div>
+            <Alert variant="info" title={isZh ? '多方向支持' : 'Multiple sides'}>
+              {isZh
+                ? 'Sheet 支持从 left、right、top、bottom 四个方向滑入。'
+                : 'Sheet supports left, right, top, and bottom directions.'}
+            </Alert>
+          </div>
+        );
+      }
+      case 'popover': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Popover content={<div style={{ fontSize: '0.875rem' }}>{isZh ? 'Popover 用于补充上下文，而不是承载另一套页面层级。' : 'Popover adds context instead of carrying a second page hierarchy.'}</div>}>
+              <Button variant="secondary" size="sm">{isZh ? '打开弹出' : 'Open popover'}</Button>
+            </Popover>
+          </div>
+        );
+      }
+      case 'tooltip': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <div className="vx-inline vx-inline--wrap" style={{ alignItems: 'center' }}>
+              <Tooltip content={isZh ? '主要操作' : 'Primary action'} placement="top">
+                <Button size="sm">{isZh ? '悬停 (上)' : 'Hover (top)'}</Button>
+              </Tooltip>
+              <Tooltip content={isZh ? '右侧' : 'Right'} placement="right">
+                <Button size="sm" variant="secondary">{isZh ? '右侧' : 'Right'}</Button>
+              </Tooltip>
+            </div>
+          </div>
+        );
+      }
+      case 'hover-card': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <HoverCard content={<div style={{ fontSize: '0.875rem', padding: '4px 0' }}>{isZh ? '悬停卡片内容。' : 'Hover card content.'}</div>}>
+              <Button variant="ghost" size="sm">{isZh ? '悬停我' : 'Hover me'}</Button>
+            </HoverCard>
+          </div>
+        );
+      }
+      case 'dropdown-menu': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <DropdownMenu
+              trigger={<Button variant="secondary" size="sm">{isZh ? '更多操作' : 'More actions'}</Button>}
+              items={[
+                { label: isZh ? '打开首页' : 'Open home', onClick: () => {} },
+                { label: isZh ? '打开文档' : 'Open docs', onClick: () => {} },
+                { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} },
+              ]}
+            />
+          </div>
+        );
+      }
+      case 'context-menu': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <ContextMenu
+              items={[
+                { label: isZh ? '复制' : 'Copy', onClick: () => {} },
+                { label: isZh ? '粘贴' : 'Paste', onClick: () => {} },
+                { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} },
+              ]}
+            >
+              <div style={{ padding: '12px', border: '1px dashed var(--vx-border)', borderRadius: 'var(--vx-radius)', fontSize: '0.875rem', color: 'var(--vx-text-secondary)', textAlign: 'center' }}>
+                {isZh ? '右键点击 / 长按' : 'Right-click / long-press'}
+              </div>
+            </ContextMenu>
+          </div>
+        );
+      }
+      case 'navigation-menu': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <NavigationMenu
+              items={[
+                { label: 'Docs', items: [
+                  { label: 'Introduction', description: 'Get started', onClick: () => selectPage('introduction') },
+                  { label: 'Quick Start', description: 'Install & use', onClick: () => selectPage('quick-start') },
+                ]},
+                { label: 'Components', items: [
+                  { label: 'Button', onClick: () => selectPage('button') },
+                  { label: 'Form Controls', onClick: () => selectPage('form-controls') },
+                ]},
+                { label: 'Mobile', onClick: () => selectPage('mobile') },
+              ]}
+            />
+          </div>
+        );
+      }
+      case 'menubar': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <Menubar
+              menus={[
+                { label: 'File', items: [
+                  { label: 'New', shortcut: '⌘N', onClick: () => {} },
+                  { label: 'Open', shortcut: '⌘O', onClick: () => {} },
+                  { label: 'Save', shortcut: '⌘S', onClick: () => {} },
+                ]},
+                { label: 'Edit', items: [
+                  { label: 'Undo', shortcut: '⌘Z', onClick: () => {} },
+                  { label: 'Redo', shortcut: '⌘⇧Z', onClick: () => {} },
+                  { label: 'Delete', danger: true, onClick: () => {} },
+                ]},
+              ]}
+            />
+          </div>
+        );
+      }
+      case 'mobile-list': {
+        const isZh = locale === 'zh';
+        return (
+          <div className="vx-stack">
+            <MobileList>
+              <MobileListSection title={isZh ? '账户' : 'Account'}>
+                <MobileListItem label={isZh ? '个人资料' : 'Profile'} chevron onClick={() => {}} />
+                <MobileListItem label={isZh ? '安全设置' : 'Security'} chevron onClick={() => {}} />
+              </MobileListSection>
+              <MobileListSection title={isZh ? '偏好' : 'Preferences'}>
+                <MobileListItem label={isZh ? '通知' : 'Notifications'} trailing={<Badge variant="accent">3</Badge>} />
+                <MobileListItem label={isZh ? '主题' : 'Theme'} description={isZh ? '跟随系统' : 'System'} chevron onClick={() => {}} />
+              </MobileListSection>
+            </MobileList>
+          </div>
+        );
+      }
       default:
         return null;
     }
@@ -1625,26 +2344,70 @@ export function MobileApp() {
           icon: <FileCode2 size={22} />,
           active: activeTab === 'docs' && !isAuthView && !isLegalView,
           submenu: [
-            { key: 'introduction', label: t.pages.introduction, icon: <House size={16} />, onSelect: () => { selectPage('introduction'); selectTab('docs'); } },
+            { key: 'introduction', label: t.pages.introduction, icon: <Compass size={16} />, onSelect: () => { selectPage('introduction'); selectTab('docs'); } },
             { key: 'quick-start', label: t.pages['quick-start'], icon: <Zap size={16} />, onSelect: () => { selectPage('quick-start'); selectTab('docs'); } },
             { key: 'shell-sidebar', label: t.pages['shell-sidebar'], icon: <PanelsTopLeft size={16} />, onSelect: () => { selectPage('shell-sidebar'); selectTab('docs'); } },
             { key: 'grid-page', label: t.pages['grid-page'], icon: <LayoutDashboard size={16} />, onSelect: () => { selectPage('grid-page'); selectTab('docs'); } },
+            { key: 'nav-layout', label: t.pages['nav-layout'], icon: <LayoutDashboard size={16} />, onSelect: () => { selectPage('nav-layout'); selectTab('docs'); } },
+            { key: 'scroll-area', label: t.pages['scroll-area'], icon: <FileText size={16} />, onSelect: () => { selectPage('scroll-area'); selectTab('docs'); } },
+            { key: 'separator', label: t.pages.separator, icon: <Minus size={16} />, onSelect: () => { selectPage('separator'); selectTab('docs'); } },
+            { key: 'resizable', label: t.pages.resizable, icon: <GripHorizontal size={16} />, onSelect: () => { selectPage('resizable'); selectTab('docs'); } },
+            { key: 'typography', label: t.pages.typography, icon: <FileText size={16} />, onSelect: () => { selectPage('typography'); selectTab('docs'); } },
+            { key: 'badge', label: t.pages.badge, icon: <ShieldCheck size={16} />, onSelect: () => { selectPage('badge'); selectTab('docs'); } },
+            { key: 'avatar', label: t.pages.avatar, icon: <User size={16} />, onSelect: () => { selectPage('avatar'); selectTab('docs'); } },
+            { key: 'skeleton', label: t.pages.skeleton, icon: <LayoutDashboard size={16} />, onSelect: () => { selectPage('skeleton'); selectTab('docs'); } },
+            { key: 'card', label: t.pages.card, icon: <LayoutDashboard size={16} />, onSelect: () => { selectPage('card'); selectTab('docs'); } },
             { key: 'button', label: t.pages.button, icon: <Sparkles size={16} />, onSelect: () => { selectPage('button'); selectTab('docs'); } },
             { key: 'elements', label: t.pages.elements, icon: <Package2 size={16} />, onSelect: () => { selectPage('elements'); selectTab('docs'); } },
+            { key: 'accordion', label: t.pages.accordion, icon: <List size={16} />, onSelect: () => { selectPage('accordion'); selectTab('docs'); } },
+            { key: 'tabs', label: t.pages.tabs, icon: <FileText size={16} />, onSelect: () => { selectPage('tabs'); selectTab('docs'); } },
+            { key: 'breadcrumb', label: t.pages.breadcrumb, icon: <List size={16} />, onSelect: () => { selectPage('breadcrumb'); selectTab('docs'); } },
+            { key: 'pagination', label: t.pages.pagination, icon: <List size={16} />, onSelect: () => { selectPage('pagination'); selectTab('docs'); } },
+            { key: 'stepper', label: t.pages.stepper, icon: <List size={16} />, onSelect: () => { selectPage('stepper'); selectTab('docs'); } },
+            { key: 'progress', label: t.pages.progress, icon: <List size={16} />, onSelect: () => { selectPage('progress'); selectTab('docs'); } },
+            { key: 'spinner', label: t.pages.spinner, icon: <List size={16} />, onSelect: () => { selectPage('spinner'); selectTab('docs'); } },
+            { key: 'alert', label: t.pages.alert, icon: <AlertTriangle size={16} />, onSelect: () => { selectPage('alert'); selectTab('docs'); } },
             { key: 'form-controls', label: t.pages['form-controls'], icon: <SlidersHorizontal size={16} />, onSelect: () => { selectPage('form-controls'); selectTab('docs'); } },
             { key: 'form-inputs', label: t.pages['form-inputs'], icon: <SlidersHorizontal size={16} />, onSelect: () => { selectPage('form-inputs'); selectTab('docs'); } },
+            { key: 'toggle', label: t.pages.toggle, icon: <SlidersHorizontal size={16} />, onSelect: () => { selectPage('toggle'); selectTab('docs'); } },
+            { key: 'rating', label: t.pages.rating, icon: <Star size={16} />, onSelect: () => { selectPage('rating'); selectTab('docs'); } },
+            { key: 'label', label: t.pages.label, icon: <Tag size={16} />, onSelect: () => { selectPage('label'); selectTab('docs'); } },
+            { key: 'date-pickers', label: t.pages['date-pickers'], icon: <CalendarDays size={16} />, onSelect: () => { selectPage('date-pickers'); selectTab('docs'); } },
+            { key: 'file-upload', label: t.pages['file-upload'], icon: <Upload size={16} />, onSelect: () => { selectPage('file-upload'); selectTab('docs'); } },
+            { key: 'color-picker', label: t.pages['color-picker'], icon: <Palette size={16} />, onSelect: () => { selectPage('color-picker'); selectTab('docs'); } },
+            { key: 'form', label: t.pages.form, icon: <LayoutDashboard size={16} />, onSelect: () => { selectPage('form'); selectTab('docs'); } },
+            { key: 'toasts', label: t.pages.toasts, icon: <Bell size={16} />, onSelect: () => { selectPage('toasts'); selectTab('docs'); } },
+            { key: 'table', label: t.pages.table, icon: <FileText size={16} />, onSelect: () => { selectPage('table'); selectTab('docs'); } },
+            { key: 'data-list', label: t.pages['data-list'], icon: <List size={16} />, onSelect: () => { selectPage('data-list'); selectTab('docs'); } },
+            { key: 'timeline', label: t.pages.timeline, icon: <List size={16} />, onSelect: () => { selectPage('timeline'); selectTab('docs'); } },
+            { key: 'tree-view', label: t.pages['tree-view'], icon: <Boxes size={16} />, onSelect: () => { selectPage('tree-view'); selectTab('docs'); } },
+            { key: 'carousel', label: t.pages.carousel, icon: <LayoutDashboard size={16} />, onSelect: () => { selectPage('carousel'); selectTab('docs'); } },
+            { key: 'empty-states', label: t.pages['empty-states'], icon: <FileX2 size={16} />, onSelect: () => { selectPage('empty-states'); selectTab('docs'); } },
             { key: 'overlays', label: t.pages.overlays, icon: <Package2 size={16} />, onSelect: () => { selectPage('overlays'); selectTab('docs'); } },
             { key: 'data-display', label: t.pages['data-display'], icon: <List size={16} />, onSelect: () => { selectPage('data-display'); selectTab('docs'); } },
             { key: 'navigation', label: t.pages.navigation, icon: <Compass size={16} />, onSelect: () => { selectPage('navigation'); selectTab('docs'); } },
-            { key: 'data-list', label: t.pages['data-list'], icon: <List size={16} />, onSelect: () => { selectPage('data-list'); selectTab('docs'); } },
-            { key: 'empty-states', label: t.pages['empty-states'], icon: <FileX2 size={16} />, onSelect: () => { selectPage('empty-states'); selectTab('docs'); } },
+            { key: 'feedback', label: t.pages.feedback, icon: <ShieldCheck size={16} />, onSelect: () => { selectPage('feedback'); selectTab('docs'); } },
+            { key: 'dialog', label: t.pages.dialog, icon: <ChevronRight size={16} />, onSelect: () => { selectPage('dialog'); selectTab('docs'); } },
+            { key: 'alert-dialog', label: t.pages['alert-dialog'], icon: <AlertTriangle size={16} />, onSelect: () => { selectPage('alert-dialog'); selectTab('docs'); } },
+            { key: 'sheet', label: t.pages.sheet, icon: <PanelRightClose size={16} />, onSelect: () => { selectPage('sheet'); selectTab('docs'); } },
+            { key: 'popover', label: t.pages.popover, icon: <ChevronRight size={16} />, onSelect: () => { selectPage('popover'); selectTab('docs'); } },
+            { key: 'tooltip', label: t.pages.tooltip, icon: <ChevronRight size={16} />, onSelect: () => { selectPage('tooltip'); selectTab('docs'); } },
+            { key: 'hover-card', label: t.pages['hover-card'], icon: <ChevronRight size={16} />, onSelect: () => { selectPage('hover-card'); selectTab('docs'); } },
+            { key: 'dropdown-menu', label: t.pages['dropdown-menu'], icon: <ChevronRight size={16} />, onSelect: () => { selectPage('dropdown-menu'); selectTab('docs'); } },
+            { key: 'context-menu', label: t.pages['context-menu'], icon: <ChevronRight size={16} />, onSelect: () => { selectPage('context-menu'); selectTab('docs'); } },
             { key: 'command-palette', label: t.pages['command-palette'], icon: <Search size={16} />, onSelect: () => { selectPage('command-palette'); selectTab('docs'); } },
             { key: 'code-block', label: t.pages['code-block'], icon: <FileCode2 size={16} />, onSelect: () => { selectPage('code-block'); selectTab('docs'); } },
             { key: 'language-switcher', label: t.pages['language-switcher'], icon: <Globe size={16} />, onSelect: () => { selectPage('language-switcher'); selectTab('docs'); } },
-            { key: 'toasts', label: t.pages.toasts, icon: <Bell size={16} />, onSelect: () => { selectPage('toasts'); selectTab('docs'); } },
-            { key: 'feedback', label: t.pages.feedback, icon: <Bell size={16} />, onSelect: () => { selectPage('feedback'); selectTab('docs'); } },
-            { key: 'nav-layout', label: t.pages['nav-layout'], icon: <Compass size={16} />, onSelect: () => { selectPage('nav-layout'); selectTab('docs'); } },
+            { key: 'navigation-menu', label: t.pages['navigation-menu'], icon: <Navigation size={16} />, onSelect: () => { selectPage('navigation-menu'); selectTab('docs'); } },
+            { key: 'menubar', label: t.pages.menubar, icon: <Menu size={16} />, onSelect: () => { selectPage('menubar'); selectTab('docs'); } },
             { key: 'mobile', label: t.pages.mobile, icon: <Smartphone size={16} />, onSelect: () => { selectPage('mobile'); selectTab('docs'); } },
+            { key: 'mobile-list', label: t.pages['mobile-list'], icon: <List size={16} />, onSelect: () => { selectPage('mobile-list'); selectTab('docs'); } },
+            { key: 'home-page', label: t.pages['home-page'], icon: <House size={16} />, onSelect: () => { selectPage('home-page'); selectTab('docs'); } },
+            { key: 'login-page', label: t.pages['login-page'], icon: <LogIn size={16} />, onSelect: () => { selectPage('login-page'); selectTab('docs'); } },
+            { key: 'register-page', label: t.pages['register-page'], icon: <UserPlus size={16} />, onSelect: () => { selectPage('register-page'); selectTab('docs'); } },
+            { key: 'error-page', label: t.pages['error-page'], icon: <AlertTriangle size={16} />, onSelect: () => { selectPage('error-page'); selectTab('docs'); } },
+            { key: 'privacy-policy', label: t.pages['privacy-policy'], icon: <ShieldCheck size={16} />, onSelect: () => { selectPage('privacy-policy'); selectTab('docs'); } },
+            { key: 'terms-of-service', label: t.pages['terms-of-service'], icon: <FileText size={16} />, onSelect: () => { selectPage('terms-of-service'); selectTab('docs'); } },
           ],
         },
         { key: 'search', label: 'Search', icon: <Search size={22} />, active: activeTab === 'search' && !isAuthView && !isLegalView, onSelect: () => { selectTab('search'); } },
