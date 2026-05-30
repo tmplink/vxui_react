@@ -1,9 +1,14 @@
 import '../styles/base.css';
 
-export { ViewportProvider, useViewport } from './viewport';
+export { BREAKPOINTS, PHONE_MAX_WIDTH, PHONE_ASPECT_RATIO_THRESHOLD, TABLET_ASPECT_RATIO_THRESHOLD } from './breakpoints';
 export type { ViewportType, ViewportContextValue, ViewportProviderProps } from './viewport';
+export { ViewportProvider, useViewport } from './viewport';
 export { Responsive } from '../components/Responsive';
 export type { ResponsiveProps } from '../components/Responsive';
+
+// ── 组合 Provider ─────────────────────────────────────────
+export { VXUIProvider } from './VXUIProvider';
+export type { VXUIProviderProps } from './VXUIProvider';
 
 export { AppShell } from '../components/AppShell';
 export type { AppShellProps, AppShellNavItem, AppShellNavSection } from '../components/AppShell';
@@ -150,9 +155,21 @@ export type { FileUploadProps, UploadedFile } from '../components/FileUpload';
 export { Sheet } from '../components/Sheet';
 export type { SheetProps, SheetSide, SheetVariant, SheetActionItemProps } from '../components/Sheet';
 
-// @deprecated 使用统一的 Sheet 组件替代
+/**
+ * @deprecated 使用统一的 Sheet 组件替代。
+ * ActionSheet 将在下一个 major 版本中移除，请迁移到 Sheet 组件：
+ *   <Sheet variant="action" side="bottom">
+ * @see {@link Sheet} 统一 Sheet 组件
+ */
 export { ActionSheet, ActionSheetItem } from '../components/mobile/ActionSheet';
 export type { ActionSheetProps, ActionSheetItemProps } from '../components/mobile/ActionSheet';
+
+/**
+ * @deprecated 使用统一的 Sheet 组件替代。
+ * MobileDrawer 将在下一个 major 版本中移除，请迁移到 Sheet 组件：
+ *   <Sheet side="left">
+ * @see {@link Sheet} 统一 Sheet 组件
+ */
 export { MobileDrawer, DrawerNavItem, DrawerNavSection } from '../components/mobile/MobileDrawer';
 export type { MobileDrawerProps, DrawerNavItemProps, DrawerNavSectionProps } from '../components/mobile/MobileDrawer';
 

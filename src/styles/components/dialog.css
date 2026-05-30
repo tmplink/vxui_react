@@ -1,0 +1,345 @@
+/* ═══════════════════════════════════════════════════════════
+   Dialog
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--vx-z-dialog-overlay);
+  background: var(--vx-glass-scrim);
+  backdrop-filter: blur(14px) saturate(1.08);
+  -webkit-backdrop-filter: blur(14px) saturate(1.08);
+  animation: vx-opacity-in 200ms ease;
+}
+
+@keyframes vx-dialog-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes vx-dialog-in-top {
+  from { opacity: 0; transform: translate(-50%, -10px) scale(0.98); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+
+@keyframes vx-dialog-in-right {
+  from { opacity: 0; transform: translate(10px, -50%) scale(0.98); }
+  to { opacity: 1; transform: translateY(-50%); }
+}
+
+@keyframes vx-dialog-in-bottom {
+  from { opacity: 0; transform: translate(-50%, 10px) scale(0.98); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+
+@keyframes vx-dialog-in-left {
+  from { opacity: 0; transform: translate(-10px, -50%) scale(0.98); }
+  to { opacity: 1; transform: translateY(-50%); }
+}
+
+@keyframes vx-opacity-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.vx-dialog__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: var(--vx-z-dialog);
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
+  animation: vx-dialog-in 150ms ease;
+}
+
+/* When an inline popover is open inside the dialog, allow it to overflow */
+.vx-dialog__content:has(
+  .vx-select__dropdown,
+  .vx-multiselect__dropdown,
+  .vx-dropdown__menu,
+  .vx-datepicker__popover,
+  .vx-timepicker__popover,
+  .vx-colorpicker__panel
+) {
+  overflow: visible;
+}
+
+.vx-dialog__header,
+.vx-dialog__footer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.vx-dialog__title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.vx-dialog__description {
+  margin: 8px 0 0;
+  color: var(--vx-text-secondary);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.vx-dialog__body-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 14px -4px 18px;
+  padding: 4px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.vx-dialog__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: -4px;
+  padding: 4px;
+  overflow: hidden;
+}
+
+.vx-dialog__footer {
+  justify-content: flex-end;
+}
+
+.vx-dialog__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: color-mix(in srgb, var(--vx-bg-accent) 54%, transparent);
+  color: var(--vx-text-secondary);
+  cursor: pointer;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease;
+}
+
+.vx-dialog__close:hover {
+  background: color-mix(in srgb, var(--vx-bg-accent) 88%, var(--vx-surface));
+  border-color: color-mix(in srgb, var(--vx-border-strong) 72%, transparent);
+  color: var(--vx-text);
+}
+
+.vx-dialog__close:active {
+  transform: scale(0.97);
+}
+
+/* Dialog size variants */
+.vx-dialog__content--sm { width: min(400px, calc(100vw - 32px)); }
+.vx-dialog__content--lg { width: min(720px, calc(100vw - 32px)); }
+.vx-dialog__content--xl { width: min(960px, calc(100vw - 32px)); }
+.vx-dialog__content--full {
+  width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+}
+
+/* Fullscreen mode – occupies the entire viewport */
+.vx-dialog__content--fullscreen {
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 16px !important;
+}
+
+/* In fullscreen mode, the body-wrap must allow overflow */
+.vx-dialog__content--fullscreen .vx-dialog__body-wrap {
+  overflow: visible;
+}
+
+/* Dialog placement keyframes */
+@keyframes vx-dialog-in-top-left {
+  from { opacity: 0; transform: translate(-8px, -8px) scale(0.98); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes vx-dialog-in-top-right {
+  from { opacity: 0; transform: translate(8px, -8px) scale(0.98); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes vx-dialog-in-bottom-left {
+  from { opacity: 0; transform: translate(-8px, 8px) scale(0.98); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes vx-dialog-in-bottom-right {
+  from { opacity: 0; transform: translate(8px, 8px) scale(0.98); }
+  to   { opacity: 1; transform: translate(0, 0); }
+}
+@keyframes vx-dialog-in-top-half {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes vx-dialog-in-right-half {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes vx-dialog-in-bottom-half {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes vx-dialog-in-left-half {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Dialog placement variants – only active on large screens (≥ 768 px) */
+@media (min-width: 768px) {
+  .vx-dialog__content--top {
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: vx-dialog-in-top 150ms ease;
+  }
+  .vx-dialog__content--right {
+    top: 50%;
+    right: 16px;
+    left: auto;
+    transform: translateY(-50%);
+    animation: vx-dialog-in-right 150ms ease;
+  }
+  .vx-dialog__content--bottom {
+    top: auto;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: vx-dialog-in-bottom 150ms ease;
+  }
+  .vx-dialog__content--left {
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    animation: vx-dialog-in-left 150ms ease;
+  }
+  .vx-dialog__content--top-left {
+    top: 16px;
+    left: 16px;
+    right: auto;
+    transform: none;
+    animation: vx-dialog-in-top-left 150ms ease;
+  }
+  .vx-dialog__content--top-right {
+    top: 16px;
+    right: 16px;
+    left: auto;
+    transform: none;
+    animation: vx-dialog-in-top-right 150ms ease;
+  }
+  .vx-dialog__content--bottom-left {
+    top: auto;
+    bottom: 16px;
+    left: 16px;
+    right: auto;
+    transform: none;
+    animation: vx-dialog-in-bottom-left 150ms ease;
+  }
+  .vx-dialog__content--bottom-right {
+    top: auto;
+    bottom: 16px;
+    right: 16px;
+    left: auto;
+    transform: none;
+    animation: vx-dialog-in-bottom-right 150ms ease;
+  }
+  .vx-dialog__content--top-half {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    width: 100%;
+    max-height: 50dvh;
+    transform: none;
+    border-radius: 0 0 16px 16px;
+    animation: vx-dialog-in-top-half 150ms ease;
+  }
+  .vx-dialog__content--right-half {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: 50vw;
+    max-height: 100dvh;
+    transform: none;
+    border-radius: 16px 0 0 16px;
+    animation: vx-dialog-in-right-half 150ms ease;
+  }
+  .vx-dialog__content--bottom-half {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 50dvh;
+    transform: none;
+    border-radius: 16px 16px 0 0;
+    animation: vx-dialog-in-bottom-half 150ms ease;
+  }
+  .vx-dialog__content--left-half {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: auto;
+    width: 50vw;
+    max-height: 100dvh;
+    transform: none;
+    border-radius: 0 16px 16px 0;
+    animation: vx-dialog-in-left-half 150ms ease;
+  }
+}
+
+/* Scrollable body */
+.vx-dialog__content--scrollable .vx-dialog__body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* When a dropdown is open inside a scrollable dialog, temporarily allow overflow */
+.vx-dialog__content--scrollable .vx-dialog__body:has(
+  .vx-select__dropdown,
+  .vx-multiselect__dropdown,
+  .vx-dropdown__menu,
+  .vx-datepicker__popover,
+  .vx-timepicker__popover,
+  .vx-colorpicker__panel
+) {
+  overflow-y: visible;
+}
+
+/* Elevate open DropdownMenu container so it stacks above siblings */
+.vx-dropdown--open {
+  z-index: 1;
+}
+
+/* Padding variants */
+.vx-dialog__content--pad-none { padding: 0; }
+.vx-dialog__content--pad-sm { padding: 12px; }
+.vx-dialog__content--pad-lg { padding: 32px; }

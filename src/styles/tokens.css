@@ -1,0 +1,145 @@
+/* ═══════════════════════════════════════════════════════════
+   VXUI Design Tokens
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  color-scheme: light;
+  --vx-primary: #2563eb;
+  --vx-primary-strong: #1d4ed8;
+  --vx-primary-soft: rgba(37, 99, 235, 0.1);
+  --vx-secondary: #64748b;
+  --vx-success: #10b981;
+  --vx-warning: #f59e0b;
+  --vx-danger: #ef4444;
+  --vx-info: #3b82f6;
+  --vx-bg: #f8fafc;
+  --vx-bg-accent: #f1f5f9;
+  --vx-surface: #ffffff;
+  --vx-surface-strong: #ffffff;
+  --vx-surface-hover: #f8fafc;
+  --vx-border: #e2e8f0;
+  --vx-border-strong: #cbd5e1;
+  --vx-text: #0f172a;
+  --vx-text-secondary: #64748b;
+  --vx-text-muted: #94a3b8;
+  --vx-code-bg: color-mix(in srgb, var(--vx-bg-accent) 78%, var(--vx-surface));
+  --vx-code-text: #0f172a;
+  --vx-code-border: color-mix(in srgb, var(--vx-border-strong) 72%, var(--vx-border));
+  --vx-code-comment: #64748b;
+  --vx-code-keyword: #2563eb;
+  --vx-code-string: #047857;
+  --vx-code-number: #b45309;
+  --vx-code-function: #0f766e;
+  --vx-code-property: #1d4ed8;
+  --vx-code-class: #c2410c;
+  --vx-code-tag: #be123c;
+  --vx-code-attr-name: #0f766e;
+  --vx-code-attr-value: #b45309;
+  --vx-code-punctuation: #475569;
+  --vx-code-operator: #0f172a;
+  --vx-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --vx-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  --vx-shadow-lg: 0 28px 60px rgba(15, 23, 42, 0.12);
+  --vx-glass-bg: color-mix(in srgb, var(--vx-surface-strong) 82%, transparent);
+  --vx-glass-bg-strong: color-mix(in srgb, var(--vx-surface-strong) 90%, transparent);
+  --vx-glass-border: color-mix(in srgb, var(--vx-border-strong) 52%, var(--vx-border));
+  --vx-glass-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+  --vx-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  --vx-glass-filter: blur(18px) saturate(1.7);
+  --vx-glass-scrim: color-mix(in srgb, var(--vx-bg) 44%, transparent);
+  /* ── 移动端组件命名规范 ──────────────────────────────────
+     vxm- 前缀用于移动端专属组件（MobileShell, BottomNav 等）。
+     这是有意为之的命名空间隔离，与桌面端 vx- 前缀区分。
+     未来版本可能统一为 vx-mobile- 前缀。
+     ───────────────────────────────────────────────────── */
+  --vxm-drawer-bg: var(--vx-glass-bg-strong);
+  --vx-radius-sm: 8px;
+  --vx-radius: 10px;
+  --vx-radius-lg: 14px;
+  --vx-radius-xl: 20px;
+  --vx-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --vx-mono: 'SFMono-Regular', 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  --vx-sidebar-width: 240px;
+  --vx-sidebar-width-collapsed: 72px;
+  --vx-header-height: 92px;
+  --vx-content-width: 1100px;
+  --vx-z-layout: 10;
+  --vx-z-layout-rail: 20;
+  --vx-z-screen: 200;
+  --vx-z-popover: 120;
+  --vx-z-menu: 140;
+  --vx-z-context-menu: 160;
+  --vx-z-sheet-overlay: 600;
+  --vx-z-sheet: 610;
+  --vx-z-dialog-overlay: 500;
+  --vx-z-dialog: 510;
+  --vx-z-command: 620;
+  --vx-z-toast: 720;
+
+  /* ── Control size tokens ───────────────────────────────────────────
+     These drive the unified height / padding / font-size across all
+    interactive controls: Button, Input, Select, DatePicker,
+     TimePicker, MultiSelect, NumberInput, ColorPicker, etc.
+  ─────────────────────────────────────────────────────────────────── */
+  --vx-ctrl-h-sm:  36px;
+  --vx-ctrl-h-md:  42px;
+  --vx-ctrl-h-lg:  48px;
+
+  --vx-ctrl-px-sm: 10px;
+  --vx-ctrl-px-md: 12px;
+  --vx-ctrl-px-lg: 16px;
+
+  --vx-ctrl-fs-sm: 13px;
+  --vx-ctrl-fs-md: 14px;
+  --vx-ctrl-fs-lg: 15px;
+
+  /* ── Breakpoint tokens (unified with JS) ─────────────────────
+     PHONE_MAX_WIDTH in viewport.tsx = 1000
+     Keep CSS breakpoints consistent with device detection logic.
+  ───────────────────────────────────────────────────────────── */
+  --vx-breakpoint-sm: 640px;   /* small / phone landscape */
+  --vx-breakpoint-md: 768px;   /* tablet portrait */
+  --vx-breakpoint-lg: 1000px;  /* desktop threshold (matches PHONE_MAX_WIDTH) */
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --vx-primary: #3b82f6;
+  --vx-primary-strong: #2563eb;
+  --vx-primary-soft: rgba(59, 130, 246, 0.14);
+  --vx-bg: #0f172a;
+  --vx-bg-accent: #111827;
+  --vx-surface: #111827;
+  --vx-surface-strong: #0f172a;
+  --vx-surface-hover: #172033;
+  --vx-border: rgba(148, 163, 184, 0.18);
+  --vx-border-strong: rgba(148, 163, 184, 0.32);
+  --vx-text: #f8fafc;
+  --vx-text-secondary: #94a3b8;
+  --vx-text-muted: #94a3b8;
+  --vx-code-bg: color-mix(in srgb, var(--vx-bg-accent) 72%, black 10%);
+  --vx-code-text: #e2e8f0;
+  --vx-code-border: var(--vx-border);
+  --vx-code-comment: #94a3b8;
+  --vx-code-keyword: #93c5fd;
+  --vx-code-string: #86efac;
+  --vx-code-number: #fdba74;
+  --vx-code-function: #67e8f9;
+  --vx-code-property: #bfdbfe;
+  --vx-code-class: #fdba74;
+  --vx-code-tag: #fda4af;
+  --vx-code-attr-name: #5eead4;
+  --vx-code-attr-value: #fde68a;
+  --vx-code-punctuation: #cbd5e1;
+  --vx-code-operator: #e2e8f0;
+  --vx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --vx-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+  --vx-shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.34);
+  --vx-glass-bg: color-mix(in srgb, var(--vx-surface-strong) 86%, transparent);
+  --vx-glass-bg-strong: color-mix(in srgb, var(--vx-surface-strong) 94%, transparent);
+  --vx-glass-border: color-mix(in srgb, var(--vx-border-strong) 72%, var(--vx-border));
+  --vx-glass-shadow: 0 22px 54px rgba(0, 0, 0, 0.42);
+  --vx-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --vx-glass-filter: blur(20px) saturate(1.55);
+  --vx-glass-scrim: color-mix(in srgb, #020408 58%, transparent);
+}

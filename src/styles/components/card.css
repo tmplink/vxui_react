@@ -1,0 +1,89 @@
+/* ═══════════════════════════════════════════════════════════
+   Card
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  box-shadow: var(--vx-shadow-sm);
+}
+
+/* Card variants */
+.vx-card--flat {
+  box-shadow: none;
+}
+
+.vx-card--elevated {
+  box-shadow:
+    0 4px 12px -2px color-mix(in srgb, var(--vx-text) 10%, transparent),
+    0 12px 32px -4px color-mix(in srgb, var(--vx-text) 8%, transparent);
+}
+
+.vx-card--outlined {
+  background: transparent;
+  box-shadow: none;
+  border-color: var(--vx-border-strong);
+  border-width: 2px;
+}
+
+.vx-card--ghost {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.vx-card--filled {
+  background: var(--vx-bg-accent);
+  border-color: transparent;
+  box-shadow: none;
+}
+
+/* Card padding overrides */
+.vx-card--pad-none { padding: 0; gap: 0; }
+.vx-card--pad-sm   { padding: 10px; gap: 10px; }
+.vx-card--pad-md   { padding: 18px; gap: 14px; }
+.vx-card--pad-lg   { padding: 28px; gap: 20px; }
+
+/* Hoverable card */
+.vx-card--hoverable {
+  cursor: pointer;
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+.vx-card--hoverable:hover {
+  box-shadow:
+    0 6px 18px -2px color-mix(in srgb, var(--vx-text) 12%, transparent),
+    0 16px 36px -4px color-mix(in srgb, var(--vx-text) 8%, transparent);
+  transform: translateY(-2px);
+}
+
+.vx-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vx-card__title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+
+.vx-card__description {
+  margin: 0;
+  color: var(--vx-text-secondary);
+  line-height: 1.55;
+  font-size: 14px;
+}
+
+.vx-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}

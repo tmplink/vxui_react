@@ -1,0 +1,38 @@
+/* ═══════════════════════════════════════════════════════════
+   Badge
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  min-height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--vx-border);
+  font-family: var(--vx-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.vx-badge--neutral {
+  background: var(--vx-bg-accent);
+}
+
+.vx-badge--accent {
+  color: var(--vx-primary);
+  background: var(--vx-primary-soft);
+  border-color: rgba(37, 99, 235, 0.18);
+}
+
+.vx-badge--success {
+  background: color-mix(in srgb, var(--vx-success) 16%, var(--vx-surface));
+  color: var(--vx-success);
+}
+
+.vx-badge--warning {
+  background: color-mix(in srgb, var(--vx-warning) 16%, var(--vx-surface));
+  color: var(--vx-warning);
+}
