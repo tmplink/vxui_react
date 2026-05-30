@@ -4006,14 +4006,15 @@ a {
   padding: 0.3125rem 0.625rem;
   border-radius: calc(var(--vx-radius) * 0.75);
   pointer-events: none;
-  animation: vx-fade-in 120ms ease;
 }
+@keyframes vx-tooltip-fade-in-x { from { opacity: 0; transform: translateX(-50%) scale(0.95); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+@keyframes vx-tooltip-fade-in-y { from { opacity: 0; transform: translateY(-50%) scale(0.95); } to { opacity: 1; transform: translateY(-50%) scale(1); } }
 @keyframes vx-fade-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 @keyframes vx-fade-out { from { opacity: 1; } to { opacity: 0; } }
-.vx-tooltip--top    { bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); }
-.vx-tooltip--bottom { top: calc(100% + 6px); left: 50%; transform: translateX(-50%); }
-.vx-tooltip--left   { right: calc(100% + 6px); top: 50%; transform: translateY(-50%); }
-.vx-tooltip--right  { left: calc(100% + 6px); top: 50%; transform: translateY(-50%); }
+.vx-tooltip--top    { bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); animation: vx-tooltip-fade-in-x 120ms ease; }
+.vx-tooltip--bottom { top: calc(100% + 6px); left: 50%; transform: translateX(-50%); animation: vx-tooltip-fade-in-x 120ms ease; }
+.vx-tooltip--left   { right: calc(100% + 6px); top: 50%; transform: translateY(-50%); animation: vx-tooltip-fade-in-y 120ms ease; }
+.vx-tooltip--right  { left: calc(100% + 6px); top: 50%; transform: translateY(-50%); animation: vx-tooltip-fade-in-y 120ms ease; }
 
 /* ── Popover ───────────────────────────────────────── */
 .vx-popover-wrap {
@@ -7414,7 +7415,11 @@ a {
   -webkit-backdrop-filter: var(--vx-glass-filter);
   border: 1px solid var(--vx-glass-border);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
-  animation: vx-fade-in 150ms ease;
+  animation: vx-alert-dialog-in 150ms ease;
+}
+@keyframes vx-alert-dialog-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 .vx-alert-dialog__title {
   margin: 0 0 10px;

@@ -1738,6 +1738,215 @@ export function DemoTabs() {
     </Tabs>
   );
 }`,
+  dialog: String.raw`import { Button, Dialog, DialogClose } from 'vxui-react';
+
+export function DialogExample() {
+  return (
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+      <Dialog
+        trigger={<Button>Open dialog</Button>}
+        title="Confirm action"
+        description="Please confirm this operation."
+        footer={
+          <>
+            <Button variant="ghost">Cancel</Button>
+            <Button>Confirm</Button>
+          </>
+        }
+      >
+        This action will be applied immediately.
+      </Dialog>
+
+      <Dialog
+        placement="right"
+        title="Side panel"
+        trigger={<Button variant="secondary">Side panel</Button>}
+      >
+        A dialog anchored to the right edge.
+      </Dialog>
+    </div>
+  );
+}`,
+  'alert-dialog': String.raw`import { AlertDialog, Button } from 'vxui-react';
+
+export function AlertDialogExample() {
+  return (
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+      <AlertDialog
+        trigger={<Button variant="danger">Delete item</Button>}
+        title="Are you sure?"
+        description="This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+      />
+      <AlertDialog
+        trigger={<Button variant="secondary">Discard changes</Button>}
+        title="Discard changes?"
+        description="You have unsaved changes that will be lost."
+        confirmLabel="Discard"
+      />
+    </div>
+  );
+}`,
+  popover: String.raw`import { Button, Popover } from 'vxui-react';
+
+export function PopoverExample() {
+  return (
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+      <Popover content={<div>Popover content with extra information.</div>}>
+        <Button variant="secondary">Click me</Button>
+      </Popover>
+      <Popover placement="top" content={<div>Tooltip-like but interactive.</div>}>
+        <Button variant="ghost">Top</Button>
+      </Popover>
+    </div>
+  );
+}`,
+  tooltip: String.raw`import { Button, Tooltip } from 'vxui-react';
+
+export function TooltipExample() {
+  return (
+    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <Tooltip content="This is a tooltip">
+        <Button variant="secondary">Hover me</Button>
+      </Tooltip>
+      <Tooltip content="Top tooltip" placement="top">
+        <Button variant="ghost">Top</Button>
+      </Tooltip>
+      <Tooltip content="Right tooltip" placement="right">
+        <Button variant="ghost">Right</Button>
+      </Tooltip>
+    </div>
+  );
+}`,
+  'hover-card': String.raw`import { Button, HoverCard } from 'vxui-react';
+
+export function HoverCardExample() {
+  return (
+    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <HoverCard
+        content={
+          <div style={{ padding: 12, maxWidth: 220 }}>
+            <strong>User profile</strong>
+            <p style={{ margin: '4px 0 0', color: 'var(--vx-text-secondary)' }}>
+              Preview additional context without navigating.
+            </p>
+          </div>
+        }
+      >
+        <Button variant="secondary">Hover me</Button>
+      </HoverCard>
+    </div>
+  );
+}`,
+  'dropdown-menu': String.raw`import { Button, DropdownMenu } from 'vxui-react';
+
+export function DropdownMenuExample() {
+  return (
+    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+      <DropdownMenu
+        trigger={<Button variant="secondary">Actions</Button>}
+        items={[
+          { label: 'Duplicate', onClick: () => {} },
+          { label: 'Archive', onClick: () => {} },
+          { label: 'Delete', danger: true, onClick: () => {} },
+        ]}
+      />
+      <DropdownMenu
+        trigger={<Button variant="ghost">Grouped</Button>}
+        groups={[
+          {
+            label: 'Navigation',
+            items: [
+              { label: 'Dashboard', onClick: () => {} },
+              { label: 'Settings', onClick: () => {} },
+            ],
+          },
+          {
+            label: 'Danger',
+            items: [
+              { label: 'Sign out', danger: true, onClick: () => {} },
+            ],
+          },
+        ]}
+      />
+    </div>
+  );
+}`,
+  'context-menu': String.raw`import { ContextMenu } from 'vxui-react';
+
+export function ContextMenuExample() {
+  return (
+    <div style={{ display: 'flex', gap: 12 }}>
+      <ContextMenu items={[
+        { label: 'Copy', onClick: () => {} },
+        { label: 'Paste', onClick: () => {} },
+        { label: 'Delete', danger: true, onClick: () => {} },
+      ]}>
+        <div style={{
+          padding: '2rem 3rem',
+          border: '1px dashed var(--vx-color-border)',
+          borderRadius: 'var(--vx-radius-md)',
+          textAlign: 'center',
+          color: 'var(--vx-text-secondary)',
+        }}>
+          Right-click this area
+        </div>
+      </ContextMenu>
+    </div>
+  );
+}`,
+  'navigation-menu': String.raw`import { NavigationMenu } from 'vxui-react';
+
+export function NavigationMenuExample() {
+  return (
+    <NavigationMenu
+      items={[
+        {
+          label: 'Docs',
+          items: [
+            { label: 'Introduction', description: 'Get started with VXUI', onClick: () => {} },
+            { label: 'Quick Start', description: 'Install and configure', onClick: () => {} },
+          ],
+        },
+        {
+          label: 'Components',
+          items: [
+            { label: 'Button', description: 'Primary action element', onClick: () => {} },
+            { label: 'Dialog', description: 'Modal overlay', onClick: () => {} },
+          ],
+        },
+        { label: 'Templates', onClick: () => {} },
+      ]}
+    />
+  );
+}`,
+  menubar: String.raw`import { Menubar } from 'vxui-react';
+
+export function MenubarExample() {
+  return (
+    <Menubar
+      menus={[
+        {
+          label: 'File',
+          items: [
+            { label: 'New', shortcut: '⌘N', onClick: () => {} },
+            { label: 'Open...', shortcut: '⌘O', onClick: () => {} },
+            { label: 'Save', shortcut: '⌘S', onClick: () => {} },
+            { label: 'Exit', danger: true, onClick: () => {} },
+          ],
+        },
+        {
+          label: 'Edit',
+          items: [
+            { label: 'Undo', shortcut: '⌘Z', onClick: () => {} },
+            { label: 'Redo', shortcut: '⇧⌘Z', onClick: () => {} },
+          ],
+        },
+      ]}
+    />
+  );
+}`,
 };
 
 function isPageKey(value: string | undefined): value is PageKey {
@@ -3922,19 +4131,209 @@ function DesktopApp() {
           </div>
         );
       case 'dialog':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Dialog
+                trigger={<Button>{isZh ? '打开对话框' : 'Open dialog'}</Button>}
+                title={isZh ? '确认操作' : 'Confirm action'}
+                description={isZh ? '请确认此操作。' : 'Please confirm this operation.'}
+                footer={
+                  <>
+                    <Button variant="ghost">{isZh ? '取消' : 'Cancel'}</Button>
+                    <Button>{isZh ? '确认' : 'Confirm'}</Button>
+                  </>
+                }
+              >
+                {isZh ? '此操作将立即生效。' : 'This action will be applied immediately.'}
+              </Dialog>
+              <Dialog placement="right" title={isZh ? '侧边面板' : 'Side panel'} trigger={<Button variant="secondary">{isZh ? '侧边面板' : 'Side panel'}</Button>}>
+                {isZh ? '固定在右侧边缘的对话框。' : 'A dialog anchored to the right edge.'}
+              </Dialog>
+              <Dialog size="sm" title={isZh ? '小尺寸确认' : 'Small confirmation'} trigger={<Button variant="ghost">{isZh ? '小号' : 'Small'}</Button>}>
+                {isZh ? '紧凑的确认对话框。' : 'A compact confirmation dialog.'}
+              </Dialog>
+            </div>
+          </div>
+        );
       case 'alert-dialog':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <AlertDialog
+                trigger={<Button variant="danger">{isZh ? '删除项目' : 'Delete item'}</Button>}
+                title={isZh ? '确认删除？' : 'Are you sure?'}
+                description={isZh ? '此操作不可撤销。' : 'This action cannot be undone.'}
+                confirmLabel={isZh ? '删除' : 'Delete'}
+                variant="danger"
+              />
+              <AlertDialog
+                trigger={<Button variant="secondary">{isZh ? '丢弃更改' : 'Discard'}</Button>}
+                title={isZh ? '丢弃更改？' : 'Discard changes?'}
+                description={isZh ? '未保存的更改将丢失。' : 'You have unsaved changes that will be lost.'}
+                confirmLabel={isZh ? '丢弃' : 'Discard'}
+              />
+            </div>
+          </div>
+        );
       case 'popover':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Popover content={<div style={{ padding: 8 }}>{isZh ? '弹出内容，提供额外信息。' : 'Popover content with extra information.'}</div>}>
+                <Button variant="secondary">{isZh ? '点击打开' : 'Click me'}</Button>
+              </Popover>
+              <Popover placement="top" content={<div style={{ padding: 8 }}>{isZh ? '顶部弹出' : 'Top placement'}</div>}>
+                <Button variant="ghost">{isZh ? '顶部' : 'Top'}</Button>
+              </Popover>
+              <Popover placement="right" content={<div style={{ padding: 8 }}>{isZh ? '右侧弹出' : 'Right placement'}</div>}>
+                <Button variant="ghost">{isZh ? '右侧' : 'Right'}</Button>
+              </Popover>
+            </div>
+          </div>
+        );
       case 'tooltip':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Tooltip content={isZh ? '这是一个工具提示' : 'This is a tooltip'}>
+                <Button variant="secondary">{isZh ? '悬停查看' : 'Hover me'}</Button>
+              </Tooltip>
+              <Tooltip content={isZh ? '顶部提示' : 'Top tooltip'} placement="top">
+                <Button variant="ghost">{isZh ? '顶部' : 'Top'}</Button>
+              </Tooltip>
+              <Tooltip content={isZh ? '右侧提示' : 'Right tooltip'} placement="right">
+                <Button variant="ghost">{isZh ? '右侧' : 'Right'}</Button>
+              </Tooltip>
+              <Tooltip content={isZh ? '底部提示' : 'Bottom tooltip'} placement="bottom">
+                <Button variant="ghost">{isZh ? '底部' : 'Bottom'}</Button>
+              </Tooltip>
+            </div>
+          </div>
+        );
       case 'hover-card':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <HoverCard
+                content={
+                  <div style={{ padding: 12, maxWidth: 220 }}>
+                    <strong>{isZh ? '用户资料' : 'User profile'}</strong>
+                    <p style={{ margin: '4px 0 0', color: 'var(--vx-text-secondary)' }}>
+                      {isZh ? '无需导航即可预览更多上下文。' : 'Preview additional context without navigating.'}
+                    </p>
+                  </div>
+                }
+              >
+                <Button variant="secondary">{isZh ? '悬停查看' : 'Hover me'}</Button>
+              </HoverCard>
+            </div>
+          </div>
+        );
       case 'dropdown-menu':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <DropdownMenu
+                trigger={<Button variant="secondary">{isZh ? '操作' : 'Actions'}</Button>}
+                items={[
+                  { label: isZh ? '复制' : 'Duplicate', onClick: () => {} },
+                  { label: isZh ? '归档' : 'Archive', onClick: () => {} },
+                  { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} },
+                ]}
+              />
+              <DropdownMenu
+                trigger={<Button variant="ghost">{isZh ? '分组' : 'Grouped'}</Button>}
+                groups={[
+                  {
+                    label: isZh ? '导航' : 'Navigation',
+                    items: [
+                      { label: isZh ? '仪表盘' : 'Dashboard', onClick: () => {} },
+                      { label: isZh ? '设置' : 'Settings', onClick: () => {} },
+                    ],
+                  },
+                  {
+                    label: isZh ? '危险' : 'Danger',
+                    items: [
+                      { label: isZh ? '退出登录' : 'Sign out', danger: true, onClick: () => {} },
+                    ],
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        );
       case 'context-menu':
-      case 'command-palette':
-        // These overlays are collectively demonstrated on the 'overlays' page.
-        return null;
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <ContextMenu items={[
+                { label: isZh ? '复制' : 'Copy', onClick: () => {} },
+                { label: isZh ? '粘贴' : 'Paste', onClick: () => {} },
+                { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} },
+              ]}>
+                <div style={{
+                  padding: '2rem 3rem',
+                  border: '1px dashed var(--vx-color-border)',
+                  borderRadius: 'var(--vx-radius-md)',
+                  textAlign: 'center',
+                  color: 'var(--vx-text-secondary)',
+                }}>
+                  {isZh ? '在此区域右键点击' : 'Right-click this area'}
+                </div>
+              </ContextMenu>
+            </div>
+          </div>
+        );
       case 'navigation-menu':
+        return (
+          <div className="vx-doc-preview-stack">
+            <NavigationMenu
+              items={[
+                {
+                  label: isZh ? '文档' : 'Docs',
+                  items: [
+                    { label: isZh ? '介绍' : 'Introduction', description: isZh ? '开始使用 VXUI' : 'Get started with VXUI', onClick: () => {} },
+                    { label: isZh ? '快速开始' : 'Quick Start', description: isZh ? '安装和配置' : 'Install and configure', onClick: () => {} },
+                  ],
+                },
+                {
+                  label: isZh ? '组件' : 'Components',
+                  items: [
+                    { label: 'Button', description: isZh ? '主要操作元素' : 'Primary action element', onClick: () => {} },
+                    { label: 'Dialog', description: isZh ? '模态叠层' : 'Modal overlay', onClick: () => {} },
+                  ],
+                },
+                { label: isZh ? '模板' : 'Templates', onClick: () => {} },
+              ]}
+            />
+          </div>
+        );
       case 'menubar':
-        // These navigation components are collectively demonstrated on the 'navigation' page.
-        return null;
+        return (
+          <div className="vx-doc-preview-stack">
+            <Menubar
+              menus={[
+                {
+                  label: 'File',
+                  items: [
+                    { label: 'New', shortcut: '⌘N', onClick: () => {} },
+                    { label: 'Open...', shortcut: '⌘O', onClick: () => {} },
+                    { label: 'Save', shortcut: '⌘S', onClick: () => {} },
+                    { label: 'Exit', danger: true, onClick: () => {} },
+                  ],
+                },
+                {
+                  label: 'Edit',
+                  items: [
+                    { label: 'Undo', shortcut: '⌘Z', onClick: () => {} },
+                    { label: 'Redo', shortcut: '⇧⌘Z', onClick: () => {} },
+                  ],
+                },
+              ]}
+            />
+          </div>
+        );
       case 'introduction':
       default:
         return null;
