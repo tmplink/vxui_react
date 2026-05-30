@@ -4,26 +4,35 @@ import {
   ArrowRight,
   Bell,
   Boxes,
+  CalendarDays,
   ChevronRight,
   Compass,
   FileCode2,
   FileText,
   Globe,
+  GripHorizontal,
   House,
   LayoutDashboard,
   List,
   LogIn,
+  Menu,
+  Minus,
   MoreHorizontal,
+  Monitor,
   Moon,
+  Navigation,
   Palette,
   PanelsTopLeft,
+  PanelRightClose,
   Search,
   ShieldCheck,
   SlidersHorizontal,
   Smartphone,
   Sparkles,
+  Star,
   Sun,
-  Monitor,
+  Tag,
+  Upload,
   User,
   UserPlus,
   Zap,
@@ -61,6 +70,7 @@ import {
   DialogClose,
   DropdownMenu,
   Input,
+  Label,
   MultiSelect,
   Pagination,
   Popover,
@@ -90,9 +100,17 @@ import {
   ContextMenu,
   EmptyState,
   FileUpload,
+  Form,
+  FormDescription,
+  FormField,
+  FormLabel,
+  FormMessage,
   Heading,
   HoverCard,
   Menubar,
+  MobileList,
+  MobileListItem,
+  MobileListSection,
   NavigationMenu,
   NumberInput,
   Rating,
@@ -111,6 +129,7 @@ import {
   Tooltip,
   TreeView,
   Toggle,
+  ToggleGroup,
   useViewport,
 } from './lib';
 
@@ -119,22 +138,60 @@ const DOC_PAGE_KEYS = [
   'quick-start',
   'shell-sidebar',
   'grid-page',
+  'nav-layout',
+  'scroll-area',
+  'separator',
+  'resizable',
+  'typography',
+  'badge',
+  'avatar',
+  'skeleton',
+  'card',
+  'code-block',
+  'language-switcher',
   'button',
   'elements',
   'form-controls',
   'form-inputs',
-  'navigation',
-  'data-list',
-  'empty-states',
+  'toggle',
+  'rating',
+  'label',
+  'date-pickers',
+  'file-upload',
+  'color-picker',
+  'form',
+  'accordion',
+  'tabs',
+  'breadcrumb',
+  'pagination',
+  'stepper',
+  'progress',
+  'spinner',
+  'alert',
   'toasts',
-  'feedback',
+  'table',
+  'data-list',
+  'timeline',
+  'tree-view',
+  'carousel',
+  'empty-states',
   'overlays',
-  'nav-layout',
   'data-display',
+  'navigation',
+  'feedback',
+  'dialog',
+  'alert-dialog',
+  'sheet',
+  'popover',
+  'tooltip',
+  'hover-card',
+  'dropdown-menu',
+  'context-menu',
   'command-palette',
-  'code-block',
-  'language-switcher',
+  'navigation-menu',
+  'menubar',
   'mobile',
+  'mobile-list',
   'home-page',
   'login-page',
   'register-page',
@@ -144,7 +201,7 @@ const DOC_PAGE_KEYS = [
 ] as const;
 
 type PageKey = (typeof DOC_PAGE_KEYS)[number];
-type NavGroupKey = 'gettingStarted' | 'layout' | 'components' | 'feedback' | 'templates' | 'mobile';
+type NavGroupKey = 'gettingStarted' | 'layout' | 'content' | 'forms' | 'components' | 'overlays' | 'navigation' | 'feedback' | 'templates' | 'mobile';
 type RouteView = 'home' | 'login' | 'register' | 'docs' | 'privacy-policy' | 'terms-of-service' | 'error';
 type ReleaseTrack = 'stable' | 'preview' | 'internal';
 
@@ -175,64 +232,107 @@ interface ViewerSession {
 
 const SESSION_STORAGE_KEY = 'vxui-react-auth-session';
 
-type NavGroupItem = PageKey | { type: 'submenu'; key: string; i18nKey: 'forms'; pages: PageKey[]; icon: React.ReactNode };
+type NavGroupItem = PageKey | { type: 'submenu'; key: string; i18nKey: 'layout' | 'content' | 'elements' | 'forms' | 'inputs' | 'overlays' | 'navigation' | 'feedback'; pages: PageKey[]; icon: React.ReactNode };
 
 const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> = [
   { key: 'gettingStarted', items: ['introduction'] },
-  { key: 'layout', items: ['quick-start'] },
+  { key: 'layout', items: ['quick-start', 'shell-sidebar', 'grid-page', 'nav-layout', 'scroll-area', 'separator', 'resizable'] },
+  { key: 'content', items: ['typography', 'badge', 'avatar', 'skeleton', 'card', 'code-block', 'language-switcher'] },
+  {
+    key: 'forms',
+    items: [
+      { type: 'submenu', key: 'inputs', i18nKey: 'inputs', pages: ['form-controls', 'form-inputs'], icon: <SlidersHorizontal size={16} /> },
+      'toggle', 'rating', 'label', 'date-pickers', 'file-upload', 'color-picker', 'form',
+    ],
+  },
   {
     key: 'components',
     items: [
-      'shell-sidebar',
-      'grid-page',
-      'nav-layout',
-      'button',
-      'elements',
-      { type: 'submenu', key: 'forms', i18nKey: 'forms', pages: ['form-controls', 'form-inputs'], icon: <SlidersHorizontal size={16} /> },
-      'navigation',
-      'overlays',
-      'data-display',
-      'data-list',
-      'empty-states',
-      'toasts',
-      'feedback',
-      'command-palette',
-      'code-block',
-      'language-switcher',
+      'button', 'elements', 'accordion', 'tabs', 'breadcrumb', 'pagination',
+      'stepper', 'progress', 'spinner', 'alert', 'toasts', 'table',
+      'data-list', 'timeline', 'tree-view', 'carousel', 'empty-states',
     ],
   },
+  {
+    key: 'overlays',
+    items: [
+      'dialog', 'alert-dialog', 'sheet', 'popover', 'tooltip', 'hover-card',
+      'dropdown-menu', 'context-menu', 'command-palette',
+    ],
+  },
+  { key: 'navigation', items: ['navigation-menu', 'menubar'] },
+  { key: 'feedback', items: ['feedback'] },
   {
     key: 'templates',
     items: ['home-page', 'login-page', 'register-page', 'error-page', 'privacy-policy', 'terms-of-service'],
   },
-  { key: 'mobile', items: ['mobile'] },
+  { key: 'mobile', items: ['mobile', 'mobile-list'] },
 ];
 
 const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
   'quick-start',
   'shell-sidebar',
   'grid-page',
+  'nav-layout',
+  'scroll-area',
+  'separator',
+  'resizable',
+  'typography',
+  'badge',
+  'avatar',
+  'skeleton',
+  'card',
+  'code-block',
+  'language-switcher',
   'button',
   'elements',
   'form-controls',
   'form-inputs',
-  'navigation',
-  'data-list',
-  'empty-states',
+  'toggle',
+  'rating',
+  'label',
+  'date-pickers',
+  'file-upload',
+  'color-picker',
+  'form',
+  'accordion',
+  'tabs',
+  'breadcrumb',
+  'pagination',
+  'stepper',
+  'progress',
+  'spinner',
+  'alert',
   'toasts',
-  'feedback',
+  'table',
+  'data-list',
+  'timeline',
+  'tree-view',
+  'carousel',
+  'empty-states',
   'overlays',
-  'nav-layout',
   'data-display',
+  'navigation',
+  'feedback',
+  'dialog',
+  'alert-dialog',
+  'sheet',
+  'popover',
+  'tooltip',
+  'hover-card',
+  'dropdown-menu',
+  'context-menu',
   'command-palette',
-  'code-block',
-  'language-switcher',
+  'navigation-menu',
+  'menubar',
   'mobile',
+  'mobile-list',
   'home-page',
   'login-page',
   'register-page',
   'error-page',
   'privacy-policy',
+  'terms-of-service',
 ]);
 
 const pageIcons: Record<PageKey, ReactNode> = {
@@ -240,22 +340,60 @@ const pageIcons: Record<PageKey, ReactNode> = {
   'quick-start': <Zap size={16} />,
   'shell-sidebar': <PanelsTopLeft size={16} />,
   'grid-page': <LayoutDashboard size={16} />,
+  'nav-layout': <LayoutDashboard size={16} />,
+  'scroll-area': <FileText size={16} />,
+  separator: <Minus size={16} />,
+  resizable: <GripHorizontal size={16} />,
+  typography: <FileText size={16} />,
+  badge: <ShieldCheck size={16} />,
+  avatar: <User size={16} />,
+  skeleton: <LayoutDashboard size={16} />,
+  card: <LayoutDashboard size={16} />,
+  'code-block': <FileCode2 size={16} />,
+  'language-switcher': <Globe size={16} />,
   button: <Sparkles size={16} />,
   elements: <Palette size={16} />,
   'form-controls': <FileText size={16} />,
   'form-inputs': <SlidersHorizontal size={16} />,
-  navigation: <Compass size={16} />,
-  'data-list': <List size={16} />,
-  'empty-states': <AlertTriangle size={16} />,
+  toggle: <SlidersHorizontal size={16} />,
+  rating: <Star size={16} />,
+  label: <Tag size={16} />,
+  'date-pickers': <CalendarDays size={16} />,
+  'file-upload': <Upload size={16} />,
+  'color-picker': <Palette size={16} />,
+  form: <LayoutDashboard size={16} />,
+  accordion: <List size={16} />,
+  tabs: <FileText size={16} />,
+  breadcrumb: <List size={16} />,
+  pagination: <List size={16} />,
+  stepper: <List size={16} />,
+  progress: <List size={16} />,
+  spinner: <List size={16} />,
+  alert: <AlertTriangle size={16} />,
   toasts: <Bell size={16} />,
-  feedback: <ShieldCheck size={16} />,
+  table: <FileText size={16} />,
+  'data-list': <List size={16} />,
+  timeline: <List size={16} />,
+  'tree-view': <Boxes size={16} />,
+  carousel: <LayoutDashboard size={16} />,
+  'empty-states': <AlertTriangle size={16} />,
   overlays: <ChevronRight size={16} />,
-  'nav-layout': <LayoutDashboard size={16} />,
   'data-display': <Boxes size={16} />,
+  navigation: <Compass size={16} />,
+  feedback: <ShieldCheck size={16} />,
+  dialog: <ChevronRight size={16} />,
+  'alert-dialog': <AlertTriangle size={16} />,
+  sheet: <PanelRightClose size={16} />,
+  popover: <ChevronRight size={16} />,
+  tooltip: <ChevronRight size={16} />,
+  'hover-card': <ChevronRight size={16} />,
+  'dropdown-menu': <ChevronRight size={16} />,
+  'context-menu': <ChevronRight size={16} />,
   'command-palette': <Search size={16} />,
-  'code-block': <FileText size={16} />,
-  'language-switcher': <Globe size={16} />,
+  'navigation-menu': <Navigation size={16} />,
+  menubar: <Menu size={16} />,
   mobile: <Smartphone size={16} />,
+  'mobile-list': <List size={16} />,
   'home-page': <House size={16} />,
   'login-page': <LogIn size={16} />,
   'register-page': <UserPlus size={16} />,
@@ -267,17 +405,25 @@ const pageIcons: Record<PageKey, ReactNode> = {
 function getDocsGroupLabel(key: NavGroupKey, isZh: boolean) {
   switch (key) {
     case 'gettingStarted':
-      return isZh ? '介绍' : 'Introduction';
+      return isZh ? '介绍' : 'Getting Started';
     case 'layout':
-      return isZh ? '安装' : 'Installation';
+      return isZh ? '布局' : 'Layout';
+    case 'content':
+      return isZh ? '内容展示' : 'Content';
+    case 'forms':
+      return isZh ? '表单' : 'Forms';
     case 'components':
       return isZh ? '组件' : 'Components';
+    case 'overlays':
+      return isZh ? '浮层' : 'Overlays';
+    case 'navigation':
+      return isZh ? '导航' : 'Navigation';
+    case 'feedback':
+      return isZh ? '反馈' : 'Feedback';
     case 'templates':
       return isZh ? '模板' : 'Templates';
     case 'mobile':
       return isZh ? '响应式' : 'Responsive';
-    case 'feedback':
-      return isZh ? '反馈' : 'Feedback';
     default:
       return isZh ? '文档' : 'Docs';
   }
@@ -291,12 +437,28 @@ function getDocsGroupDescription(key: NavGroupKey, isZh: boolean) {
         : 'Start with the design goals, the page shell, and what this library is meant to solve.';
     case 'layout':
       return isZh
-        ? '安装包、引入样式、挂载 Provider，并创建第一个页面。'
-        : 'Install the package, import styles, mount providers, and create the first page.';
+        ? '页面框架、栅格系统、布局组件和响应式容器。'
+        : 'Page shell, grid system, layout components, and responsive containers.';
+    case 'content':
+      return isZh
+        ? '排版、徽章、头像、卡片和代码块等内容展示组件。'
+        : 'Typography, badges, avatars, cards, and code blocks for content display.';
+    case 'forms':
+      return isZh
+        ? '输入框、选择器、开关、日期选择器和表单组合模式。'
+        : 'Inputs, selectors, switches, date pickers, and form composition patterns.';
     case 'components':
       return isZh
-        ? '布局、表单、反馈、数据展示与浮层统一收敛到一个组件入口。'
-        : 'Layout, forms, feedback, data display, and overlays now live under one component entry point.';
+        ? '按钮、反馈、数据展示和交互核心组件。'
+        : 'Buttons, feedback, data display, and core interaction components.';
+    case 'overlays':
+      return isZh
+        ? '弹窗、弹出框、提示和侧滑面板等浮层组件。'
+        : 'Modals, popovers, tooltips, and sheet panels for overlay interactions.';
+    case 'navigation':
+      return isZh
+        ? '导航菜单和菜单栏组件。'
+        : 'Navigation menu and menubar components.';
     case 'templates':
       return isZh
         ? '直接查看主页、认证页、错误页和法务页等完整页面结构。'
@@ -1192,6 +1354,22 @@ export function Example() {
 export function CodeExample() {
   return <CodeBlock code={snippet} language="tsx" />;
 }`,
+  'mobile-list': String.raw`import { MobileList, MobileListSection, MobileListItem } from 'vxui-react';
+
+export function SettingsMenu() {
+  return (
+    <MobileList>
+      <MobileListSection title="Account">
+        <MobileListItem label="Profile" chevron onClick={() => {}} />
+        <MobileListItem label="Security" chevron onClick={() => {}} />
+      </MobileListSection>
+      <MobileListSection title="Preferences">
+        <MobileListItem label="Notifications" trailing={<Badge variant="accent">3</Badge>} />
+        <MobileListItem label="Theme" description="System" chevron onClick={() => {}} />
+      </MobileListSection>
+    </MobileList>
+  );
+}`,
   'language-switcher': String.raw`import { LanguageSwitcher } from 'vxui-react';
 
 // Wrap your app with the i18n provider, then drop in the switcher anywhere.
@@ -1200,6 +1378,364 @@ export function TopbarActions() {
     <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
       <LanguageSwitcher variant="inline" />
     </div>
+  );
+}`,
+  'scroll-area': String.raw`import { ScrollArea } from 'vxui-react';
+
+export function LogViewer() {
+  return (
+    <ScrollArea maxHeight={240}>
+      <div>Line 1: Server started</div>
+      <div>Line 2: Loading config...</div>
+      <div>Line 3: Connected to database</div>
+    </ScrollArea>
+  );
+}`,
+  separator: String.raw`import { Separator } from 'vxui-react';
+
+export function SectionDivider() {
+  return (
+    <div>
+      <p>Above the separator</p>
+      <Separator />
+      <p>Below the separator</p>
+    </div>
+  );
+}`,
+  timeline: String.raw`import { Timeline } from 'vxui-react';
+
+const items = [
+  { title: 'Order placed', time: '2 min ago', status: 'success' as const },
+  { title: 'Preparing shipment', time: '1 min ago', status: 'info' as const },
+  { title: 'Dispatched', time: 'Now', status: 'default' as const },
+];
+
+export function OrderTimeline() {
+  return <Timeline items={items} />;
+}`,
+  'tree-view': String.raw`import { TreeView } from 'vxui-react';
+
+const nodes = [
+  {
+    id: 'src', label: 'src',
+    children: [
+      { id: 'components', label: 'components',
+        children: [
+          { id: 'button', label: 'Button.tsx' },
+          { id: 'card', label: 'Card.tsx' },
+        ],
+      },
+    ],
+  },
+];
+
+export function FileTree() {
+  return <TreeView nodes={nodes} defaultExpanded={['src', 'components']} />;
+}`,
+  carousel: String.raw`import { Carousel } from 'vxui-react';
+
+const slides = [
+  <div key="1" style={{ padding: 40, textAlign: 'center' }}>Slide 1</div>,
+  <div key="2" style={{ padding: 40, textAlign: 'center' }}>Slide 2</div>,
+  <div key="3" style={{ padding: 40, textAlign: 'center' }}>Slide 3</div>,
+];
+
+export function DemoCarousel() {
+  return <Carousel items={slides} autoPlay />;
+}`,
+  toggle: String.raw`import { Toggle, ToggleGroup } from 'vxui-react';
+
+export function ToggleExample() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Toggle defaultPressed={false}>Bold</Toggle>
+      <ToggleGroup
+        type="single"
+        defaultValue="list"
+        items={[
+          { value: 'grid', label: 'Grid' },
+          { value: 'list', label: 'List' },
+        ]}
+      />
+    </div>
+  );
+}`,
+  rating: String.raw`import { Rating } from 'vxui-react';
+
+export function ReviewRating() {
+  return <Rating defaultValue={3} allowHalf />;
+}`,
+  label: String.raw`import { Label, Input } from 'vxui-react';
+
+export function FieldLabel() {
+  return (
+    <div style={{ display: 'grid', gap: 4 }}>
+      <Label required>Email address</Label>
+      <Input placeholder="name@example.com" />
+    </div>
+  );
+}`,
+  'date-pickers': String.raw`import { useState } from 'react';
+import { DatePicker } from 'vxui-react';
+
+export function DateField() {
+  const [date, setDate] = useState<Date | undefined>();
+  return (
+    <DatePicker
+      label="Start date"
+      value={date}
+      onChange={setDate}
+    />
+  );
+}`,
+  avatar: String.raw`import { Avatar } from 'vxui-react';
+
+export function UserAvatar() {
+  return (
+    <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+      <Avatar src="https://i.pravatar.cc/80" name="Alex Morgan" size="md" />
+      <Avatar name="Jamie Chen" size="md" />
+      <Avatar size="md" />
+    </div>
+  );
+}`,
+  badge: String.raw`import { Badge } from 'vxui-react';
+
+export function StatusBadges() {
+  return (
+    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+      <Badge variant="accent">New</Badge>
+      <Badge variant="success">Live</Badge>
+      <Badge variant="warning">Beta</Badge>
+      <Badge variant="neutral">Draft</Badge>
+    </div>
+  );
+}`,
+  skeleton: String.raw`import { Skeleton } from 'vxui-react';
+
+export function LoadingCard() {
+  return (
+    <div style={{ display: 'grid', gap: 8, width: 280 }}>
+      <Skeleton variant="rect" width="100%" height={120} />
+      <Skeleton variant="text" width="60%" />
+      <Skeleton variant="text" lines={2} />
+    </div>
+  );
+}`,
+  typography: String.raw`import { Heading, Text } from 'vxui-react';
+
+export function TypographyExample() {
+  return (
+    <div style={{ display: 'grid', gap: 8 }}>
+      <Heading level={1}>Heading 1</Heading>
+      <Heading level={2}>Heading 2</Heading>
+      <Text>Default body text.</Text>
+      <Text variant="secondary">Secondary text with less emphasis.</Text>
+      <Text variant="muted">Muted helper text.</Text>
+    </div>
+  );
+}`,
+  card: String.raw`import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'vxui-react';
+
+export function CardExample() {
+  return (
+    <Card variant="elevated" padding="md" hoverable>
+      <CardHeader>
+        <CardTitle>Team dashboard</CardTitle>
+        <CardDescription>Real-time metrics for your workspace.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        Cards compose with Header, Title, Description, and Content.
+      </CardContent>
+    </Card>
+  );
+}`,
+  form: String.raw`import { Form, FormField, FormLabel, FormDescription, FormMessage, Input, Button } from 'vxui-react';
+
+export function SignupForm() {
+  return (
+    <Form onSubmit={(e) => { e.preventDefault(); }}>
+      <FormField error="">
+        <FormLabel required>Email</FormLabel>
+        <FormDescription>We will never share your email.</FormDescription>
+        <Input type="email" placeholder="name@example.com" />
+        <FormMessage />
+      </FormField>
+      <Button type="submit">Submit</Button>
+    </Form>
+  );
+}`,
+  sheet: String.raw`import { Sheet, Button } from 'vxui-react';
+
+export function SheetExample() {
+  return (
+    <Sheet
+      trigger={<Button>Open panel</Button>}
+      title="Details"
+      side="right"
+    >
+      <p>Sheet content goes here.</p>
+    </Sheet>
+  );
+}`,
+  accordion: String.raw`import { Accordion } from 'vxui-react';
+
+const items = [
+  { key: 'getting-started', title: 'Getting Started', content: 'Install the package and set up providers.' },
+  { key: 'components', title: 'Components', content: 'Browse the full component library.' },
+  { key: 'templates', title: 'Templates', content: 'Pre-built page layouts you can drop into your app.' },
+];
+
+export function DemoAccordion() {
+  return <Accordion items={items} defaultOpen={['getting-started']} />;
+}`,
+  alert: String.raw`import { Alert } from 'vxui-react';
+
+export function DemoAlerts() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Alert title="Information" variant="info">This is an informational message.</Alert>
+      <Alert title="Success" variant="success">Operation completed successfully.</Alert>
+      <Alert title="Warning" variant="warning">Please review before proceeding.</Alert>
+      <Alert title="Error" variant="danger">Something went wrong. Please try again.</Alert>
+    </div>
+  );
+}`,
+  breadcrumb: String.raw`import { Breadcrumb } from 'vxui-react';
+
+export function DemoBreadcrumb() {
+  return (
+    <Breadcrumb
+      items={[
+        { label: 'Home', href: '#' },
+        { label: 'Components', href: '#' },
+        { label: 'Navigation' },
+      ]}
+    />
+  );
+}`,
+  'color-picker': String.raw`import { useState } from 'react';
+import { ColorPicker } from 'vxui-react';
+
+export function ThemeColorPicker() {
+  const [color, setColor] = useState('#3b82f6');
+  return <ColorPicker label="Theme color" value={color} onChange={setColor} />;
+}`,
+  'file-upload': String.raw`import { FileUpload } from 'vxui-react';
+
+export function UploadDemo() {
+  return (
+    <FileUpload
+      multiple
+      label="Upload attachments"
+      hint="Multiple files allowed, up to 10MB each"
+      accept="image/*,.pdf"
+    />
+  );
+}`,
+  pagination: String.raw`import { useState } from 'react';
+import { Pagination } from 'vxui-react';
+
+export function DemoPagination() {
+  const [page, setPage] = useState(1);
+  return <Pagination page={page} total={48} pageSize={10} onChange={setPage} />;
+}`,
+  progress: String.raw`import { Progress } from 'vxui-react';
+
+export function DemoProgress() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Progress label="Default" showLabel value={68} />
+      <Progress label="Success" showLabel value={68} variant="success" />
+      <Progress label="Warning" showLabel value={68} variant="warning" />
+      <Progress label="Danger" showLabel value={68} variant="danger" />
+      <Progress label="Rainbow" showLabel value={68} variant="rainbow" size="lg" />
+    </div>
+  );
+}`,
+  resizable: String.raw`import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from 'vxui-react';
+
+export function SplitPanel() {
+  return (
+    <ResizablePanelGroup direction="horizontal" style={{ height: 200 }}>
+      <ResizablePanel defaultSize={50} minSize={20}>
+        <div style={{ padding: 16 }}>Left panel</div>
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel defaultSize={50} minSize={20}>
+        <div style={{ padding: 16 }}>Right panel</div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  );
+}`,
+  spinner: String.raw`import { Spinner } from 'vxui-react';
+
+export function DemoSpinners() {
+  return (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <Spinner size="sm" />
+      <Spinner size="md" />
+      <Spinner size="lg" />
+    </div>
+  );
+}`,
+  stepper: String.raw`import { Stepper } from 'vxui-react';
+
+export function DemoStepper() {
+  return (
+    <Stepper
+      currentStep={1}
+      steps={[
+        { label: 'Plan', description: 'Define requirements' },
+        { label: 'Build', description: 'Implement features' },
+        { label: 'Launch', description: 'Deploy to production' },
+      ]}
+    />
+  );
+}`,
+  table: String.raw`import { Badge, Table } from 'vxui-react';
+
+type TeamRow = {
+  name: string;
+  role: string;
+  status: string;
+};
+
+const columns = [
+  { key: 'name', header: 'Name', accessor: (row: TeamRow) => row.name },
+  { key: 'role', header: 'Role', accessor: (row: TeamRow) => row.role },
+  {
+    key: 'status',
+    header: 'Status',
+    accessor: (row: TeamRow) => (
+      <Badge variant={row.status === 'Active' ? 'success' : 'warning'}>{row.status}</Badge>
+    ),
+  },
+];
+
+const data: TeamRow[] = [
+  { name: 'Alice Chen', role: 'Designer', status: 'Active' },
+  { name: 'Bo Wang', role: 'Engineer', status: 'Active' },
+  { name: 'Cora Lin', role: 'PM', status: 'Inactive' },
+];
+
+export function TeamTable() {
+  return <Table columns={columns} data={data} striped bordered />;
+}`,
+  tabs: String.raw`import { Tabs, TabsContent, TabsList, TabsTrigger } from 'vxui-react';
+
+export function DemoTabs() {
+  return (
+    <Tabs defaultValue="preview">
+      <TabsList>
+        <TabsTrigger value="preview">Preview</TabsTrigger>
+        <TabsTrigger value="code">Code</TabsTrigger>
+        <TabsTrigger value="props">Props</TabsTrigger>
+      </TabsList>
+      <TabsContent value="preview">Preview the component in real time.</TabsContent>
+      <TabsContent value="code">View the source code and copy it into your project.</TabsContent>
+      <TabsContent value="props">Browse the full API reference with descriptions.</TabsContent>
+    </Tabs>
   );
 }`,
 };
@@ -1311,6 +1847,7 @@ function DesktopApp() {
   const [selectRegionA, setSelectRegionA] = useState<string | undefined>(undefined);
   const [selectRegionB, setSelectRegionB] = useState<string | undefined>(undefined);
   const [timeValue, setTimeValue] = useState<string | undefined>(undefined);
+  const [paginationDemoPage, setPaginationDemoPage] = useState(1);
 
   const copy = isZh
     ? {
@@ -1696,7 +2233,7 @@ function DesktopApp() {
             };
           }
           // handle submenu
-          const title = isZh ? locales.zh.families.forms : locales.en.families.forms;
+          const title = isZh ? locales.zh.families[item.i18nKey] : locales.en.families[item.i18nKey];
           return {
             key: item.key,
             label: title,
@@ -2909,6 +3446,21 @@ function DesktopApp() {
             </div>
           </div>
         );
+      case 'mobile-list':
+        return (
+          <div className="vx-doc-preview-stack" style={{ maxWidth: 320, border: '1px solid var(--vx-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+            <MobileList>
+              <MobileListSection title={isZh ? '账户' : 'Account'}>
+                <MobileListItem label={isZh ? '个人资料' : 'Profile'} chevron onClick={() => {}} />
+                <MobileListItem label={isZh ? '安全设置' : 'Security'} chevron onClick={() => {}} />
+              </MobileListSection>
+              <MobileListSection title={isZh ? '偏好' : 'Preferences'}>
+                <MobileListItem label={isZh ? '通知' : 'Notifications'} trailing={<Badge variant="accent">3</Badge>} />
+                <MobileListItem label={isZh ? '主题' : 'Theme'} description={isZh ? '跟随系统' : 'System'} chevron onClick={() => {}} />
+              </MobileListSection>
+            </MobileList>
+          </div>
+        );
       case 'mobile':
         return (
           <div className="vx-breakpoint-grid">
@@ -2967,6 +3519,422 @@ function DesktopApp() {
             </Alert>
           </div>
         );
+      case 'scroll-area':
+        return (
+          <div className="vx-doc-preview-stack">
+            <ScrollArea maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
+              {Array.from({ length: 20 }, (_, i) => (
+                <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>
+                  {isZh ? `日志行 ${i + 1}` : `Log line ${i + 1}`}
+                </div>
+              ))}
+            </ScrollArea>
+          </div>
+        );
+      case 'separator':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              <span>{isZh ? '左' : 'Left'}</span>
+              <Separator orientation="vertical" style={{ height: 24 }} />
+              <span>{isZh ? '中' : 'Center'}</span>
+              <Separator orientation="vertical" style={{ height: 24 }} />
+              <span>{isZh ? '右' : 'Right'}</span>
+            </div>
+            <Separator />
+            <p>{isZh ? '水平分隔线上方内容' : 'Content above the horizontal separator.'}</p>
+          </div>
+        );
+      case 'timeline':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Timeline
+              items={[
+                { title: isZh ? '订单已创建' : 'Order created', time: '09:42', status: 'success' },
+                { title: isZh ? '支付成功' : 'Payment confirmed', time: '09:43', status: 'info' },
+                { title: isZh ? '配送中' : 'Shipping', time: '10:15', status: 'warning' },
+                { title: isZh ? '已签收' : 'Delivered', time: '14:30', status: 'default' },
+              ]}
+            />
+          </div>
+        );
+      case 'tree-view':
+        return (
+          <div className="vx-doc-preview-stack">
+            <TreeView
+              nodes={[
+                {
+                  id: 'src', label: 'src',
+                  children: [
+                    { id: 'components', label: 'components', children: [{ id: 'btn', label: 'Button.tsx' }, { id: 'card', label: 'Card.tsx' }] },
+                    { id: 'pages', label: 'pages', children: [{ id: 'home', label: 'Home.tsx' }, { id: 'about', label: 'About.tsx' }] },
+                  ],
+                },
+                { id: 'public', label: 'public', children: [{ id: 'index', label: 'index.html' }] },
+              ]}
+              defaultExpanded={['src', 'components', 'pages']}
+            />
+          </div>
+        );
+      case 'carousel':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ maxWidth: 400 }}>
+              <Carousel
+                items={[
+                  <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
+                  <div key="2" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-3)' }}>{isZh ? '第二张' : 'Slide 2'}</div>,
+                  <div key="3" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第三张' : 'Slide 3'}</div>,
+                ]}
+                showDots
+                showArrows
+              />
+            </div>
+          </div>
+        );
+      case 'toggle':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline" style={{ marginBottom: 12 }}>
+              <Toggle defaultPressed={false}><Text size="sm">{isZh ? '加粗' : 'Bold'}</Text></Toggle>
+              <Toggle><Text size="sm">{isZh ? '斜体' : 'Italic'}</Text></Toggle>
+              <Toggle><Text size="sm">{isZh ? '下划线' : 'Underline'}</Text></Toggle>
+            </div>
+            <ToggleGroup
+              type="single"
+              defaultValue="grid"
+              items={[
+                { value: 'grid', label: isZh ? '网格' : 'Grid' },
+                { value: 'list', label: isZh ? '列表' : 'List' },
+                { value: 'table', label: isZh ? '表格' : 'Table' },
+              ]}
+            />
+          </div>
+        );
+      case 'rating':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline" style={{ flexDirection: 'column', gap: 16 }}>
+              <Rating defaultValue={3.5} allowHalf />
+              <Rating defaultValue={4} size="sm" />
+              <Rating defaultValue={5} size="lg" readOnly />
+            </div>
+          </div>
+        );
+      case 'label':
+        return (
+          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 12, maxWidth: 320 }}>
+            <div style={{ display: 'grid', gap: 4 }}>
+              <Label required>{isZh ? '电子邮箱' : 'Email'}</Label>
+              <Input placeholder="name@example.com" />
+            </div>
+            <div style={{ display: 'grid', gap: 4 }}>
+              <Label>{isZh ? '备注（选填）' : 'Notes (optional)'}</Label>
+              <Input placeholder={isZh ? '添加备注...' : 'Add notes...'} />
+            </div>
+          </div>
+        );
+      case 'date-pickers':
+        return (
+          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 16, maxWidth: 320 }}>
+            <DatePicker label={isZh ? '开始日期' : 'Start date'} />
+            <DatePicker label={isZh ? '结束日期' : 'End date'} weekStartsOnMonday />
+          </div>
+        );
+      case 'avatar':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline" style={{ gap: 16, alignItems: 'center' }}>
+              <Avatar src="https://i.pravatar.cc/80?u=1" name="Alex Morgan" size="xs" />
+              <Avatar src="https://i.pravatar.cc/80?u=2" name="Jamie Chen" size="sm" />
+              <Avatar src="https://i.pravatar.cc/80?u=3" name="Taylor Kim" size="md" />
+              <Avatar name="Sam Wilson" size="lg" />
+              <Avatar size="xl" />
+            </div>
+          </div>
+        );
+      case 'badge':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <Badge variant="accent">{isZh ? '新品' : 'New'}</Badge>
+              <Badge variant="success">{isZh ? '在线' : 'Live'}</Badge>
+              <Badge variant="warning">{isZh ? '测试版' : 'Beta'}</Badge>
+              <Badge variant="neutral">{isZh ? '草稿' : 'Draft'}</Badge>
+            </div>
+          </div>
+        );
+      case 'skeleton':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ display: 'grid', gap: 8, width: 240 }}>
+              <Skeleton variant="rect" width="100%" height={100} />
+              <Skeleton variant="text" width="65%" />
+              <Skeleton variant="text" lines={2} />
+            </div>
+          </div>
+        );
+      case 'typography':
+        return (
+          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 8 }}>
+            <Heading level={1}>{isZh ? '标题 1' : 'Heading 1'}</Heading>
+            <Heading level={2}>{isZh ? '标题 2' : 'Heading 2'}</Heading>
+            <Heading level={3}>{isZh ? '标题 3' : 'Heading 3'}</Heading>
+            <Text>{isZh ? '默认正文文本。' : 'Default body text.'}</Text>
+            <Text variant="secondary">{isZh ? '次级强调文本。' : 'Secondary emphasis text.'}</Text>
+            <Text variant="muted">{isZh ? '弱化辅助文本。' : 'Muted helper text.'}</Text>
+            <Text weight="bold">{isZh ? '加粗正文。' : 'Bold body text.'}</Text>
+          </div>
+        );
+      case 'card':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Card variant="default" padding="md">
+                <CardHeader><CardTitle>Default</CardTitle><CardDescription>Standard card surface.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+              <Card variant="elevated" padding="md" hoverable>
+                <CardHeader><CardTitle>Elevated</CardTitle><CardDescription>Interactive with hover lift.</CardDescription></CardHeader>
+                <CardContent>Hover over this card.</CardContent>
+              </Card>
+              <Card variant="outlined" padding="md">
+                <CardHeader><CardTitle>Outlined</CardTitle><CardDescription>Bordered surface.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+              <Card variant="flat" padding="md">
+                <CardHeader><CardTitle>Flat</CardTitle><CardDescription>No border or shadow.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+              <Card variant="ghost" padding="md">
+                <CardHeader><CardTitle>Ghost</CardTitle><CardDescription>Minimal presence.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+              <Card variant="filled" padding="md">
+                <CardHeader><CardTitle>Filled</CardTitle><CardDescription>Background fill.</CardDescription></CardHeader>
+                <CardContent>Content goes here.</CardContent>
+              </Card>
+            </div>
+            <Alert variant="info" title={isZh ? '可组合的子组件' : 'Composable sub-components'}>
+              {isZh
+                ? 'Card 可与 CardHeader、CardTitle、CardDescription、CardContent 自由组合。'
+                : 'Card composes with CardHeader, CardTitle, CardDescription, and CardContent.'}
+            </Alert>
+          </div>
+        );
+      case 'form':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Form style={{ display: 'grid', gap: 16, maxWidth: 400 }}>
+              <FormField>
+                <FormLabel required>{isZh ? '邮箱' : 'Email'}</FormLabel>
+                <FormDescription>{isZh ? '我们不会分享你的邮箱。' : 'We will never share your email.'}</FormDescription>
+                <Input type="email" placeholder="name@example.com" />
+                <FormMessage />
+              </FormField>
+              <FormField>
+                <FormLabel required>{isZh ? '密码' : 'Password'}</FormLabel>
+                <Input type="password" placeholder="••••••••" />
+                <FormMessage />
+              </FormField>
+              <Button type="submit">{isZh ? '提交' : 'Submit'}</Button>
+            </Form>
+          </div>
+        );
+      case 'sheet':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <Sheet
+                trigger={<Button>{isZh ? '打开面板' : 'Open panel'}</Button>}
+                title={isZh ? '侧滑面板' : 'Sheet panel'}
+                description={isZh ? '这是从右侧滑入的面板。' : 'This panel slides in from the right.'}
+                side="right"
+              >
+                <div style={{ padding: 16 }}>{isZh ? '面板内容' : 'Panel content'}</div>
+              </Sheet>
+            </div>
+            <Alert variant="info" title={isZh ? '多方向支持' : 'Multiple sides'}>
+              {isZh
+                ? 'Sheet 支持从 left、right、top、bottom 四个方向滑入。'
+                : 'Sheet supports left, right, top, and bottom directions.'}
+            </Alert>
+          </div>
+        );
+      case 'resizable':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ height: 200, border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-lg)', overflow: 'hidden' }}>
+              <ResizablePanelGroup direction="horizontal">
+              <ResizablePanel defaultSize={50} minSize={20}>
+                <div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--vx-surface)', color: 'var(--vx-text-secondary)' }}>
+                  {isZh ? '左侧面板' : 'Left panel'}
+                </div>
+              </ResizablePanel>
+              <ResizableHandle />
+              <ResizablePanel defaultSize={50} minSize={20}>
+                <div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--vx-surface)', color: 'var(--vx-text-secondary)' }}>
+                  {isZh ? '右侧面板' : 'Right panel'}
+                </div>
+              </ResizablePanel>
+            </ResizablePanelGroup>
+            </div>
+          </div>
+        );
+      case 'accordion':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Accordion
+              defaultOpen={['getting-started']}
+              items={[
+                { key: 'getting-started', title: isZh ? '快速开始' : 'Getting Started', content: isZh ? '安装包并配置 Provider。' : 'Install the package and set up providers.' },
+                { key: 'components', title: isZh ? '组件库' : 'Components', content: isZh ? '按分类浏览全部组件。' : 'Browse the full component library organized by category.' },
+                { key: 'templates', title: isZh ? '页面模板' : 'Templates', content: isZh ? '可直接引入项目的预置页面布局。' : 'Pre-built page layouts you can drop into your app.' },
+              ]}
+            />
+          </div>
+        );
+      case 'tabs':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Tabs defaultValue="preview">
+              <TabsList>
+                <TabsTrigger value="preview">{isZh ? '预览' : 'Preview'}</TabsTrigger>
+                <TabsTrigger value="code">{isZh ? '代码' : 'Code'}</TabsTrigger>
+                <TabsTrigger value="props">{isZh ? '属性' : 'Props'}</TabsTrigger>
+              </TabsList>
+              <TabsContent value="preview">{isZh ? '实时预览组件效果。' : 'Preview the component in real time.'}</TabsContent>
+              <TabsContent value="code">{isZh ? '查看源代码并复制到项目中使用。' : 'View the source code and copy it into your project.'}</TabsContent>
+              <TabsContent value="props">{isZh ? '浏览完整的 API 参考。' : 'Browse the full API reference with descriptions.'}</TabsContent>
+            </Tabs>
+          </div>
+        );
+      case 'breadcrumb':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Breadcrumb
+              items={[
+                { label: isZh ? '首页' : 'Home', href: '#' },
+                { label: isZh ? '组件' : 'Components', href: '#' },
+                { label: isZh ? '导航' : 'Navigation' },
+              ]}
+            />
+          </div>
+        );
+      case 'pagination':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Pagination page={paginationDemoPage} total={48} pageSize={10} onChange={setPaginationDemoPage} />
+          </div>
+        );
+      case 'stepper':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Stepper
+              currentStep={1}
+              steps={[
+                { label: isZh ? '规划' : 'Plan', description: isZh ? '定义需求' : 'Define requirements' },
+                { label: isZh ? '开发' : 'Build', description: isZh ? '实现功能' : 'Implement features' },
+                { label: isZh ? '发布' : 'Launch', description: isZh ? '部署上线' : 'Deploy to production' },
+              ]}
+            />
+          </div>
+        );
+      case 'progress':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Progress label={isZh ? '默认' : 'Default'} showLabel value={sliderValue} />
+            <Progress label={isZh ? '成功' : 'Success'} showLabel value={sliderValue} variant="success" />
+            <Progress label={isZh ? '警告' : 'Warning'} showLabel value={sliderValue} variant="warning" />
+            <Progress label={isZh ? '危险' : 'Danger'} showLabel value={sliderValue} variant="danger" />
+            <Progress label={isZh ? '炫彩' : 'Rainbow'} showLabel value={sliderValue} variant="rainbow" size="lg" />
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap" style={{ marginTop: 8 }}>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={sliderValue}
+                onChange={(e) => setSliderValue(Number(e.target.value))}
+                style={{ width: '100%' }}
+              />
+            </div>
+          </div>
+        );
+      case 'spinner':
+        return (
+          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+            <Spinner size="sm" />
+            <Spinner size="md" />
+            <Spinner size="lg" />
+          </div>
+        );
+      case 'alert':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Alert title={isZh ? '提示信息' : 'Information'} variant="info">
+              {isZh ? '这是一条提示信息。' : 'This is an informational message.'}
+            </Alert>
+            <Alert title={isZh ? '操作成功' : 'Success'} variant="success">
+              {isZh ? '操作已成功完成。' : 'Operation completed successfully.'}
+            </Alert>
+            <Alert title={isZh ? '请注意' : 'Warning'} variant="warning">
+              {isZh ? '请检查后再继续。' : 'Please review before proceeding.'}
+            </Alert>
+            <Alert title={isZh ? '错误' : 'Error'} variant="danger">
+              {isZh ? '出错了，请重试。' : 'Something went wrong. Please try again.'}
+            </Alert>
+          </div>
+        );
+      case 'table':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Table
+              columns={[
+                { key: 'name', header: isZh ? '名称' : 'Name', accessor: (row: { name: string }) => row.name },
+                { key: 'role', header: isZh ? '角色' : 'Role', accessor: (row: { role: string }) => row.role },
+                { key: 'status', header: isZh ? '状态' : 'Status', accessor: (row: { status: string }) => <Badge variant={(row.status === 'Active' ? 'success' : 'warning') as 'success' | 'warning'}>{row.status}</Badge> },
+              ]}
+              data={[
+                { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: 'Active' },
+                { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: 'Active' },
+                { name: 'Cora Lin', role: isZh ? '产品经理' : 'PM', status: 'Inactive' },
+              ]}
+              striped
+              bordered
+            />
+          </div>
+        );
+      case 'file-upload':
+        return (
+          <div className="vx-doc-preview-stack" style={{ maxWidth: 480 }}>
+            <FileUpload
+              multiple
+              label={isZh ? '上传附件' : 'Upload attachments'}
+              hint={isZh ? '支持多文件上传，单文件最大 10MB' : 'Multiple files allowed, up to 10MB each'}
+              accept="image/*,.pdf"
+            />
+          </div>
+        );
+      case 'color-picker':
+        return (
+          <div className="vx-doc-preview-stack" style={{ maxWidth: 480 }}>
+            <ColorPicker label={isZh ? '主题色' : 'Theme color'} />
+          </div>
+        );
+      case 'dialog':
+      case 'alert-dialog':
+      case 'popover':
+      case 'tooltip':
+      case 'hover-card':
+      case 'dropdown-menu':
+      case 'context-menu':
+      case 'command-palette':
+        // These overlays are collectively demonstrated on the 'overlays' page.
+        return null;
+      case 'navigation-menu':
+      case 'menubar':
+        // These navigation components are collectively demonstrated on the 'navigation' page.
+        return null;
       case 'introduction':
       default:
         return null;

@@ -30,11 +30,14 @@ export interface Translations {
   nav: {
     gettingStarted: string;
     layout: string;
+    content: string;
+    forms: string;
     components: string;
-    feedback: string;
+    overlays: string;
     navigation: string;
-    mobile: string;
+    feedback: string;
     templates: string;
+    mobile: string;
   };
 
   // Nav item labels
@@ -43,22 +46,60 @@ export interface Translations {
     'quick-start': string;
     'shell-sidebar': string;
     'grid-page': string;
+    'nav-layout': string;
+    'scroll-area': string;
+    separator: string;
+    resizable: string;
+    typography: string;
+    badge: string;
+    avatar: string;
+    skeleton: string;
+    card: string;
+    'code-block': string;
+    'language-switcher': string;
     button: string;
     elements: string;
     'form-controls': string;
     'form-inputs': string;
+    toggle: string;
+    rating: string;
+    label: string;
+    'date-pickers': string;
+    'file-upload': string;
+    'color-picker': string;
+    form: string;
+    accordion: string;
+    tabs: string;
+    breadcrumb: string;
+    pagination: string;
+    stepper: string;
+    progress: string;
+    spinner: string;
+    alert: string;
+    toasts: string;
+    table: string;
+    'data-list': string;
+    timeline: string;
+    'tree-view': string;
+    carousel: string;
+    'empty-states': string;
     overlays: string;
     'data-display': string;
     navigation: string;
-    'data-list': string;
-    'empty-states': string;
-    toasts: string;
     feedback: string;
-    'nav-layout': string;
-    mobile: string;
+    dialog: string;
+    'alert-dialog': string;
+    sheet: string;
+    popover: string;
+    tooltip: string;
+    'hover-card': string;
+    'dropdown-menu': string;
+    'context-menu': string;
     'command-palette': string;
-    'code-block': string;
-    'language-switcher': string;
+    'navigation-menu': string;
+    menubar: string;
+    mobile: string;
+    'mobile-list': string;
     'home-page': string;
     'login-page': string;
     'register-page': string;
@@ -129,10 +170,18 @@ export interface Translations {
   families: {
     layout: string;
     layoutDesc: string;
+    content: string;
+    contentDesc: string;
     elements: string;
     elementsDesc: string;
     forms: string;
     formsDesc: string;
+    inputs: string;
+    inputsDesc: string;
+    overlays: string;
+    overlaysDesc: string;
+    navigation: string;
+    navigationDesc: string;
     feedback: string;
     feedbackDesc: string;
   };
@@ -266,11 +315,14 @@ export const en: Translations = {
   nav: {
     gettingStarted: 'Getting Started',
     layout: 'Layout',
+    content: 'Content',
+    forms: 'Forms',
     components: 'Components',
-    feedback: 'Feedback',
+    overlays: 'Overlays',
     navigation: 'Navigation',
-    mobile: 'Responsive',
+    feedback: 'Feedback',
     templates: 'Templates',
+    mobile: 'Responsive',
   },
 
   pages: {
@@ -278,22 +330,60 @@ export const en: Translations = {
     'quick-start': 'Quick Start',
     'shell-sidebar': 'Shell & Sidebar',
     'grid-page': 'Grid & Page',
+    'nav-layout': 'Navigation & Layout',
+    'scroll-area': 'ScrollArea',
+    separator: 'Separator',
+    resizable: 'Resizable',
+    typography: 'Typography',
+    badge: 'Badge',
+    avatar: 'Avatar',
+    skeleton: 'Skeleton',
+    card: 'Card',
+    'code-block': 'Code Block',
+    'language-switcher': 'Language Switcher',
     button: 'Button',
     elements: 'Elements',
     'form-controls': 'Form Controls',
     'form-inputs': 'Form Inputs',
+    toggle: 'Toggle',
+    rating: 'Rating',
+    label: 'Label',
+    'date-pickers': 'Date Pickers',
+    'file-upload': 'File Upload',
+    'color-picker': 'Color Picker',
+    form: 'Form',
+    accordion: 'Accordion',
+    tabs: 'Tabs',
+    breadcrumb: 'Breadcrumb',
+    pagination: 'Pagination',
+    stepper: 'Stepper',
+    progress: 'Progress',
+    spinner: 'Spinner',
+    alert: 'Alert',
+    toasts: 'Toasts',
+    table: 'Table',
+    'data-list': 'Data List',
+    timeline: 'Timeline',
+    'tree-view': 'Tree View',
+    carousel: 'Carousel',
+    'empty-states': 'Empty States',
     overlays: 'Overlays',
     'data-display': 'Data Display',
     navigation: 'Navigation',
-    'data-list': 'Data List',
-    'empty-states': 'Empty States',
-    toasts: 'Toasts',
-    feedback: 'Feedback Components',
-    'nav-layout': 'Navigation & Layout',
-    mobile: 'Mobile Components',
+    feedback: 'Feedback',
+    dialog: 'Dialog',
+    'alert-dialog': 'Alert Dialog',
+    sheet: 'Sheet',
+    popover: 'Popover',
+    tooltip: 'Tooltip',
+    'hover-card': 'Hover Card',
+    'dropdown-menu': 'Dropdown Menu',
+    'context-menu': 'Context Menu',
     'command-palette': 'Command Palette',
-    'code-block': 'Code Block',
-    'language-switcher': 'Language Switcher',
+    'navigation-menu': 'Navigation Menu',
+    menubar: 'Menubar',
+    mobile: 'Mobile Components',
+    'mobile-list': 'Mobile List',
     'home-page': 'Home Page',
     'login-page': 'Login Page',
     'register-page': 'Register Page',
@@ -361,10 +451,18 @@ export const en: Translations = {
   families: {
     layout: 'Layout',
     layoutDesc: 'App shell, sticky header, section rhythm, and responsive content framing.',
+    content: 'Content',
+    contentDesc: 'Typography, badges, avatars, cards, and code blocks.',
     elements: 'Elements',
     elementsDesc: 'Quiet primitives for actions, metadata, and structured content blocks.',
     forms: 'Forms',
     formsDesc: 'Inputs, switches, dialogs, and field composition patterns.',
+    inputs: 'Inputs',
+    inputsDesc: 'Text inputs, selects, textareas, and number pickers.',
+    overlays: 'Overlays',
+    overlaysDesc: 'Modals, popovers, tooltips, and sheet panels.',
+    navigation: 'Navigation',
+    navigationDesc: 'Menus, nav bars, and breadcrumbs.',
     feedback: 'Feedback',
     feedbackDesc: 'Transient toasts and interruptive confirmation flows.',
   },
@@ -535,11 +633,11 @@ export const en: Translations = {
       section: 'Components',
       title: 'Elements',
       description:
-        'Button, Badge, Text, Heading, CodeBlock, and LanguageSwitcher form the atomic foundation of the UI.',
+        'Button forms the atomic foundation of actions. Other atomic components (Badge, Text, Heading, CodeBlock, LanguageSwitcher) each have their own dedicated pages under Content.',
       guidance: [
         'One primary action per area is usually enough.',
-        'Use badges for compact status or category metadata, not decoration.',
-        'Cards should organize content without feeling like dashboards by default.',
+        'Use the solid variant for the primary action in a given area.',
+        'Use secondary or ghost variants for supporting actions.',
       ],
     },
     'form-controls': {
@@ -577,15 +675,242 @@ export const en: Translations = {
         'Reserve destructive affordances for row action groups, not inline text links.',
       ],
     },
+    dialog: {
+      section: 'Overlays',
+      title: 'Dialog',
+      description: 'A modal dialog that interrupts the user to confirm an action or show critical information. Supports multiple sizes, placement options, and a close button.',
+      guidance: [
+        'Use Dialog for confirmations that require a decision before continuing.',
+        'Choose the appropriate size — "sm" for quick confirmations, "lg" for forms or details.',
+        'Dialog traps focus and blocks interaction with the page behind it.',
+      ],
+    },
+    'alert-dialog': {
+      section: 'Overlays',
+      title: 'Alert Dialog',
+      description: 'A destructive-action confirmation dialog. Renders with a danger-styled confirm button and requires explicit user acknowledgement before proceeding.',
+      guidance: [
+        'Reserve AlertDialog for irreversible or destructive actions (delete, remove, discard).',
+        'The confirm button is always styled as danger; there is no neutral variant.',
+        'Always provide a clear description of what will happen so the user can make an informed choice.',
+      ],
+    },
+    popover: {
+      section: 'Overlays',
+      title: 'Popover',
+      description: 'A rich popup that can contain forms, buttons, and structured content. Unlike Tooltip, Popover can hold interactive elements and requires an explicit dismiss action.',
+      guidance: [
+        'Popover can contain interactive content — forms, buttons, links.',
+        'Always provide a close mechanism (click outside or explicit close button).',
+        'Use Tooltip for read-only labels and Popover for interactive content.',
+      ],
+    },
+    tooltip: {
+      section: 'Overlays',
+      title: 'Tooltip',
+      description: 'A short, non-interactive label that appears on hover or focus to describe a UI element. Tooltips contain text only — no links, buttons, or forms.',
+      guidance: [
+        'Tooltips are for supplementary text only — never place interactive content inside.',
+        'Tooltips appear on hover and focus; they do not require a close action.',
+        'Keep tooltip text short — one to five words is ideal.',
+      ],
+    },
+    'hover-card': {
+      section: 'Overlays',
+      title: 'Hover Card',
+      description: 'A card that appears on hover, showing a richer preview of a linked element. Useful for user profiles, document previews, or reference summaries.',
+      guidance: [
+        'Use HoverCard to preview related content without navigating away.',
+        'HoverCard can contain richer content than Tooltip — images, metadata, links.',
+        'Ensure the HoverCard trigger area is large enough to reach without the card disappearing.',
+      ],
+    },
+    'dropdown-menu': {
+      section: 'Overlays',
+      title: 'Dropdown Menu',
+      description: 'A menu that opens on click, presenting a list of grouped actions or navigation items. Supports nested groups, keyboard navigation, and disabled items.',
+      guidance: [
+        'Group related actions under labeled menu groups.',
+        'Use separators between unrelated action groups.',
+        'DropdownMenu supports keyboard navigation — arrow keys, Enter, and Escape.',
+      ],
+    },
+    'context-menu': {
+      section: 'Overlays',
+      title: 'Context Menu',
+      description: 'A right-click menu that provides actions relevant to the clicked element. Supports the same item and group API as DropdownMenu.',
+      guidance: [
+        'Use ContextMenu to expose secondary actions that users discover through right-click.',
+        'Always provide an alternative way to access the same actions (toolbar, button).',
+        'Keep the menu short — long context menus are hard to scan at a glance.',
+      ],
+    },
+    'command-palette': {
+      section: 'Overlays',
+      title: 'Command Palette',
+      description:
+        'A keyboard-driven search overlay that lets users jump to any page or action without leaving the keyboard. Render it globally, wire a hotkey, then pass a flat list of entries.',
+      guidance: [
+        'Keep the entries list flat and label-searchable — avoid nesting pages under hidden categories.',
+        'Populate entries from the same nav data you use for the sidebar so the two surfaces stay in sync.',
+        'Bind to ⌘K (Mac) or Ctrl+K (Windows) for a familiar shortcut.',
+      ],
+    },
+    'navigation-menu': {
+      section: 'Navigation',
+      title: 'Navigation Menu',
+      description: 'A horizontal navigation bar that supports multi-level dropdown menus on hover. Suitable for top-level site navigation with nested sections.',
+      guidance: [
+        'Use NavigationMenu for site-level navigation with multiple tiers of content.',
+        'Each item can have sub-items for second-level navigation.',
+        'Keep the top-level items short — one or two words each.',
+      ],
+    },
+    menubar: {
+      section: 'Navigation',
+      title: 'Menubar',
+      description: 'A horizontal menu bar typically used for application-level actions (File, Edit, View). Supports keyboard-driven navigation between menus.',
+      guidance: [
+        'Menubar follows desktop application conventions — use it for app-level command menus.',
+        'Each menu can contain items, groups, and separators.',
+        'Arrow keys navigate between menus; Escape closes the current menu.',
+      ],
+    },
+    resizable: {
+      section: 'Layout',
+      title: 'Resizable',
+      description: 'A set of three components — ResizablePanelGroup, ResizablePanel, ResizableHandle — for building split-panel layouts with draggable dividers. Supports horizontal and vertical arrangements.',
+      guidance: [
+        'Use ResizablePanelGroup as the outer container, then nest ResizablePanel and ResizableHandle inside.',
+        'Set direction to "horizontal" for side-by-side panels, "vertical" for stacked panels.',
+        'Panels can be collapsed or resized by dragging the handle between them.',
+      ],
+    },
+    'file-upload': {
+      section: 'Forms',
+      title: 'File Upload',
+      description: 'A drag-and-drop file upload area with click-to-browse fallback. Supports multiple files, previews, and removal.',
+      guidance: [
+        'Accept multiple files with the multiple prop — each file renders a preview card.',
+        'Uploaded files are surfaced via the onChange callback with name, size, and file object.',
+        'The component handles its own drag state and visual feedback.',
+      ],
+    },
+    'color-picker': {
+      section: 'Forms',
+      title: 'Color Picker',
+      description: 'A color selection control that opens a popup with hue, saturation, and brightness sliders. Supports predefined swatches and custom hex input.',
+      guidance: [
+        'Use ColorPicker for brand color configuration, tag colors, or theme customization.',
+        'The component provides both a visual picker and a hex input for precision.',
+        'Swatches can be customized via the swatches prop for brand-specific palettes.',
+      ],
+    },
+    accordion: {
+      section: 'Components',
+      title: 'Accordion',
+      description: 'A vertically stacked list of collapsible panels. Each panel has a header that toggles its content open or closed. Supports single and multiple open panels.',
+      guidance: [
+        'Accordion is ideal for FAQ sections, settings panels, and progressive disclosure patterns.',
+        'By default, only one panel is open at a time (type="single").',
+        'For accordions where multiple panels should stay open simultaneously, allowMultiple enables independent toggling.',
+      ],
+    },
+    tabs: {
+      section: 'Components',
+      title: 'Tabs',
+      description: 'A tabbed interface for switching between multiple content panels. Supports controlled and uncontrolled modes with keyboard navigation.',
+      guidance: [
+        'Use Tabs to organize related content into separate panels without navigating to a new page.',
+        'TabsList holds the trigger buttons; TabsContent holds the panel content.',
+        'Use the defaultValue prop for uncontrolled usage, or value/onValueChange for controlled mode.',
+      ],
+    },
+    breadcrumb: {
+      section: 'Components',
+      title: 'Breadcrumb',
+      description: 'A navigation aid that shows the user\'s location within the page hierarchy. Each segment is a link to the corresponding level.',
+      guidance: [
+        'Breadcrumb reflects URL depth — single-level pages may omit it entirely.',
+        'Use the separator prop to customize the divider between segments.',
+        'The last segment should be the current page (not a link) for accessibility.',
+      ],
+    },
+    pagination: {
+      section: 'Components',
+      title: 'Pagination',
+      description: 'A page navigation control that breaks large datasets into manageable pages. Shows page numbers with prev/next buttons and an optional page size selector.',
+      guidance: [
+        'Show the total page count so users know the dataset size.',
+        'Use the siblings prop to control how many page numbers appear around the current page.',
+        'The onPageChange callback receives the new page number for external data fetching.',
+      ],
+    },
+    stepper: {
+      section: 'Components',
+      title: 'Progress Steps',
+      description: 'A multi-step progress indicator that visualizes the user\'s current position in a linear workflow. Supports completed, active, pending, and error states.',
+      guidance: [
+        'Use Stepper for multi-page forms, checkout flows, or setup wizards.',
+        'Each step can be in "completed", "active", "pending", or "error" status.',
+        'Steps with error status draw attention to the failed step so users can navigate back to fix it.',
+      ],
+    },
+    progress: {
+      section: 'Components',
+      title: 'Progress Bar',
+      description: 'A horizontal progress bar that indicates the completion percentage of a deterministic operation. Supports labeled and unlabeled variants.',
+      guidance: [
+        'Use Progress for deterministic operations where the duration is known (e.g., file upload, data export).',
+        'Use Spinner for indeterminate waits where the duration is unknown.',
+        'The value prop accepts 0-100; set to 100 for completion.',
+      ],
+    },
+    spinner: {
+      section: 'Components',
+      title: 'Spinner',
+      description: 'A rotating indicator for indeterminate loading states. Use it while content is being fetched or processed without a known duration.',
+      guidance: [
+        'Use Spinner for short, indeterminate waits where the remaining time is unknown.',
+        'Use Progress for deterministic operations with a known duration.',
+        'Spinner accepts size prop ("sm", "md", "lg") to match the surrounding context.',
+      ],
+    },
+    alert: {
+      section: 'Components',
+      title: 'Alert',
+      description: 'A prominent status message that communicates success, warning, danger, or informational states. Can optionally be dismissed by the user.',
+      guidance: [
+        'Use Alert for persistent or page-level status messages — prefer it over Toasts for important information.',
+        'Alert supports "info", "success", "warning", and "danger" variants.',
+        'The dismissible prop adds a close button for user-dismissable alerts.',
+      ],
+    },
+    table: {
+      section: 'Components',
+      title: 'Table',
+      description: 'A data table with sortable columns, optional row striping, and responsive overflow. Ideal for listing structured data with column-level sorting.',
+      guidance: [
+        'Table supports sortable columns — delegate sort state up when the data comes from a server.',
+        'Use striped rows in dense tables to help eyes track across long rows.',
+        'The columns prop defines headers; each column can have a sortKey for client-side sorting.',
+      ],
+    },
     'empty-states': {
       section: 'Components',
       title: 'Empty States',
       description:
-        'An empty state should explain what is missing, why it matters, and what the next action is. It should never feel like a dead end.',
+        'An empty state should explain what is missing, why it matters, and what the next action is. It should never feel like a dead end. The EmptyState component provides a consistent layout with icon, title, description, and an action slot.',
       guidance: [
         'Name the object that is absent so users know what they are looking at.',
-        'Offer one clear recovery action.',
+        'Offer one clear recovery action via the action prop.',
         'Keep the visual weight lighter than success or alert feedback.',
+      ],
+      props: [
+        { prop: 'icon', type: 'ReactNode', description: 'Illustration or icon displayed above the title.' },
+        { prop: 'title', type: 'string', required: true, description: 'Main heading explaining what is missing.' },
+        { prop: 'description', type: 'string', description: 'Optional explanatory text below the title.' },
+        { prop: 'action', type: 'ReactNode', description: 'Call-to-action button or link for recovery.' },
       ],
     },
     toasts: {
@@ -600,14 +925,13 @@ export const en: Translations = {
       ],
     },
     feedback: {
-      section: 'Components',
+      section: 'Feedback',
       title: 'Feedback Components',
       description:
-        'Alert, Progress, Skeleton, Spinner, Stepper, and Toast indicate application state without blocking layouts.',
+        'Alert, Progress, Spinner, Stepper, and Toast indicate application state without interrupting the layout.',
       guidance: [
-        'Use Spinner for short indeterminate waits; Progress for deterministic operations.',
-        'Prefer Alert over toast for persistent or page-level status messages.',
-        'Skeleton should match the shape of the content it replaces to reduce layout shift.',
+        'Use Spinner for short, indeterminate waits; use Progress for deterministic operations.',
+        'Prefer Alert over Toast for persistent or page-level status messages.',
       ],
     },
     overlays: {
@@ -636,23 +960,46 @@ export const en: Translations = {
       section: 'Components',
       title: 'Data Display',
       description:
-        'Avatar, Card, Badge, Table, Carousel, Timeline, TreeView, and EmptyState present rich data compactly.',
+        'Table and EmptyState present structured data compactly. Other data components (Avatar, Badge, Card, Carousel, Timeline, TreeView) each have their own dedicated pages.',
       guidance: [
-        'Avatar should always have an accessible label, even when showing an image.',
         'Table supports sortable columns — delegate sort state up when the data is server-side.',
         'Use striped rows in dense tables to help eyes track across long rows.',
+        'EmptyState should include a clear recovery action whenever possible.',
       ],
     },
     'form-inputs': {
-      section: 'Components',
+      section: 'Forms',
       title: 'Form Inputs',
       description:
-        'Select, Checkbox, Radio, Textarea, Switch, Slider, Input, Label, NumberInput, TagInput, ColorPicker, DatePicker, FileUpload, Rating, Toggle, SegmentedControl, and Calendar extend the form vocabulary beyond text inputs.',
+        'Checkbox, Radio, Switch, Slider, NumberInput, TagInput, SegmentedControl, and Input extend the form vocabulary beyond text inputs. Other form components (Label, Toggle, Rating, DatePicker) each have their own dedicated pages.',
       guidance: [
         'Group radio buttons with RadioGroup to share name and semantics.',
         'Slider is ideal for numeric ranges; pair it with showValue for immediate feedback.',
         'Textarea defaults to vertical resize — disable resize only in fixed-height containers.',
         'Use Switch for immediate state toggles (like settings), and Checkbox for form submissions or multi-selections.',
+      ],
+    },
+    'mobile-list': {
+      section: 'Responsive',
+      title: 'Mobile List',
+      description: 'MobileList, MobileListSection, and MobileListItem provide a native-feeling list suitable for mobile navigation, settings, and data display. Each item supports leading icons, trailing content, chevron indicators, and destructive or disabled states.',
+      guidance: [
+        'Use MobileListSection with a title prop to group related items under a section header.',
+        'Set chevron on items that navigate to a detail view — omit it for static or toggle items.',
+        'Use destructive for irreversible actions (delete, leave, remove) — the text turns red.',
+        'Disabled items render visually muted and block click events.',
+      ],
+      props: [
+        { prop: 'MobileList', type: '—', description: 'Root <ul> element with list styling.' },
+        { prop: 'MobileListSection.title', type: 'string', description: 'Section header text.' },
+        { prop: 'MobileListItem.leading', type: 'ReactNode', description: 'Icon or avatar on the left side.' },
+        { prop: 'MobileListItem.trailing', type: 'ReactNode', description: 'Custom content on the right (badge, value, etc.).' },
+        { prop: 'MobileListItem.label', type: 'ReactNode', required: true, description: 'Primary label text.' },
+        { prop: 'MobileListItem.description', type: 'ReactNode', description: 'Secondary descriptive text.' },
+        { prop: 'MobileListItem.chevron', type: 'boolean', default: 'false', description: 'Show a right chevron arrow.' },
+        { prop: 'MobileListItem.destructive', type: 'boolean', default: 'false', description: 'Style as destructive action (red text).' },
+        { prop: 'MobileListItem.disabled', type: 'boolean', default: 'false', description: 'Disable the item.' },
+        { prop: 'MobileListItem.onClick', type: '() => void', description: 'Click handler.' },
       ],
     },
     mobile: {
@@ -732,17 +1079,6 @@ export const en: Translations = {
         'Link to the terms directly from registration and pricing flows so consent is contextual.',
       ],
     },
-    'command-palette': {
-      section: 'Components',
-      title: 'Command Palette',
-      description:
-        'A keyboard-driven search overlay that lets users jump to any page or action without leaving the keyboard. Render it globally, wire a hotkey, then pass a flat list of entries.',
-      guidance: [
-        'Keep the entries list flat and label-searchable — avoid nesting pages under hidden categories.',
-        'Populate entries from the same nav data you use for the sidebar so the two surfaces stay in sync.',
-        'Combine with ⌘K (Mac) or Ctrl+K (Windows) for a familiar shortcut that power users expect.',
-      ],
-    },
     'code-block': {
       section: 'Components',
       title: 'Code Block',
@@ -763,6 +1099,321 @@ export const en: Translations = {
         'Place the switcher in a persistent surface (topbar or settings page) so users can find it from anywhere.',
         'The switcher reflects the current locale; no extra state wiring is needed beyond the i18n provider.',
         'Use the inline variant for topbars and the default variant for settings pages to match visual density.',
+      ],
+    },
+    'scroll-area': {
+      section: 'Layout',
+      title: 'ScrollArea',
+      description: 'A scrollable container with custom-styled scrollbars. Use it to constrain overflowing content to a fixed viewport with maxHeight or maxWidth.',
+      guidance: [
+        'Set maxHeight to constrain vertical overflow — all content outside the viewport scrolls inside.',
+        'Pass a number for pixels or a string like "50vh" for relative sizing.',
+        'ScrollArea is purely presentational; it does not virtualize or lazy-render children.',
+      ],
+      props: [
+        { prop: 'maxHeight', type: 'string | number', description: 'Maximum height before content scrolls. Numbers are treated as pixels.' },
+        { prop: 'maxWidth', type: 'string | number', description: 'Maximum width before content scrolls. Numbers are treated as pixels.' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Content inside the scrollable viewport.' },
+      ],
+    },
+    separator: {
+      section: 'Layout',
+      title: 'Separator',
+      description: 'A visual divider that separates content sections. Renders as an <hr> element with horizontal or vertical orientation.',
+      guidance: [
+        'Use horizontal separators between stacked sections; use vertical ones in toolbars or inline contexts.',
+        'The decorative prop controls the role attribute — set to false when the separator conveys semantic meaning.',
+        'Vertical separators need an explicit height to render visibly.',
+      ],
+      props: [
+        { prop: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: 'The axis of the separator line.' },
+        { prop: 'decorative', type: 'boolean', default: 'true', description: 'When true, sets role="none"; when false, role="separator" with aria-orientation.' },
+      ],
+    },
+    timeline: {
+      section: 'Components',
+      title: 'Timeline',
+      description: 'A vertical list of chronologically ordered events. Each item shows a title, optional description, time, icon, and status indicator.',
+      guidance: [
+        'Use Timeline for activity feeds, order tracking, or deployment history.',
+        'Set status to "success", "warning", "danger", or "info" to color the timeline dot.',
+        'Pass an icon on individual items to replace the default dot icon.',
+      ],
+      props: [
+        { prop: 'items', type: 'TimelineItem[]', required: true, description: 'Array of timeline entries.' },
+        { prop: 'items[].title', type: 'string', required: true, description: 'Event title.' },
+        { prop: 'items[].description', type: 'string', description: 'Optional event description.' },
+        { prop: 'items[].time', type: 'string', description: 'Timestamp or date label.' },
+        { prop: 'items[].icon', type: 'ReactNode', description: 'Custom icon replacing the default dot.' },
+        { prop: 'items[].status', type: '"default" | "success" | "warning" | "danger" | "info"', description: 'Visual status color for the dot.' },
+      ],
+    },
+    'tree-view': {
+      section: 'Components',
+      title: 'Tree View',
+      description: 'A hierarchical tree control with expandable/collapsible nodes, keyboard navigation, and optional selection state. Suitable for file browsers, organization charts, or nested settings.',
+      guidance: [
+        'Use defaultExpanded to pre-expand certain nodes on initial render.',
+        'Each node requires a unique id for selection and expansion tracking.',
+        'TreeView supports controlled (selected/expanded) or uncontrolled modes via the corresponding props.',
+        'Disabled nodes cannot be selected or expanded but remain visible.',
+      ],
+      props: [
+        { prop: 'nodes', type: 'TreeNode[]', required: true, description: 'Root-level tree nodes.' },
+        { prop: 'selected', type: 'string', description: 'Controlled selected node id.' },
+        { prop: 'defaultSelected', type: 'string', description: 'Uncontrolled initial selected node id.' },
+        { prop: 'onSelect', type: '(id: string, node: TreeNode) => void', description: 'Called when a node is selected.' },
+        { prop: 'expanded', type: 'string[]', description: 'Controlled expanded node ids.' },
+        { prop: 'defaultExpanded', type: 'string[]', description: 'Uncontrolled initial expanded node ids.' },
+        { prop: 'onExpandedChange', type: '(ids: string[]) => void', description: 'Called when expansion state changes.' },
+      ],
+    },
+    carousel: {
+      section: 'Components',
+      title: 'Carousel',
+      description: 'A slide-based carousel with dot indicators, arrow navigation, optional auto-play, and loop support. Each slide accepts arbitrary React content.',
+      guidance: [
+        'Set autoPlay for unattended rotation — useful for hero banners or kiosks.',
+        'Disable loop for linear walkthroughs where users should not wrap around.',
+        'Carousel respects controlled index via the index prop for external pagination sync.',
+        'Hide arrows or dots with showArrows / showDots when building minimal variants.',
+      ],
+      props: [
+        { prop: 'items', type: 'ReactNode[]', required: true, description: 'Array of slide content.' },
+        { prop: 'defaultIndex', type: 'number', default: '0', description: 'Initial slide index (uncontrolled).' },
+        { prop: 'index', type: 'number', description: 'Controlled current slide index.' },
+        { prop: 'onIndexChange', type: '(index: number) => void', description: 'Called when the active slide changes.' },
+        { prop: 'autoPlay', type: 'boolean', default: 'false', description: 'Automatically advance slides on an interval.' },
+        { prop: 'interval', type: 'number', default: '3000', description: 'Auto-play interval in milliseconds.' },
+        { prop: 'loop', type: 'boolean', default: 'true', description: 'Wrap from last slide back to first.' },
+        { prop: 'showDots', type: 'boolean', default: 'true', description: 'Show dot indicators.' },
+        { prop: 'showArrows', type: 'boolean', default: 'true', description: 'Show prev/next arrow buttons.' },
+      ],
+    },
+    toggle: {
+      section: 'Forms',
+      title: 'Toggle',
+      description: 'A two-state button that toggles between pressed and unpressed. ToggleGroup extends this to single/multiple selection among a set of options.',
+      guidance: [
+        'Use Toggle for toolbar toggles (bold/italic, filter pills) and ToggleGroup for view mode switching.',
+        'ToggleGroup type="single" behaves like a radio group; type="multiple" allows any combination.',
+        'Both controlled (pressed/value) and uncontrolled (defaultPressed/defaultValue) modes are supported.',
+      ],
+      props: [
+        { prop: 'Toggle.pressed', type: 'boolean', description: 'Controlled pressed state.' },
+        { prop: 'Toggle.defaultPressed', type: 'boolean', default: 'false', description: 'Uncontrolled initial pressed state.' },
+        { prop: 'Toggle.onPressedChange', type: '(pressed: boolean) => void', description: 'Called when pressed state changes.' },
+        { prop: 'Toggle.size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Button size.' },
+        { prop: 'ToggleGroup.items', type: 'ToggleGroupItem[]', required: true, description: 'Array of toggle options.' },
+        { prop: 'ToggleGroup.value', type: 'string | string[]', description: 'Controlled selection value.' },
+        { prop: 'ToggleGroup.defaultValue', type: 'string | string[]', description: 'Uncontrolled initial selection.' },
+        { prop: 'ToggleGroup.onValueChange', type: '(value: string | string[]) => void', description: 'Called when selection changes.' },
+        { prop: 'ToggleGroup.type', type: '"single" | "multiple"', default: '"single"', description: 'Selection mode.' },
+      ],
+    },
+    rating: {
+      section: 'Forms',
+      title: 'Rating',
+      description: 'A star-based rating input that supports whole and half-star precision, controlled/uncontrolled modes, and read-only or disabled states.',
+      guidance: [
+        'Set allowHalf to permit half-star precision for detailed feedback.',
+        'Use readOnly for display-only ratings (historical averages) and disabled when interaction should be blocked entirely.',
+        'The size prop adjusts star dimensions for different visual contexts.',
+      ],
+      props: [
+        { prop: 'value', type: 'number', description: 'Controlled rating value.' },
+        { prop: 'defaultValue', type: 'number', default: '0', description: 'Uncontrolled initial value.' },
+        { prop: 'onChange', type: '(value: number) => void', description: 'Called when the rating changes.' },
+        { prop: 'max', type: 'number', default: '5', description: 'Maximum number of stars.' },
+        { prop: 'allowHalf', type: 'boolean', default: 'false', description: 'Allow half-star values.' },
+        { prop: 'disabled', type: 'boolean', description: 'Disable interaction.' },
+        { prop: 'readOnly', type: 'boolean', description: 'Display-only mode.' },
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Star size.' },
+        { prop: 'label', type: 'string', description: 'Accessible label for the rating group.' },
+      ],
+    },
+    label: {
+      section: 'Forms',
+      title: 'Label',
+      description: 'A styled <label> element with an optional required indicator. Use it alongside any form control to provide accessible labelling.',
+      guidance: [
+        'Always associate a Label with its form control — either by wrapping the input or using htmlFor.',
+        'Set required to automatically append a red asterisk after the label text.',
+        'Label is a thin wrapper; it passes all standard label attributes to the underlying element.',
+      ],
+      props: [
+        { prop: 'required', type: 'boolean', description: 'Show a required indicator (red asterisk) after the label text.' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Label text content.' },
+      ],
+    },
+    avatar: {
+      section: 'Content',
+      title: 'Avatar',
+      description: 'Displays a user avatar with image, fallback initials, or a placeholder icon. Supports multiple sizes and shapes.',
+      guidance: [
+        'Always provide an accessible label via the name or alt prop.',
+        'The src prop accepts an image URL; on load failure it falls back to initials or fallback text.',
+        'Initials are generated from the name prop (up to 2 characters).',
+        'The circle shape is the default; use square for data-dense layouts.',
+      ],
+      props: [
+        { prop: 'src', type: 'string', description: 'Image URL for the avatar.' },
+        { prop: 'name', type: 'string', description: 'User name used for initials and accessible label.' },
+        { prop: 'size', type: '"xs" | "sm" | "md" | "lg" | "xl"', default: '"md"', description: 'Avatar size.' },
+        { prop: 'shape', type: '"circle" | "square"', default: '"circle"', description: 'Avatar shape.' },
+        { prop: 'fallback', type: 'string', description: 'Custom fallback text when no image or name is provided.' },
+      ],
+    },
+    badge: {
+      section: 'Content',
+      title: 'Badge',
+      description: 'A compact label for status, category, or metadata. Use it inline with text or inside buttons, cards, and table cells.',
+      guidance: [
+        'Use badges for compact status or category metadata, not decoration.',
+        'The accent variant is reserved for the primary brand color; success and warning convey semantic states.',
+        'Badges are inline elements — they flow naturally alongside text and other inline content.',
+      ],
+      props: [
+        { prop: 'variant', type: '"neutral" | "accent" | "success" | "warning"', default: '"neutral"', description: 'Visual style variant.' },
+      ],
+    },
+    skeleton: {
+      section: 'Content',
+      title: 'Skeleton',
+      description: 'A placeholder that mimics content shape while data loads. Supports text, rectangle, and circle variants, as well as multi-line text blocks.',
+      guidance: [
+        'Match the skeleton shape to the real content to reduce layout shift.',
+        'Use variant="text" with lines > 1 to simulate a paragraph placeholder.',
+        'The last line of a multi-line text skeleton is shorter (70% width) to look more natural.',
+      ],
+      props: [
+        { prop: 'variant', type: '"text" | "rect" | "circle"', default: '"rect"', description: 'Shape variant.' },
+        { prop: 'width', type: 'string | number', description: 'Width. Numbers are treated as pixels.' },
+        { prop: 'height', type: 'string | number', description: 'Height. Numbers are treated as pixels.' },
+        { prop: 'lines', type: 'number', default: '1', description: 'Number of lines for text variant.' },
+      ],
+    },
+    typography: {
+      section: 'Content',
+      title: 'Typography',
+      description: 'Heading and Text provide the core typography system. Heading renders <h1>-<h6> with level-based sizing; Text renders <p>, <span>, or <div> with variant, size, and weight options.',
+      guidance: [
+        'Use Heading for section titles and hierarchical content structure.',
+        'Use Text with variant="secondary" or "muted" for lower-emphasis content.',
+        'The truncate prop clips overflow with an ellipsis — useful for table cells and sidebars.',
+        'Set the as prop on Heading to override the rendered HTML element without changing visual style.',
+      ],
+      props: [
+        { prop: 'Heading.level', type: '1 | 2 | 3 | 4 | 5 | 6', default: '2', description: 'Heading level determines font size.' },
+        { prop: 'Heading.as', type: '"h1" | "h2" | "h3" | "h4" | "h5" | "h6"', description: 'Override the rendered HTML element.' },
+        { prop: 'Heading.variant', type: '"default" | "secondary"', default: '"default"', description: 'Visual variant.' },
+        { prop: 'Heading.weight', type: '"normal" | "medium" | "semibold" | "bold"', default: '"bold"', description: 'Font weight.' },
+        { prop: 'Heading.truncate', type: 'boolean', default: 'false', description: 'Truncate with ellipsis on overflow.' },
+        { prop: 'Text.as', type: '"p" | "span" | "div"', default: '"p"', description: 'Rendered HTML element.' },
+        { prop: 'Text.variant', type: '"default" | "secondary" | "muted" | "danger" | "success"', default: '"default"', description: 'Color variant.' },
+        { prop: 'Text.size', type: '"sm" | "base" | "lg" | "xl"', default: '"base"', description: 'Font size.' },
+        { prop: 'Text.weight', type: '"normal" | "medium" | "semibold" | "bold"', default: '"normal"', description: 'Font weight.' },
+        { prop: 'Text.truncate', type: 'boolean', default: 'false', description: 'Truncate with ellipsis on overflow.' },
+      ],
+    },
+    'date-pickers': {
+      section: 'Forms',
+      title: 'Date Pickers',
+      description: 'DatePicker provides a text-input with a popup calendar for date selection. Calendar is the standalone month-grid component used internally by DatePicker.',
+      guidance: [
+        'Use DatePicker for form fields; use Calendar directly when embedding a date grid into a custom widget.',
+        'Set min/max to constrain the selectable date range.',
+        'The weekStartsOnMonday prop changes the first day of the week — default is Sunday.',
+        'DatePicker falls back to a Sheet-based layout on mobile viewports automatically.',
+      ],
+      props: [
+        { prop: 'DatePicker.value', type: 'Date', description: 'Controlled selected date.' },
+        { prop: 'DatePicker.defaultValue', type: 'Date', description: 'Uncontrolled initial date.' },
+        { prop: 'DatePicker.onChange', type: '(date: Date | undefined) => void', description: 'Called when the date changes.' },
+        { prop: 'DatePicker.label', type: 'string', description: 'Input label.' },
+        { prop: 'DatePicker.hint', type: 'string', description: 'Helper text below the input.' },
+        { prop: 'DatePicker.error', type: 'string', description: 'Error message.' },
+        { prop: 'DatePicker.min', type: 'Date', description: 'Minimum selectable date.' },
+        { prop: 'DatePicker.max', type: 'Date', description: 'Maximum selectable date.' },
+        { prop: 'DatePicker.disabled', type: 'boolean', description: 'Disable the date picker.' },
+        { prop: 'DatePicker.weekStartsOnMonday', type: 'boolean', default: 'false', description: 'Start the week on Monday instead of Sunday.' },
+        { prop: 'Calendar.value', type: 'Date', description: 'Controlled selected date.' },
+        { prop: 'Calendar.defaultValue', type: 'Date', description: 'Uncontrolled initial date.' },
+        { prop: 'Calendar.onChange', type: '(date: Date) => void', description: 'Called when a date is clicked.' },
+        { prop: 'Calendar.min', type: 'Date', description: 'Minimum selectable date.' },
+        { prop: 'Calendar.max', type: 'Date', description: 'Maximum selectable date.' },
+        { prop: 'Calendar.weekStartsOnMonday', type: 'boolean', default: 'false', description: 'Start the week on Monday.' },
+      ],
+    },
+    card: {
+      section: 'Content',
+      title: 'Card',
+      description:
+        'A flexible content container with multiple visual variants. Use Card as the outer wrapper, then compose CardHeader, CardTitle, CardDescription, and CardContent inside.',
+      guidance: [
+        'Use the elevated variant for interactive cards that invite clicks.',
+        'Set hoverable to add a lift effect on hover — ideal for gallery or dashboard tiles.',
+        'Padding defaults to the card’s internal spacing; use the padding prop to adjust for dense or spacious layouts.',
+        'Card itself is a <section> — always include a heading (CardTitle) for accessibility.',
+      ],
+      props: [
+        { prop: 'variant', type: '"default" | "flat" | "elevated" | "outlined" | "ghost" | "filled"', default: '"default"', description: 'Visual style preset.' },
+        { prop: 'padding', type: '"none" | "sm" | "md" | "lg"', description: 'Inner padding size. Defaults to the card\'s internal spacing.' },
+        { prop: 'hoverable', type: 'boolean', default: 'false', description: 'Add a hover lift effect — useful for clickable cards.' },
+      ],
+    },
+    form: {
+      section: 'Forms',
+      title: 'Form',
+      description:
+        'A form composition system built from Form, FormField, FormLabel, FormDescription, FormMessage, and useFormField. Works with any input component to provide consistent label, hint, and error layout.',
+      guidance: [
+        'Wrap each logical field group in a FormField to share error state via context.',
+        'Use FormLabel with required to show a required indicator automatically.',
+        'FormMessage renders the error from FormField context — no manual prop drilling needed.',
+        'Form sets noValidate by default; handle validation yourself or with a library.',
+      ],
+      props: [
+        { prop: 'Form', type: '—', description: 'Standard <form> wrapper with noValidate and vx-form class.' },
+        { prop: 'FormField', type: '—', description: 'Wraps a field group; provides error context to FormMessage.' },
+        { prop: 'FormField.error', type: 'string', description: 'Error message shown by FormMessage in this field.' },
+        { prop: 'FormLabel', type: '—', description: 'Renders a <label> with an optional required asterisk.' },
+        { prop: 'FormLabel.required', type: 'boolean', description: 'Shows a red asterisk after the label text.' },
+        { prop: 'FormDescription', type: '—', description: 'Helper text rendered below the label.' },
+        { prop: 'FormMessage', type: '—', description: 'Error or helper message; auto-reads error from FormField context.' },
+        { prop: 'useFormField', type: '() => { error?: string }', description: 'Hook to read the current field\'s error context.' },
+      ],
+    },
+    sheet: {
+      section: 'Overlays',
+      title: 'Sheet',
+      description:
+        'A slide-out panel that enters from the left, right, top, or bottom edge. Supports title, description, optional confirm action, and controlled or uncontrolled open state.',
+      guidance: [
+        'Use Sheet for secondary content that does not require a full page navigation.',
+        'Set side to "right" for detail panels, "bottom" for mobile-like action sheets.',
+        'The variant="action" preset hides the close button and shows a confirm footer — suitable for destructive or confirm actions.',
+        'Control open state with the open/onOpenChange props or use defaultOpen for uncontrolled usage.',
+      ],
+      props: [
+        { prop: 'trigger', type: 'ReactNode', description: 'Element that opens the sheet on click.' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Sheet body content.' },
+        { prop: 'side', type: '"left" | "right" | "top" | "bottom"', default: '"right"', description: 'Edge from which the sheet slides in.' },
+        { prop: 'variant', type: '"default" | "action"', default: '"default"', description: '"action" hides close button and shows a confirm footer.' },
+        { prop: 'title', type: 'ReactNode', description: 'Sheet header title.' },
+        { prop: 'description', type: 'ReactNode', description: 'Sheet header description.' },
+        { prop: 'header', type: 'ReactNode', description: 'Custom header content (replaces title/description).' },
+        { prop: 'footer', type: 'ReactNode', description: 'Custom footer content.' },
+        { prop: 'open', type: 'boolean', description: 'Controlled open state.' },
+        { prop: 'defaultOpen', type: 'boolean', description: 'Uncontrolled initial open state.' },
+        { prop: 'onOpenChange', type: '(open: boolean) => void', description: 'Callback when open state changes.' },
+        { prop: 'showClose', type: 'boolean', default: 'true', description: 'Show the close button in the header.' },
+        { prop: 'closeOnOverlayClick', type: 'boolean', default: 'true', description: 'Close when clicking the backdrop.' },
+        { prop: 'showConfirm', type: 'boolean', default: 'false', description: 'Show a confirm button in the footer.' },
+        { prop: 'confirmText', type: 'string', default: '"Confirm"', description: 'Confirm button label.' },
+        { prop: 'confirmDisabled', type: 'boolean', default: 'false', description: 'Disable the confirm button.' },
+        { prop: 'onConfirm', type: '() => void', description: 'Callback when confirm is clicked.' },
+        { prop: 'width', type: 'number', description: 'Custom panel width in pixels.' },
       ],
     },
   },
@@ -793,11 +1444,14 @@ export const zh: Translations = {
   nav: {
     gettingStarted: '开始使用',
     layout: '布局',
+    content: '内容',
+    forms: '表单',
     components: '组件',
-    feedback: '反馈',
+    overlays: '浮层',
     navigation: '导航',
-    mobile: '响应式',
+    feedback: '反馈',
     templates: '模板',
+    mobile: '响应式',
   },
 
   pages: {
@@ -805,22 +1459,60 @@ export const zh: Translations = {
     'quick-start': '快速开始',
     'shell-sidebar': '框架与侧边栏',
     'grid-page': '网格与页面',
+    'nav-layout': '导航与布局',
+    'scroll-area': '滚动区域',
+    separator: '分隔线',
+    resizable: '可拖拽面板',
+    typography: '排版',
+    badge: '徽章',
+    avatar: '头像',
+    skeleton: '骨架屏',
+    card: '卡片',
+    'code-block': '代码块',
+    'language-switcher': '语言切换器',
     button: '按钮',
     elements: '基础元素',
     'form-controls': '表单控件',
     'form-inputs': '表单输入',
+    toggle: '开关按钮',
+    rating: '评分',
+    label: '标签',
+    'date-pickers': '日期选择器',
+    'file-upload': '文件上传',
+    'color-picker': '颜色选择器',
+    form: '表单组合',
+    accordion: '折叠面板',
+    tabs: '标签页',
+    breadcrumb: '面包屑',
+    pagination: '分页',
+    stepper: '步骤条',
+    progress: '进度条',
+    spinner: '加载器',
+    alert: '提示',
+    toasts: '消息提示',
+    table: '表格',
+    'data-list': '数据列表',
+    timeline: '时间线',
+    'tree-view': '树形视图',
+    carousel: '轮播',
+    'empty-states': '空状态',
     overlays: '浮层',
     'data-display': '数据展示',
     navigation: '导航',
-    'data-list': '数据列表',
-    'empty-states': '空状态',
-    toasts: '消息提示',
     feedback: '反馈组件',
-    'nav-layout': '导航与布局',
-    mobile: '移动端组件',
+    dialog: '弹窗',
+    'alert-dialog': '确认弹窗',
+    sheet: '侧滑面板',
+    popover: '弹出框',
+    tooltip: '工具提示',
+    'hover-card': '悬停卡片',
+    'dropdown-menu': '下拉菜单',
+    'context-menu': '右键菜单',
     'command-palette': '命令面板',
-    'code-block': '代码块',
-    'language-switcher': '语言切换器',
+    'navigation-menu': '导航菜单',
+    menubar: '菜单栏',
+    mobile: '移动端组件',
+    'mobile-list': '移动端列表',
     'home-page': '主页',
     'login-page': '登录页',
     'register-page': '注册页',
@@ -888,10 +1580,18 @@ export const zh: Translations = {
   families: {
     layout: '布局',
     layoutDesc: '应用框架、固定顶栏、章节节奏和响应式内容框架。',
+    content: '内容展示',
+    contentDesc: '排版、徽章、头像、卡片和代码块。',
     elements: '基础元素',
     elementsDesc: '用于操作、元数据和结构化内容块的低调原语。',
     forms: '表单',
     formsDesc: '输入框、开关、对话框和字段组合模式。',
+    inputs: '输入类',
+    inputsDesc: '文本输入框、下拉选择、文本域和数字选择器。',
+    overlays: '浮层',
+    overlaysDesc: '弹窗、弹出框、工具提示和侧滑面板。',
+    navigation: '导航',
+    navigationDesc: '菜单、导航栏和面包屑。',
     feedback: '反馈',
     feedbackDesc: '短暂的消息提示与打断性确认流程。',
   },
@@ -1063,11 +1763,11 @@ export const zh: Translations = {
     elements: {
       section: '组件',
       title: '基础元素',
-      description: 'Button、Badge、Text、Heading、CodeBlock 和 LanguageSwitcher 构成 UI 的原子基础。',
+      description: 'Button 构成操作的原子基础。其他原子组件（Badge、Text、Heading、CodeBlock、LanguageSwitcher）各有独立文档页，位于"内容展示"分类下。',
       guidance: [
         '每个区域通常一个主操作就足够了。',
-        '徽章用于紧凑的状态或分类元数据，而非纯装饰。',
-        '卡片应组织内容，默认不应有仪表盘的感觉。',
+        '使用 solid 变体作为区域内的主操作。',
+        '使用 secondary 或 ghost 变体作为辅助操作。',
       ],
     },
     'form-controls': {
@@ -1105,15 +1805,242 @@ export const zh: Translations = {
         '将破坏性操作保留在行操作组中，而非内联文字链接。',
       ],
     },
+    dialog: {
+      section: '浮层',
+      title: '弹窗',
+      description: '中断用户操作以确认操作或展示关键信息的模态对话框。支持多种尺寸、放置选项和关闭按钮。',
+      guidance: [
+        '在需要用户做出决定才能继续时使用 Dialog。',
+        '"sm" 适用于快速确认，"lg" 适用于表单或详细信息展示。',
+        'Dialog 会捕获焦点并阻止与背景页面的交互。',
+      ],
+    },
+    'alert-dialog': {
+      section: '浮层',
+      title: '确认弹窗',
+      description: '用于破坏性操作确认的对话框。确认按钮始终为危险样式，用户需明确确认才能继续。',
+      guidance: [
+        '将 AlertDialog 保留给不可逆或破坏性操作（删除、移除、放弃）。',
+        '确认按钮始终为危险样式，无中性变体。',
+        '始终清晰描述即将发生的操作，让用户做出知情选择。',
+      ],
+    },
+    popover: {
+      section: '浮层',
+      title: '弹出框',
+      description: '可包含表单、按钮和结构化内容的丰富弹出面板。与 Tooltip 不同，Popover 可包含交互元素，需要明确的关闭操作。',
+      guidance: [
+        'Popover 可包含交互内容——表单、按钮、链接。',
+        '始终提供关闭机制（点击外部或显式关闭按钮）。',
+        'Tooltip 用于只读标签，Popover 用于交互内容。',
+      ],
+    },
+    tooltip: {
+      section: '浮层',
+      title: '工具提示',
+      description: '悬停或聚焦时出现的简短非交互标签，用于描述 UI 元素。仅包含文本——无链接、按钮或表单。',
+      guidance: [
+        'Tooltip 仅用于补充文本——绝不可放入交互内容。',
+        'Tooltip 在悬停和聚焦时出现，无需关闭操作。',
+        '保持 Tooltip 文本简短——一到五个词为最佳。',
+      ],
+    },
+    'hover-card': {
+      section: '浮层',
+      title: '悬停卡片',
+      description: '悬停时出现的卡片，展示链接元素的更丰富预览。适用于用户资料、文档预览或引用摘要。',
+      guidance: [
+        '使用 HoverCard 预览相关内容，无需导航离开。',
+        'HoverCard 可包含比 Tooltip 更丰富的内容——图片、元数据、链接。',
+        '确保触发器区域足够大，避免卡片在到达前消失。',
+      ],
+    },
+    'dropdown-menu': {
+      section: '浮层',
+      title: '下拉菜单',
+      description: '点击时打开的菜单，展示分组操作或导航项列表。支持嵌套分组、键盘导航和禁用项。',
+      guidance: [
+        '在带标签的菜单组中对相关操作分组。',
+        '在无关操作组之间使用分隔线。',
+        '支持键盘导航——方向键、Enter 和 Escape。',
+      ],
+    },
+    'context-menu': {
+      section: '浮层',
+      title: '右键菜单',
+      description: '右键点击时出现的菜单，提供与点击元素相关的操作列表。支持与 DropdownMenu 相同的项和分组 API。',
+      guidance: [
+        '使用 ContextMenu 公开用户通过右键发现的次要操作。',
+        '始终提供访问相同操作的替代方式（工具栏、按钮）。',
+        '保持菜单简短——长右键菜单难以快速扫读。',
+      ],
+    },
+    'command-palette': {
+      section: '浮层',
+      title: '命令面板',
+      description:
+        '键盘驱动的搜索浮层，让用户无需离开键盘即可跳转到任意页面或触发任意操作。全局挂载、绑定快捷键，传入扁平的条目列表即可使用。',
+      guidance: [
+        '保持条目列表扁平且按标签可搜索——避免隐藏分类嵌套。',
+        '从与侧边栏相同的导航数据填充条目，保持两个入口同步。',
+        '绑定 ⌘K（Mac）或 Ctrl+K（Windows）快捷键。',
+      ],
+    },
+    'navigation-menu': {
+      section: '导航',
+      title: '导航菜单',
+      description: '支持悬停时多级下拉菜单的横向导航栏。适用于具有嵌套章节的顶级站点导航。',
+      guidance: [
+        '在具有多层内容的站点级导航中使用 NavigationMenu。',
+        '每个项可包含子项用于次级导航。',
+        '保持顶级项简短——每个一两个词即可。',
+      ],
+    },
+    menubar: {
+      section: '导航',
+      title: '菜单栏',
+      description: '通常用于应用级操作（文件、编辑、视图）的横向菜单栏。支持菜单间的键盘导航。',
+      guidance: [
+        'Menubar 遵循桌面应用惯例——用于应用级命令菜单。',
+        '每个菜单可包含项、分组和分隔线。',
+        '方向键在菜单间导航；Escape 关闭当前菜单。',
+      ],
+    },
+    resizable: {
+      section: '布局',
+      title: '可拖拽面板',
+      description: '由 ResizablePanelGroup、ResizablePanel 和 ResizableHandle 组成的分割面板布局组件，支持水平和垂直排列且分隔线可拖拽。',
+      guidance: [
+        '使用 ResizablePanelGroup 作为外层容器，内部嵌套 ResizablePanel 和 ResizableHandle。',
+        'direction 设为 "horizontal" 实现左右布局，"vertical" 实现上下布局。',
+        '面板之间的拖拽手柄可拖动调整各面板尺寸。',
+      ],
+    },
+    'file-upload': {
+      section: '表单',
+      title: '文件上传',
+      description: '支持拖拽上传和点击浏览的文件上传区域。支持多文件上传、预览和移除。',
+      guidance: [
+        '使用 multiple 属性接受多个文件——每个文件以预览卡片展示。',
+        '通过 onChange 回调获取上传文件的信息（名称、大小和文件对象）。',
+        '组件自带拖拽状态管理和视觉反馈。',
+      ],
+    },
+    'color-picker': {
+      section: '表单',
+      title: '颜色选择器',
+      description: '弹出式颜色选择控件，包含色相、饱和度和亮度滑块。支持预设色板和自定义十六进制输入。',
+      guidance: [
+        '适用于品牌颜色配置、标签颜色或主题自定义。',
+        '同时提供可视化选取器和精确十六进制输入。',
+        '可通过 swatches 属性定制品牌专属色板。',
+      ],
+    },
+    accordion: {
+      section: '组件',
+      title: '折叠面板',
+      description: '垂直堆叠的可折叠面板列表。每个面板有可切换展开/折叠的标题区域。支持单面板和双面板同时展开。',
+      guidance: [
+        '适用于 FAQ、设置面板和渐进式披露模式。',
+        '默认每次只能展开一个面板（type="single"）。',
+        '设置 allowMultiple 可允许多个面板同时保持展开状态。',
+      ],
+    },
+    tabs: {
+      section: '组件',
+      title: '标签页',
+      description: '用于在多个内容面板间切换的标签页组件。支持受控和非受控模式及键盘导航。',
+      guidance: [
+        '使用 Tabs 将相关内容组织到独立面板中，无需跳转到新页面。',
+        'TabsList 存放触发按钮，TabsContent 存放面板内容。',
+        '非受控使用 defaultValue，受控模式使用 value/onValueChange。',
+      ],
+    },
+    breadcrumb: {
+      section: '组件',
+      title: '面包屑',
+      description: '显示用户在页面层级中当前位置的导航辅助。每个分段对应相应层级的链接。',
+      guidance: [
+        '面包屑反映 URL 深度——单层页面可完全省略。',
+        '使用 separator 属性自定义分段之间的分隔符。',
+        '最后一个分段应为当前页面（非链接），以确保无障碍。',
+      ],
+    },
+    pagination: {
+      section: '组件',
+      title: '分页',
+      description: '将大数据集分页展示的导航控件。显示页码及上/下翻页按钮，可选页面大小选择器。',
+      guidance: [
+        '显示总页数，让用户了解数据集大小。',
+        '使用 siblings 属性控制在当前页周围显示的页码数量。',
+        'onPageChange 回调返回新页码，用于外部数据加载。',
+      ],
+    },
+    stepper: {
+      section: '组件',
+      title: '步骤条',
+      description: '在线性工作流中可视化用户当前位置的多步骤进度指示器。支持已完成、进行中、待处理和错误状态。',
+      guidance: [
+        '适用于多页表单、结账流程或设置向导。',
+        '每一步可以是 "completed"、"active"、"pending" 或 "error" 状态。',
+        '错误状态的步骤将吸引注意力，方便用户导航回去修复。',
+      ],
+    },
+    progress: {
+      section: '组件',
+      title: '进度条',
+      description: '指示确定性操作完成百分比的横向进度条。支持带标签和不带标签的变体。',
+      guidance: [
+        '对已知持续时间的确定性操作使用 Progress（如文件上传、数据导出）。',
+        '对未知持续时间的等待使用 Spinner。',
+        'value 属性接受 0-100 范围的值，100 表示完成。',
+      ],
+    },
+    spinner: {
+      section: '组件',
+      title: '加载器',
+      description: '用于不确定等待状态的旋转指示器。在内容正在加载或处理且时长未知时使用。',
+      guidance: [
+        '对短暂且剩余时间未知的等待使用 Spinner。',
+        '对已知持续时间的确定性操作使用 Progress。',
+        'Spinner 支持 size 属性（"sm"、"md"、"lg"）以匹配周围上下文。',
+      ],
+    },
+    alert: {
+      section: '组件',
+      title: '提示',
+      description: '传达成功、警告、危险或信息状态的重要状态消息。用户可选择关闭。',
+      guidance: [
+        '对持久性或页面级状态消息使用 Alert——重要信息优先于 Toast。',
+        '支持 "info"、"success"、"warning" 和 "danger" 变体。',
+        'dismissible 属性可添加关闭按钮，用户可手动关闭提示。',
+      ],
+    },
+    table: {
+      section: '组件',
+      title: '表格',
+      description: '支持可排序列、可选斑马纹和响应式溢出的数据表格。适用于以列排序方式列示结构化数据。',
+      guidance: [
+        'Table 支持可排序列——后端数据时请将排序状态向上委托。',
+        '在密集表格中使用斑马纹可帮助视线跟踪对齐。',
+        'columns 属性定义表头；每列可设置 sortKey 实现客户端排序。',
+      ],
+    },
     'empty-states': {
       section: '组件',
       title: '空状态',
       description:
-        '空状态应解释缺少什么、为何重要以及下一步操作是什么。它不应让用户感到走投无路。',
+        '空状态应解释缺少什么、为何重要以及下一步操作是什么。它不应让用户感到走投无路。EmptyState 组件提供了包含图标、标题、描述和操作插槽的一致布局。',
       guidance: [
         '指明缺失的对象，让用户清楚自己在看什么。',
-        '提供一个清晰的恢复操作。',
+        '通过 action 属性提供一个清晰的恢复操作。',
         '视觉重量应轻于成功或警告反馈。',
+      ],
+      props: [
+        { prop: 'icon', type: 'ReactNode', description: '标题上方展示的插画或图标。' },
+        { prop: 'title', type: 'string', required: true, description: '解释缺失对象的主标题。' },
+        { prop: 'description', type: 'string', description: '标题下方的可选说明文字。' },
+        { prop: 'action', type: 'ReactNode', description: '用于恢复的操作按钮或链接。' },
       ],
     },
     toasts: {
@@ -1127,14 +2054,13 @@ export const zh: Translations = {
       ],
     },
     feedback: {
-      section: '组件',
+      section: '反馈',
       title: '反馈组件',
       description:
-        'Alert、Progress、Skeleton、Spinner、Stepper 和 Toast 在不阻塞布局的情况下指示应用状态。',
+        'Alert、Progress、Spinner、Stepper 和 Toast 在不阻塞布局的情况下指示应用状态。',
       guidance: [
         '对短暂的不确定等待使用 Spinner；对确定性操作使用 Progress。',
         '对持久性或页面级状态消息，优先使用 Alert 而非 Toast。',
-        'Skeleton 应与其替代内容的形状匹配，以减少布局偏移。',
       ],
     },
     overlays: {
@@ -1148,9 +2074,9 @@ export const zh: Translations = {
       ],
     },
     'nav-layout': {
-      section: '组件',
+      section: '布局',
       title: '导航与布局',
-      description: 'Tabs、Accordion、Breadcrumb、Menubar、NavigationMenu、ScrollArea、Separator、Resizable 和 Sheet 以层级方式构筑内容。',
+      description: 'Tabs、Accordion、Breadcrumb 和 Resizable 帮助结构化展示内容。其他布局组件（ScrollArea、Separator）各有独立文档页。',
       guidance: [
         'Breadcrumb 反映路由深度——单层页面可省略。',
         'Pagination 应显示总页数，让用户了解数据集大小。',
@@ -1160,23 +2086,46 @@ export const zh: Translations = {
     'data-display': {
       section: '组件',
       title: '数据展示',
-      description: 'Avatar、Card、Badge、Table、Carousel、Timeline、TreeView 和 EmptyState 紧凑地呈现丰富数据。',
+      description: 'Table 和 EmptyState 以紧凑方式呈现结构化数据。其他数据组件（Avatar、Badge、Card、Carousel、Timeline、TreeView）各有独立文档页。',
       guidance: [
-        'Avatar 即使在显示图片时也应始终具有无障碍标签。',
-        'Table 支持可排序列——数据来自服务端时应将排序状态提升。',
-        '在密集表格中使用斑马纹，帮助视线跨列追踪。',
+        'Table 支持可排序列——后端数据时请将排序状态向上委托。',
+        '在密集表格中使用斑马纹可帮助视线在大段行间对齐追踪。',
+        'EmptyState 应尽可能包含一个明确的恢复操作。',
       ],
     },
     'form-inputs': {
-      section: '组件',
+      section: '表单',
       title: '表单输入',
       description:
-        'Select、Checkbox、Radio、Textarea、Switch、Slider、Input、Label、NumberInput、TagInput、ColorPicker、DatePicker、FileUpload、Rating、Toggle、SegmentedControl 和 Calendar 将表单词汇扩展到文本输入之外。',
+        'Checkbox、Radio、Switch、Slider、NumberInput、TagInput、SegmentedControl 和 Input 在文本输入框之外扩展了表单词汇。其他表单组件（Label、Toggle、Rating、DatePicker）各有独立文档页。',
       guidance: [
-        '使用 RadioGroup 包裹单选按钮，共享 name 和语义。',
-        'Slider 适合数值范围；配合 showValue 可获得即时反馈。',
-        'Textarea 默认纵向可拖拽——仅在固定高度容器中禁用 resize。',
-        '使用 Switch 并在交互后立即生效（例如设置开启或关闭），使用 Checkbox 用于表单提交或多项选择。',
+        '使用 RadioGroup 对单选按钮分组，共享 name 和语义。',
+        'Slider 适合数值范围，配合 showValue 可提供即时反馈。',
+        'Textarea 默认可垂直调整尺寸——仅在固定高度容器中禁用调整。',
+        'Switch 用于即时状态切换（如设置开关），Checkbox 用于表单提交或多选。',
+      ],
+    },
+    'mobile-list': {
+      section: '响应式',
+      title: '移动端列表',
+      description: 'MobileList、MobileListSection 和 MobileListItem 提供原生感的列表，适用于移动端导航、设置和数据展示。每个条目支持前置图标、尾部内容、箭头指示器以及破坏性或禁用状态。',
+      guidance: [
+        '使用 MobileListSection 的 title 属性对相关条目分组。',
+        '对于导航到详情页的条目设置 chevron 箭头——静态或切换条目省略。',
+        '对于不可逆操作（删除、退出、移除）使用 destructive 样式，文字变红。',
+        '禁用条目以低视觉权重渲染并阻止点击事件。',
+      ],
+      props: [
+        { prop: 'MobileList', type: '—', description: '带列表样式的根 <ul> 元素。' },
+        { prop: 'MobileListSection.title', type: 'string', description: '分组标题文字。' },
+        { prop: 'MobileListItem.leading', type: 'ReactNode', description: '左侧图标或头像。' },
+        { prop: 'MobileListItem.trailing', type: 'ReactNode', description: '右侧自定义内容（徽章、数值等）。' },
+        { prop: 'MobileListItem.label', type: 'ReactNode', required: true, description: '主标签文字。' },
+        { prop: 'MobileListItem.description', type: 'ReactNode', description: '次要描述文字。' },
+        { prop: 'MobileListItem.chevron', type: 'boolean', default: 'false', description: '显示右侧箭头。' },
+        { prop: 'MobileListItem.destructive', type: 'boolean', default: 'false', description: '破坏性操作样式（红色文字）。' },
+        { prop: 'MobileListItem.disabled', type: 'boolean', default: 'false', description: '禁用条目。' },
+        { prop: 'MobileListItem.onClick', type: '() => void', description: '点击回调。' },
       ],
     },
     mobile: {
@@ -1256,17 +2205,6 @@ export const zh: Translations = {
         '在注册和定价流程中直接链接条款页面，让同意动作具备上下文。',
       ],
     },
-    'command-palette': {
-      section: '组件',
-      title: '命令面板',
-      description:
-        '键盘驱动的搜索浮层，让用户无需离开键盘即可跳转到任意页面或触发任意操作。全局挂载、绑定快捷键，传入扁平的条目列表即可使用。',
-      guidance: [
-        '保持条目列表扁平且按标签可搜索——避免隐藏分类嵌套。',
-        '从侧边栏导航数据同步填充条目，确保两个入口保持一致。',
-        '绑定 ⌘K（Mac）或 Ctrl+K（Windows）快捷键，满足高频用户的操作预期。',
-      ],
-    },
     'code-block': {
       section: '组件',
       title: '代码块',
@@ -1287,6 +2225,321 @@ export const zh: Translations = {
         '将切换器放置在持久性界面（顶栏或设置页）中，方便用户在任何位置找到它。',
         '切换器自动反映当前语言，除 i18n Provider 外无需额外的状态绑定。',
         '顶栏中使用 inline 变体，设置页中使用默认变体，以匹配对应场景的视觉密度。',
+      ],
+    },
+    'scroll-area': {
+      section: '布局',
+      title: '滚动区域',
+      description: '一个带有自定义滚动条的滚动容器。使用 maxHeight 或 maxWidth 将溢出内容限制在固定视口内。',
+      guidance: [
+        '设置 maxHeight 限制垂直溢出——超出视口的内容可在内部滚动。',
+        '传入数字按像素计算，传入字符串如 "50vh" 按相对尺寸计算。',
+        'ScrollArea 纯属展示性组件，不支持虚拟化或延迟渲染子元素。',
+      ],
+      props: [
+        { prop: 'maxHeight', type: 'string | number', description: '内容滚动前的最大高度，数字按像素处理。' },
+        { prop: 'maxWidth', type: 'string | number', description: '内容滚动前的最大宽度，数字按像素处理。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '滚动视口内的内容。' },
+      ],
+    },
+    separator: {
+      section: '布局',
+      title: '分隔线',
+      description: '用于分隔内容区域的视觉分割线。渲染为 <hr> 元素，支持水平或垂直方向。',
+      guidance: [
+        '水平分隔线用于堆叠的章节之间；垂直分隔线用于工具栏或行内上下文。',
+        'decorative 属性控制 role 属性——当分隔线具有语义含义时应设为 false。',
+        '垂直分隔线需要指定显式高度才能正确渲染。',
+      ],
+      props: [
+        { prop: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: '分隔线的方向。' },
+        { prop: 'decorative', type: 'boolean', default: 'true', description: '为 true 时设置 role="none"，否则设置 role="separator"。' },
+      ],
+    },
+    timeline: {
+      section: '组件',
+      title: '时间线',
+      description: '按时间顺序排列的垂直事件列表。每个条目显示标题、可选描述、时间、图标和状态指示器。',
+      guidance: [
+        '适用于活动动态、订单跟踪或部署历史。',
+        '将 status 设为 "success"、"warning"、"danger" 或 "info" 可设置时间点颜色。',
+        '在条目中传入 icon 可替换默认的点图标。',
+      ],
+      props: [
+        { prop: 'items', type: 'TimelineItem[]', required: true, description: '时间线条目数组。' },
+        { prop: 'items[].title', type: 'string', required: true, description: '事件标题。' },
+        { prop: 'items[].description', type: 'string', description: '事件描述。' },
+        { prop: 'items[].time', type: 'string', description: '时间戳或日期标签。' },
+        { prop: 'items[].icon', type: 'ReactNode', description: '替换默认点的自定义图标。' },
+        { prop: 'items[].status', type: '"default" | "success" | "warning" | "danger" | "info"', description: '点的状态颜色。' },
+      ],
+    },
+    'tree-view': {
+      section: '组件',
+      title: '树形视图',
+      description: '支持展开/折叠节点、键盘导航和可选选中状态的层级树控件。适用于文件浏览器、组织架构或嵌套设置。',
+      guidance: [
+        '使用 defaultExpanded 在初始渲染时预展开某些节点。',
+        '每个节点需要唯一的 id 用于选择和展开状态跟踪。',
+        'TreeView 支持受控（selected/expanded）或非受控模式。',
+        'disabled 的节点不可选中或展开，但仍可见。',
+      ],
+      props: [
+        { prop: 'nodes', type: 'TreeNode[]', required: true, description: '根级树节点。' },
+        { prop: 'selected', type: 'string', description: '受控选中的节点 id。' },
+        { prop: 'defaultSelected', type: 'string', description: '非受控初始选中节点 id。' },
+        { prop: 'onSelect', type: '(id: string, node: TreeNode) => void', description: '节点选中时调用。' },
+        { prop: 'expanded', type: 'string[]', description: '受控展开的节点 id 数组。' },
+        { prop: 'defaultExpanded', type: 'string[]', description: '非受控初始展开节点 id 数组。' },
+        { prop: 'onExpandedChange', type: '(ids: string[]) => void', description: '展开状态变化时调用。' },
+      ],
+    },
+    carousel: {
+      section: '组件',
+      title: '轮播',
+      description: '基于滑块的轮播组件，支持圆点指示器、箭头导航、自动播放和循环。每个滑块可接受任意 React 内容。',
+      guidance: [
+        '设置 autoPlay 实现无人值守轮播——适用于横幅广告或信息亭。',
+        '禁用 loop 用于线性引导流程，用户不应循环回到开头。',
+        '通过 index 属性支持受控索引，便于外部分页同步。',
+        '在构建极简变体时，使用 showArrows / showDots 隐藏箭头或圆点。',
+      ],
+      props: [
+        { prop: 'items', type: 'ReactNode[]', required: true, description: '滑块内容数组。' },
+        { prop: 'defaultIndex', type: 'number', default: '0', description: '初始滑块索引（非受控）。' },
+        { prop: 'index', type: 'number', description: '受控的当前滑块索引。' },
+        { prop: 'onIndexChange', type: '(index: number) => void', description: '活动滑块变化时调用。' },
+        { prop: 'autoPlay', type: 'boolean', default: 'false', description: '按时间间隔自动前进滑块。' },
+        { prop: 'interval', type: 'number', default: '3000', description: '自动播放间隔（毫秒）。' },
+        { prop: 'loop', type: 'boolean', default: 'true', description: '从最后一张循环回到第一张。' },
+        { prop: 'showDots', type: 'boolean', default: 'true', description: '显示圆点指示器。' },
+        { prop: 'showArrows', type: 'boolean', default: 'true', description: '显示上一张/下一张箭头按钮。' },
+      ],
+    },
+    toggle: {
+      section: '表单',
+      title: '开关按钮',
+      description: '在按下和未按下状态之间切换的双状态按钮。ToggleGroup 将其扩展为一组选项间的单选/多选。',
+      guidance: [
+        'Toggle 适用于工具栏开关（加粗/斜体、筛选标签），ToggleGroup 适用于视图模式切换。',
+        'ToggleGroup type="single" 类似单选按钮组，type="multiple" 允许多选。',
+        '同时支持受控（pressed/value）和非受控（defaultPressed/defaultValue）模式。',
+      ],
+      props: [
+        { prop: 'Toggle.pressed', type: 'boolean', description: '受控按下状态。' },
+        { prop: 'Toggle.defaultPressed', type: 'boolean', default: 'false', description: '非受控初始按下状态。' },
+        { prop: 'Toggle.onPressedChange', type: '(pressed: boolean) => void', description: '按下状态变化时调用。' },
+        { prop: 'Toggle.size', type: '"sm" | "md" | "lg"', default: '"md"', description: '按钮尺寸。' },
+        { prop: 'ToggleGroup.items', type: 'ToggleGroupItem[]', required: true, description: '开关选项数组。' },
+        { prop: 'ToggleGroup.value', type: 'string | string[]', description: '受控选中值。' },
+        { prop: 'ToggleGroup.defaultValue', type: 'string | string[]', description: '非受控初始选中值。' },
+        { prop: 'ToggleGroup.onValueChange', type: '(value: string | string[]) => void', description: '选中值变化时调用。' },
+        { prop: 'ToggleGroup.type', type: '"single" | "multiple"', default: '"single"', description: '选择模式。' },
+      ],
+    },
+    rating: {
+      section: '表单',
+      title: '评分',
+      description: '基于星形的评分输入组件，支持整星和半星精度、受控/非受控模式和只读/禁用状态。',
+      guidance: [
+        '设置 allowHalf 允许半星精度，用于需要精细反馈的场景。',
+        '使用 readOnly 作为仅展示评分（如历史平均值），disabled 完全阻止交互。',
+        'size 属性调整星形尺寸以适配不同的视觉语境。',
+      ],
+      props: [
+        { prop: 'value', type: 'number', description: '受控评分值。' },
+        { prop: 'defaultValue', type: 'number', default: '0', description: '非受控初始值。' },
+        { prop: 'onChange', type: '(value: number) => void', description: '评分变化时调用。' },
+        { prop: 'max', type: 'number', default: '5', description: '最大星数。' },
+        { prop: 'allowHalf', type: 'boolean', default: 'false', description: '允许半星值。' },
+        { prop: 'disabled', type: 'boolean', description: '禁用交互。' },
+        { prop: 'readOnly', type: 'boolean', description: '只读展示模式。' },
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: '星形尺寸。' },
+        { prop: 'label', type: 'string', description: '评分组的无障碍标签。' },
+      ],
+    },
+    label: {
+      section: '表单',
+      title: '标签',
+      description: '带可选必填标记的样式化 <label> 元素。与任意表单控件配合使用，提供无障碍标签。',
+      guidance: [
+        '始终将 Label 与其表单控件关联——可以包裹输入组件或使用 htmlFor。',
+        '设置 required 可在标签文本后自动追加红色星号。',
+        'Label 是轻量封装，透传所有标准 label 属性到底层元素。',
+      ],
+      props: [
+        { prop: 'required', type: 'boolean', description: '在标签文本后显示必填标记（红色星号）。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '标签文本内容。' },
+      ],
+    },
+    avatar: {
+      section: '内容展示',
+      title: '头像',
+      description: '显示用户头像，支持图片、首字母回退或占位图标。支持多种尺寸和形状。',
+      guidance: [
+        '始终通过 name 或 alt 属性提供无障碍标签。',
+        'src 属性接受图片 URL；加载失败时自动回退为首字母或 fallback 文本。',
+        '首字母从 name 属性自动生成（最多 2 个字符）。',
+        '圆形为默认形状，数据密集布局可使用方形。',
+      ],
+      props: [
+        { prop: 'src', type: 'string', description: '头像图片 URL。' },
+        { prop: 'name', type: 'string', description: '用户名，用于生成首字母和无障碍标签。' },
+        { prop: 'size', type: '"xs" | "sm" | "md" | "lg" | "xl"', default: '"md"', description: '头像尺寸。' },
+        { prop: 'shape', type: '"circle" | "square"', default: '"circle"', description: '头像形状。' },
+        { prop: 'fallback', type: 'string', description: '当无图片和名称时的自定义回退文字。' },
+      ],
+    },
+    badge: {
+      section: '内容展示',
+      title: '徽章',
+      description: '用于状态、分类或元数据的紧凑标签。可内联于文本中，或放在按钮、卡片和表格单元格内。',
+      guidance: [
+        '徽章用于紧凑的状态或分类元数据，而非纯装饰。',
+        'accent 变体保留给品牌的颜色；success 和 warning 传达语义状态。',
+        '徽章是内联元素，与文本和其他内联内容自然排列。',
+      ],
+      props: [
+        { prop: 'variant', type: '"neutral" | "accent" | "success" | "warning"', default: '"neutral"', description: '视觉样式变体。' },
+      ],
+    },
+    skeleton: {
+      section: '内容展示',
+      title: '骨架屏',
+      description: '在数据加载时模拟内容形状的占位组件。支持文本、矩形和圆形变体，以及多行文本块。',
+      guidance: [
+        '骨架屏形状与实际内容匹配，减少布局偏移。',
+        '使用 variant="text" 配合 lines > 1 模拟段落占位。',
+        '多行文本骨架屏的最后一行宽度为 70%，视觉效果更自然。',
+      ],
+      props: [
+        { prop: 'variant', type: '"text" | "rect" | "circle"', default: '"rect"', description: '形状变体。' },
+        { prop: 'width', type: 'string | number', description: '宽度，数字按像素计算。' },
+        { prop: 'height', type: 'string | number', description: '高度，数字按像素计算。' },
+        { prop: 'lines', type: 'number', default: '1', description: '文本变体的行数。' },
+      ],
+    },
+    typography: {
+      section: '内容展示',
+      title: '排版',
+      description: 'Heading 和 Text 提供核心排版系统。Heading 渲染 <h1>-<h6> 并基于级别调整字号；Text 渲染 <p>、<span> 或 <div>，支持变体、尺寸和字重选项。',
+      guidance: [
+        '使用 Heading 作为章节标题和层级内容结构。',
+        '使用 variant="secondary" 或 "muted" 降低内容强调程度。',
+        'truncate 属性超出时以省略号截断——适用于表格单元格和侧边栏。',
+        'Heading 的 as 属性可覆盖渲染的 HTML 元素而不改变视觉样式。',
+      ],
+      props: [
+        { prop: 'Heading.level', type: '1 | 2 | 3 | 4 | 5 | 6', default: '2', description: '标题级别，决定字号大小。' },
+        { prop: 'Heading.as', type: '"h1" | "h2" | "h3" | "h4" | "h5" | "h6"', description: '覆盖渲染的 HTML 元素。' },
+        { prop: 'Heading.variant', type: '"default" | "secondary"', default: '"default"', description: '视觉变体。' },
+        { prop: 'Heading.weight', type: '"normal" | "medium" | "semibold" | "bold"', default: '"bold"', description: '字重。' },
+        { prop: 'Heading.truncate', type: 'boolean', default: 'false', description: '超出时以省略号截断。' },
+        { prop: 'Text.as', type: '"p" | "span" | "div"', default: '"p"', description: '渲染的 HTML 元素。' },
+        { prop: 'Text.variant', type: '"default" | "secondary" | "muted" | "danger" | "success"', default: '"default"', description: '颜色变体。' },
+        { prop: 'Text.size', type: '"sm" | "base" | "lg" | "xl"', default: '"base"', description: '字号。' },
+        { prop: 'Text.weight', type: '"normal" | "medium" | "semibold" | "bold"', default: '"normal"', description: '字重。' },
+        { prop: 'Text.truncate', type: 'boolean', default: 'false', description: '超出时以省略号截断。' },
+      ],
+    },
+    'date-pickers': {
+      section: '表单',
+      title: '日期选择器',
+      description: 'DatePicker 提供带弹出日历的文本输入框用于日期选择。Calendar 是独立的月历网格组件，由 DatePicker 内部使用。',
+      guidance: [
+        '表单字段中使用 DatePicker；内嵌日历网格到自定义组件中使用 Calendar。',
+        '设置 min/max 限制可选日期范围。',
+        'weekStartsOnMonday 属性更改每周第一天——默认为周日。',
+        'DatePicker 在移动端视口自动切换为基于 Sheet 的布局。',
+      ],
+      props: [
+        { prop: 'DatePicker.value', type: 'Date', description: '受控选中日期。' },
+        { prop: 'DatePicker.defaultValue', type: 'Date', description: '非受控初始日期。' },
+        { prop: 'DatePicker.onChange', type: '(date: Date | undefined) => void', description: '日期变化时调用。' },
+        { prop: 'DatePicker.label', type: 'string', description: '输入框标签。' },
+        { prop: 'DatePicker.hint', type: 'string', description: '输入框下方的帮助文字。' },
+        { prop: 'DatePicker.error', type: 'string', description: '错误信息。' },
+        { prop: 'DatePicker.min', type: 'Date', description: '最小可选日期。' },
+        { prop: 'DatePicker.max', type: 'Date', description: '最大可选日期。' },
+        { prop: 'DatePicker.disabled', type: 'boolean', description: '禁用日期选择器。' },
+        { prop: 'DatePicker.weekStartsOnMonday', type: 'boolean', default: 'false', description: '每周从周一开始而非周日。' },
+        { prop: 'Calendar.value', type: 'Date', description: '受控选中日期。' },
+        { prop: 'Calendar.defaultValue', type: 'Date', description: '非受控初始日期。' },
+        { prop: 'Calendar.onChange', type: '(date: Date) => void', description: '点击日期时调用。' },
+        { prop: 'Calendar.min', type: 'Date', description: '最小可选日期。' },
+        { prop: 'Calendar.max', type: 'Date', description: '最大可选日期。' },
+        { prop: 'Calendar.weekStartsOnMonday', type: 'boolean', default: 'false', description: '每周从周一开始。' },
+      ],
+    },
+    card: {
+      section: '内容展示',
+      title: '卡片',
+      description:
+        '灵活的内容容器，支持多种视觉变体。使用 Card 作为外层容器，内部组合 CardHeader、CardTitle、CardDescription 和 CardContent。',
+      guidance: [
+        '对于可交互的卡片，使用 elevated 变体增强视觉层次。',
+        '设置 hoverable 可以在悬停时添加浮起效果，适用于图库或仪表盘磁贴。',
+        'padding 属性可调整内边距，适应密集或宽松的布局需求。',
+        'Card 本身是 <section> 元素，为无障碍考虑，始终应包含 CardTitle。',
+      ],
+      props: [
+        { prop: 'variant', type: '"default" | "flat" | "elevated" | "outlined" | "ghost" | "filled"', default: '"default"', description: '视觉样式预设。' },
+        { prop: 'padding', type: '"none" | "sm" | "md" | "lg"', description: '内边距大小，默认为卡片的内部间距。' },
+        { prop: 'hoverable', type: 'boolean', default: 'false', description: '悬停时添加浮起效果，适用于可点击的卡片。' },
+      ],
+    },
+    form: {
+      section: '表单',
+      title: '表单组合',
+      description:
+        '由 Form、FormField、FormLabel、FormDescription、FormMessage 和 useFormField 构成的表单组合系统。可与任意输入组件配合，提供一致的标签、提示和错误布局。',
+      guidance: [
+        '将每个逻辑字段组包裹在 FormField 中，通过 context 共享错误状态。',
+        '使用 FormLabel 的 required 属性可自动显示必填标记。',
+        'FormMessage 自动读取 FormField context 中的错误信息，无需手动传参。',
+        'Form 默认启用 noValidate，你需要自行处理验证逻辑或使用验证库。',
+      ],
+      props: [
+        { prop: 'Form', type: '—', description: '表单根组件，携带 noValidate 和 vx-form 类名。' },
+        { prop: 'FormField', type: '—', description: '包裹字段组，向 FormMessage 提供错误上下文。' },
+        { prop: 'FormField.error', type: 'string', description: '当前字段的错误信息，会被 FormMessage 显示。' },
+        { prop: 'FormLabel', type: '—', description: '渲染 <label>，支持可选的必填星号。' },
+        { prop: 'FormLabel.required', type: 'boolean', description: '在标签文本后显示红色星号。' },
+        { prop: 'FormDescription', type: '—', description: '标签下方渲染的帮助提示文字。' },
+        { prop: 'FormMessage', type: '—', description: '错误或帮助提示消息，自动从 FormField context 读取错误。' },
+        { prop: 'useFormField', type: '() => { error?: string }', description: 'Hook，用于读取当前字段的错误上下文。' },
+      ],
+    },
+    sheet: {
+      section: '浮层',
+      title: '侧滑面板',
+      description:
+        '从左侧、右侧、顶部或底部边缘滑出的面板。支持标题、描述、可选的确认操作，以及受控或非受控的打开状态。',
+      guidance: [
+        '在需要展示次级内容但无需整页导航时使用 Sheet。',
+        '将 side 设为 "right" 用于详情面板，"bottom" 用于类似移动端的操作面板。',
+        'variant="action" 预设隐藏关闭按钮并显示确认底部栏，适用于删除等破坏性操作。',
+        '通过 open/onOpenChange 控制打开状态，或使用 defaultOpen 实现非受控使用。',
+      ],
+      props: [
+        { prop: 'trigger', type: 'ReactNode', description: '点击后打开面板的触发器元素。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '面板主体内容。' },
+        { prop: 'side', type: '"left" | "right" | "top" | "bottom"', default: '"right"', description: '面板滑入的起始边缘。' },
+        { prop: 'variant', type: '"default" | "action"', default: '"default"', description: '"action" 隐藏关闭按钮并显示确认底部栏。' },
+        { prop: 'title', type: 'ReactNode', description: '面板标题。' },
+        { prop: 'description', type: 'ReactNode', description: '面板描述。' },
+        { prop: 'header', type: 'ReactNode', description: '自定义顶部内容（替换 title/description）。' },
+        { prop: 'footer', type: 'ReactNode', description: '自定义底部内容。' },
+        { prop: 'open', type: 'boolean', description: '受控打开状态。' },
+        { prop: 'defaultOpen', type: 'boolean', description: '非受控初始打开状态。' },
+        { prop: 'onOpenChange', type: '(open: boolean) => void', description: '打开状态变化时的回调。' },
+        { prop: 'showClose', type: 'boolean', default: 'true', description: '是否显示关闭按钮。' },
+        { prop: 'closeOnOverlayClick', type: 'boolean', default: 'true', description: '点击遮罩层时是否关闭面板。' },
+        { prop: 'showConfirm', type: 'boolean', default: 'false', description: '是否在底部显示确认按钮。' },
+        { prop: 'confirmText', type: 'string', default: '"确认"', description: '确认按钮的文字。' },
+        { prop: 'confirmDisabled', type: 'boolean', default: 'false', description: '是否禁用确认按钮。' },
+        { prop: 'onConfirm', type: '() => void', description: '确认按钮回调。' },
+        { prop: 'width', type: 'number', description: '自定义面板宽度（像素）。' },
       ],
     },
   },
