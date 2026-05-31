@@ -1,0 +1,44 @@
+/* ═══════════════════════════════════════════════════════════
+   Progress
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-progress-wrap { display: flex; flex-direction: column; gap: 6px; }
+.vx-progress__header { display: flex; justify-content: space-between; align-items: center; }
+.vx-progress__label { font-size: 13px; color: var(--vx-text); }
+.vx-progress__value { font-size: 12px; color: var(--vx-text-muted); }
+.vx-progress {
+  width: 100%;
+  background: var(--vx-border);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.vx-progress--sm { height: 4px; }
+.vx-progress--md { height: 6px; }
+.vx-progress--lg { height: 10px; }
+.vx-progress__bar {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--vx-primary);
+  transition: width 300ms ease;
+}
+.vx-progress--success .vx-progress__bar { background: var(--vx-success); }
+.vx-progress--warning .vx-progress__bar { background: var(--vx-warning); }
+.vx-progress--danger  .vx-progress__bar { background: var(--vx-danger); }
+.vx-progress--rainbow .vx-progress__bar {
+  background: linear-gradient(90deg, #f87171, #fb923c, #facc15, #4ade80, #60a5fa, #a78bfa, #f472b6, #f87171);
+  background-size: 300% 100%;
+  animation: vx-progress-rainbow 3s linear infinite;
+  box-shadow: 0 0 8px 1px color-mix(in srgb, #a78bfa 45%, transparent);
+}
+@keyframes vx-progress-rainbow {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: -300% 0%; }
+}
+.vx-progress--indeterminate .vx-progress__bar {
+  width: 45% !important;
+  animation: vx-progress-indeterminate 1.4s ease-in-out infinite;
+}
+@keyframes vx-progress-indeterminate {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(320%); }
+}

@@ -1,0 +1,27 @@
+/* ═══════════════════════════════════════════════════════════
+   Textarea
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-textarea {
+  display: block;
+  width: 100%;
+  min-height: 96px;
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+  color: var(--vx-text);
+  font-size: var(--vx-ctrl-fs-md);
+  font-family: inherit;
+  padding: 8px 12px;
+  transition: border-color 150ms, box-shadow 150ms;
+  line-height: 1.5;
+}
+.vx-textarea:focus {
+  border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 20%, transparent);
+}
+.vx-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vx-textarea::placeholder { color: var(--vx-text-muted); }

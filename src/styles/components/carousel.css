@@ -1,0 +1,60 @@
+/* ═══════════════════════════════════════════════════════════
+   Carousel
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--vx-radius-lg);
+  border: 1px solid var(--vx-border);
+}
+.vx-carousel__track {
+  display: flex;
+  transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+.vx-carousel__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+.vx-carousel__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  box-shadow: var(--vx-shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--vx-text);
+  z-index: 1;
+  transition: background 120ms, box-shadow 120ms;
+}
+.vx-carousel__nav:hover { background: var(--vx-bg-accent); box-shadow: var(--vx-shadow); }
+.vx-carousel__nav--prev { left: 12px; }
+.vx-carousel__nav--next { right: 12px; }
+.vx-carousel__nav:disabled { opacity: 0.3; cursor: not-allowed; }
+.vx-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+}
+.vx-carousel__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--vx-border);
+  border: none;
+  cursor: pointer;
+  transition: background 200ms, width 200ms;
+}
+.vx-carousel__dot--active {
+  background: var(--vx-primary);
+  width: 20px;
+  border-radius: 9999px;
+}

@@ -1,0 +1,63 @@
+/* ═══════════════════════════════════════════════════════════
+   TagInput
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 4px var(--vx-ctrl-px-md);
+  border-radius: 10px;
+  border: 1px solid var(--vx-border);
+  background: var(--vx-surface);
+  cursor: text;
+  transition: border-color 140ms;
+}
+.vx-tag-input:focus-within {
+  border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 22%, transparent);
+}
+.vx-tag-input__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px 1px 8px;
+  border-radius: 99px;
+  font-size: 12px;
+  background: var(--vx-primary-soft);
+  color: var(--vx-primary);
+  border: 1px solid color-mix(in srgb, var(--vx-primary) 24%, transparent);
+  white-space: nowrap;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.vx-tag-input__tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.7;
+  padding: 1px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+.vx-tag-input__tag-remove:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--vx-primary) 18%, transparent);
+}
+.vx-tag-input__field {
+  flex: 1;
+  min-width: 80px;
+  border: none;
+  background: transparent;
+  color: var(--vx-text);
+  font-size: 14px;
+  padding: 2px 0;
+  outline: none;
+}
+.vx-tag-input__field::placeholder {
+  color: var(--vx-text-muted);
+}

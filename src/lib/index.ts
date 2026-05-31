@@ -1,9 +1,14 @@
 import '../styles/base.css';
 
-export { ViewportProvider, useViewport } from './viewport';
+export { BREAKPOINTS, PHONE_MAX_WIDTH, PHONE_ASPECT_RATIO_THRESHOLD, TABLET_ASPECT_RATIO_THRESHOLD } from './breakpoints';
 export type { ViewportType, ViewportContextValue, ViewportProviderProps } from './viewport';
+export { ViewportProvider, useViewport } from './viewport';
 export { Responsive } from '../components/Responsive';
 export type { ResponsiveProps } from '../components/Responsive';
+
+// ── 组合 Provider ─────────────────────────────────────────
+export { VXUIProvider } from './VXUIProvider';
+export type { VXUIProviderProps } from './VXUIProvider';
 
 export { AppShell } from '../components/AppShell';
 export type { AppShellProps, AppShellNavItem, AppShellNavSection } from '../components/AppShell';
@@ -115,22 +120,14 @@ export { MobileShell, MobileTopBar, MobileIconButton } from '../components/mobil
 export type { MobileShellProps, MobileTopBarProps, MobileIconButtonProps } from '../components/mobile/MobileShell';
 export { BottomNav } from '../components/mobile/BottomNav';
 export type { BottomNavProps, BottomNavItem } from '../components/mobile/BottomNav';
-export { ActionSheet, ActionSheetItem } from '../components/mobile/ActionSheet';
-export type { ActionSheetProps, ActionSheetItemProps } from '../components/mobile/ActionSheet';
 export { MobileList, MobileListSection, MobileListItem } from '../components/mobile/MobileList';
 export type { MobileListSectionProps, MobileListItemProps } from '../components/mobile/MobileList';
-export { MobileDrawer, DrawerNavItem, DrawerNavSection } from '../components/mobile/MobileDrawer';
-export type { MobileDrawerProps, DrawerNavItemProps, DrawerNavSectionProps } from '../components/mobile/MobileDrawer';
 
 // New: Form primitives
 export { Label } from '../components/Label';
 export type { LabelProps } from '../components/Label';
 export { Form, FormField, FormLabel, FormDescription, FormMessage, useFormField } from '../components/Form';
 export type { FormProps, FormFieldProps, FormLabelProps, FormDescriptionProps, FormMessageProps } from '../components/Form';
-
-// New: Alert Dialog
-export { AlertDialog } from '../components/AlertDialog';
-export type { AlertDialogProps } from '../components/AlertDialog';
 
 // New: Number Input
 export { NumberInput } from '../components/NumberInput';
@@ -154,9 +151,27 @@ export type { TimePickerProps } from '../components/TimePicker';
 export { FileUpload } from '../components/FileUpload';
 export type { FileUploadProps, UploadedFile } from '../components/FileUpload';
 
-// New: Sheet
+// Sheet — 统一 Sheet 组件（替代 BottomSheet / ActionSheet / MobileDrawer / 旧 Sheet）
 export { Sheet } from '../components/Sheet';
-export type { SheetProps, SheetSide } from '../components/Sheet';
+export type { SheetProps, SheetSide, SheetVariant, SheetActionItemProps } from '../components/Sheet';
+
+/**
+ * @deprecated 使用统一的 Sheet 组件替代。
+ * ActionSheet 将在下一个 major 版本中移除，请迁移到 Sheet 组件：
+ *   <Sheet variant="action" side="bottom">
+ * @see {@link Sheet} 统一 Sheet 组件
+ */
+export { ActionSheet, ActionSheetItem } from '../components/mobile/ActionSheet';
+export type { ActionSheetProps, ActionSheetItemProps } from '../components/mobile/ActionSheet';
+
+/**
+ * @deprecated 使用统一的 Sheet 组件替代。
+ * MobileDrawer 将在下一个 major 版本中移除，请迁移到 Sheet 组件：
+ *   <Sheet side="left">
+ * @see {@link Sheet} 统一 Sheet 组件
+ */
+export { MobileDrawer, DrawerNavItem, DrawerNavSection } from '../components/mobile/MobileDrawer';
+export type { MobileDrawerProps, DrawerNavItemProps, DrawerNavSectionProps } from '../components/mobile/MobileDrawer';
 
 // New: Scroll Area
 export { ScrollArea } from '../components/ScrollArea';
@@ -229,3 +244,49 @@ export type { CodeBlockProps, CodeBlockLanguage } from '../components/CodeBlock'
 // Language switcher
 export { LanguageSwitcher } from '../components/LanguageSwitcher';
 export type { LanguageSwitcherProps } from '../components/LanguageSwitcher';
+
+// ── Typography Base (排版组件) ─────────────────────────────
+// 这些组件配合 typography-base.css 使用，提供文章/文档排版布局。
+// CSS 类名参考 Bootstrap 风格，可直接在 JSX 中使用 className。
+//
+// 可用 CSS 类（无需组件，直接使用 className）：
+//   vx-article, vx-article__header, vx-article__title, vx-article__description
+//   vx-article__body, vx-article__content
+//   vx-section, vx-section__heading, vx-section__anchor
+//   vx-display, vx-display--page, vx-display--section
+//   vx-lead, vx-lead--page
+//   vx-kicker, vx-list, vx-code, vx-badges, vx-meta, vx-actions
+//   vx-breadcrumb, vx-empty
+//   vx-example, vx-example__grid, vx-example__panel, vx-example__meta, vx-example__eyebrow
+//   vx-props-table, vx-prop-required, vx-prop-type, vx-prop-dash
+//   vx-pager, vx-pager__btn, vx-pager__dir, vx-pager__label
+//   vx-mobile-preview, vx-mobile-preview__frame, vx-mobile-preview__iframe, vx-mobile-preview__hint
+//   vx-preview-shell, vx-preview-grid, vx-preview-list, vx-preview-stack, vx-preview-inline
+//   vx-stats, vx-stat, vx-stat__copy, vx-stat__label, vx-stat__value, vx-stat__hint, vx-stat__icon
+export {
+  Article,
+  ArticleHeader,
+  ArticleTitle,
+  ArticleBody,
+  Section,
+  SectionHeading,
+  Pager,
+  PropsTable,
+  ArticleEmptyState,
+  StatsGrid,
+} from '../components/Article';
+export type {
+  ArticleProps,
+  ArticleHeaderProps,
+  ArticleTitleProps,
+  ArticleBodyProps,
+  SectionProps,
+  SectionHeadingProps,
+  PagerProps,
+  PagerItem,
+  PropsTableProps,
+  PropsTableColumn,
+  ArticleEmptyStateProps,
+  StatsGridProps,
+  StatItem,
+} from '../components/Article';

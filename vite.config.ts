@@ -1,10 +1,13 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
     react(),
+    // 运行 `npm run build` 后自动生成 dist/visualizer/index.html
+    ...(process.env.VISUALIZE === 'true' ? [visualizer({ open: true, filename: 'dist/visualizer/stats.html', gzipSize: true })] : []),
     dts({
       include: ['src/lib', 'src/components'],
       insertTypesEntry: true,

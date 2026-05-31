@@ -1,0 +1,111 @@
+/* ═══════════════════════════════════════════════════════════
+   Input & Field Group
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vx-field-group__label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.vx-field-group__hint {
+  color: var(--vx-text-secondary);
+  font-size: 12px;
+}
+
+.vx-field-group__error {
+  color: var(--vx-danger);
+  font-size: 12px;
+}
+
+.vx-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
+  font-size: var(--vx-ctrl-fs-md);
+  border-radius: 10px;
+  border: 1px solid var(--vx-border);
+  background: var(--vx-surface);
+}
+
+.vx-input__field {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--vx-text);
+}
+
+.vx-input__field::placeholder {
+  color: color-mix(in srgb, var(--vx-text-muted) 72%, transparent);
+}
+
+.vx-input:focus-within,
+.vx-switch__control:focus-visible,
+.vx-nav-item:focus-visible,
+.vx-dialog__close:focus-visible,
+.vx-tabs__trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 22%, transparent);
+}
+
+.vx-input--invalid {
+  border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--vx-danger) 18%, transparent);
+}
+
+/* Input variants */
+.vx-input--filled {
+  background: var(--vx-bg-accent);
+  border-color: transparent;
+}
+
+.vx-input--filled:focus-within {
+  border-color: var(--vx-primary);
+  background: var(--vx-surface);
+}
+
+.vx-input--underline {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--vx-border);
+  border-radius: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.vx-input--underline:focus-within {
+  border-bottom-color: var(--vx-primary);
+  box-shadow: 0 1px 0 0 var(--vx-primary);
+}
+
+.vx-input--borderless {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.vx-input--borderless:focus-within {
+  background: var(--vx-bg-accent);
+}
+
+/* Input sizes — aligned with --vx-ctrl-h-* tokens */
+.vx-input--sm { min-height: var(--vx-ctrl-h-sm); font-size: var(--vx-ctrl-fs-sm); padding: 0 var(--vx-ctrl-px-sm); }
+.vx-input--lg { min-height: var(--vx-ctrl-h-lg); font-size: var(--vx-ctrl-fs-lg); padding: 0 var(--vx-ctrl-px-lg); }
+
+/* Rounded / pill input */
+.vx-input--rounded { border-radius: 9999px; }
+
+.vx-input__ornament {
+  color: var(--vx-text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}

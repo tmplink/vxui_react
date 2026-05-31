@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useCallback, useLayoutEffect } from 'react
 import { createPortal } from 'react-dom';
 import { cx } from '../lib/cx';
 import { getDialogPopoverContext } from '../lib/dialogPopover';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { Sheet } from './Sheet';
 
 function pad(n: number): string {
   return String(n).padStart(2, '0');
@@ -150,6 +152,7 @@ export function TimePicker({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const dialogContentRef = useRef<HTMLElement | null>(null);
+  const isMobile = useIsMobile();
   const [dropPos, setDropPos] = useState<{
     top?: number;
     bottom?: number;
@@ -165,8 +168,9 @@ export function TimePicker({
     }
   }, [controlledValue]);
 
+  // ─── 桌面端：点击外部 / Escape 关闭 ──────────────────────────────
   useEffect(() => {
-    if (!open) return;
+    if (!open || isMobile) return;
     const handler = (e: Event) => {
       const inWrap = wrapRef.current?.contains(e.target as Node);
       const inPopover = popoverRef.current?.contains(e.target as Node);
@@ -183,7 +187,7 @@ export function TimePicker({
       document.removeEventListener('touchstart', handler);
       document.removeEventListener('keydown', keyHandler);
     };
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
@@ -202,7 +206,7 @@ export function TimePicker({
 
   useLayoutEffect(() => {
     const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
-    if (!open || !triggerRef.current || shouldInline) {
+    if (!open || !triggerRef.current || shouldInline || isMobile) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
@@ -217,7 +221,7 @@ export function TimePicker({
         ? { top: rect.bottom + 4, left: rect.left, direction }
         : { bottom: window.innerHeight - rect.top + 4, left: rect.left, direction },
     );
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     if (!open || !dropPos) return;
@@ -248,6 +252,47 @@ export function TimePicker({
 
   const displayValue = current ?? (open ? formatTime(h, m, s, seconds) : undefined);
 
+  // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
+  const [pendingH, setPendingH] = useState(parsed.h);
+  const [pendingM, setPendingM] = useState(parsed.m);
+  const [pendingS, setPendingS] = useState(parsed.s);
+
+  // 打开 BottomSheet 时，同步 pending 值为当前值
+  useEffect(() => {
+    if (open && isMobile) {
+      const p = current ? parseTime(current) : { h: 12, m: 0, s: 0 };
+      setPendingH(p.h);
+      setPendingM(p.m);
+      setPendingS(p.s);
+    }
+  }, [open, isMobile, current]);
+
+  const handlePendingH = (val: number) => setPendingH(val);
+  const handlePendingM = (val: number) => setPendingM(val);
+  const handlePendingS = (val: number) => setPendingS(val);
+
+  const handleConfirm = () => {
+    commit(pendingH, pendingM, pendingS);
+    // BottomSheet 自主关闭
+  };
+
+  // Mobile BottomSheet content
+  const mobileSheetContent = (
+    <>
+      <div className="vx-timepicker__columns">
+        <SpinnerColumn value={pendingH} min={0} max={23} onChange={handlePendingH} label="Hours" />
+        <span className="vx-timepicker__sep">:</span>
+        <SpinnerColumn value={pendingM} min={0} max={59} onChange={handlePendingM} label="Minutes" />
+        {seconds && (
+          <>
+            <span className="vx-timepicker__sep">:</span>
+            <SpinnerColumn value={pendingS} min={0} max={59} onChange={handlePendingS} label="Seconds" />
+          </>
+        )}
+      </div>
+    </>
+  );
+
   return (
     <div ref={wrapRef} className={cx('vx-timepicker', className)}>
       {label ? <span className="vx-field-group__label">{label}</span> : null}
@@ -271,7 +316,8 @@ export function TimePicker({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open && (() => {
+      {/* Desktop popover - fixed position */}
+      {open && !isMobile && (() => {
         const shouldPortal = Boolean(dropPos);
         const popoverStyle = dropPos
           ? { position: 'fixed' as const, top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, pointerEvents: 'auto' as const }
@@ -304,7 +350,6 @@ export function TimePicker({
               type="button"
               className="vx-timepicker__done"
               onClick={() => {
-                // If no value has been committed yet, commit the currently displayed time.
                 if (!current) commit(h, m, s);
                 setOpen(false);
               }}
@@ -316,6 +361,19 @@ export function TimePicker({
         );
         return shouldPortal ? createPortal(popoverNode, dialogContentRef.current ?? document.body) : popoverNode;
       })()}
+      {/* Mobile BottomSheet */}
+      {isMobile && open && (
+        <Sheet
+          side="bottom"
+          open={open}
+          onOpenChange={(v) => { if (!v) setOpen(false); }}
+          title={label || 'Select time'}
+          showConfirm
+          onConfirm={handleConfirm}
+        >
+          {mobileSheetContent}
+        </Sheet>
+      )}
     </div>
   );
 }

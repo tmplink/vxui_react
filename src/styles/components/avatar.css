@@ -1,0 +1,24 @@
+/* ═══════════════════════════════════════════════════════════
+   Avatar
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(var(--vx-avatar-hue, 200) 55% 60%);
+  color: #fff;
+  font-weight: 600;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.vx-avatar--circle { border-radius: 9999px; }
+.vx-avatar--square { border-radius: var(--vx-radius); }
+.vx-avatar--xs { width: 24px; height: 24px; font-size: 9px; }
+.vx-avatar--sm { width: 32px; height: 32px; font-size: 11px; }
+.vx-avatar--md { width: 40px; height: 40px; font-size: 13px; }
+.vx-avatar--lg { width: 56px; height: 56px; font-size: 16px; }
+.vx-avatar--xl { width: 80px; height: 80px; font-size: 22px; }
+.vx-avatar__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vx-avatar__initials, .vx-avatar__fallback { line-height: 1; }
+.vx-avatar__placeholder { width: 55%; height: 55%; color: rgba(255,255,255,0.75); }

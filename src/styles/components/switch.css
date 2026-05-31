@@ -1,0 +1,63 @@
+/* ═══════════════════════════════════════════════════════════
+   Switch
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-switch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.vx-switch__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vx-switch__label {
+  font-weight: 600;
+}
+
+.vx-switch__description {
+  color: var(--vx-text-secondary);
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.vx-switch__control {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  padding: 3px;
+  border: 0;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  background: color-mix(in srgb, var(--vx-text) 16%, transparent);
+  cursor: pointer;
+  appearance: none;
+  transition: background 160ms ease;
+}
+
+.vx-switch__control[data-state='checked'] {
+  background: var(--vx-primary);
+}
+
+.vx-switch__thumb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  background: white;
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.16);
+  transform: translateX(0);
+  transition: transform 160ms ease;
+}
+
+.vx-switch__control[data-state='checked'] .vx-switch__thumb {
+  transform: translateX(18px);
+}

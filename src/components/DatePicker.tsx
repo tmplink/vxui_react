@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../lib/cx';
 import { getDialogPopoverContext } from '../lib/dialogPopover';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { Sheet } from './Sheet';
 import { Calendar } from './Calendar';
 
 function formatDate(date: Date): string {
@@ -55,6 +57,7 @@ export function DatePicker({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
   const dialogContentRef = useRef<HTMLElement | null>(null);
+  const isMobile = useIsMobile();
   const [dropPos, setDropPos] = useState<{
     top?: number;
     bottom?: number;
@@ -62,8 +65,9 @@ export function DatePicker({
     direction: 'down' | 'up';
   } | null>(null);
 
+  // ─── 桌面端：点击外部 / Escape 关闭 ──────────────────────────────
   useEffect(() => {
-    if (!open) return;
+    if (!open || isMobile) return;
     const handler = (e: Event) => {
       const inWrap = wrapRef.current?.contains(e.target as Node);
       const inPopover = popoverRef.current?.contains(e.target as Node);
@@ -80,7 +84,7 @@ export function DatePicker({
       document.removeEventListener('touchstart', handler);
       document.removeEventListener('keydown', keyHandler);
     };
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
@@ -99,7 +103,7 @@ export function DatePicker({
 
   useLayoutEffect(() => {
     const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
-    if (!open || !triggerRef.current || shouldInline) {
+    if (!open || !triggerRef.current || shouldInline || isMobile) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
@@ -114,7 +118,7 @@ export function DatePicker({
         ? { top: rect.bottom + 6, left: rect.left, direction }
         : { bottom: window.innerHeight - rect.top + 6, left: rect.left, direction },
     );
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     if (!open || !dropPos) return;
@@ -130,11 +134,45 @@ export function DatePicker({
     };
   }, [open, dropPos]);
 
+  // ─── 桌面端：选中即关 ────────────────────────────────────────────
   const handleSelect = (date: Date) => {
     if (!isControlled) setInternalValue(date);
     onChange?.(date);
     setOpen(false);
   };
+
+  // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
+  const [pendingValue, setPendingValue] = useState<Date | undefined>(selected);
+
+  // 打开 BottomSheet 时，同步 pendingValue 为当前值
+  useEffect(() => {
+    if (open && isMobile) {
+      setPendingValue(selected);
+    }
+  }, [open, isMobile, selected]);
+
+  const handlePendingSelect = (date: Date) => {
+    setPendingValue(date);
+  };
+
+  const handleConfirm = () => {
+    if (!isControlled) setInternalValue(pendingValue);
+    onChange?.(pendingValue);
+    // BottomSheet 自主关闭
+  };
+
+  // Mobile BottomSheet content
+  const mobileSheetContent = (
+    <>
+      <Calendar
+        value={pendingValue}
+        onChange={handlePendingSelect}
+        min={min}
+        max={max}
+        weekStartsOnMonday={weekStartsOnMonday}
+      />
+    </>
+  );
 
   return (
     <div ref={wrapRef} className={cx('vx-datepicker', className)}>
@@ -159,7 +197,8 @@ export function DatePicker({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open ? (() => {
+      {/* Desktop popover - fixed position */}
+      {open && !isMobile && (() => {
         const shouldPortal = Boolean(dropPos);
         const popoverStyle = dropPos
           ? { position: 'fixed' as const, top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, pointerEvents: 'auto' as const }
@@ -186,7 +225,21 @@ export function DatePicker({
         </div>
         );
         return shouldPortal ? createPortal(popoverNode, dialogContentRef.current ?? document.body) : popoverNode;
-      })() : null}
+      })()}
+      {/* Mobile BottomSheet */}
+      {isMobile && open && (
+        <Sheet
+          side="bottom"
+          open={open}
+          onOpenChange={(v) => { if (!v) setOpen(false); }}
+          title={label || 'Select date'}
+          showConfirm
+          confirmDisabled={pendingValue === undefined}
+          onConfirm={handleConfirm}
+        >
+          {mobileSheetContent}
+        </Sheet>
+      )}
     </div>
   );
 }

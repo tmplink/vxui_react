@@ -1,0 +1,759 @@
+/* ═══════════════════════════════════════════════════════════
+   VXUI Typography Base — 通用排版样式
+   参考 Bootstrap 命名风格，提供开箱即用的排版工具类。
+   所有颜色使用 CSS 变量，自动适配亮/暗主题。
+   内置响应式断点，确保移动端和桌面端体验统一。
+   ═══════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════
+   页面容器
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: var(--vx-content-width);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   文章/文档容器
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-article {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.vx-article__header {
+  padding-bottom: 28px;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--vx-border);
+}
+
+.vx-article__title {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 3.2vw, 2.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  color: var(--vx-text);
+  text-wrap: balance;
+}
+
+.vx-article__description {
+  margin: 0 0 16px;
+  max-width: 60ch;
+  font-size: clamp(1rem, 0.3vw + 0.98rem, 1.08rem);
+  line-height: 1.65;
+  color: var(--vx-text-secondary);
+}
+
+.vx-article__body {
+  display: block;
+  padding-top: 32px;
+  container-type: inline-size;
+  container-name: article-body;
+}
+
+.vx-article__content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   章节
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-section {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--vx-border);
+}
+
+.vx-section:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.vx-section__heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--vx-text);
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vx-section__anchor {
+  color: var(--vx-text-muted);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 140ms;
+  line-height: 1;
+}
+
+.vx-section__heading:hover .vx-section__anchor {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   展示标题层级 (Bootstrap .display-* 风格)
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-display {
+  margin: 0;
+  font-size: clamp(2.75rem, 5vw, 4.5rem);
+  line-height: 1.03;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  text-wrap: balance;
+  color: var(--vx-text);
+}
+
+.vx-display--page {
+  margin: 0;
+  font-weight: 700;
+  text-wrap: balance;
+  color: var(--vx-text);
+  font-size: clamp(2rem, 3.2vw, 2.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+.vx-display--section {
+  margin: 0;
+  font-weight: 700;
+  text-wrap: balance;
+  color: var(--vx-text);
+  font-size: clamp(1.75rem, 2.6vw, 2.35rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   导语/正文文本 (Bootstrap .lead 风格)
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-lead {
+  margin: 0;
+  max-width: 72ch;
+  font-size: clamp(1rem, 0.3vw + 0.98rem, 1.08rem);
+  line-height: 1.62;
+  color: var(--vx-text-secondary);
+}
+
+.vx-lead--page {
+  margin: 0;
+  max-width: 60ch;
+  font-size: clamp(1rem, 0.3vw + 0.98rem, 1.08rem);
+  line-height: 1.62;
+  text-wrap: pretty;
+  color: var(--vx-text-secondary);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   标签/徽标 (Bootstrap .kicker 风格)
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-kicker {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--vx-primary);
+  margin-bottom: 10px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   列表
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 10px;
+  color: var(--vx-text-secondary);
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   代码块
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-code {
+  margin: 0;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--vx-bg-accent);
+  border: 1px solid var(--vx-border);
+  color: var(--vx-text);
+  font-size: 13px;
+  line-height: 1.65;
+  font-family: var(--vx-mono);
+  white-space: pre-wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   徽标组 / 元信息
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vx-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.vx-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   面包屑导航
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-breadcrumb {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.vx-breadcrumb__kicker {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vx-primary);
+}
+
+.vx-breadcrumb strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: clamp(0.98rem, 0.4vw + 0.92rem, 1.08rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--vx-text);
+}
+
+.vx-breadcrumb[data-state='overview'] strong {
+  color: var(--vx-text-secondary);
+}
+
+.vx-breadcrumb__summary {
+  display: none;
+}
+
+.vx-breadcrumb[data-state='pinned'] .vx-breadcrumb__summary {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.82rem;
+  color: var(--vx-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   空状态
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-xl);
+  background: color-mix(in srgb, var(--vx-surface) 90%, var(--vx-primary-soft));
+}
+
+.vx-empty__icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vx-primary);
+  background: var(--vx-primary-soft);
+}
+
+.vx-empty strong {
+  margin: 0;
+  color: var(--vx-text);
+}
+
+.vx-empty p {
+  margin: 0;
+  color: var(--vx-text-secondary);
+  line-height: 1.65;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   示例区域
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-example {
+  padding: 28px 24px;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-lg);
+  background: color-mix(in srgb, var(--vx-bg-accent) 55%, var(--vx-surface));
+}
+
+.vx-example__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.vx-example__panel {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vx-example__panel--mobile {
+  align-items: center;
+}
+
+.vx-example__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vx-example__meta strong {
+  font-size: 0.96rem;
+  color: var(--vx-text);
+}
+
+.vx-example__eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--vx-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   属性表格 (API 参考)
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-props-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.vx-props-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--vx-text-muted);
+  background: var(--vx-bg-accent);
+  border-bottom: 1px solid var(--vx-border);
+}
+
+.vx-props-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--vx-border);
+  color: var(--vx-text-secondary);
+  vertical-align: top;
+}
+
+.vx-props-table tr:last-child td {
+  border-bottom: none;
+}
+
+.vx-props-table td:first-child {
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--vx-text);
+}
+
+.vx-props-table code {
+  font-family: var(--vx-mono);
+  font-size: 13px;
+  background: var(--vx-bg-accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--vx-text);
+}
+
+.vx-prop-required {
+  color: var(--vx-danger);
+  margin-left: 2px;
+}
+
+.vx-prop-type {
+  color: var(--vx-primary) !important;
+}
+
+.vx-prop-dash {
+  color: var(--vx-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   分页导航
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 32px;
+  border-top: 1px solid var(--vx-border);
+  margin-top: 32px;
+}
+
+.vx-pager__btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 18px;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  cursor: pointer;
+  text-align: left;
+  max-width: 220px;
+  transition: border-color 160ms, background 160ms, transform 160ms;
+  font-family: var(--vx-font);
+  color: inherit;
+}
+
+.vx-pager__btn:hover {
+  border-color: color-mix(in srgb, var(--vx-primary) 40%, var(--vx-border));
+  background: var(--vx-surface-hover);
+  transform: translateY(-1px);
+}
+
+.vx-pager__btn--next {
+  text-align: right;
+  margin-left: auto;
+}
+
+.vx-pager__dir {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--vx-text-muted);
+}
+
+.vx-pager__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--vx-text);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   移动端预览
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-mobile-preview {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.vx-mobile-preview__frame {
+  width: min(100%, 414px);
+  height: 896px;
+  border-width: 5px;
+  margin: 0 auto;
+  background: var(--vx-bg);
+}
+
+.vx-mobile-preview__iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: var(--vx-bg);
+}
+
+.vx-mobile-preview__hint {
+  margin: 0;
+  max-width: 30ch;
+  text-align: center;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--vx-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   预览组件 (用于文档中的组件展示)
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-preview-shell {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--vx-border);
+  background: var(--vx-bg-accent);
+}
+
+.vx-preview-shell__sidebar,
+.vx-preview-shell__content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vx-preview-shell__sidebar {
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+}
+
+.vx-preview-shell__content {
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+}
+
+.vx-preview-shell__line,
+.vx-preview-grid__item {
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--vx-primary) 10%, var(--vx-surface));
+  border: 1px solid var(--vx-border);
+}
+
+.vx-preview-shell__line {
+  height: 14px;
+}
+
+.vx-preview-shell__line--strong {
+  height: 18px;
+  width: 68%;
+}
+
+.vx-preview-shell__line--header {
+  height: 20px;
+  width: 42%;
+}
+
+.vx-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.vx-preview-grid--page {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.vx-preview-grid__item {
+  min-height: 72px;
+}
+
+.vx-preview-grid__item--wide {
+  grid-column: 1 / -1;
+  min-height: 110px;
+}
+
+.vx-preview-list {
+  border: 1px solid var(--vx-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.vx-preview-list__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) 120px 120px;
+  gap: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  border-top: 1px solid var(--vx-border);
+}
+
+.vx-preview-list__row:first-child {
+  border-top: 0;
+}
+
+.vx-preview-list__row--header {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--vx-text-muted);
+  background: var(--vx-bg-accent);
+}
+
+.vx-preview-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vx-preview-stack__group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vx-preview-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.vx-preview-inline--wrap {
+  row-gap: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   统计网格
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.vx-stat {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vx-stat__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vx-stat__label {
+  color: var(--vx-text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.vx-stat__value {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.vx-stat__hint {
+  color: var(--vx-text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.vx-stat__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vx-primary);
+  background: var(--vx-primary-soft);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   响应式
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 1160px) {
+  .vx-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1023px) {
+  .vx-article__header {
+    padding-bottom: 20px;
+  }
+
+  .vx-article__body {
+    padding-top: 24px;
+  }
+
+  .vx-section {
+    padding: 20px 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .vx-display {
+    font-size: 2.5rem;
+  }
+
+  .vx-display--section {
+    font-size: 1.9rem;
+  }
+
+  .vx-display--page {
+    font-size: 1.9rem;
+  }
+
+  .vx-article__title {
+    font-size: 1.9rem;
+  }
+
+  .vx-pager {
+    flex-direction: column;
+  }
+
+  .vx-pager__btn,
+  .vx-pager__btn--next {
+    max-width: 100%;
+    text-align: left;
+    margin-left: 0;
+  }
+
+  .vx-example {
+    padding: 16px;
+  }
+
+  .vx-example__grid {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .vx-preview-list__row {
+    grid-template-columns: 1fr;
+  }
+}

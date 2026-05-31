@@ -1,0 +1,41 @@
+/* ═══════════════════════════════════════════════════════════
+   Menubar
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-menubar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+}
+.vx-menubar__item-wrap {
+  position: relative;
+}
+.vx-menubar__trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--vx-text-secondary);
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+.vx-menubar__trigger:hover:not(:disabled) {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+.vx-menubar__trigger--open {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+.vx-menubar__trigger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

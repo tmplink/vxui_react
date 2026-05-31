@@ -1,0 +1,113 @@
+/* ═══════════════════════════════════════════════════════════
+   CodeBlock
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-code-block-wrap {
+  position: relative;
+}
+
+.vx-code-block__copy {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.vx-button.vx-code-block__copy--copied {
+  background: color-mix(in srgb, var(--vx-success) 88%, white 12%);
+  border-color: color-mix(in srgb, var(--vx-success) 72%, var(--vx-border));
+  color: #ffffff;
+}
+
+.vx-code-block {
+  margin: 0;
+  padding: 56px 18px 16px;
+  border-radius: var(--vx-radius-lg);
+  border: 1px solid var(--vx-code-border);
+  background: var(--vx-code-bg);
+  color: var(--vx-code-text);
+  font-family: var(--vx-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow: auto;
+}
+
+.vx-code-block__code {
+  display: block;
+  min-width: max-content;
+  color: var(--vx-code-text);
+}
+
+/* ── Prism token colors ─────────────────────────────── */
+.vx-code-block__code .token.comment,
+.vx-code-block__code .token.prolog,
+.vx-code-block__code .token.doctype,
+.vx-code-block__code .token.cdata {
+  color: var(--vx-code-comment);
+  font-style: italic;
+}
+
+.vx-code-block__code .token.keyword,
+.vx-code-block__code .token.selector,
+.vx-code-block__code .token.atrule {
+  color: var(--vx-code-keyword);
+}
+
+.vx-code-block__code .token.string,
+.vx-code-block__code .token.regex,
+.vx-code-block__code .token.attr-value,
+.vx-code-block__code .token.inserted {
+  color: var(--vx-code-string);
+}
+
+.vx-code-block__code .token.number,
+.vx-code-block__code .token.boolean,
+.vx-code-block__code .token.constant,
+.vx-code-block__code .token.symbol {
+  color: var(--vx-code-number);
+}
+
+.vx-code-block__code .token.function,
+.vx-code-block__code .token.function-variable,
+.vx-code-block__code .token.method {
+  color: var(--vx-code-function);
+}
+
+.vx-code-block__code .token.property,
+.vx-code-block__code .token.attr-name,
+.vx-code-block__code .token.parameter {
+  color: var(--vx-code-property);
+}
+
+.vx-code-block__code .token.class-name,
+.vx-code-block__code .token.builtin {
+  color: var(--vx-code-class);
+}
+
+.vx-code-block__code .token.tag {
+  color: var(--vx-code-tag);
+}
+
+.vx-code-block__code .token.punctuation {
+  color: var(--vx-code-punctuation);
+}
+
+.vx-code-block__code .token.operator,
+.vx-code-block__code .token.entity,
+.vx-code-block__code .token.url {
+  color: var(--vx-code-operator);
+}
+
+.vx-code-block__code .token.deleted {
+  color: var(--vx-danger);
+}
+
+.vx-code-block__code .token.important,
+.vx-code-block__code .token.bold {
+  font-weight: 700;
+}
+
+.vx-code-block__code .token.italic {
+  font-style: italic;
+}

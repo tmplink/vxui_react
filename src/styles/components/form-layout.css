@@ -1,0 +1,38 @@
+/* ═══════════════════════════════════════════════════════════
+   Form Layout
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.vx-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.vx-form-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vx-text);
+}
+.vx-form-label__required {
+  color: var(--vx-danger);
+}
+.vx-form-description {
+  font-size: 12px;
+  color: var(--vx-text-secondary);
+  margin: 0;
+}
+.vx-form-message {
+  font-size: 12px;
+  color: var(--vx-text-secondary);
+  margin: 0;
+}
+.vx-form-message--error {
+  color: var(--vx-danger);
+}

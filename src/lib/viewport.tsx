@@ -5,6 +5,11 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import {
+  PHONE_MAX_WIDTH,
+  PHONE_ASPECT_RATIO_THRESHOLD,
+  TABLET_ASPECT_RATIO_THRESHOLD,
+} from './breakpoints';
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -25,20 +30,14 @@ export interface ViewportContextValue {
   aspectRatio: number;
 }
 
-// ─── Breakpoints ────────────────────────────────────────────────────────────
-
-// Physical screen width threshold (CSS pixels)
-// Devices with physical width > 1000px are considered desktops
-const PHONE_MAX_WIDTH = 1000;
-
 /**
  * Detects device type based on screen physical dimensions and aspect ratio.
  *
  * Detection logic:
  * 1. Use PHYSICAL screen size (window.screen) to determine device category
  *    - This prevents false positives when desktop browsers are resized
- * 2. Physical width ≤ 1000px → phone or tablet (depends on orientation)
- * 3. Physical width > 1000px → desktop (even if viewport is small)
+ * 2. Physical width ≤ PHONE_MAX_WIDTH → phone or tablet (depends on orientation)
+ * 3. Physical width > PHONE_MAX_WIDTH → desktop (even if viewport is small)
  *
  * Note: window.screen.width/height returns physical screen dimensions in CSS pixels.
  * These values do NOT change when the device rotates or the browser window resizes.
@@ -50,19 +49,19 @@ function resolveViewport(): ViewportType {
   const physicalWidth = window.screen.width;
   const physicalHeight = window.screen.height;
   
-  // If physical width > 1000px, it's definitely not a phone
+  // If physical width > PHONE_MAX_WIDTH, it's definitely not a phone
   // (desktop browsers might be resized, but physical screen stays large)
   if (physicalWidth > PHONE_MAX_WIDTH) {
     return 'desktop';
   }
   
-  // Physical width ≤ 1000px: could be phone or tablet
+  // Physical width ≤ PHONE_MAX_WIDTH: could be phone or tablet
   // Use aspect ratio to differentiate:
-  // - Phones are typically narrow (aspect ratio < 0.7)
-  // - Tablets are wider (aspect ratio >= 0.7)
+  // - Phones are typically narrow (aspect ratio < threshold)
+  // - Tablets are wider (aspect ratio >= threshold)
   const aspectRatio = physicalWidth / physicalHeight;
   
-  if (aspectRatio < 0.7) {
+  if (aspectRatio < PHONE_ASPECT_RATIO_THRESHOLD) {
     return 'phone';
   }
   

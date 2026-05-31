@@ -1,0 +1,105 @@
+/* ═══════════════════════════════════════════════════════════
+   ColorPicker
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-colorpicker__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
+  border-radius: 10px;
+  border: 1px solid var(--vx-border);
+  background: var(--vx-surface);
+  cursor: pointer;
+  transition: border-color 140ms;
+  width: 100%;
+}
+.vx-colorpicker__trigger:hover { border-color: var(--vx-border-strong); }
+.vx-colorpicker__swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid var(--vx-border);
+  flex-shrink: 0;
+}
+.vx-colorpicker__value {
+  flex: 1;
+  font-size: 14px;
+  color: var(--vx-text);
+  font-family: var(--vx-mono);
+}
+.vx-colorpicker__panel {
+  position: absolute;
+  z-index: var(--vx-z-menu);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius);
+  box-shadow: var(--vx-shadow);
+  padding: 14px;
+  min-width: 220px;
+}
+.vx-colorpicker__canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  cursor: crosshair;
+}
+.vx-colorpicker__canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.vx-colorpicker__hue {
+  width: 100%;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 10px;
+}
+.vx-colorpicker__hue-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+.vx-colorpicker__inputs {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.vx-colorpicker__hex-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid var(--vx-border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: var(--vx-mono);
+  color: var(--vx-text);
+  background: var(--vx-bg-accent);
+}
+.vx-colorpicker__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
+}
+.vx-colorpicker__preset {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid var(--vx-border);
+  cursor: pointer;
+  transition: transform 100ms;
+}
+.vx-colorpicker__preset:hover { transform: scale(1.2); }

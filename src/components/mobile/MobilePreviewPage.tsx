@@ -23,9 +23,8 @@ import {
 } from 'lucide-react';
 import { MobileShell, MobileTopBar, MobileIconButton } from './MobileShell';
 import { BottomNav } from './BottomNav';
-import { ActionSheet, ActionSheetItem } from './ActionSheet';
 import { MobileList, MobileListSection, MobileListItem } from './MobileList';
-import { MobileDrawer, DrawerNavItem, DrawerNavSection } from './MobileDrawer';
+import { Sheet } from '../Sheet';
 import { Badge } from '../Badge';
 import { Button } from '../Button';
 
@@ -355,9 +354,10 @@ export function MobilePreviewPage({ onExit }: MobilePreviewPageProps) {
         </MobileShell>
 
         {/* Drawer — rendered inside the stage so it overlays the phone UI */}
-        <MobileDrawer
+        <Sheet
+          side="left"
           open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
+          onOpenChange={(v) => { if (!v) setDrawerOpen(false); }}
           width={260}
           header={
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -383,44 +383,82 @@ export function MobilePreviewPage({ onExit }: MobilePreviewPageProps) {
             </div>
           }
           footer={
-            <DrawerNavSection>
-              <DrawerNavItem icon={<Settings size={18} />} label="Settings" onClick={() => setDrawerOpen(false)} />
-              <DrawerNavItem icon={<LogOut size={18} />} label="Sign out" onClick={() => setDrawerOpen(false)} />
-            </DrawerNavSection>
+            <div>
+              <button type="button" className="vxm-drawer-item" onClick={() => setDrawerOpen(false)}>
+                <span className="vxm-drawer-item__icon"><Settings size={18} /></span>
+                <span className="vxm-drawer-item__label">Settings</span>
+              </button>
+              <button type="button" className="vxm-drawer-item" onClick={() => setDrawerOpen(false)}>
+                <span className="vxm-drawer-item__icon"><LogOut size={18} /></span>
+                <span className="vxm-drawer-item__label">Sign out</span>
+              </button>
+            </div>
           }
         >
-          <DrawerNavSection title="Getting Started">
-            <DrawerNavItem icon={<House size={18} />} label="Introduction" active={drawerActive === 'intro'} onClick={() => { setDrawerActive('intro'); setDrawerOpen(false); }} />
-            <DrawerNavItem icon={<Zap size={18} />} label="Quick Start" active={drawerActive === 'quickstart'} onClick={() => { setDrawerActive('quickstart'); setDrawerOpen(false); }} />
-          </DrawerNavSection>
-          <DrawerNavSection title="Layout">
-            <DrawerNavItem icon={<Package2 size={18} />} label="Shell & Sidebar" active={drawerActive === 'shell-sidebar'} onClick={() => { setDrawerActive('shell-sidebar'); setDrawerOpen(false); }} />
-            <DrawerNavItem icon={<FileCode2 size={18} />} label="Grid & Page" active={drawerActive === 'grid'} onClick={() => { setDrawerActive('grid'); setDrawerOpen(false); }} />
-          </DrawerNavSection>
-          <DrawerNavSection title="Components">
-            <DrawerNavItem icon={<Star size={18} />} label="Elements" active={drawerActive === 'elements'} onClick={() => { setDrawerActive('elements'); setDrawerOpen(false); }} />
-            <DrawerNavItem icon={<Palette size={18} />} label="Theming" badge={2} active={drawerActive === 'theming'} onClick={() => { setDrawerActive('theming'); setDrawerOpen(false); }} />
-            <DrawerNavItem icon={<Bell size={18} />} label="Toasts" active={drawerActive === 'toasts'} onClick={() => { setDrawerActive('toasts'); setDrawerOpen(false); }} />
-          </DrawerNavSection>
-        </MobileDrawer>
+          <div className="vxm-drawer-section">
+            <div className="vxm-drawer-section__title">Getting Started</div>
+            <div className="vxm-drawer-section__items">
+              <button type="button" className={'vxm-drawer-item' + (drawerActive === 'intro' ? ' vxm-drawer-item--active' : '')} onClick={() => { setDrawerActive('intro'); setDrawerOpen(false); }}>
+                <span className="vxm-drawer-item__icon"><House size={18} /></span>
+                <span className="vxm-drawer-item__label">Introduction</span>
+              </button>
+              <button type="button" className={'vxm-drawer-item' + (drawerActive === 'quickstart' ? ' vxm-drawer-item--active' : '')} onClick={() => { setDrawerActive('quickstart'); setDrawerOpen(false); }}>
+                <span className="vxm-drawer-item__icon"><Zap size={18} /></span>
+                <span className="vxm-drawer-item__label">Quick Start</span>
+              </button>
+            </div>
+          </div>
+          <div className="vxm-drawer-section">
+            <div className="vxm-drawer-section__title">Layout</div>
+            <div className="vxm-drawer-section__items">
+              <button type="button" className={'vxm-drawer-item' + (drawerActive === 'shell-sidebar' ? ' vxm-drawer-item--active' : '')} onClick={() => { setDrawerActive('shell-sidebar'); setDrawerOpen(false); }}>
+                <span className="vxm-drawer-item__icon"><Package2 size={18} /></span>
+                <span className="vxm-drawer-item__label">Shell & Sidebar</span>
+              </button>
+              <button type="button" className={'vxm-drawer-item' + (drawerActive === 'grid' ? ' vxm-drawer-item--active' : '')} onClick={() => { setDrawerActive('grid'); setDrawerOpen(false); }}>
+                <span className="vxm-drawer-item__icon"><FileCode2 size={18} /></span>
+                <span className="vxm-drawer-item__label">Grid & Page</span>
+              </button>
+            </div>
+          </div>
+          <div className="vxm-drawer-section">
+            <div className="vxm-drawer-section__title">Components</div>
+            <div className="vxm-drawer-section__items">
+              <button type="button" className={'vxm-drawer-item' + (drawerActive === 'elements' ? ' vxm-drawer-item--active' : '')} onClick={() => { setDrawerActive('elements'); setDrawerOpen(false); }}>
+                <span className="vxm-drawer-item__icon"><Star size={18} /></span>
+                <span className="vxm-drawer-item__label">Elements</span>
+              </button>
+              <button type="button" className={'vxm-drawer-item' + (drawerActive === 'theming' ? ' vxm-drawer-item--active' : '')} onClick={() => { setDrawerActive('theming'); setDrawerOpen(false); }}>
+                <span className="vxm-drawer-item__icon"><Palette size={18} /></span>
+                <span className="vxm-drawer-item__label">Theming</span>
+                <span className="vxm-drawer-item__badge">2</span>
+              </button>
+              <button type="button" className={'vxm-drawer-item' + (drawerActive === 'toasts' ? ' vxm-drawer-item--active' : '')} onClick={() => { setDrawerActive('toasts'); setDrawerOpen(false); }}>
+                <span className="vxm-drawer-item__icon"><Bell size={18} /></span>
+                <span className="vxm-drawer-item__label">Toasts</span>
+              </button>
+            </div>
+          </div>
+        </Sheet>
       </div>
 
-      <ActionSheet
+      <Sheet
+        variant="action"
         open={actionSheetOpen}
-        onClose={() => setActionSheetOpen(false)}
+        onOpenChange={(v) => { if (!v) setActionSheetOpen(false); }}
         title="Share"
         description="Choose how to share this component."
       >
-        <ActionSheetItem icon={<Share2 size={18} />} onClick={() => setActionSheetOpen(false)}>
+        <Sheet.Item icon={<Share2 size={18} />} onClick={() => setActionSheetOpen(false)}>
           Copy link
-        </ActionSheetItem>
-        <ActionSheetItem icon={<Download size={18} />} onClick={() => setActionSheetOpen(false)}>
+        </Sheet.Item>
+        <Sheet.Item icon={<Download size={18} />} onClick={() => setActionSheetOpen(false)}>
           Download source
-        </ActionSheetItem>
-        <ActionSheetItem icon={<Trash2 size={18} />} destructive onClick={() => setActionSheetOpen(false)}>
+        </Sheet.Item>
+        <Sheet.Item icon={<Trash2 size={18} />} destructive onClick={() => setActionSheetOpen(false)}>
           Remove from library
-        </ActionSheetItem>
-      </ActionSheet>
+        </Sheet.Item>
+      </Sheet>
     </div>
   );
 }

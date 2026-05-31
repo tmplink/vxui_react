@@ -1,0 +1,91 @@
+/* ═══════════════════════════════════════════════════════════
+   Calendar
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-calendar {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  background: var(--vx-surface);
+  border-radius: var(--vx-radius-lg);
+  border: 1px solid var(--vx-border);
+  user-select: none;
+  min-width: 264px;
+}
+.vx-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px 6px;
+}
+.vx-calendar__nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--vx-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--vx-text-secondary);
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+.vx-calendar__nav-btn:hover {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+.vx-calendar__month-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vx-text);
+}
+.vx-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.vx-calendar__weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--vx-text-muted);
+}
+.vx-calendar__cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--vx-text);
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background 100ms, color 100ms;
+}
+.vx-calendar__cell--empty {
+  cursor: default;
+}
+.vx-calendar__cell:hover:not(:disabled):not(.vx-calendar__cell--empty) {
+  background: var(--vx-bg-accent);
+}
+.vx-calendar__cell--today {
+  font-weight: 700;
+  color: var(--vx-primary);
+}
+.vx-calendar__cell--selected {
+  background: var(--vx-primary) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+.vx-calendar__cell--disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

@@ -3,6 +3,8 @@ import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
 import { getDialogPopoverContext } from '../lib/dialogPopover';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { Sheet } from './Sheet';
 
 export interface MultiSelectOption {
   value: string;
@@ -55,6 +57,7 @@ export function MultiSelect({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
+  const isMobile = useIsMobile();
 
   /** Fixed position for portaled desktop dropdown. null = render inline (mobile). */
   const [dropPos, setDropPos] = useState<{
@@ -75,12 +78,16 @@ export function MultiSelect({
       setSearch('');
       return;
     }
-    const t = setTimeout(() => searchRef.current?.focus(), 0);
+    // 移动端需要延迟聚焦，等 BottomSheet 进入动画完成、body overflow 稳定后再聚焦
+    // 否则 iOS Safari 会在 body overflow 切换间隙触发视口调整，导致页面跳动
+    const delay = isMobile ? 350 : 0;
+    const t = setTimeout(() => searchRef.current?.focus(), delay);
     return () => clearTimeout(t);
-  }, [open]);
+  }, [open, isMobile]);
 
+  // ─── 桌面端：点击外部 / Escape 关闭 ──────────────────────────────
   useEffect(() => {
-    if (!open) return;
+    if (!open || isMobile) return;
     const onOutside = (e: Event) => {
       const inWrap = wrapRef.current?.contains(e.target as Node);
       const inDropdown = dropdownRef.current?.contains(e.target as Node);
@@ -97,7 +104,7 @@ export function MultiSelect({
       document.removeEventListener('touchstart', onOutside);
       document.removeEventListener('keydown', onKey);
     };
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
@@ -117,7 +124,7 @@ export function MultiSelect({
   // Use an inline mobile sheet only outside Dialog so dialog popovers can escape clipping.
   useLayoutEffect(() => {
     const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
-    if (!open || !triggerRef.current || shouldInline) {
+    if (!open || !triggerRef.current || shouldInline || isMobile) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
@@ -132,7 +139,7 @@ export function MultiSelect({
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
         : { bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width, direction },
     );
-  }, [open]);
+  }, [open, isMobile]);
 
   // Close fixed-position dropdown on scroll/resize (but not when scrolling inside it)
   useEffect(() => {
@@ -149,6 +156,7 @@ export function MultiSelect({
     };
   }, [open, dropPos]);
 
+  // ─── 桌面端：选中即关 ────────────────────────────────────────────
   const toggle = (option: MultiSelectOption) => {
     if (option.disabled) return;
     const next = value.includes(option.value)
@@ -156,6 +164,7 @@ export function MultiSelect({
       : [...value, option.value];
     if (!isControlled) setInternalValue(next);
     onChange?.(next);
+    setOpen(false);
   };
 
   const removeTag = (e: React.MouseEvent, val: string) => {
@@ -177,6 +186,76 @@ export function MultiSelect({
     acc[o.value] = o.label;
     return acc;
   }, {});
+
+  // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
+  const [pendingValue, setPendingValue] = useState<string[]>(value);
+
+  // 打开 BottomSheet 时，同步 pendingValue 为当前值
+  useEffect(() => {
+    if (open && isMobile) {
+      setPendingValue(value);
+    }
+  }, [open, isMobile, value]);
+
+  const handlePendingToggle = (option: MultiSelectOption) => {
+    if (option.disabled) return;
+    setPendingValue((prev) =>
+      prev.includes(option.value)
+        ? prev.filter((v) => v !== option.value)
+        : [...prev, option.value],
+    );
+  };
+
+  const handleConfirm = () => {
+    if (!isControlled) setInternalValue(pendingValue);
+    onChange?.(pendingValue);
+    // BottomSheet 自主关闭
+  };
+
+  // Mobile BottomSheet content
+  const mobileSheetContent = (
+    <>
+      <div className="vx-multiselect__search-wrap">
+        <input
+          ref={searchRef}
+          type="text"
+          className="vx-multiselect__search"
+          placeholder={searchPlaceholder}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          aria-label={searchPlaceholder}
+        />
+      </div>
+      <ul id={listboxId} className="vx-multiselect__list" role="listbox" aria-multiselectable="true" aria-label={label ?? 'Options'}>
+        {filtered.length === 0 ? (
+          <li className="vx-multiselect__empty">{emptyText}</li>
+        ) : (
+          filtered.map((option) => {
+            const isSelected = pendingValue.includes(option.value);
+            return (
+              <li
+                key={option.value}
+                className={cx(
+                  'vx-multiselect__option',
+                  isSelected && 'vx-multiselect__option--selected',
+                  option.disabled && 'vx-multiselect__option--disabled',
+                )}
+                role="option"
+                aria-selected={isSelected}
+                aria-disabled={option.disabled}
+                onClick={() => handlePendingToggle(option)}
+              >
+                <span className={cx('vx-multiselect__checkbox', isSelected && 'vx-multiselect__checkbox--checked')}>
+                  {isSelected ? <Check size={11} /> : null}
+                </span>
+                <span>{option.label}</span>
+              </li>
+            );
+          })
+        )}
+      </ul>
+    </>
+  );
 
   return (
     <div ref={wrapRef} className={cx('vx-multiselect', open && 'vx-multiselect--open', className)}>
@@ -240,7 +319,8 @@ export function MultiSelect({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open && (() => {
+      {/* Desktop dropdown - fixed position */}
+      {open && !isMobile && (() => {
         const shouldPortal = Boolean(dropPos);
         const dropdownStyle = shouldPortal && dropPos
           ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width, pointerEvents: 'auto' as const }
@@ -298,6 +378,20 @@ export function MultiSelect({
         );
         return shouldPortal ? createPortal(dropdownNode, dialogContentRef.current ?? document.body) : dropdownNode;
       })()}
+      {/* Mobile BottomSheet */}
+      {isMobile && (
+        <Sheet
+          side="bottom"
+          open={open}
+          onOpenChange={(v) => { if (!v) setOpen(false); }}
+          title={label || placeholder}
+          showConfirm
+          confirmDisabled={pendingValue.length === 0}
+          onConfirm={handleConfirm}
+        >
+          {mobileSheetContent}
+        </Sheet>
+      )}
     </div>
   );
 }

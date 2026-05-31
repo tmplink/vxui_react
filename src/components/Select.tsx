@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect, useLayoutEffect, useId } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useId, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
 import { getDialogPopoverContext } from '../lib/dialogPopover';
+import { useIsMobile } from '../hooks/useIsMobile';
+import { Sheet } from './Sheet';
 
 export interface SelectOption {
   value: string;
@@ -25,6 +27,12 @@ export interface SelectProps {
   emptyText?: string;
   searchable?: boolean | number;
   className?: string;
+  /**
+   * 自定义移动端选择面板组件。
+   * 默认使用 Sheet 组件。传入 null 可禁用移动端面板。
+   * 可用于注入自定义的 BottomSheet 实现以解耦依赖。
+   */
+  mobileSheet?: ReactNode;
 }
 
 export function Select({
@@ -42,6 +50,7 @@ export function Select({
   emptyText = 'No results',
   searchable = true,
   className,
+  mobileSheet,
 }: SelectProps) {
   const isControlled = controlledValue !== undefined;
   const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
@@ -54,6 +63,7 @@ export function Select({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
+  const isMobile = useIsMobile();
 
   const [dropPos, setDropPos] = useState<{
     top?: number;
@@ -77,13 +87,17 @@ export function Select({
       return;
     }
     if (showSearch) {
-      const timeoutId = setTimeout(() => searchRef.current?.focus(), 0);
+      // 移动端需要延迟聚焦，等 BottomSheet 进入动画完成、body overflow 稳定后再聚焦
+      // 否则 iOS Safari 会在 body overflow 切换间隙触发视口调整，导致页面跳动
+      const delay = isMobile ? 350 : 0;
+      const timeoutId = setTimeout(() => searchRef.current?.focus(), delay);
       return () => clearTimeout(timeoutId);
     }
-  }, [open, showSearch]);
+  }, [open, showSearch, isMobile]);
 
+  // ─── 桌面端：点击外部 / Escape 关闭 ──────────────────────────────
   useEffect(() => {
-    if (!open) return;
+    if (!open || isMobile) return;
     const onOutside = (event: Event) => {
       const inWrap = wrapRef.current?.contains(event.target as Node);
       const inDropdown = dropdownRef.current?.contains(event.target as Node);
@@ -103,7 +117,7 @@ export function Select({
       document.removeEventListener('touchstart', onOutside);
       document.removeEventListener('keydown', onKey);
     };
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     const { shouldInline } = getDialogPopoverContext(wrapRef.current);
@@ -124,7 +138,7 @@ export function Select({
 
   useLayoutEffect(() => {
     const { dialogContent, shouldInline } = getDialogPopoverContext(wrapRef.current);
-    if (!open || !triggerRef.current || shouldInline) {
+    if (!open || !triggerRef.current || shouldInline || isMobile) {
       setDropPos(null);
       dialogContentRef.current = null;
       return;
@@ -139,7 +153,7 @@ export function Select({
         ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
         : { bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width, direction },
     );
-  }, [open]);
+  }, [open, isMobile]);
 
   useEffect(() => {
     if (!open || !dropPos) return;
@@ -155,6 +169,7 @@ export function Select({
     };
   }, [open, dropPos]);
 
+  // ─── 桌面端：选中即关 ────────────────────────────────────────────
   const handleSelect = (option: SelectOption) => {
     if (option.disabled) return;
     if (!isControlled) setInternalValue(option.value);
@@ -167,6 +182,69 @@ export function Select({
     if (!isControlled) setInternalValue(undefined);
     onChange?.(undefined);
   };
+
+  // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
+  const [pendingValue, setPendingValue] = useState<string | undefined>(value);
+
+  // 打开 BottomSheet 时，同步 pendingValue 为当前值
+  useEffect(() => {
+    if (open && isMobile) {
+      setPendingValue(value);
+    }
+  }, [open, isMobile, value]);
+
+  const handlePendingSelect = (option: SelectOption) => {
+    if (option.disabled) return;
+    setPendingValue(option.value);
+  };
+
+  const handleConfirm = () => {
+    if (!isControlled) setInternalValue(pendingValue);
+    onChange?.(pendingValue);
+    // BottomSheet 自主关闭
+  };
+
+  // Mobile BottomSheet content
+  const mobileSheetContent = (
+    <>
+      {showSearch && (
+        <div className="vx-select__search-wrap">
+          <input
+            ref={searchRef}
+            type="text"
+            className="vx-select__search"
+            placeholder={searchPlaceholder}
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            aria-label={searchPlaceholder}
+          />
+        </div>
+      )}
+      <ul id={listboxId} className="vx-select__list" role="listbox" aria-label={label ?? 'Options'}>
+        {filtered.length === 0 ? (
+          <li className="vx-select__empty">{emptyText}</li>
+        ) : (
+          filtered.map((option) => (
+            <li
+              key={option.value}
+              className={cx(
+                'vx-select__option',
+                option.value === pendingValue && 'vx-select__option--selected',
+                option.disabled && 'vx-select__option--disabled',
+              )}
+              role="option"
+              aria-selected={option.value === pendingValue}
+              aria-disabled={option.disabled}
+              onClick={() => handlePendingSelect(option)}
+            >
+              <span>{option.label}</span>
+              {option.value === pendingValue ? <Check size={14} /> : null}
+            </li>
+          ))
+        )}
+      </ul>
+    </>
+  );
 
   return (
     <div ref={wrapRef} className={cx('vx-select', open && 'vx-select--open', className)}>
@@ -207,7 +285,8 @@ export function Select({
       </button>
       {error ? <span className="vx-field-group__error">{error}</span> : null}
       {!error && hint ? <span className="vx-field-group__hint">{hint}</span> : null}
-      {open && (() => {
+      {/* Desktop dropdown - fixed position */}
+      {open && !isMobile && (() => {
         const shouldPortal = Boolean(dropPos);
         const dropdownStyle = dropPos
           ? { top: dropPos.top, bottom: dropPos.bottom, left: dropPos.left, width: dropPos.width, pointerEvents: 'auto' as const }
@@ -262,6 +341,22 @@ export function Select({
         );
         return shouldPortal ? createPortal(dropdownNode, dialogContentRef.current ?? document.body) : dropdownNode;
       })()}
+      {/* Mobile BottomSheet — 可通过 mobileSheet prop 注入自定义组件 */}
+      {isMobile && (mobileSheet !== undefined ? (
+        mobileSheet
+      ) : (
+        <Sheet
+          side="bottom"
+          open={open}
+          onOpenChange={(v) => { if (!v) setOpen(false); }}
+          title={label || placeholder}
+          showConfirm
+          confirmDisabled={pendingValue === undefined}
+          onConfirm={handleConfirm}
+        >
+          {mobileSheetContent}
+        </Sheet>
+      ))}
     </div>
   );
 }

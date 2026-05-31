@@ -1,0 +1,195 @@
+/* ═══════════════════════════════════════════════════════════
+   Sheet — 统一组件，同时处理桌面端和移动端的所有方向
+   ═══════════════════════════════════════════════════════════ */
+
+/* Overlay — 遮罩层，阻止事件穿透到背景，但不响应点击关闭 */
+.vx-sheet__overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--vx-glass-scrim);
+  backdrop-filter: blur(8px) saturate(1.08);
+  -webkit-backdrop-filter: blur(8px) saturate(1.08);
+  z-index: var(--vx-z-sheet-overlay);
+  animation: vx-sheet-overlay-in 200ms ease both;
+}
+.vx-sheet__overlay--exiting {
+  animation: vx-sheet-overlay-out 200ms ease both;
+}
+
+/* Sheet 面板 */
+.vx-sheet {
+  position: fixed;
+  z-index: var(--vx-z-sheet);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
+  box-shadow: var(--vx-glass-shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 方向 ──────────────────────────────────────────────────── */
+
+.vx-sheet--right {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 90vw);
+  border-left: 1px solid var(--vx-glass-border);
+  animation: vx-sheet-slide-right-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.vx-sheet--right.vx-sheet--exiting {
+  animation: vx-sheet-slide-right-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.vx-sheet--left {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(420px, 90vw);
+  border-right: 1px solid var(--vx-glass-border);
+  animation: vx-sheet-slide-left-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.vx-sheet--left.vx-sheet--exiting {
+  animation: vx-sheet-slide-left-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.vx-sheet--top {
+  top: 0;
+  left: 0;
+  right: 0;
+  max-height: 60vh;
+  border-bottom: 1px solid var(--vx-glass-border);
+  animation: vx-sheet-slide-top-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.vx-sheet--top.vx-sheet--exiting {
+  animation: vx-sheet-slide-top-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.vx-sheet--bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 90dvh;
+  border-top: 1px solid var(--vx-glass-border);
+  border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
+  animation: vx-sheet-slide-bottom-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.vx-sheet--bottom.vx-sheet--exiting {
+  animation: vx-sheet-slide-bottom-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+/* action 变体 — 底部操作列表 */
+.vx-sheet--action {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 85dvh;
+  border-top: 1px solid var(--vx-glass-border);
+  border-radius: var(--vx-radius-xl) var(--vx-radius-xl) 0 0;
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
+  animation: vx-sheet-slide-bottom-in 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.vx-sheet--action.vx-sheet--exiting {
+  animation: vx-sheet-slide-bottom-out 280ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+/* ── 关闭按钮 ──────────────────────────────────────────────── */
+.vx-sheet__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--vx-radius);
+  background: transparent;
+  color: var(--vx-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 160ms ease, color 160ms ease;
+  z-index: 1;
+  outline: none;
+}
+.vx-sheet__close:focus-visible {
+  outline: 2px solid var(--vx-primary);
+  outline-offset: 2px;
+}
+.vx-sheet__close:hover {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+
+/* ── 头部 ──────────────────────────────────────────────────── */
+.vx-sheet__header {
+  padding: 16px 20px 12px;
+  flex: 0 0 auto;
+  border-bottom: 1px solid var(--vx-border);
+}
+.vx-sheet__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--vx-text);
+}
+.vx-sheet__description {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--vx-text-secondary);
+  line-height: 1.5;
+}
+
+/* ── 内容 ──────────────────────────────────────────────────── */
+.vx-sheet__body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px 20px;
+}
+.vx-sheet__body--action {
+  padding: 8px 0;
+}
+
+/* ── 底部（确认按钮） ────────────────────────────────────────── */
+.vx-sheet__footer {
+  display: flex;
+  justify-content: center;
+  padding: 8px 20px max(env(safe-area-inset-bottom, 0px), 16px);
+  flex: 0 0 auto;
+  border-top: 1px solid var(--vx-border);
+}
+.vx-sheet__confirm {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: var(--vx-radius);
+  background: var(--vx-primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.vx-sheet__confirm:active {
+  background: var(--vx-primary-strong);
+}
+.vx-sheet__confirm:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Sheet keyframes ──────────────────────────────────────── */
+@keyframes vx-sheet-overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes vx-sheet-overlay-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes vx-sheet-slide-right-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes vx-sheet-slide-right-out { from { transform: translateX(0); } to { transform: translateX(100%); } }
+@keyframes vx-sheet-slide-left-in { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes vx-sheet-slide-left-out { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+@keyframes vx-sheet-slide-top-in { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+@keyframes vx-sheet-slide-top-out { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+@keyframes vx-sheet-slide-bottom-in { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes vx-sheet-slide-bottom-out { from { transform: translateY(0); } to { transform: translateY(100%); } }

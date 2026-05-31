@@ -1,0 +1,29 @@
+/* ═══════════════════════════════════════════════════════════
+   Pagination
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-pagination {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vx-pagination__btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--vx-border);
+  border-radius: calc(var(--vx-radius) * 0.75);
+  color: var(--vx-text);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 100ms, border-color 100ms, color 100ms;
+}
+.vx-pagination__btn:hover:not(:disabled) { background: var(--vx-bg-accent); border-color: var(--vx-border-strong); }
+.vx-pagination__btn--active { background: var(--vx-primary); border-color: var(--vx-primary); color: #fff; font-weight: 600; }
+.vx-pagination__btn--active:hover { background: var(--vx-primary); }
+.vx-pagination__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.vx-pagination__ellipsis { padding: 0 4px; color: var(--vx-text-muted); font-size: 14px; }

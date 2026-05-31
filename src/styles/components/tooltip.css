@@ -1,0 +1,28 @@
+/* ═══════════════════════════════════════════════════════════
+   Tooltip
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.vx-tooltip {
+  position: absolute;
+  z-index: 1000;
+  white-space: nowrap;
+  background: var(--vx-text);
+  color: var(--vx-bg);
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: calc(var(--vx-radius) * 0.75);
+  pointer-events: none;
+}
+@keyframes vx-tooltip-fade-in-x { from { opacity: 0; transform: translateX(-50%) scale(0.95); } to { opacity: 1; transform: translateX(-50%) scale(1); } }
+@keyframes vx-tooltip-fade-in-y { from { opacity: 0; transform: translateY(-50%) scale(0.95); } to { opacity: 1; transform: translateY(-50%) scale(1); } }
+@keyframes vx-fade-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes vx-fade-out { from { opacity: 1; } to { opacity: 0; } }
+.vx-tooltip--top    { bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); animation: vx-tooltip-fade-in-x 120ms ease; }
+.vx-tooltip--bottom { top: calc(100% + 6px); left: 50%; transform: translateX(-50%); animation: vx-tooltip-fade-in-x 120ms ease; }
+.vx-tooltip--left   { right: calc(100% + 6px); top: 50%; transform: translateY(-50%); animation: vx-tooltip-fade-in-y 120ms ease; }
+.vx-tooltip--right  { left: calc(100% + 6px); top: 50%; transform: translateY(-50%); animation: vx-tooltip-fade-in-y 120ms ease; }

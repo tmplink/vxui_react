@@ -1,0 +1,187 @@
+/* ═══════════════════════════════════════════════════════════
+   Button
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-button {
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
+  font-size: var(--vx-ctrl-fs-md);
+  border: 1px solid transparent;
+  border-radius: var(--vx-radius);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.vx-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 22%, transparent);
+}
+
+.vx-button svg {
+  flex: 0 0 auto;
+}
+
+.vx-button--sm {
+  min-height: var(--vx-ctrl-h-sm);
+  padding: 0 var(--vx-ctrl-px-sm);
+  font-size: var(--vx-ctrl-fs-sm);
+}
+
+.vx-button--md {
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
+  font-size: var(--vx-ctrl-fs-md);
+}
+
+.vx-button--lg {
+  min-height: var(--vx-ctrl-h-lg);
+  padding: 0 var(--vx-ctrl-px-lg);
+  font-size: var(--vx-ctrl-fs-lg);
+}
+
+.vx-button--full-width {
+  width: 100%;
+}
+
+.vx-button--square {
+  border-radius: 0;
+}
+
+.vx-button--pill {
+  border-radius: 9999px;
+}
+
+.vx-button--circle {
+  border-radius: 9999px;
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+/* Loading state */
+.vx-button--loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.75;
+}
+
+.vx-button__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: vx-spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes vx-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Variants */
+.vx-button--gradient {
+  color: #ffffff;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-color: transparent;
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4);
+}
+
+.vx-button--gradient:hover {
+  box-shadow: 0 8px 22px rgba(79, 70, 229, 0.5);
+  transform: translateY(-1px);
+}
+
+.vx-button--gradient:active {
+  transform: scale(0.96);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.vx-button--solid {
+  color: #ffffff;
+  background: var(--vx-primary);
+  border-color: var(--vx-primary);
+}
+
+.vx-button--solid:hover {
+  background: var(--vx-primary-strong);
+  border-color: var(--vx-primary-strong);
+}
+
+.vx-button--secondary {
+  color: var(--vx-text);
+  border-color: var(--vx-border);
+  background: var(--vx-surface);
+}
+
+.vx-button--secondary:hover {
+  background: var(--vx-surface-hover);
+  border-color: var(--vx-border-strong);
+}
+
+.vx-button--ghost {
+  color: var(--vx-text-secondary);
+  background: transparent;
+  border-color: transparent;
+}
+
+.vx-button--ghost:hover {
+  color: var(--vx-text);
+  background: var(--vx-bg-accent);
+}
+
+.vx-button--outline {
+  color: var(--vx-text);
+  background: transparent;
+  border-color: var(--vx-border-strong);
+}
+
+.vx-button--outline:hover {
+  background: var(--vx-bg-accent);
+}
+
+.vx-button--soft {
+  color: var(--vx-primary-strong);
+  background: var(--vx-primary-soft);
+  border-color: transparent;
+}
+
+.vx-button--soft:hover {
+  background: color-mix(in srgb, var(--vx-primary-soft) 80%, black);
+}
+
+.vx-button--primary-outline {
+  color: var(--vx-primary);
+  background: transparent;
+  border-color: var(--vx-primary);
+}
+
+.vx-button--primary-outline:hover {
+  background: var(--vx-primary-soft);
+}
+
+.vx-button--danger {
+  color: #ffffff;
+  background: var(--vx-danger);
+  border-color: var(--vx-danger);
+}
+
+.vx-button--danger:hover {
+  background: color-mix(in srgb, var(--vx-danger) 80%, black);
+  border-color: color-mix(in srgb, var(--vx-danger) 80%, black);
+}
+
+.vx-button--danger-outline {
+  color: var(--vx-danger);
+  background: transparent;
+  border-color: color-mix(in srgb, var(--vx-danger) 50%, transparent);
+}
+
+.vx-button--danger-outline:hover {
+  background: color-mix(in srgb, var(--vx-danger) 10%, transparent);
+  border-color: var(--vx-danger);
+}
