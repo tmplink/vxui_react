@@ -70,6 +70,7 @@
 @import './components/code-block.css';
 @import './components/command-palette.css';
 @import './components/language-switcher.css';
+@import './components/docs-toolbar.css';
 
 /* ═══════════════════════════════════════════════════════════
    以下样式没有对应的独立 CSS 文件，保留在此

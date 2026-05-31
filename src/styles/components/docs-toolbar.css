@@ -1,0 +1,112 @@
+/**
+ * Docs Toolbar — 文档页面顶部工具栏样式
+ * 使用 flex 布局实现弹性隐藏，无需 JS 硬编码宽度计算
+ */
+
+/* ── 工具栏容器 ─────────────────────────────────────── */
+.vx-docs-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--vx-spacing-xs, 10px);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── 工具栏按钮基础样式 ───────────────────────────── */
+.vx-docs-toolbar .vx-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+/* ── 响应式断点：逐步隐藏按钮 ─────────────────────── */
+
+/* > 1280px: 显示所有按钮（默认） */
+@media (min-width: 1280px) {
+  .vx-docs-toolbar .vx-docs-toolbar__item--back,
+  .vx-docs-toolbar .vx-docs-toolbar__item--search,
+  .vx-docs-toolbar .vx-docs-toolbar__item--density,
+  .vx-docs-toolbar .vx-docs-toolbar__item--theme,
+  .vx-docs-toolbar .vx-docs-toolbar__item--account,
+  .vx-docs-toolbar .vx-docs-toolbar__item--language {
+    display: flex !important;
+  }
+  
+  .vx-docs-toolbar .vx-docs-toolbar__more {
+    display: none !important;
+  }
+}
+
+/* 960px ~ 1279px: 隐藏语言按钮 */
+@media (max-width: 1279px) and (min-width: 960px) {
+  .vx-docs-toolbar .vx-docs-toolbar__item--language {
+    display: none !important;
+  }
+}
+
+/* 768px ~ 959px: 隐藏语言和账户按钮 */
+@media (max-width: 959px) and (min-width: 768px) {
+  .vx-docs-toolbar .vx-docs-toolbar__item--language,
+  .vx-docs-toolbar .vx-docs-toolbar__item--account {
+    display: none !important;
+  }
+}
+
+/* < 768px: 只保留返回、搜索和更多菜单 */
+@media (max-width: 767px) {
+  .vx-docs-toolbar .vx-docs-toolbar__item--density,
+  .vx-docs-toolbar .vx-docs-toolbar__item--theme,
+  .vx-docs-toolbar .vx-docs-toolbar__item--account,
+  .vx-docs-toolbar .vx-docs-toolbar__item--language {
+    display: none !important;
+  }
+}
+
+/* ── 更多菜单按钮 ─────────────────────────────────── */
+.vx-docs-toolbar .vx-docs-toolbar__more {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ── 搜索按钮中的 kbd ────────────────────────────── */
+.vx-search-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 4px;
+  margin-left: 8px;
+  font-size: 11px;
+  line-height: 1;
+  font-family: var(--vx-font-mono, monospace);
+  color: var(--vx-text-tertiary, #6b7280);
+  background: var(--vx-surface-raised, #f3f4f6);
+  border: 1px solid var(--vx-border, #e5e7eb);
+  border-radius: 4px;
+}
+
+/* ── 紧凑模式下的工具栏 ──────────────────────────── */
+.vx-docs-toolbar--compact {
+  gap: 6px;
+  
+  .vx-btn {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
+
+/* ── 平板横屏模式下的工具栏 ──────────────────────── */
+.vx-docs-toolbar--tablet-landscape {
+  gap: 6px;
+  
+  .vx-btn {
+    font-size: 13px;
+  }
+}

@@ -2,7 +2,7 @@
  * DocPage — 文档详情页组件
  * 从 App.tsx 的 renderDocPage 提取
  */
-import type { ReactNode, RefObject } from 'react';
+import type { ReactNode, RefObject, RefCallback } from 'react';
 import { Badge } from '../components/Badge';
 import { Button } from '../components/Button';
 import { CodeBlock } from '../components/CodeBlock';
@@ -23,7 +23,7 @@ interface DocPageProps {
   renderCodeBlock: (code: string, language?: 'tsx' | 'bash') => ReactNode;
   renderTemplateLauncher: (pageKey: Extract<PageKey, 'home-page' | 'login-page' | 'register-page' | 'error-page' | 'privacy-policy' | 'terms-of-service'>) => ReactNode;
   navigate: (route: AppRoute) => void;
-  docHeaderRef: RefObject<HTMLElement | null>;
+  docHeaderRef: RefObject<HTMLElement | null> | RefCallback<HTMLElement | null>;
 }
 
 export function DocPage({

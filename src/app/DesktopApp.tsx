@@ -35,6 +35,7 @@ import { DocsHome } from './DocsHome';
 import { DocPage } from './DocPage';
 import { getDocsCopy, getDocsHomeCopy } from './doc-copy';
 import { createDocHelpers } from './doc-helpers';
+import { useIntersectionInView } from '../hooks/useIntersectionInView';
 
 interface DesktopAppProps {
   route: AppRoute;
@@ -82,9 +83,7 @@ export function DesktopApp({
   const [timeValue, setTimeValue] = useState<string | undefined>(undefined);
   const [paginationDemoPage, setPaginationDemoPage] = useState(1);
   const docsTopbarRef = useRef<HTMLElement | null>(null);
-  const docHeaderRef = useRef<HTMLElement | null>(null);
-  const [docsTopbarWidth, setDocsTopbarWidth] = useState<number>(() => (typeof window === 'undefined' ? 0 : window.innerWidth));
-  const [isDocHeaderInView, setIsDocHeaderInView] = useState(true);
+  const { ref: docHeaderRef, isInView: isDocHeaderInView } = useIntersectionInView({ rootMargin: '-72px 0px 0px 0px' });
 
   const copy = getDocsCopy(isZh);
   const docsHomeCopy = getDocsHomeCopy(isZh);
@@ -96,34 +95,18 @@ export function DesktopApp({
   const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
   const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
 
-  const isTabletLandscape = isTablet && !isTabletPortrait;
-  const TOOLBAR_OVERHEAD = isTabletLandscape ? 40 : (isTabletPortrait ? 130 : 246);
-  const TOOLBAR_GAP = 10;
-  const MORE_BTN_WIDTH = 92;
-  const TOOLBAR_ITEM_WIDTHS = [130, 110, 170, 105, 95, 125];
-  const availableForActions = docsTopbarWidth > 0 ? docsTopbarWidth - TOOLBAR_OVERHEAD : 9999;
-  const totalAllWidths = TOOLBAR_ITEM_WIDTHS.reduce((sum, w, i) => sum + w + (i > 0 ? TOOLBAR_GAP : 0), 0);
-  let docsToolbarVisibleCount: number;
-  if (totalAllWidths <= availableForActions) {
-    docsToolbarVisibleCount = TOOLBAR_ITEM_WIDTHS.length;
-  } else {
-    const inlineBudget = availableForActions - MORE_BTN_WIDTH - TOOLBAR_GAP;
-    let acc = 0;
-    docsToolbarVisibleCount = 0;
-    for (const w of TOOLBAR_ITEM_WIDTHS) {
-      const needed = docsToolbarVisibleCount === 0 ? w : acc + TOOLBAR_GAP + w;
-      if (needed <= inlineBudget) { acc = needed; docsToolbarVisibleCount++; } else break;
-    }
-  }
-  const showBack = docsToolbarVisibleCount >= 1;
-  const showSearch = docsToolbarVisibleCount >= 2;
-  const showDensity = docsToolbarVisibleCount >= 3;
-  const showThemeBtn = docsToolbarVisibleCount >= 4;
-  const showAccountBtn = docsToolbarVisibleCount >= 5;
-  const showLanguageBtn = docsToolbarVisibleCount >= 6;
-  const showMoreMenu = docsToolbarVisibleCount < TOOLBAR_ITEM_WIDTHS.length;
+  // CSS handles responsive visibility via media queries in docs-toolbar.css
+  // All toolbar items are always rendered — JS no longer calculates widths
+  const showBack = true;
+  const showSearch = true;
+  const showDensity = true;
+  const showThemeBtn = true;
+  const showAccountBtn = true;
+  const showLanguageBtn = true;
+  const showMoreMenu = false;
 
   const densityLabel = isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`;
+
   const themeMenuItems = themeEntries.map(([themeName, definition]) => ({
     label: `${definition.label ?? themeName}${theme === themeName ? (isZh ? ' (当前)' : ' (current)') : ''}`,
     icon: <Palette size={14} />,
@@ -208,37 +191,6 @@ export function DesktopApp({
     label: getDocsGroupLabel(group.key, isZh),
     description: getDocsGroupDescription(group.key, isZh),
   }));
-
-  useEffect(() => {
-    const target = docsTopbarRef.current;
-    if (!target) return;
-    const syncWidth = () => setDocsTopbarWidth(target.getBoundingClientRect().width);
-    syncWidth();
-    if (typeof ResizeObserver === 'undefined') return;
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      setDocsTopbarWidth(entry ? entry.contentRect.width : target.getBoundingClientRect().width);
-    });
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!isDocDetailPage) { setIsDocHeaderInView(true); return; }
-    setIsDocHeaderInView(true);
-  }, [isDocDetailPage, activePage]);
-
-  useEffect(() => {
-    if (!isDocDetailPage) return;
-    const target = docHeaderRef.current;
-    if (!target || typeof IntersectionObserver === 'undefined') { setIsDocHeaderInView(true); return; }
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsDocHeaderInView(entry.isIntersecting),
-      { rootMargin: '-72px 0px 0px 0px' },
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, [isDocDetailPage, activePage]);
 
   // ── renderSample ──
   function renderSample(pageKey: PageKey): ReactNode {
