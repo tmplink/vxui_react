@@ -51,6 +51,7 @@ export interface Translations {
     separator: string;
     resizable: string;
     typography: string;
+    'typography-base': string;
     badge: string;
     avatar: string;
     skeleton: string;
@@ -335,6 +336,7 @@ export const en: Translations = {
     separator: 'Separator',
     resizable: 'Resizable',
     typography: 'Typography',
+    'typography-base': 'Typography Base',
     badge: 'Badge',
     avatar: 'Avatar',
     skeleton: 'Skeleton',
@@ -1306,6 +1308,29 @@ export const en: Translations = {
         { prop: 'Text.truncate', type: 'boolean', default: 'false', description: 'Truncate with ellipsis on overflow.' },
       ],
     },
+    'typography-base': {
+      section: 'Content',
+      title: 'Typography Base',
+      description: 'Ready-to-use typography CSS utilities and React components inspired by Bootstrap naming conventions. Ideal for articles, documentation, and API reference pages.',
+      guidance: [
+        'Typography styles are loaded automatically when you import "vxui-react".',
+        'Use className directly (e.g., vx-article, vx-section) or use React components (e.g., Article, Section).',
+        'All colors use CSS variables and automatically adapt to light/dark themes.',
+        'Built-in responsive breakpoints ensure a consistent experience on mobile and desktop.',
+      ],
+      props: [
+        { prop: 'Article', type: 'Component', description: 'Article container with standard document layout.' },
+        { prop: 'ArticleHeader', type: 'Component', description: 'Article header containing title and description.' },
+        { prop: 'ArticleTitle', type: 'Component', description: 'Article title (h1).' },
+        { prop: 'ArticleBody', type: 'Component', description: 'Article body container.' },
+        { prop: 'Section', type: 'Component', description: 'Document section with anchor support.' },
+        { prop: 'SectionHeading', type: 'Component', description: 'Section heading (h2) with optional anchor link.' },
+        { prop: 'Pager', type: 'Component', description: 'Previous/next page navigation.' },
+        { prop: 'PropsTable', type: 'Component', description: 'API props reference table.' },
+        { prop: 'ArticleEmptyState', type: 'Component', description: 'Empty state display.' },
+        { prop: 'StatsGrid', type: 'Component', description: 'Statistics metrics grid.' },
+      ],
+    },
     'date-pickers': {
       section: 'Forms',
       title: 'Date Pickers',
@@ -1454,6 +1479,7 @@ export const zh: Translations = {
     separator: '分隔线',
     resizable: '可拖拽面板',
     typography: '排版',
+    'typography-base': '排版基础',
     badge: '徽章',
     avatar: '头像',
     skeleton: '骨架屏',
@@ -2420,6 +2446,29 @@ export const zh: Translations = {
         { prop: 'Text.size', type: '"sm" | "base" | "lg" | "xl"', default: '"base"', description: '字号。' },
         { prop: 'Text.weight', type: '"normal" | "medium" | "semibold" | "bold"', default: '"normal"', description: '字重。' },
         { prop: 'Text.truncate', type: 'boolean', default: 'false', description: '超出时以省略号截断。' },
+      ],
+    },
+    'typography-base': {
+      section: '内容展示',
+      title: '排版基础',
+      description: '开箱即用的排版 CSS 工具类和 React 组件，参考 Bootstrap 命名风格，适用于文章、文档、API 参考等页面。',
+      guidance: [
+        '排版样式通过 import "vxui-react" 自动加载，无需额外配置。',
+        '可直接使用 className（如 vx-article、vx-section），也可使用 React 组件（如 Article、Section）。',
+        '所有颜色使用 CSS 变量，自动适配亮/暗主题。',
+        '内置响应式断点，移动端和桌面端体验统一。',
+      ],
+      props: [
+        { prop: 'Article', type: 'Component', description: '文章容器，提供标准文档排版布局。' },
+        { prop: 'ArticleHeader', type: 'Component', description: '文章头部，包含标题和描述。' },
+        { prop: 'ArticleTitle', type: 'Component', description: '文章标题（h1）。' },
+        { prop: 'ArticleBody', type: 'Component', description: '文章正文容器。' },
+        { prop: 'Section', type: 'Component', description: '文档章节，支持锚点跳转。' },
+        { prop: 'SectionHeading', type: 'Component', description: '章节标题（h2），可选锚点链接。' },
+        { prop: 'Pager', type: 'Component', description: '上下页导航。' },
+        { prop: 'PropsTable', type: 'Component', description: 'API 属性表格。' },
+        { prop: 'ArticleEmptyState', type: 'Component', description: '空状态展示。' },
+        { prop: 'StatsGrid', type: 'Component', description: '统计指标网格。' },
       ],
     },
     'date-pickers': {

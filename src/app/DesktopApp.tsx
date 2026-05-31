@@ -103,7 +103,7 @@ export function DesktopApp({
   const showThemeBtn = true;
   const showAccountBtn = true;
   const showLanguageBtn = true;
-  const showMoreMenu = false;
+  const showMoreMenu = true;
 
   const densityLabel = isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`;
 
@@ -212,7 +212,7 @@ export function DesktopApp({
       }
       case 'shell-sidebar':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <div style={{ background: 'var(--vx-surface)', border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-lg)', overflow: 'hidden' }}>
               <ShellNav label={isZh ? '导航示例' : 'Navigation demo'}>
                 <ShellNavSection title={isZh ? '快速开始' : 'Getting started'}>
@@ -236,9 +236,9 @@ export function DesktopApp({
         );
       case 'grid-page':
         return (
-          <div className="vx-doc-stat-grid">
+          <div className="vx-stats-grid">
             {metricCards.map((m) => (
-              <div key={m.label} className="vx-doc-stat-grid__item">
+              <div key={m.label} className="vx-stats-grid__item">
                 <span>{m.label}</span><strong>{m.value}</strong><small>{m.hint}</small>
               </div>
             ))}
@@ -246,19 +246,19 @@ export function DesktopApp({
         );
       case 'button':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <Button>{isZh ? '主要按钮' : 'Primary'}</Button>
               <Button variant="secondary">{isZh ? '次级按钮' : 'Secondary'}</Button>
               <Button variant="ghost">{isZh ? '幽灵按钮' : 'Ghost'}</Button>
               <Button variant="danger">{isZh ? '危险按钮' : 'Danger'}</Button>
             </div>
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <Button size="sm">{isZh ? '小' : 'Small'}</Button>
               <Button size="md">{isZh ? '中' : 'Medium'}</Button>
               <Button size="lg">{isZh ? '大' : 'Large'}</Button>
             </div>
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <Button shape="square">{isZh ? '直角' : 'Square'}</Button>
               <Button shape="rect">{isZh ? '圆角' : 'Rounded'}</Button>
               <Button shape="pill">{isZh ? '胶囊' : 'Pill'}</Button>
@@ -269,19 +269,19 @@ export function DesktopApp({
         );
       case 'elements':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline">
               <Button><Zap size={16} />{isZh ? '主要操作' : 'Primary action'}</Button>
               <Button variant="secondary">{isZh ? '次级操作' : 'Secondary'}</Button>
               <Button variant="ghost">{isZh ? '幽灵按钮' : 'Ghost'}</Button>
             </div>
-            <div className="vx-doc-preview-inline">
+            <div className="vx-preview-inline">
               <Badge variant="accent">Brand</Badge><Badge variant="success">Live</Badge><Badge variant="warning">Beta</Badge>
             </div>
             <Alert title={isZh ? '统一风格' : 'Unified styling'} variant="info">
               {isZh ? '基础元素在所有页面共享同一套颜色、圆角和交互节奏。' : 'Core elements now share the same color, radius, and interaction rhythm.'}
             </Alert>
-            <div className="vx-doc-preview-stack__group">
+            <div className="vx-preview-stack__group">
               <Heading level={1}>{isZh ? 'H1 标题' : 'Heading 1'}</Heading>
               <Heading level={2}>{isZh ? 'H2 标题' : 'Heading 2'}</Heading>
               <Heading level={3}>{isZh ? 'H3 标题' : 'Heading 3'}</Heading>
@@ -292,7 +292,7 @@ export function DesktopApp({
         );
       case 'form-controls':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Input label={isZh ? '项目名称' : 'Project name'} value="VXUI Workspace" readOnly />
             <Select label={copy.releaseLabel} value={releaseTrack}
               onChange={(v) => { if (v) onReleaseTrackChange(v as ReleaseTrack); }}
@@ -321,8 +321,8 @@ export function DesktopApp({
         );
       case 'form-inputs':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-stack__group">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-stack__group">
               <Checkbox checked={checkboxA} label={isZh ? '默认启用响应式抽屉' : 'Enable responsive drawer'} onChange={(e) => setCheckboxA(e.target.checked)} />
               <Checkbox checked={checkboxB} label={isZh ? '显示调试边界' : 'Show debug boundaries'} onChange={(e) => setCheckboxB(e.target.checked)} />
             </div>
@@ -334,7 +334,7 @@ export function DesktopApp({
             <SegmentedControl value={radioValue} onChange={setRadioValue} fullWidth
               options={[{ label: <><Monitor size={16} />{isZh ? '跟随系统' : 'System'}</>, value: 'system' }, { label: <><Sun size={16} />{isZh ? '浅色' : 'Light'}</>, value: 'comfortable' }, { label: <><Moon size={16} />{isZh ? '深色' : 'Dark'}</>, value: 'compact' }]} />
             <Slider label={isZh ? '文档完成度' : 'Coverage'} max={100} min={0} onChange={(e) => setSliderValue(Number(e.target.value))} showValue value={sliderValue} />
-            <div className="vx-doc-preview-stack__group" style={{ marginTop: 24 }}>
+            <div className="vx-preview-stack__group" style={{ marginTop: 24 }}>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                 <Toggle data-state="on">{isZh ? '自动保存' : 'Auto-save'}</Toggle>
                 <Toggle>{isZh ? '多标签模式' : 'Multiple tabs'}</Toggle>
@@ -349,7 +349,7 @@ export function DesktopApp({
         );
       case 'navigation':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Tabs defaultValue="library">
               <TabsList>
                 <TabsTrigger value="library">{copy.libraryTitle}</TabsTrigger>
@@ -377,8 +377,8 @@ export function DesktopApp({
         );
       case 'empty-states':
         return (
-          <div className="vx-doc-empty-state">
-            <div className="vx-doc-empty-state__icon"><AlertTriangle size={20} /></div>
+          <div className="vx-empty">
+            <div className="vx-empty__icon"><AlertTriangle size={20} /></div>
             <strong>{isZh ? '这里暂时没有内容' : 'Nothing lives here yet'}</strong>
             <p>{isZh ? '空状态与错误页共享同一套视觉策略。' : 'Empty states share the same visual language.'}</p>
             <Button variant="secondary" onClick={() => onNavigate({ view: 'error' })}>{copy.openPage}</Button>
@@ -386,7 +386,7 @@ export function DesktopApp({
         );
       case 'toasts':
         return (
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Button onClick={() => push({ tone: 'info', title: isZh ? '文档树已同步' : 'Docs tree synced', description: isZh ? '所有页面已映射到统一壳层。' : 'Every page is mapped to the unified shell.' })}>
               {isZh ? '信息提示' : 'Info toast'}
             </Button>
@@ -397,7 +397,7 @@ export function DesktopApp({
         );
       case 'feedback':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Alert title={isZh ? '迁移进度' : 'Migration progress'} variant="info">{isZh ? '响应式壳层、模板页面和文档内容库已经收敛到同一套运行时。' : 'The responsive shell, template pages, and docs library now share the same runtime.'}</Alert>
             <Progress label={isZh ? '默认' : 'Default'} showLabel value={sliderValue} />
             <Progress label={isZh ? '成功' : 'Success'} showLabel value={sliderValue} variant="success" />
@@ -405,15 +405,15 @@ export function DesktopApp({
             <Progress label={isZh ? '危险' : 'Danger'} showLabel value={sliderValue} variant="danger" />
             <Progress label={isZh ? '炫彩' : 'Rainbow'} showLabel value={sliderValue} variant="rainbow" size="lg" />
             <div className="vx-doc-skeleton-grid"><Skeleton lines={3} variant="text" /><Skeleton height={92} /></div>
-            <div className="vx-doc-preview-stack__group">
-              <div className="vx-doc-preview-inline"><Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" /></div>
+            <div className="vx-preview-stack__group">
+              <div className="vx-preview-inline"><Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" /></div>
               <Stepper currentStep={2} steps={[{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }]} />
             </div>
           </div>
         );
       case 'overlays':
         return (
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Dialog trigger={<Button variant="secondary">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
               title={isZh ? '删除项目' : 'Delete project'} description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
               confirmLabel={isZh ? '删除' : 'Delete'} cancelLabel={isZh ? '取消' : 'Cancel'} confirmVariant="danger">
@@ -432,7 +432,7 @@ export function DesktopApp({
         );
       case 'nav-layout':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Breadcrumb items={[{ label: 'Home' }, { label: 'Components' }, { label: 'Navigation' }]} />
             <Menubar menus={[{ label: 'File', items: [{ label: 'New', shortcut: '⌘N' }, { label: 'Open...', shortcut: '⌘O' }, { label: 'Exit', danger: true }] }, { label: 'Edit', items: [{ label: 'Undo', shortcut: '⌘Z' }, { label: 'Redo', shortcut: '⇧⌘Z' }] }]} />
             <Separator />
@@ -448,8 +448,8 @@ export function DesktopApp({
         );
       case 'data-display':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline"><Avatar name="Alice Chen" size="sm" /><Avatar name="Bo Wang" size="md" /><Avatar name="Cora Lin" size="lg" /></div>
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline"><Avatar name="Alice Chen" size="sm" /><Avatar name="Bo Wang" size="md" /><Avatar name="Cora Lin" size="lg" /></div>
             <Table columns={[{ key: 'name', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.name }, { key: 'scope', header: 'Scope', accessor: (r: any) => r.scope }]}
               data={[{ name: isZh ? '设计系统' : 'Design system', scope: isZh ? '公共组件' : 'Shared primitives' }, { name: isZh ? '文档库' : 'Documentation', scope: isZh ? '内容导航' : 'Content navigation' }]} />
             <Timeline items={[{ title: isZh ? '已创建' : 'Created', time: '10:00 AM' }, { title: isZh ? '处理中' : 'Processing', time: '10:05 AM' }, { title: isZh ? '已完成' : 'Completed', time: '10:15 AM' }]} />
@@ -461,7 +461,7 @@ export function DesktopApp({
         );
       case 'mobile-list':
         return (
-          <div className="vx-doc-preview-stack" style={{ maxWidth: 320, border: '1px solid var(--vx-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+          <div className="vx-preview-stack" style={{ maxWidth: 320, border: '1px solid var(--vx-color-border)', borderRadius: 8, overflow: 'hidden' }}>
             <MobileList>
               <MobileListSection title={isZh ? '账户' : 'Account'}>
                 <MobileListItem label={isZh ? '个人资料' : 'Profile'} chevron onClick={() => {}} />
@@ -494,8 +494,8 @@ export function DesktopApp({
         return renderTemplateLauncher(pageKey);
       case 'command-palette':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline">
               <Button onClick={() => onSearchOpenChange(true)}>
                 {isZh ? '打开搜索' : 'Open search'}<kbd className="vx-search-kbd">⌘K</kbd>
               </Button>
@@ -509,8 +509,8 @@ export function DesktopApp({
         return renderCodeBlock(isZh ? `import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>点击我</Button>;\n}` : `import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>Click me</Button>;\n}`, 'tsx');
       case 'language-switcher':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline"><LanguageSwitcher variant="inline" /></div>
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline"><LanguageSwitcher variant="inline" /></div>
             <Alert variant="info" title={isZh ? '全局语言切换' : 'Global language switch'}>
               {isZh ? '切换语言后，文档内所有 UI 文案同步更新。' : 'Switching locale updates all UI copy across the entire docs surface.'}
             </Alert>
@@ -518,7 +518,7 @@ export function DesktopApp({
         );
       case 'scroll-area':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <ScrollArea maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
               {Array.from({ length: 20 }, (_, i) => (<div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>{isZh ? `日志行 ${i + 1}` : `Log line ${i + 1}`}</div>))}
             </ScrollArea>
@@ -526,7 +526,7 @@ export function DesktopApp({
         );
       case 'separator':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
               <span>{isZh ? '左' : 'Left'}</span><Separator orientation="vertical" style={{ height: 24 }} /><span>{isZh ? '中' : 'Center'}</span><Separator orientation="vertical" style={{ height: 24 }} /><span>{isZh ? '右' : 'Right'}</span>
             </div>
@@ -536,19 +536,19 @@ export function DesktopApp({
         );
       case 'timeline':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Timeline items={[{ title: isZh ? '订单已创建' : 'Order created', time: '09:42', status: 'success' }, { title: isZh ? '支付成功' : 'Payment confirmed', time: '09:43', status: 'info' }, { title: isZh ? '配送中' : 'Shipping', time: '10:15', status: 'warning' }, { title: isZh ? '已签收' : 'Delivered', time: '14:30', status: 'default' }]} />
           </div>
         );
       case 'tree-view':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <TreeView nodes={[{ id: 'src', label: 'src', children: [{ id: 'components', label: 'components', children: [{ id: 'btn', label: 'Button.tsx' }, { id: 'card', label: 'Card.tsx' }] }, { id: 'pages', label: 'pages', children: [{ id: 'home', label: 'Home.tsx' }, { id: 'about', label: 'About.tsx' }] }] }, { id: 'public', label: 'public', children: [{ id: 'index', label: 'index.html' }] }]} defaultExpanded={['src', 'components', 'pages']} />
           </div>
         );
       case 'carousel':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <div style={{ maxWidth: 400 }}>
               <Carousel items={[
                 <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
@@ -560,8 +560,8 @@ export function DesktopApp({
         );
       case 'toggle':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline" style={{ marginBottom: 12 }}>
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline" style={{ marginBottom: 12 }}>
               <Toggle defaultPressed={false}><Text size="sm">{isZh ? '加粗' : 'Bold'}</Text></Toggle>
               <Toggle><Text size="sm">{isZh ? '斜体' : 'Italic'}</Text></Toggle>
               <Toggle><Text size="sm">{isZh ? '下划线' : 'Underline'}</Text></Toggle>
@@ -571,29 +571,29 @@ export function DesktopApp({
         );
       case 'rating':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline" style={{ flexDirection: 'column', gap: 16 }}>
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline" style={{ flexDirection: 'column', gap: 16 }}>
               <Rating defaultValue={3.5} allowHalf /><Rating defaultValue={4} size="sm" /><Rating defaultValue={5} size="lg" readOnly />
             </div>
           </div>
         );
       case 'label':
         return (
-          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 12, maxWidth: 320 }}>
+          <div className="vx-preview-stack" style={{ display: 'grid', gap: 12, maxWidth: 320 }}>
             <div style={{ display: 'grid', gap: 4 }}><Label required>{isZh ? '电子邮箱' : 'Email'}</Label><Input placeholder="name@example.com" /></div>
             <div style={{ display: 'grid', gap: 4 }}><Label>{isZh ? '备注（选填）' : 'Notes (optional)'}</Label><Input placeholder={isZh ? '添加备注...' : 'Add notes...'} /></div>
           </div>
         );
       case 'date-pickers':
         return (
-          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 16, maxWidth: 320 }}>
+          <div className="vx-preview-stack" style={{ display: 'grid', gap: 16, maxWidth: 320 }}>
             <DatePicker label={isZh ? '开始日期' : 'Start date'} /><DatePicker label={isZh ? '结束日期' : 'End date'} weekStartsOnMonday />
           </div>
         );
       case 'avatar':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline" style={{ gap: 16, alignItems: 'center' }}>
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline" style={{ gap: 16, alignItems: 'center' }}>
               <Avatar src="https://i.pravatar.cc/80?u=1" name="Alex Morgan" size="xs" />
               <Avatar src="https://i.pravatar.cc/80?u=2" name="Jamie Chen" size="sm" />
               <Avatar src="https://i.pravatar.cc/80?u=3" name="Taylor Kim" size="md" />
@@ -603,8 +603,8 @@ export function DesktopApp({
         );
       case 'badge':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline">
               <Badge variant="accent">{isZh ? '新品' : 'New'}</Badge><Badge variant="success">{isZh ? '在线' : 'Live'}</Badge>
               <Badge variant="warning">{isZh ? '测试版' : 'Beta'}</Badge><Badge variant="neutral">{isZh ? '草稿' : 'Draft'}</Badge>
             </div>
@@ -612,7 +612,7 @@ export function DesktopApp({
         );
       case 'skeleton':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <div style={{ display: 'grid', gap: 8, width: 240 }}>
               <Skeleton variant="rect" width="100%" height={100} /><Skeleton variant="text" width="65%" /><Skeleton variant="text" lines={2} />
             </div>
@@ -620,7 +620,7 @@ export function DesktopApp({
         );
       case 'typography':
         return (
-          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 8 }}>
+          <div className="vx-preview-stack" style={{ display: 'grid', gap: 8 }}>
             <Heading level={1}>{isZh ? '标题 1' : 'Heading 1'}</Heading>
             <Heading level={2}>{isZh ? '标题 2' : 'Heading 2'}</Heading>
             <Heading level={3}>{isZh ? '标题 3' : 'Heading 3'}</Heading>
@@ -632,8 +632,8 @@ export function DesktopApp({
         );
       case 'card':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <Card variant="default" padding="md"><CardHeader><CardTitle>Default</CardTitle><CardDescription>Standard card.</CardDescription></CardHeader><CardContent>Content.</CardContent></Card>
               <Card variant="elevated" padding="md" hoverable><CardHeader><CardTitle>Elevated</CardTitle><CardDescription>Interactive.</CardDescription></CardHeader><CardContent>Hover over this card.</CardContent></Card>
               <Card variant="outlined" padding="md"><CardHeader><CardTitle>Outlined</CardTitle><CardDescription>Bordered.</CardDescription></CardHeader><CardContent>Content.</CardContent></Card>
@@ -642,7 +642,7 @@ export function DesktopApp({
         );
       case 'form':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Form style={{ display: 'grid', gap: 16, maxWidth: 400 }}>
               <FormField><FormLabel required>{isZh ? '邮箱' : 'Email'}</FormLabel><FormDescription>{isZh ? '我们不会分享你的邮箱。' : 'We will never share your email.'}</FormDescription><Input type="email" placeholder="name@example.com" /><FormMessage /></FormField>
               <FormField><FormLabel required>{isZh ? '密码' : 'Password'}</FormLabel><Input type="password" placeholder="••••••••" /><FormMessage /></FormField>
@@ -652,8 +652,8 @@ export function DesktopApp({
         );
       case 'sheet':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline">
               <Sheet trigger={<Button>{isZh ? '打开面板' : 'Open panel'}</Button>} title={isZh ? '侧滑面板' : 'Sheet panel'} description={isZh ? '这是从右侧滑入的面板。' : 'This panel slides in from the right.'} side="right">
                 <div style={{ padding: 16 }}>{isZh ? '面板内容' : 'Panel content'}</div>
               </Sheet>
@@ -662,7 +662,7 @@ export function DesktopApp({
         );
       case 'resizable':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <div style={{ height: 200, border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-lg)', overflow: 'hidden' }}>
               <ResizablePanelGroup direction="horizontal">
                 <ResizablePanel defaultSize={50} minSize={20}><div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{isZh ? '左侧面板' : 'Left panel'}</div></ResizablePanel>
@@ -674,7 +674,7 @@ export function DesktopApp({
         );
       case 'accordion':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Accordion defaultOpen={['getting-started']} items={[
               { key: 'getting-started', title: isZh ? '快速开始' : 'Getting Started', content: isZh ? '安装包并配置 Provider。' : 'Install the package and set up providers.' },
               { key: 'components', title: isZh ? '组件库' : 'Components', content: isZh ? '按分类浏览全部组件。' : 'Browse the full component library.' },
@@ -684,7 +684,7 @@ export function DesktopApp({
         );
       case 'tabs':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Tabs defaultValue="preview">
               <TabsList><TabsTrigger value="preview">{isZh ? '预览' : 'Preview'}</TabsTrigger><TabsTrigger value="code">{isZh ? '代码' : 'Code'}</TabsTrigger><TabsTrigger value="props">{isZh ? '属性' : 'Props'}</TabsTrigger></TabsList>
               <TabsContent value="preview">{isZh ? '实时预览组件效果。' : 'Preview the component in real time.'}</TabsContent>
@@ -695,25 +695,25 @@ export function DesktopApp({
         );
       case 'breadcrumb':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Breadcrumb items={[{ label: isZh ? '首页' : 'Home', href: '#' }, { label: isZh ? '组件' : 'Components', href: '#' }, { label: isZh ? '导航' : 'Navigation' }]} />
           </div>
         );
       case 'pagination':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Pagination page={paginationDemoPage} total={48} pageSize={10} onChange={setPaginationDemoPage} />
           </div>
         );
       case 'stepper':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Stepper currentStep={1} steps={[{ label: isZh ? '规划' : 'Plan' }, { label: isZh ? '开发' : 'Build' }, { label: isZh ? '发布' : 'Launch' }]} />
           </div>
         );
       case 'progress':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Progress label={isZh ? '默认' : 'Default'} showLabel value={sliderValue} />
             <Progress label={isZh ? '成功' : 'Success'} showLabel value={sliderValue} variant="success" />
             <Progress label={isZh ? '警告' : 'Warning'} showLabel value={sliderValue} variant="warning" />
@@ -722,13 +722,13 @@ export function DesktopApp({
         );
       case 'spinner':
         return (
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" />
           </div>
         );
       case 'alert':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Alert title={isZh ? '提示信息' : 'Information'} variant="info">{isZh ? '这是一条提示信息。' : 'This is an informational message.'}</Alert>
             <Alert title={isZh ? '操作成功' : 'Success'} variant="success">{isZh ? '操作已成功完成。' : 'Operation completed successfully.'}</Alert>
             <Alert title={isZh ? '错误' : 'Error'} variant="danger">{isZh ? '出错了，请重试。' : 'Something went wrong.'}</Alert>
@@ -736,7 +736,7 @@ export function DesktopApp({
         );
       case 'table':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Table columns={[
               { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
               { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
@@ -749,20 +749,20 @@ export function DesktopApp({
         );
       case 'file-upload':
         return (
-          <div className="vx-doc-preview-stack" style={{ maxWidth: 480 }}>
+          <div className="vx-preview-stack" style={{ maxWidth: 480 }}>
             <FileUpload multiple label={isZh ? '上传附件' : 'Upload attachments'} hint={isZh ? '支持多文件上传，单文件最大 10MB' : 'Multiple files allowed, up to 10MB each'} accept="image/*,.pdf" />
           </div>
         );
       case 'color-picker':
         return (
-          <div className="vx-doc-preview-stack" style={{ maxWidth: 480 }}>
+          <div className="vx-preview-stack" style={{ maxWidth: 480 }}>
             <ColorPicker label={isZh ? '主题色' : 'Theme color'} />
           </div>
         );
       case 'dialog':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <Dialog trigger={<Button>{isZh ? '打开对话框' : 'Open dialog'}</Button>}
                 title={isZh ? '确认操作' : 'Confirm action'} description={isZh ? '请确认此操作。' : 'Please confirm this operation.'}
                 confirmLabel={isZh ? '确认' : 'Confirm'} cancelLabel={isZh ? '取消' : 'Cancel'}>
@@ -776,8 +776,8 @@ export function DesktopApp({
         );
       case 'popover':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <Popover content={<div style={{ padding: 8 }}>{isZh ? '弹出内容，提供额外信息。' : 'Popover content.'}</div>}>
                 <Button variant="secondary">{isZh ? '点击打开' : 'Click me'}</Button>
               </Popover>
@@ -786,8 +786,8 @@ export function DesktopApp({
         );
       case 'tooltip':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <Tooltip content={isZh ? '这是一个工具提示' : 'This is a tooltip'}><Button variant="secondary">{isZh ? '悬停查看' : 'Hover me'}</Button></Tooltip>
               <Tooltip content={isZh ? '顶部提示' : 'Top tooltip'} placement="top"><Button variant="ghost">{isZh ? '顶部' : 'Top'}</Button></Tooltip>
             </div>
@@ -795,8 +795,8 @@ export function DesktopApp({
         );
       case 'hover-card':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <HoverCard content={<div style={{ padding: 12, maxWidth: 220 }}><strong>{isZh ? '用户资料' : 'User profile'}</strong><p style={{ margin: '4px 0 0', color: 'var(--vx-text-secondary)' }}>{isZh ? '无需导航即可预览更多上下文。' : 'Preview additional context.'}</p></div>}>
                 <Button variant="secondary">{isZh ? '悬停查看' : 'Hover me'}</Button>
               </HoverCard>
@@ -805,8 +805,8 @@ export function DesktopApp({
         );
       case 'dropdown-menu':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline vx-preview-inline--wrap">
               <DropdownMenu trigger={<Button variant="secondary">{isZh ? '操作' : 'Actions'}</Button>}
                 items={[{ label: isZh ? '复制' : 'Duplicate', onClick: () => {} }, { label: isZh ? '归档' : 'Archive', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]} />
             </div>
@@ -814,8 +814,8 @@ export function DesktopApp({
         );
       case 'context-menu':
         return (
-          <div className="vx-doc-preview-stack">
-            <div className="vx-doc-preview-inline">
+          <div className="vx-preview-stack">
+            <div className="vx-preview-inline">
               <ContextMenu items={[{ label: isZh ? '复制' : 'Copy', onClick: () => {} }, { label: isZh ? '粘贴' : 'Paste', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]}>
                 <div style={{ padding: '2rem 3rem', border: '1px dashed var(--vx-color-border)', borderRadius: 'var(--vx-radius-md)', textAlign: 'center', color: 'var(--vx-text-secondary)' }}>
                   {isZh ? '在此区域右键点击' : 'Right-click this area'}
@@ -826,7 +826,7 @@ export function DesktopApp({
         );
       case 'navigation-menu':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <NavigationMenu items={[
               { label: isZh ? '文档' : 'Docs', items: [{ label: isZh ? '介绍' : 'Introduction', description: isZh ? '开始使用 VXUI' : 'Get started', onClick: () => {} }, { label: isZh ? '快速开始' : 'Quick Start', description: isZh ? '安装和配置' : 'Install and configure', onClick: () => {} }] },
               { label: isZh ? '组件' : 'Components', items: [{ label: 'Button', description: isZh ? '主要操作元素' : 'Primary action', onClick: () => {} }, { label: 'Dialog', description: isZh ? '模态叠层' : 'Modal overlay', onClick: () => {} }] },
@@ -836,11 +836,81 @@ export function DesktopApp({
         );
       case 'menubar':
         return (
-          <div className="vx-doc-preview-stack">
+          <div className="vx-preview-stack">
             <Menubar menus={[
               { label: 'File', items: [{ label: 'New', shortcut: '⌘N', onClick: () => {} }, { label: 'Open...', shortcut: '⌘O', onClick: () => {} }, { label: 'Save', shortcut: '⌘S', onClick: () => {} }, { label: 'Exit', danger: true, onClick: () => {} }] },
               { label: 'Edit', items: [{ label: 'Undo', shortcut: '⌘Z', onClick: () => {} }, { label: 'Redo', shortcut: '⇧⌘Z', onClick: () => {} }] },
             ]} />
+          </div>
+        );
+      case 'typography-base':
+        return (
+          <div className="vx-preview-stack">
+            {/* CSS 类名用法 */}
+            <div className="vx-article">
+              <header className="vx-article__header">
+                <span className="vx-kicker">{isZh ? 'CSS 类名' : 'CSS Classes'}</span>
+                <h1 className="vx-article__title">{isZh ? '使用 CSS 类名' : 'Using CSS Classes'}</h1>
+                <p className="vx-article__description">
+                  {isZh ? '直接使用 className 即可应用排版样式，无需额外组件。' : 'Apply typography styles directly via className — no extra components needed.'}
+                </p>
+              </header>
+              <div className="vx-article__body">
+                <section className="vx-section">
+                  <h2 className="vx-section__heading">
+                    {isZh ? '章节标题' : 'Section Heading'}
+                    <a href="#section" className="vx-section__anchor">#</a>
+                  </h2>
+                  <p className="vx-lead">{isZh ? '这是导语文本（vx-lead），用于段落开头的引导性内容。' : 'This is lead text (vx-lead), used for introductory content at the start of a section.'}</p>
+                  <ul className="vx-list">
+                    <li>{isZh ? '使用 vx-article 作为文章容器' : 'Use vx-article as the article container'}</li>
+                    <li>{isZh ? '使用 vx-section 划分章节' : 'Use vx-section to divide chapters'}</li>
+                    <li>{isZh ? '使用 vx-kicker 作为分类标签' : 'Use vx-kicker as a category label'}</li>
+                  </ul>
+                </section>
+              </div>
+            </div>
+
+            {/* React 组件用法 */}
+            <div className="vx-section">
+              <h2 className="vx-section__heading">
+                {isZh ? 'React 组件' : 'React Components'}
+                <a href="#components" className="vx-section__anchor">#</a>
+              </h2>
+              <div className="vx-example">
+                <div className="vx-stats" style={{ marginBottom: 16 }}>
+                  <div className="vx-stat">
+                    <div className="vx-stat__copy">
+                      <span className="vx-stat__label">{isZh ? '组件' : 'Components'}</span>
+                      <strong className="vx-stat__value">10</strong>
+                      <small className="vx-stat__hint">{isZh ? '可直接导入使用' : 'Ready to import'}</small>
+                    </div>
+                    <div className="vx-stat__icon"><Zap size={20} /></div>
+                  </div>
+                  <div className="vx-stat">
+                    <div className="vx-stat__copy">
+                      <span className="vx-stat__label">{isZh ? 'CSS 类' : 'CSS Classes'}</span>
+                      <strong className="vx-stat__value">30+</strong>
+                      <small className="vx-stat__hint">{isZh ? '开箱即用' : 'Out of the box'}</small>
+                    </div>
+                    <div className="vx-stat__icon"><Palette size={20} /></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 空状态示例 */}
+            <div className="vx-section">
+              <h2 className="vx-section__heading">
+                {isZh ? '空状态' : 'Empty State'}
+                <a href="#empty" className="vx-section__anchor">#</a>
+              </h2>
+              <div className="vx-empty">
+                <div className="vx-empty__icon"><AlertTriangle size={20} /></div>
+                <strong>{isZh ? '暂无内容' : 'No content yet'}</strong>
+                <p>{isZh ? '使用 vx-empty 和 vx-empty__icon 展示空状态。' : 'Use vx-empty and vx-empty__icon to display empty states.'}</p>
+              </div>
+            </div>
           </div>
         );
       case 'introduction':
@@ -874,40 +944,40 @@ export function DesktopApp({
         topbarRef={docsTopbarRef}
         density={compactDensity ? 'compact' : 'comfortable'}
         breadcrumb={
-          <div className="vx-doc-breadcrumb" data-state={showPinnedDocTitle ? 'pinned' : 'overview'}>
-            {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__kicker">{activeDocument.section}</span> : null}
+          <div className="vx-breadcrumb" data-state={showPinnedDocTitle ? 'pinned' : 'overview'}>
+            {showPinnedDocTitle ? <span className="vx-breadcrumb__kicker">{activeDocument.section}</span> : null}
             <strong>{topbarDocLabel}</strong>
-            {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__summary">{activeDocument.description}</span> : null}
+            {showPinnedDocTitle ? <span className="vx-breadcrumb__summary">{activeDocument.description}</span> : null}
           </div>
         }
         headerActions={
           <div className="vx-docs-toolbar">
             {showBack ? (
-              <Button variant="outline" size="sm" onClick={() => onNavigate({ view: 'home' })}>
+              <Button className="vx-docs-toolbar__item--back" variant="outline" size="sm" onClick={() => onNavigate({ view: 'home' })}>
                 <House size={14} />{t.publicPages.backHome}
               </Button>
             ) : null}
             {showSearch ? (
-              <Button variant="outline" size="sm" onClick={() => onSearchOpenChange(true)}>
+              <Button className="vx-docs-toolbar__item--search" variant="outline" size="sm" onClick={() => onSearchOpenChange(true)}>
                 <Search size={14} />{t.searchTrigger}<kbd className="vx-search-kbd">⌘K</kbd>
               </Button>
             ) : null}
             {showDensity ? (
-              <Button variant={compactDensity ? 'soft' : 'outline'} size="sm" onClick={() => onCompactDensityChange(!compactDensity)}>
+              <Button className="vx-docs-toolbar__item--density" variant={compactDensity ? 'soft' : 'outline'} size="sm" onClick={() => onCompactDensityChange(!compactDensity)}>
                 <SlidersHorizontal size={14} />{densityLabel}
               </Button>
             ) : null}
             {showThemeBtn ? (
-              <DropdownMenu trigger={<Button variant="outline" size="sm"><Palette size={14} />{themes[theme]?.label ?? theme}</Button>}
+              <DropdownMenu className="vx-docs-toolbar__item--theme" trigger={<Button variant="outline" size="sm"><Palette size={14} />{themes[theme]?.label ?? theme}</Button>}
                 items={themeMenuItems} align="right" />
             ) : null}
             {showAccountBtn ? (
-              <DropdownMenu trigger={<Button variant="outline" size="sm"><User size={14} />{viewerSession?.name ?? t.publicPages.guestLabel}</Button>}
+              <DropdownMenu className="vx-docs-toolbar__item--account" trigger={<Button variant="outline" size="sm"><User size={14} />{viewerSession?.name ?? t.publicPages.guestLabel}</Button>}
                 groups={[{ label: copy.accountMenu, items: accountMenuItems }]} align="right" />
             ) : null}
-            {showLanguageBtn ? <LanguageSwitcher variant="inline" /> : null}
+            {showLanguageBtn ? <span className="vx-docs-toolbar__item--language"><LanguageSwitcher variant="inline" /></span> : null}
             {showMoreMenu ? (
-              <DropdownMenu key="docs-toolbar-more"
+              <DropdownMenu key="docs-toolbar-more" className="vx-docs-toolbar__more"
                 trigger={<Button variant="outline" size="sm"><MoreHorizontal size={14} />{isZh ? '更多' : 'More'}</Button>}
                 groups={[
                   ...(!showBack || !showSearch ? [{

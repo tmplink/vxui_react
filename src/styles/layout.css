@@ -98,7 +98,7 @@
 }
 
 .vx-sidebar__brand-text {
-  font-size: 1.48px;
+  font-size: 1.3rem;
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.03em;
@@ -107,7 +107,7 @@
 
 .vx-sidebar__brand-caption {
   color: var(--vx-text-secondary);
-  font-size: 0.832px;
+  font-size: 0.82rem;
   line-height: 1.45;
 }
 
@@ -322,7 +322,8 @@
 .vx-shell[data-collapsed='true'] .vx-nav-sublist,
 .vx-shell[data-collapsed='true'] .vx-sidebar__brand-caption,
 .vx-shell[data-collapsed='true'] .vx-sidebar__brand-copy,
-.vx-shell[data-collapsed='true'] .vx-sidebar__toggle-label {
+.vx-shell[data-collapsed='true'] .vx-sidebar__toggle-label,
+.vx-shell[data-collapsed='true'] .vx-sidebar-session {
   display: none;
 }
 
@@ -424,7 +425,7 @@
 
 .vx-topbar__title {
   margin: 0;
-  font-size: 1.480px;
+  font-size: 1.45rem;
   line-height: 1.08;
   letter-spacing: -0.025em;
 }
@@ -518,4 +519,198 @@
   gap: 0;
   width: 100%;
   max-width: var(--vx-content-width);
+}
+
+/* ── Topbar menu button (hidden on desktop) ─────────────── */
+.vx-topbar__menu {
+  display: none !important;
+  flex: 0 0 auto;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Shell: tablet/drawer mode
+   Controlled by JS ViewportProvider, not CSS media query
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Tablet (landscape / overlay) ───────────────────────── */
+.vx-shell[data-tablet='true'] .vx-topbar__menu {
+  display: inline-flex !important;
+}
+
+.vx-shell[data-tablet='true'] .vx-shell__overlay {
+  display: block;
+  position: fixed;
+  inset: 0;
+  background: var(--vx-glass-scrim);
+  backdrop-filter: blur(14px) saturate(1.06);
+  -webkit-backdrop-filter: blur(14px) saturate(1.06);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+  z-index: calc(var(--vx-z-layout-rail) - 1);
+}
+
+.vx-shell[data-tablet='true'][data-nav-open='true'] .vx-shell__overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.vx-shell[data-tablet='true'] .vx-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(86vw, 320px);
+  min-width: min(86vw, 320px);
+  height: 100dvh;
+  transform: translateX(-100%);
+  box-shadow: var(--vx-shadow-lg);
+  border-right: 1px solid var(--vx-border);
+}
+
+.vx-shell[data-tablet='true'][data-nav-open='true'] .vx-sidebar {
+  transform: translateX(0);
+}
+
+.vx-shell[data-tablet='true'] .vx-sidebar__toggle {
+  display: none;
+}
+
+.vx-shell[data-tablet='true'] .vx-shell__main {
+  border-left: 0;
+}
+
+.vx-shell[data-tablet='true'] .vx-topbar {
+  gap: 12px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  min-height: 0;
+  height: auto;
+  padding: 14px 20px 12px;
+}
+
+.vx-shell[data-tablet='true'] .vx-topbar__menu {
+  display: inline-flex !important;
+  order: 1;
+  align-self: flex-start;
+}
+
+.vx-shell[data-tablet='true'] .vx-topbar__title-group {
+  order: 2;
+  flex: 1 1 0;
+  width: auto;
+  min-width: min(280px, 100%);
+  padding: 0;
+}
+
+.vx-shell[data-tablet='true'] .vx-topbar__actions {
+  order: 3;
+  flex: 1 1 100%;
+  width: 100%;
+  border-left: 0;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--vx-border);
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+/* ── Tablet portrait — persistent icon rail + floating expand ── */
+
+/* 1. Use collapsed-width variable for the rail */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) {
+  --vx-sidebar-width: var(--vx-sidebar-width-collapsed);
+}
+
+/* 2. Override the tablet fixed/off-screen sidebar → sticky in-layout rail */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar {
+  position: sticky;
+  top: 0;
+  inset-inline-start: auto;
+  width: var(--vx-sidebar-width);
+  min-width: var(--vx-sidebar-width);
+  height: 100%;
+  transform: none;
+  box-shadow: none;
+  border-right: 1px solid var(--vx-border);
+}
+
+/* 3. Floating expanded sidebar (overrides the sticky above when nav is open) */
+.vx-shell[data-tablet-portrait='true'][data-nav-open='true'] .vx-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(86vw, 320px);
+  min-width: min(86vw, 320px);
+  height: 100dvh;
+  transform: translateX(0);
+  box-shadow: var(--vx-shadow-lg);
+  border-right: 1px solid var(--vx-border);
+}
+
+/* 4. Rail: icon-only appearance (mirror data-collapsed='true' rules) */
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-section-block__title,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__label,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__badge,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__trailing,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item__chevron,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-sublist,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand-caption,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand-copy,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__toggle-label,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__footer-content {
+  display: none;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__brand,
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-nav-item {
+  justify-content: center;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__header {
+  padding-inline: 10px;
+  justify-content: center;
+}
+
+.vx-shell[data-tablet-portrait='true']:not([data-nav-open='true']) .vx-sidebar__footer {
+  align-items: center;
+  padding-inline: 10px;
+}
+
+/* 5. Rail sidebar is in layout — restore the dividing border on main */
+.vx-shell[data-tablet-portrait='true'] .vx-shell__main {
+  border-left: 1px solid var(--vx-border);
+}
+
+/* 6. Keep the sidebar collapse-toggle hidden; hamburger in topbar serves this role */
+.vx-shell[data-tablet-portrait='true'] .vx-sidebar__toggle {
+  display: none;
+}
+
+/* 7. Restore topbar layout (no wrap) because tablet portrait is wide enough */
+.vx-shell[data-tablet-portrait='true'] .vx-topbar {
+  flex-wrap: nowrap;
+  align-items: center;
+  height: var(--vx-header-height);
+  padding: 0 26px;
+  gap: 16px;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__menu {
+  display: none !important;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__title-group {
+  order: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 0;
+}
+
+.vx-shell[data-tablet-portrait='true'] .vx-topbar__actions {
+  order: 0;
+  flex: 0 0 auto;
+  width: auto;
+  padding: 12px 0 12px 18px;
+  border-top: none;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
 }

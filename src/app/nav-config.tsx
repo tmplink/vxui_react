@@ -23,6 +23,7 @@ export const pageIcons: Record<PageKey, ReactNode> = {
   separator: <Minus size={16} />,
   resizable: <GripHorizontal size={16} />,
   typography: <FileText size={16} />,
+  'typography-base': <FileText size={16} />,
   badge: <ShieldCheck size={16} />,
   avatar: <User size={16} />,
   skeleton: <LayoutDashboard size={16} />,
@@ -82,7 +83,7 @@ export const pageIcons: Record<PageKey, ReactNode> = {
 export const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> = [
   { key: 'gettingStarted', items: ['introduction'] },
   { key: 'layout', items: ['quick-start', 'shell-sidebar', 'grid-page', 'nav-layout', 'scroll-area', 'separator', 'resizable'] },
-  { key: 'content', items: ['typography', 'badge', 'avatar', 'skeleton', 'card', 'code-block', 'language-switcher'] },
+  { key: 'content', items: ['typography', 'typography-base', 'badge', 'avatar', 'skeleton', 'card', 'code-block', 'language-switcher'] },
   {
     key: 'forms',
     items: [
@@ -116,7 +117,7 @@ export const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> 
 
 export const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
   'quick-start', 'shell-sidebar', 'grid-page', 'nav-layout', 'scroll-area',
-  'separator', 'resizable', 'typography', 'badge', 'avatar', 'skeleton',
+  'separator', 'resizable', 'typography', 'typography-base', 'badge', 'avatar', 'skeleton',
   'card', 'code-block', 'language-switcher', 'button', 'elements',
   'form-controls', 'form-inputs', 'toggle', 'rating', 'label', 'date-pickers',
   'file-upload', 'color-picker', 'form', 'accordion', 'tabs', 'breadcrumb',

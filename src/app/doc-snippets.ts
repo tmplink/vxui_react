@@ -182,5 +182,85 @@ export function ButtonExamples() {
     </div>
   );
 }`,
-  // More snippets can be added here as needed
+  'typography-base': String.raw`import {
+  Article, ArticleHeader, ArticleTitle, ArticleBody,
+  Section, SectionHeading, Pager, PropsTable,
+  ArticleEmptyState, StatsGrid,
+} from 'vxui-react';
+import 'vxui-react/styles.css';
+
+// 方式一：直接使用 CSS 类名
+function UsingCSSClasses() {
+  return (
+    <div className="vx-article">
+      <header className="vx-article__header">
+        <span className="vx-kicker">Category</span>
+        <h1 className="vx-article__title">Page Title</h1>
+        <p className="vx-article__description">Page description.</p>
+      </header>
+      <div className="vx-article__body">
+        <section className="vx-section">
+          <h2 className="vx-section__heading">
+            Section Title
+            <a href="#section" className="vx-section__anchor">#</a>
+          </h2>
+          <p className="vx-lead">Lead paragraph text.</p>
+          <ul className="vx-list">
+            <li>List item one</li>
+            <li>List item two</li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// 方式二：使用 React 组件
+function UsingComponents() {
+  const columns = [
+    { prop: 'variant', type: "'primary' | 'secondary'", default: "'primary'", description: 'Button variant.' },
+    { prop: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Button size.', required: true },
+  ];
+
+  return (
+    <Article>
+      <ArticleHeader>
+        <span className="vx-kicker">Components</span>
+        <ArticleTitle>Button</ArticleTitle>
+        <p className="vx-article__description">Primary action element.</p>
+      </ArticleHeader>
+      <ArticleBody>
+        <Section sectionId="overview">
+          <SectionHeading anchor="#overview">Overview</SectionHeading>
+          <p>Content here...</p>
+        </Section>
+        <Section sectionId="api">
+          <SectionHeading anchor="#api">API Reference</SectionHeading>
+          <PropsTable columns={columns} />
+        </Section>
+      </ArticleBody>
+      <Pager
+        prev={{ label: 'Previous page', onClick: () => {} }}
+        next={{ label: 'Next page', onClick: () => {} }}
+      />
+    </Article>
+  );
+}
+
+// 方式三：空状态和统计网格
+function Utilities() {
+  return (
+    <>
+      <StatsGrid items={[
+        { label: 'Components', value: '10', hint: 'Ready to import', icon: <Zap size={20} /> },
+        { label: 'CSS Classes', value: '30+', hint: 'Out of the box', icon: <Palette size={20} /> },
+      ]} />
+      <ArticleEmptyState
+        icon={<AlertTriangle size={20} />}
+        title="No content yet"
+        description="Use ArticleEmptyState to display empty states."
+      />
+    </>
+  );
+}`,
 };

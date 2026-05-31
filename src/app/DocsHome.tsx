@@ -156,7 +156,7 @@ export function DocsHome({
               <CardDescription>{docsHomeCopy.pathBody}</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="vx-doc-list">
+              <ul className="vx-list">
                 {docsHomeCopy.walkthroughItems.map((item: string) => (<li key={item}>{item}</li>))}
               </ul>
             </CardContent>
@@ -185,7 +185,7 @@ export function DocsHome({
               <CardDescription>{docsHomeCopy.rulesLead}</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="vx-doc-list">
+              <ul className="vx-list">
                 {docsHomeCopy.rulesItems.map((item: string) => (<li key={item}>{item}</li>))}
               </ul>
             </CardContent>
@@ -196,7 +196,7 @@ export function DocsHome({
               <CardDescription>{docsHomeCopy.toolsLead}</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="vx-doc-list">
+              <ul className="vx-list">
                 {docsHomeCopy.toolsItems.map((item: string) => (<li key={item}>{item}</li>))}
               </ul>
             </CardContent>

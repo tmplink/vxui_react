@@ -987,7 +987,7 @@
 
 .vxm-docs-home__title {
   margin: 0;
-  font-size: clamp(1.9rem, 8vw, 2.128px);
+  font-size: clamp(1.9rem, 8vw, 2.8rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
@@ -1295,4 +1295,68 @@
   font-size: 12px;
   line-height: 1.5;
   color: var(--vx-text-muted);
+}
+
+/* ── Mobile Docs Page ─────────────────────────────── */
+.vxm-docs-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.vxm-docs-page__header {
+  padding: 20px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-bottom: 1px solid var(--vx-border);
+  margin-bottom: 4px;
+}
+
+.vxm-docs-page__kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--vx-primary);
+  background: color-mix(in srgb, var(--vx-primary) 10%, transparent);
+  border-radius: 4px;
+  padding: 2px 7px;
+  align-self: flex-start;
+}
+
+.vxm-docs-page__title {
+  margin: 0;
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--vx-text);
+  line-height: 1.2;
+}
+
+.vxm-docs-page__lead {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--vx-text-secondary);
+  line-height: 1.55;
+}
+
+.vxm-docs-page__section {
+  padding: 12px 16px 4px;
+}
+
+.vxm-docs-page__section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--vx-text-muted);
+  margin-bottom: 8px;
+}
+
+/* ── Mobile list helpers ──────────────────────────── */
+.vxm-docs-home__list,
+.vxm-legal-page__list {
+  margin: 0 16px;
 }

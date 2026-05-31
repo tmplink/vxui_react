@@ -47,60 +47,60 @@ export function DocPage({
   const nextPage = currentIndex < flatPages.length - 1 ? flatPages[currentIndex + 1] : null;
 
   return (
-    <article className="vx-bs-doc-page">
+    <article className="vx-article">
       {/* Page header */}
-      <header ref={docHeaderRef as React.Ref<HTMLElement>} className="vx-bs-doc-header">
-        <span className="vx-bs-doc-kicker">{activeDocument.section}</span>
-        <h1>{activeDocument.title}</h1>
-        <p className="vx-bs-doc-lead">{activeDocument.description}</p>
-        <div className="vx-bs-doc-header-badges">
+      <header ref={docHeaderRef as React.Ref<HTMLElement>} className="vx-article__header">
+        <span className="vx-kicker">{activeDocument.section}</span>
+        <h1 className="vx-article__title">{activeDocument.title}</h1>
+        <p className="vx-article__description">{activeDocument.description}</p>
+        <div className="vx-badges">
           <span className="vx-version-pill">{copy.livePreview}</span>
         </div>
       </header>
 
       {/* Content body */}
-      <div className="vx-bs-doc-body">
-        <div className="vx-bs-doc-content">
+      <div className="vx-article__body">
+        <div className="vx-article__content">
           {/* Overview / Guidance */}
-          <section id="overview" className="vx-bs-doc-section">
-            <h2 className="vx-bs-section-heading">
+          <section id="overview" className="vx-section">
+            <h2 className="vx-section__heading">
               {isZh ? '使用指南' : 'Overview'}
-              <a href="#overview" className="vx-bs-anchor" aria-label={isZh ? '链接到使用指南' : 'Link to Overview'}>#</a>
+              <a href="#overview" className="vx-section__anchor" aria-label={isZh ? '链接到使用指南' : 'Link to Overview'}>#</a>
             </h2>
-            <ul className="vx-doc-list">
+            <ul className="vx-list">
               {activeDocument.guidance.map((item) => (<li key={item}>{item}</li>))}
             </ul>
           </section>
 
           {/* Live example */}
           {hasSample && (
-            <section id="example" className="vx-bs-doc-section">
-              <h2 className="vx-bs-section-heading">
+            <section id="example" className="vx-section">
+              <h2 className="vx-section__heading">
                 {isZh ? '示例' : 'Example'}
-                <a href="#example" className="vx-bs-anchor" aria-label={isZh ? '链接到示例' : 'Link to Example'}>#</a>
+                <a href="#example" className="vx-section__anchor" aria-label={isZh ? '链接到示例' : 'Link to Example'}>#</a>
               </h2>
-              <div className="vx-bs-example-grid">
-                <div className="vx-bs-example-panel">
-                  <div className="vx-bs-example-panel__meta">
-                    <span className="vx-bs-example-panel__eyebrow">{isZh ? '桌面端' : 'Desktop'}</span>
+              <div className="vx-example__grid">
+                <div className="vx-example__panel">
+                  <div className="vx-example__meta">
+                    <span className="vx-example__eyebrow">{isZh ? '桌面端' : 'Desktop'}</span>
                     <strong>{copy.livePreview}</strong>
                   </div>
-                  <div className="vx-bs-example">{sample}</div>
+                  <div className="vx-example">{sample}</div>
                 </div>
 
                 {mobilePreviewPath && (
-                  <div className="vx-bs-example-panel vx-bs-example-panel--mobile">
-                    <div className="vx-bs-example-panel__meta">
-                      <span className="vx-bs-example-panel__eyebrow">{isZh ? '移动端' : 'Mobile'}</span>
+                  <div className="vx-example__panel vx-example__panel--mobile">
+                    <div className="vx-example__meta">
+                      <span className="vx-example__eyebrow">{isZh ? '移动端' : 'Mobile'}</span>
                       <strong>{isZh ? '同步预览' : 'Synced preview'}</strong>
                     </div>
-                    <div className="vx-bs-mobile-preview">
-                      <div className="vxm-phone-frame vx-bs-mobile-preview__frame">
-                        <iframe className="vx-bs-mobile-preview__iframe" loading="lazy"
+                    <div className="vx-mobile-preview">
+                      <div className="vxm-phone-frame vx-mobile-preview__frame">
+                        <iframe className="vx-mobile-preview__iframe" loading="lazy"
                           src={mobilePreviewPath}
                           title={`${activeDocument.title} ${isZh ? '移动端预览' : 'mobile preview'}`} />
                       </div>
-                      <p className="vx-bs-mobile-preview__hint">
+                      <p className="vx-mobile-preview__hint">
                         {isZh ? '这里加载真实的移动端文档页，便于同时对比桌面与手机呈现。' : 'This loads the real mobile docs page so desktop and phone presentations stay in sync.'}
                       </p>
                     </div>
@@ -112,10 +112,10 @@ export function DocPage({
 
           {/* Code usage */}
           {usageSnippet && (
-            <section id="usage" className="vx-bs-doc-section">
-              <h2 className="vx-bs-section-heading">
+            <section id="usage" className="vx-section">
+              <h2 className="vx-section__heading">
                 {isZh ? '用法' : 'Usage'}
-                <a href="#usage" className="vx-bs-anchor" aria-label={isZh ? '链接到用法' : 'Link to Usage'}>#</a>
+                <a href="#usage" className="vx-section__anchor" aria-label={isZh ? '链接到用法' : 'Link to Usage'}>#</a>
               </h2>
               {renderCodeBlock(usageSnippet)}
             </section>
@@ -123,13 +123,13 @@ export function DocPage({
 
           {/* API Reference (props table) */}
           {activeDocument.props && activeDocument.props.length > 0 && (
-            <section id="api" className="vx-bs-doc-section">
-              <h2 className="vx-bs-section-heading">
+            <section id="api" className="vx-section">
+              <h2 className="vx-section__heading">
                 {isZh ? 'API 参考' : 'API Reference'}
-                <a href="#api" className="vx-bs-anchor" aria-label={isZh ? '链接到 API 参考' : 'Link to API Reference'}>#</a>
+                <a href="#api" className="vx-section__anchor" aria-label={isZh ? '链接到 API 参考' : 'Link to API Reference'}>#</a>
               </h2>
-              <div className="vx-bs-props-table-wrapper">
-                <table className="vx-bs-props-table">
+              <div className="vx-props-table-wrapper">
+                <table className="vx-props-table">
                   <thead>
                     <tr>
                       <th>{isZh ? '属性' : 'Prop'}</th>
@@ -141,9 +141,9 @@ export function DocPage({
                   <tbody>
                     {activeDocument.props.map((row) => (
                       <tr key={row.prop}>
-                        <td><code>{row.prop}</code>{row.required && <span className="vx-bs-prop-required" title={isZh ? '必填' : 'Required'}>*</span>}</td>
-                        <td><code className="vx-bs-prop-type">{row.type}</code></td>
-                        <td>{row.default ? <code>{row.default}</code> : <span className="vx-bs-prop-dash">—</span>}</td>
+                        <td><code>{row.prop}</code>{row.required && <span className="vx-prop-required" title={isZh ? '必填' : 'Required'}>*</span>}</td>
+                        <td><code className="vx-prop-type">{row.type}</code></td>
+                        <td>{row.default ? <code>{row.default}</code> : <span className="vx-prop-dash">—</span>}</td>
                         <td>{row.description}</td>
                       </tr>
                     ))}
@@ -157,19 +157,19 @@ export function DocPage({
 
       {/* Prev / Next page navigation */}
       {(prevPage ?? nextPage) && (
-        <nav className="vx-bs-doc-pager" aria-label={isZh ? '分页导航' : 'Page navigation'}>
+        <nav className="vx-pager" aria-label={isZh ? '分页导航' : 'Page navigation'}>
           {prevPage ? (
-            <button type="button" className="vx-bs-doc-pager__btn"
+            <button type="button" className="vx-pager__btn"
               onClick={() => navigate({ view: 'docs', page: prevPage })}>
-              <span className="vx-bs-doc-pager__dir">← {isZh ? '上一页' : 'Previous'}</span>
-              <span className="vx-bs-doc-pager__label">{pages[prevPage].title}</span>
+              <span className="vx-pager__dir">← {isZh ? '上一页' : 'Previous'}</span>
+              <span className="vx-pager__label">{pages[prevPage].title}</span>
             </button>
           ) : <div />}
           {nextPage && (
-            <button type="button" className="vx-bs-doc-pager__btn vx-bs-doc-pager__btn--next"
+            <button type="button" className="vx-pager__btn vx-pager__btn--next"
               onClick={() => navigate({ view: 'docs', page: nextPage })}>
-              <span className="vx-bs-doc-pager__dir">{isZh ? '下一页' : 'Next'} →</span>
-              <span className="vx-bs-doc-pager__label">{pages[nextPage].title}</span>
+              <span className="vx-pager__dir">{isZh ? '下一页' : 'Next'} →</span>
+              <span className="vx-pager__label">{pages[nextPage].title}</span>
             </button>
           )}
         </nav>

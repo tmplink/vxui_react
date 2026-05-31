@@ -13,6 +13,7 @@ export const DOC_PAGE_KEYS = [
   'separator',
   'resizable',
   'typography',
+  'typography-base',
   'badge',
   'avatar',
   'skeleton',

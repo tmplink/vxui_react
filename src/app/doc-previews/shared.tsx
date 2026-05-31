@@ -84,19 +84,19 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     // ── 基础元素 ──
     case 'button':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Button>{isZh ? '主要按钮' : 'Primary'}</Button>
             <Button variant="secondary">{isZh ? '次级按钮' : 'Secondary'}</Button>
             <Button variant="ghost">{isZh ? '幽灵按钮' : 'Ghost'}</Button>
             <Button variant="danger">{isZh ? '危险按钮' : 'Danger'}</Button>
           </div>
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Button size="sm">{isZh ? '小' : 'Small'}</Button>
             <Button size="md">{isZh ? '中' : 'Medium'}</Button>
             <Button size="lg">{isZh ? '大' : 'Large'}</Button>
           </div>
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Button shape="square">{isZh ? '直角' : 'Square'}</Button>
             <Button shape="rect">{isZh ? '圆角' : 'Rounded'}</Button>
             <Button shape="pill">{isZh ? '胶囊' : 'Pill'}</Button>
@@ -108,8 +108,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'badge':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline">
             <Badge variant="accent">{isZh ? '新品' : 'New'}</Badge>
             <Badge variant="success">{isZh ? '在线' : 'Live'}</Badge>
             <Badge variant="warning">{isZh ? '测试版' : 'Beta'}</Badge>
@@ -120,8 +120,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'avatar':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline" style={{ gap: 16, alignItems: 'center' }}>
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline" style={{ gap: 16, alignItems: 'center' }}>
             <Avatar src="https://i.pravatar.cc/80?u=1" name="Alex Morgan" size="xs" />
             <Avatar src="https://i.pravatar.cc/80?u=2" name="Jamie Chen" size="sm" />
             <Avatar src="https://i.pravatar.cc/80?u=3" name="Taylor Kim" size="md" />
@@ -133,7 +133,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'typography':
       return (
-        <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 8 }}>
+        <div className="vx-preview-stack" style={{ display: 'grid', gap: 8 }}>
           <Heading level={1}>{isZh ? '标题 1' : 'Heading 1'}</Heading>
           <Heading level={2}>{isZh ? '标题 2' : 'Heading 2'}</Heading>
           <Heading level={3}>{isZh ? '标题 3' : 'Heading 3'}</Heading>
@@ -146,7 +146,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'skeleton':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <div style={{ display: 'grid', gap: 8, width: 240 }}>
             <Skeleton variant="rect" width="100%" height={100} />
             <Skeleton variant="text" width="65%" />
@@ -158,8 +158,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     // ── 表单控件 ──
     case 'form-inputs':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-stack__group">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-stack__group">
             <Checkbox checked={false} label={isZh ? '默认启用响应式抽屉' : 'Enable responsive drawer'} onChange={() => {}} />
             <Checkbox checked={true} label={isZh ? '显示调试边界' : 'Show debug boundaries'} onChange={() => {}} />
           </div>
@@ -169,7 +169,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
             <Radio checked={false} label={isZh ? '紧凑' : 'Compact'} name="density" onChange={() => {}} />
           </RadioGroup>
           <Slider label={isZh ? '文档完成度' : 'Coverage'} max={100} min={0} onChange={() => {}} showValue value={68} />
-          <div className="vx-doc-preview-stack__group" style={{ marginTop: 24 }}>
+          <div className="vx-preview-stack__group" style={{ marginTop: 24 }}>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
               <Toggle data-state="on">{isZh ? '自动保存' : 'Auto-save'}</Toggle>
               <Toggle>{isZh ? '多标签模式' : 'Multiple tabs'}</Toggle>
@@ -181,8 +181,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'toggle':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline" style={{ marginBottom: 12 }}>
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline" style={{ marginBottom: 12 }}>
             <Toggle defaultPressed={false}><Text size="sm">{isZh ? '加粗' : 'Bold'}</Text></Toggle>
             <Toggle><Text size="sm">{isZh ? '斜体' : 'Italic'}</Text></Toggle>
             <Toggle><Text size="sm">{isZh ? '下划线' : 'Underline'}</Text></Toggle>
@@ -192,8 +192,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'rating':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline" style={{ flexDirection: 'column', gap: 16 }}>
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline" style={{ flexDirection: 'column', gap: 16 }}>
             <Rating defaultValue={3.5} allowHalf />
             <Rating defaultValue={4} size="sm" />
             <Rating defaultValue={5} size="lg" readOnly />
@@ -203,7 +203,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'label':
       return (
-        <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 12, maxWidth: 320 }}>
+        <div className="vx-preview-stack" style={{ display: 'grid', gap: 12, maxWidth: 320 }}>
           <div style={{ display: 'grid', gap: 4 }}>
             <Label required>{isZh ? '电子邮箱' : 'Email'}</Label>
             <Input placeholder="name@example.com" />
@@ -217,7 +217,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'date-pickers':
       return (
-        <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 16, maxWidth: 320 }}>
+        <div className="vx-preview-stack" style={{ display: 'grid', gap: 16, maxWidth: 320 }}>
           <DatePicker label={isZh ? '开始日期' : 'Start date'} />
           <DatePicker label={isZh ? '结束日期' : 'End date'} weekStartsOnMonday />
         </div>
@@ -225,14 +225,14 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'file-upload':
       return (
-        <div className="vx-doc-preview-stack" style={{ maxWidth: 480 }}>
+        <div className="vx-preview-stack" style={{ maxWidth: 480 }}>
           <FileUpload multiple label={isZh ? '上传附件' : 'Upload attachments'} hint={isZh ? '支持多文件上传，单文件最大 10MB' : 'Multiple files allowed, up to 10MB each'} accept="image/*,.pdf" />
         </div>
       );
 
     case 'color-picker':
       return (
-        <div className="vx-doc-preview-stack" style={{ maxWidth: 480 }}>
+        <div className="vx-preview-stack" style={{ maxWidth: 480 }}>
           <ColorPicker label={isZh ? '主题色' : 'Theme color'} />
         </div>
       );
@@ -240,7 +240,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     // ── 布局与导航 ──
     case 'nav-layout':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Breadcrumb items={[{ label: 'Home' }, { label: 'Components' }, { label: 'Navigation' }]} />
           <Separator />
           <Accordion defaultOpen={['hierarchy']} items={[
@@ -252,7 +252,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'separator':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <span>{isZh ? '左' : 'Left'}</span>
             <Separator orientation="vertical" style={{ height: 24 }} />
@@ -267,7 +267,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'breadcrumb':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Breadcrumb items={[{ label: isZh ? '首页' : 'Home', href: '#' }, { label: isZh ? '组件' : 'Components', href: '#' }, { label: isZh ? '导航' : 'Navigation' }]} />
         </div>
       );
@@ -275,8 +275,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     // ── 数据展示 ──
     case 'data-display':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline">
             <Avatar name="Alice Chen" size="sm" />
             <Avatar name="Bo Wang" size="md" />
             <Avatar name="Cora Lin" size="lg" />
@@ -291,7 +291,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'timeline':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Timeline items={[
             { title: isZh ? '订单已创建' : 'Order created', time: '09:42', status: 'success' as const },
             { title: isZh ? '支付成功' : 'Payment confirmed', time: '09:43', status: 'info' as const },
@@ -303,7 +303,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'tree-view':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <TreeView nodes={[
             { id: 'src', label: 'src', children: [
               { id: 'components', label: 'components', children: [
@@ -322,7 +322,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'table':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Table columns={[
             { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string; role: string; status: string }) => r.name },
             { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { name: string; role: string; status: string }) => r.role },
@@ -337,7 +337,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     // ── 反馈组件 ──
     case 'progress':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Progress label={isZh ? '默认' : 'Default'} showLabel value={68} />
           <Progress label={isZh ? '成功' : 'Success'} showLabel value={68} variant="success" />
           <Progress label={isZh ? '警告' : 'Warning'} showLabel value={68} variant="warning" />
@@ -347,7 +347,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'spinner':
       return (
-        <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+        <div className="vx-preview-inline vx-preview-inline--wrap">
           <Spinner size="sm" />
           <Spinner size="md" />
           <Spinner size="lg" />
@@ -356,7 +356,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'alert':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Alert title={isZh ? '提示信息' : 'Information'} variant="info">{isZh ? '这是一条提示信息。' : 'This is an informational message.'}</Alert>
           <Alert title={isZh ? '操作成功' : 'Success'} variant="success">{isZh ? '操作已成功完成。' : 'Operation completed successfully.'}</Alert>
           <Alert title={isZh ? '错误' : 'Error'} variant="danger">{isZh ? '出错了，请重试。' : 'Something went wrong.'}</Alert>
@@ -365,14 +365,14 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'feedback':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Alert title={isZh ? '迁移进度' : 'Migration progress'} variant="info">
             {isZh ? '响应式壳层、模板页面和文档内容库已经收敛到同一套运行时。' : 'The responsive shell, template pages, and docs library now share the same runtime.'}
           </Alert>
           <Progress label={isZh ? '默认' : 'Default'} showLabel value={68} />
           <Progress label={isZh ? '成功' : 'Success'} showLabel value={68} variant="success" />
-          <div className="vx-doc-preview-stack__group">
-            <div className="vx-doc-preview-inline"><Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" /></div>
+          <div className="vx-preview-stack__group">
+            <div className="vx-preview-inline"><Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" /></div>
             <Stepper currentStep={2} steps={[{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }]} />
           </div>
         </div>
@@ -380,8 +380,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'empty-states':
       return (
-        <div className="vx-doc-empty-state">
-          <div className="vx-doc-empty-state__icon"><Zap size={20} /></div>
+        <div className="vx-empty">
+          <div className="vx-empty__icon"><Zap size={20} /></div>
           <strong>{isZh ? '这里暂时没有内容' : 'Nothing lives here yet'}</strong>
           <p>{isZh ? '空状态与错误页共享同一套视觉策略。' : 'Empty states share the same visual language.'}</p>
         </div>
@@ -390,8 +390,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     // ── 叠层浮层 ──
     case 'dialog':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Dialog trigger={<Button>{isZh ? '打开对话框' : 'Open dialog'}</Button>}
               title={isZh ? '确认操作' : 'Confirm action'} description={isZh ? '请确认此操作。' : 'Please confirm this operation.'}
               confirmLabel={isZh ? '确认' : 'Confirm'} cancelLabel={isZh ? '取消' : 'Cancel'}>
@@ -403,8 +403,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'popover':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Popover content={<div style={{ padding: 8 }}>{isZh ? '弹出内容，提供额外信息。' : 'Popover content.'}</div>}>
               <Button variant="secondary">{isZh ? '点击打开' : 'Click me'}</Button>
             </Popover>
@@ -414,8 +414,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'tooltip':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Tooltip content={isZh ? '这是一个工具提示' : 'This is a tooltip'}><Button variant="secondary">{isZh ? '悬停查看' : 'Hover me'}</Button></Tooltip>
             <Tooltip content={isZh ? '顶部提示' : 'Top tooltip'} placement="top"><Button variant="ghost">{isZh ? '顶部' : 'Top'}</Button></Tooltip>
           </div>
@@ -424,8 +424,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'hover-card':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <HoverCard content={<div style={{ padding: 12, maxWidth: 220 }}><strong>{isZh ? '用户资料' : 'User profile'}</strong><p style={{ margin: '4px 0 0', color: 'var(--vx-text-secondary)' }}>{isZh ? '无需导航即可预览更多上下文。' : 'Preview additional context.'}</p></div>}>
               <Button variant="secondary">{isZh ? '悬停查看' : 'Hover me'}</Button>
             </HoverCard>
@@ -435,8 +435,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'dropdown-menu':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <DropdownMenu trigger={<Button variant="secondary">{isZh ? '操作' : 'Actions'}</Button>}
               items={[{ label: isZh ? '复制' : 'Duplicate', onClick: () => {} }, { label: isZh ? '归档' : 'Archive', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]} />
           </div>
@@ -445,8 +445,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'context-menu':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline">
             <ContextMenu items={[{ label: isZh ? '复制' : 'Copy', onClick: () => {} }, { label: isZh ? '粘贴' : 'Paste', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]}>
               <div style={{ padding: '2rem 3rem', border: '1px dashed var(--vx-color-border)', borderRadius: 'var(--vx-radius-md)', textAlign: 'center', color: 'var(--vx-text-secondary)' }}>
                 {isZh ? '在此区域右键点击' : 'Right-click this area'}
@@ -459,8 +459,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     // ── 内容组件 ──
     case 'card':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline vx-preview-inline--wrap">
             <Card variant="default" padding="md"><CardHeader><CardTitle>Default</CardTitle><CardDescription>Standard card.</CardDescription></CardHeader><CardContent>Content.</CardContent></Card>
             <Card variant="elevated" padding="md" hoverable><CardHeader><CardTitle>Elevated</CardTitle><CardDescription>Interactive.</CardDescription></CardHeader><CardContent>Hover over this card.</CardContent></Card>
             <Card variant="outlined" padding="md"><CardHeader><CardTitle>Outlined</CardTitle><CardDescription>Bordered.</CardDescription></CardHeader><CardContent>Content.</CardContent></Card>
@@ -470,7 +470,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'accordion':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Accordion defaultOpen={['getting-started']} items={[
             { key: 'getting-started', title: isZh ? '快速开始' : 'Getting Started', content: isZh ? '安装包并配置 Provider。' : 'Install the package and set up providers.' },
             { key: 'components', title: isZh ? '组件库' : 'Components', content: isZh ? '按分类浏览全部组件。' : 'Browse the full component library.' },
@@ -481,7 +481,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'tabs':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Tabs defaultValue="preview">
             <TabsList>
               <TabsTrigger value="preview">{isZh ? '预览' : 'Preview'}</TabsTrigger>
@@ -497,21 +497,21 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'pagination':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Pagination page={1} total={48} pageSize={10} onChange={() => {}} />
         </div>
       );
 
     case 'stepper':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Stepper currentStep={1} steps={[{ label: isZh ? '规划' : 'Plan' }, { label: isZh ? '开发' : 'Build' }, { label: isZh ? '发布' : 'Launch' }]} />
         </div>
       );
 
     case 'carousel':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <div style={{ maxWidth: 400 }}>
             <Carousel items={[
               <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
@@ -524,7 +524,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'scroll-area':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <ScrollArea maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
             {Array.from({ length: 10 }, (_, i) => (
               <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>
@@ -537,7 +537,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'resizable':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <div style={{ height: 200, border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-lg)', overflow: 'hidden' }}>
             <ResizablePanelGroup direction="horizontal">
               <ResizablePanel defaultSize={50} minSize={20}>
@@ -558,8 +558,8 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'sheet':
       return (
-        <div className="vx-doc-preview-stack">
-          <div className="vx-doc-preview-inline">
+        <div className="vx-preview-stack">
+          <div className="vx-preview-inline">
             <Sheet trigger={<Button>{isZh ? '打开面板' : 'Open panel'}</Button>}
               title={isZh ? '侧滑面板' : 'Sheet panel'} description={isZh ? '这是从右侧滑入的面板。' : 'This panel slides in from the right.'} side="right">
               <div style={{ padding: 16 }}>{isZh ? '面板内容' : 'Panel content'}</div>
@@ -570,7 +570,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
 
     case 'form':
       return (
-        <div className="vx-doc-preview-stack">
+        <div className="vx-preview-stack">
           <Form style={{ display: 'grid', gap: 16, maxWidth: 400 }}>
             <FormField>
               <FormLabel required>{isZh ? '邮箱' : 'Email'}</FormLabel>

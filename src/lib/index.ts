@@ -244,3 +244,49 @@ export type { CodeBlockProps, CodeBlockLanguage } from '../components/CodeBlock'
 // Language switcher
 export { LanguageSwitcher } from '../components/LanguageSwitcher';
 export type { LanguageSwitcherProps } from '../components/LanguageSwitcher';
+
+// ── Typography Base (排版组件) ─────────────────────────────
+// 这些组件配合 typography-base.css 使用，提供文章/文档排版布局。
+// CSS 类名参考 Bootstrap 风格，可直接在 JSX 中使用 className。
+//
+// 可用 CSS 类（无需组件，直接使用 className）：
+//   vx-article, vx-article__header, vx-article__title, vx-article__description
+//   vx-article__body, vx-article__content
+//   vx-section, vx-section__heading, vx-section__anchor
+//   vx-display, vx-display--page, vx-display--section
+//   vx-lead, vx-lead--page
+//   vx-kicker, vx-list, vx-code, vx-badges, vx-meta, vx-actions
+//   vx-breadcrumb, vx-empty
+//   vx-example, vx-example__grid, vx-example__panel, vx-example__meta, vx-example__eyebrow
+//   vx-props-table, vx-prop-required, vx-prop-type, vx-prop-dash
+//   vx-pager, vx-pager__btn, vx-pager__dir, vx-pager__label
+//   vx-mobile-preview, vx-mobile-preview__frame, vx-mobile-preview__iframe, vx-mobile-preview__hint
+//   vx-preview-shell, vx-preview-grid, vx-preview-list, vx-preview-stack, vx-preview-inline
+//   vx-stats, vx-stat, vx-stat__copy, vx-stat__label, vx-stat__value, vx-stat__hint, vx-stat__icon
+export {
+  Article,
+  ArticleHeader,
+  ArticleTitle,
+  ArticleBody,
+  Section,
+  SectionHeading,
+  Pager,
+  PropsTable,
+  ArticleEmptyState,
+  StatsGrid,
+} from '../components/Article';
+export type {
+  ArticleProps,
+  ArticleHeaderProps,
+  ArticleTitleProps,
+  ArticleBodyProps,
+  SectionProps,
+  SectionHeadingProps,
+  PagerProps,
+  PagerItem,
+  PropsTableProps,
+  PropsTableColumn,
+  ArticleEmptyStateProps,
+  StatsGridProps,
+  StatItem,
+} from '../components/Article';
