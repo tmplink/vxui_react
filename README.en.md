@@ -7,8 +7,8 @@ VXUI React is a general-purpose React UI component library designed for admin pa
 ## 🚀 Changelog
 
 > **v1.3.7** — 2026-05
-> - Dialog: add onConfirm/onCancel/confirmLabel/cancelLabel/confirmVariant props, merge AlertDialog into Dialog
-> - Remove AlertDialog component
+> - Dialog: add onConfirm/onCancel/confirmLabel/cancelLabel/confirmVariant props, built-in confirm/cancel button support
+> - Remove AlertDialog component (merged into Dialog)
 > - Remove demo build config (vite.demo.config.ts)
 >
 > **v1.3.6** — 2025-05
@@ -16,6 +16,79 @@ VXUI React is a general-purpose React UI component library designed for admin pa
 > - Update test cases, optimize user interaction simulation, enhance component availability verification
 
 See full changelog at [GitHub Releases](https://github.com/tmplink/vxui_react/releases).
+
+### v1.3.7 Migration Guide
+
+#### New Dialog Props
+
+v1.3.7 adds built-in confirm/cancel button support to [`Dialog`](src/components/Dialog.tsx):
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onConfirm` | `() => void` | — | Callback when confirm button is clicked |
+| `onCancel` | `() => void` | — | Callback when cancel button is clicked |
+| `confirmLabel` | `string` | `'Confirm'` | Confirm button text |
+| `cancelLabel` | `string` | `'Cancel'` | Cancel button text |
+| `confirmVariant` | `'solid' \| 'danger'` | `'solid'` | Confirm button style variant |
+
+**Usage example:**
+
+```tsx
+import { Dialog, useToast } from 'vxui-react';
+
+function DeleteConfirm() {
+  const { push } = useToast();
+
+  return (
+    <Dialog
+      trigger={<Button variant="danger">Delete Project</Button>}
+      title="Confirm Deletion"
+      description="This action cannot be undone."
+      onConfirm={() => {
+        // Execute delete logic
+        push({ tone: 'success', title: 'Deleted' });
+      }}
+      onCancel={() => {}}
+      confirmLabel="Delete"
+      cancelLabel="Cancel"
+      confirmVariant="danger"
+    >
+      <p>All related data will be permanently removed.</p>
+    </Dialog>
+  );
+}
+```
+
+#### AlertDialog Removal
+
+v1.3.7 removes the standalone `AlertDialog` component. Use Dialog with `confirmVariant="danger"` for destructive actions:
+
+**Before (v1.3.6):**
+```tsx
+import { AlertDialog } from 'vxui-react';
+
+<AlertDialog
+  trigger={<Button variant="danger">Delete</Button>}
+  title="Confirm Delete"
+  onConfirm={() => {}}
+/>
+```
+
+**After (v1.3.7):**
+```tsx
+import { Dialog, Button } from 'vxui-react';
+
+<Dialog
+  trigger={<Button variant="danger">Delete</Button>}
+  title="Confirm Delete"
+  confirmVariant="danger"
+  onConfirm={() => {}}
+/>
+```
+
+#### Demo Build Config Removal
+
+`vite.demo.config.ts` has been removed. Use `npm run dev` to run the demo site.
 
 The documentation follows the conventions of popular UI frameworks: installation first, then a minimal working example, then scenario-specific component code.
 

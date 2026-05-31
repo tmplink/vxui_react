@@ -7,8 +7,8 @@ VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用
 ## 🚀 更新公告
 
 > **v1.3.7** — 2026-05
-> - Dialog 新增 onConfirm/onCancel/confirmLabel/cancelLabel/confirmVariant 属性，合并 AlertDialog
-> - 移除 AlertDialog 组件
+> - Dialog: 新增 onConfirm/onCancel/confirmLabel/cancelLabel/confirmVariant 属性，内置确认/取消按钮支持
+> - 移除 AlertDialog 独立组件，功能已合并至 Dialog
 > - 移除 demo 构建配置 (vite.demo.config.ts)
 >
 > **v1.3.6** — 2025-05
@@ -16,6 +16,81 @@ VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用
 > - 更新测试用例，优化用户交互模拟，增强组件可用性验证
 
 查看完整更新日志请访问 [GitHub Releases](https://github.com/tmplink/vxui_react/releases)。
+
+### v1.3.7 适配指南
+
+#### Dialog 组件新增属性
+
+v1.3.7 为 [`Dialog`](src/components/Dialog.tsx) 组件新增了内置确认/取消按钮支持，无需再手动实现：
+
+| 属性 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `onConfirm` | `() => void` | — | 点击确认按钮时的回调 |
+| `onCancel` | `() => void` | — | 点击取消按钮时的回调 |
+| `confirmLabel` | `string` | `'确认'` | 确认按钮文本 |
+| `cancelLabel` | `string` | `'取消'` | 取消按钮文本 |
+| `confirmVariant` | `'solid' \| 'danger'` | `'solid'` | 确认按钮样式变体 |
+
+**使用示例：**
+
+```tsx
+import { Dialog, useToast } from 'vxui-react';
+
+function DeleteConfirm() {
+  const { push } = useToast();
+
+  return (
+    <Dialog
+      trigger={<Button variant="danger">删除项目</Button>}
+      title="确认删除"
+      description="此操作不可撤销，确定要继续吗？"
+      onConfirm={() => {
+        // 执行删除逻辑
+        push({ tone: 'success', title: '已删除' });
+      }}
+      onCancel={() => {
+        // 取消逻辑
+      }}
+      confirmLabel="确认删除"
+      cancelLabel="暂不删除"
+      confirmVariant="danger"
+    >
+      <p>删除后所有相关数据将被永久移除。</p>
+    </Dialog>
+  );
+}
+```
+
+#### AlertDialog 移除
+
+v1.3.7 移除了独立的 `AlertDialog` 组件。如需危险操作确认对话框，请使用 Dialog 的 `confirmVariant="danger"`：
+
+**迁移前（v1.3.6）：**
+```tsx
+import { AlertDialog } from 'vxui-react';
+
+<AlertDialog
+  trigger={<Button variant="danger">删除</Button>}
+  title="确认删除"
+  onConfirm={() => {}}
+/>
+```
+
+**迁移后（v1.3.7）：**
+```tsx
+import { Dialog, Button } from 'vxui-react';
+
+<Dialog
+  trigger={<Button variant="danger">删除</Button>}
+  title="确认删除"
+  confirmVariant="danger"
+  onConfirm={() => {}}
+/>
+```
+
+#### demo 构建配置移除
+
+`vite.demo.config.ts` 已从项目中移除。如需运行演示站点，使用标准的 `npm run dev` 命令即可。
 
 文档内容现在按流行 UI 框架的写法组织：先给安装方式，再给最小可运行示例，最后给分场景的组件代码。
 
