@@ -1,0 +1,43 @@
+/* ═══════════════════════════════════════════════════════════
+   Typography Components (Text and Heading)
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-text-component {
+  margin: 0;
+  padding: 0;
+  color: var(--vx-text);
+}
+.vx-text--secondary { color: var(--vx-text-secondary); }
+.vx-text--muted { color: var(--vx-text-muted); }
+.vx-text--danger { color: var(--vx-danger); }
+.vx-text--success { color: var(--vx-success); }
+.vx-text-size--sm { font-size: 14px; }
+.vx-text-size--base { font-size: 16px; }
+.vx-text-size--lg { font-size: 18px; }
+.vx-text-size--xl { font-size: 20px; }
+.vx-text-weight--normal { font-weight: 400; }
+.vx-text-weight--medium { font-weight: 500; }
+.vx-text-weight--semibold { font-weight: 600; }
+.vx-text-weight--bold { font-weight: 700; }
+.vx-text--truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vx-heading {
+  margin: 0;
+  color: var(--vx-text);
+  letter-spacing: -0.025em;
+}
+.vx-heading--secondary { color: var(--vx-text-secondary); }
+.vx-heading--h1 { font-size: 36px; line-height: 40px; }
+.vx-heading--h2 { font-size: 30px; line-height: 36px; }
+.vx-heading--h3 { font-size: 24px; line-height: 32px; }
+.vx-heading--h4 { font-size: 20px; line-height: 28px; }
+.vx-heading--h5 { font-size: 18px; line-height: 28px; }
+.vx-heading--h6 { font-size: 16px; line-height: 24px; }
+.vx-heading-weight--normal { font-weight: 400; }
+.vx-heading-weight--medium { font-weight: 500; }
+.vx-heading-weight--semibold { font-weight: 600; }
+.vx-heading-weight--bold { font-weight: 700; }

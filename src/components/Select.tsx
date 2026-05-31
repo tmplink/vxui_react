@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect, useId } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useId, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
@@ -27,6 +27,12 @@ export interface SelectProps {
   emptyText?: string;
   searchable?: boolean | number;
   className?: string;
+  /**
+   * 自定义移动端选择面板组件。
+   * 默认使用 Sheet 组件。传入 null 可禁用移动端面板。
+   * 可用于注入自定义的 BottomSheet 实现以解耦依赖。
+   */
+  mobileSheet?: ReactNode;
 }
 
 export function Select({
@@ -44,6 +50,7 @@ export function Select({
   emptyText = 'No results',
   searchable = true,
   className,
+  mobileSheet,
 }: SelectProps) {
   const isControlled = controlledValue !== undefined;
   const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
@@ -334,8 +341,10 @@ export function Select({
         );
         return shouldPortal ? createPortal(dropdownNode, dialogContentRef.current ?? document.body) : dropdownNode;
       })()}
-      {/* Mobile BottomSheet */}
-      {isMobile && (
+      {/* Mobile BottomSheet — 可通过 mobileSheet prop 注入自定义组件 */}
+      {isMobile && (mobileSheet !== undefined ? (
+        mobileSheet
+      ) : (
         <Sheet
           side="bottom"
           open={open}
@@ -347,7 +356,7 @@ export function Select({
         >
           {mobileSheetContent}
         </Sheet>
-      )}
+      ))}
     </div>
   );
 }

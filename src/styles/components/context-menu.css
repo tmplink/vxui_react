@@ -1,0 +1,10 @@
+/* ═══════════════════════════════════════════════════════════
+   ContextMenu
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-context-menu-wrap {
+  display: contents;
+}
+.vx-context-menu {
+  z-index: var(--vx-z-context-menu);
+}

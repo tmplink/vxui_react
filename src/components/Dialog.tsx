@@ -19,7 +19,7 @@ import { useDialogState } from '../hooks/useDialogState';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { cx } from '../lib/cx';
-import { Button } from './Button';
+import { DialogContentContext } from '../lib/dialogPopover';
 
 export type DialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export type DialogPadding = 'none' | 'sm' | 'md' | 'lg';
@@ -278,8 +278,20 @@ export function Dialog({
 
   const renderFooter = footer ?? (onConfirm ? (
     <>
-      <Button variant="secondary" onClick={handleCancel}>{cancelLabel}</Button>
-      <Button variant={confirmVariant === 'danger' ? 'danger' : 'solid'} onClick={handleConfirm}>{confirmLabel}</Button>
+      <button
+        type="button"
+        className="vx-button vx-button--secondary"
+        onClick={handleCancel}
+      >
+        {cancelLabel}
+      </button>
+      <button
+        type="button"
+        className={cx('vx-button', confirmVariant === 'danger' ? 'vx-button--danger' : 'vx-button--solid')}
+        onClick={handleConfirm}
+      >
+        {confirmLabel}
+      </button>
     </>
   ) : null);
 
@@ -290,59 +302,60 @@ export function Dialog({
       {isOpen &&
         createPortal(
           <DialogContext.Provider value={contextValue}>
-            <div
-              className="vx-dialog__overlay"
-              onClick={handleOverlayClick}
-              onPointerDown={(e) => {
-                // Prevent pointer-down outside when portaled dropdown or BottomSheet is open
-                const el = contentRef.current;
-                if (el?.dataset.hasOpenPortal === '1' || el?.dataset.hasOpenBottomSheet === '1') {
-                  e.preventDefault();
-                }
-              }}
-            />
-            <div
-              ref={contentRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={titleId}
-              aria-describedby={description ? descId : undefined}
-              tabIndex={-1}
-              className={cx(
-                'vx-dialog__content',
-                fullscreen && 'vx-dialog__content--fullscreen',
-                size !== 'md' && `vx-dialog__content--${size}`,
-                placement !== 'center' && `vx-dialog__content--${placement}`,
-                padding && `vx-dialog__content--pad-${padding}`,
-                scrollable && 'vx-dialog__content--scrollable',
-                className,
-              )}
-            >
-              <div className="vx-dialog__header">
-                <div>
-                  <h2 id={titleId} className="vx-dialog__title">
-                    {title}
-                  </h2>
-                  {description ? (
-                    <p id={descId} className="vx-dialog__description">
-                      {description}
-                    </p>
+            <DialogContentContext.Provider value={contentRef.current}>
+              <div
+                className="vx-dialog__overlay"
+                onClick={handleOverlayClick}
+                onPointerDown={(e) => {
+                  const el = contentRef.current;
+                  if (el?.dataset.hasOpenPortal === '1' || el?.dataset.hasOpenBottomSheet === '1') {
+                    e.preventDefault();
+                  }
+                }}
+              />
+              <div
+                ref={contentRef}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={titleId}
+                aria-describedby={description ? descId : undefined}
+                tabIndex={-1}
+                className={cx(
+                  'vx-dialog__content',
+                  fullscreen && 'vx-dialog__content--fullscreen',
+                  size !== 'md' && `vx-dialog__content--${size}`,
+                  placement !== 'center' && `vx-dialog__content--${placement}`,
+                  padding && `vx-dialog__content--pad-${padding}`,
+                  scrollable && 'vx-dialog__content--scrollable',
+                  className,
+                )}
+              >
+                <div className="vx-dialog__header">
+                  <div>
+                    <h2 id={titleId} className="vx-dialog__title">
+                      {title}
+                    </h2>
+                    {description ? (
+                      <p id={descId} className="vx-dialog__description">
+                        {description}
+                      </p>
+                    ) : null}
+                  </div>
+                  {closable ? (
+                    <button
+                      type="button"
+                      className="vx-dialog__close"
+                      aria-label="Close dialog"
+                      onClick={close}
+                    >
+                      <X size={16} />
+                    </button>
                   ) : null}
                 </div>
-                {closable ? (
-                  <button
-                    type="button"
-                    className="vx-dialog__close"
-                    aria-label="Close dialog"
-                    onClick={close}
-                  >
-                    <X size={16} />
-                  </button>
-                ) : null}
+                {children ? <DialogBody scrollable={scrollable}>{children}</DialogBody> : null}
+                {renderFooter ? <div className="vx-dialog__footer">{renderFooter}</div> : null}
               </div>
-              {children ? <DialogBody scrollable={scrollable}>{children}</DialogBody> : null}
-              {renderFooter ? <div className="vx-dialog__footer">{renderFooter}</div> : null}
-            </div>
+            </DialogContentContext.Provider>
           </DialogContext.Provider>,
           document.body,
         )}

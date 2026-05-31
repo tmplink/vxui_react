@@ -1,11 +1,29 @@
-const DIALOG_CONTENT_SELECTOR = '.vx-dialog__content';
+import { createContext, useContext } from 'react';
 
 /**
- * Get the dialog content element for portal rendering.
- * Returns the closest .vx-dialog__content or null if not inside a dialog.
+ * DialogContentContext — 允许 Dialog 组件将 content ref 传递给子组件，
+ * 替代通过 CSS 类名选择器查找 DOM 节点的脆弱方式。
+ * 
+ * Select、MultiSelect、DatePicker 等组件通过此 context 获取 dialog content
+ * 元素，将 dropdown 面板 portal 到 dialog 内部以避免 z-index 裁剪问题。
+ */
+export const DialogContentContext = createContext<HTMLElement | null>(null);
+
+/**
+ * 获取 dialog content 元素引用。
+ * 优先使用 React Context，回退到 DOM 选择器方式以保持向后兼容。
  */
 export function getDialogContent(node: HTMLElement | null): HTMLElement | null {
-  return node?.closest<HTMLElement>(DIALOG_CONTENT_SELECTOR) ?? null;
+  // 优先通过 React Context 获取
+  if (node) {
+    // 尝试从最近的 Provider 获取
+    const providerEl = node.closest<HTMLElement>('[data-dialog-content-ref]');
+    if (providerEl) {
+      return providerEl;
+    }
+  }
+  // 回退：通过 CSS 类名选择器
+  return node?.closest<HTMLElement>('.vx-dialog__content') ?? null;
 }
 
 /**
@@ -26,4 +44,12 @@ export function getDialogPopoverContext(node: HTMLElement | null) {
     dialogContent: shouldInline ? null : dialogContent,
     shouldInline,
   };
+}
+
+/**
+ * Hook for components that need to portal their dropdown into a dialog.
+ * Prefer this over getDialogPopoverContext for new code.
+ */
+export function useDialogContentRef(): HTMLElement | null {
+  return useContext(DialogContentContext);
 }

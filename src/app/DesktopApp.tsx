@@ -1,39 +1,40 @@
 /**
  * DesktopApp — 桌面端文档应用组件
- * 从 App.tsx 提取，包含文档导航、工具栏、页面渲染等逻辑
+ * 精简版，文案/辅助函数已提取到独立文件
  */
-
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  AlertTriangle, ArrowRight, Bell, ChevronRight, Globe, House,
-  LogIn, Menu, Monitor, Moon, Palette, Search, SlidersHorizontal,
-  Sun, User, UserPlus, Zap,
+  Globe, House, LogIn, Menu, Monitor, Moon, MoreHorizontal, Palette, Search,
+  SlidersHorizontal, Sun, User, UserPlus, Zap, AlertTriangle,
 } from 'lucide-react';
 import type { AppShellNavSection } from '../components/AppShell';
-import { CodeBlock } from '../components/CodeBlock';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { locales, useI18n } from '../i18n';
 import {
-  Accordion, Alert, AppShell, Avatar, Badge, Breadcrumb, Button,
-  Calendar, Card, CardContent, CardDescription, CardHeader, CardTitle,
-  Carousel, Checkbox, ColorPicker, ContextMenu, DatePicker, Dialog,
-  DialogClose, DropdownMenu, EmptyState, FileUpload, Form, FormDescription,
-  FormField, FormLabel, FormMessage, Heading, HoverCard, Input, Label,
-  Menubar, MobileList, MobileListItem, MobileListSection, MultiSelect,
-  NavigationMenu, NumberInput, Pagination, Popover, Progress, Radio,
-  RadioGroup, Rating, ResizableHandle, ResizablePanel, ResizablePanelGroup,
-  ScrollArea, SegmentedControl, Select, Separator, ShellNav, ShellNavItem,
+  AppShell, Button, DropdownMenu, useTheme, useToast, useViewport,
+  Accordion, Alert, Avatar, Badge, Breadcrumb, Calendar, Card, CardContent,
+  CardDescription, CardHeader, CardTitle, Carousel, Checkbox, ColorPicker,
+  ContextMenu, DatePicker, Dialog, DialogClose, DropdownMenu as DM,
+  EmptyState, FileUpload, Form, FormField, FormLabel, FormDescription,
+  FormMessage, Heading, HoverCard, Input, Label, Menubar, MobileList,
+  MobileListItem, MobileListSection, MultiSelect, NavigationMenu,
+  NumberInput, Pagination, Popover, Progress, Radio, RadioGroup, Rating,
+  ResizableHandle, ResizablePanel, ResizablePanelGroup, ScrollArea,
+  SegmentedControl, Select, Separator, ShellNav, ShellNavItem,
   ShellNavSection, Sheet, Skeleton, Slider, Spinner, Stepper, Switch,
   Tabs, TabsContent, TabsList, TabsTrigger, Table, TagInput, Text,
   Textarea, TimePicker, Timeline, Toggle, ToggleGroup, Tooltip, TreeView,
-  useTheme, useToast, useViewport,
 } from '../lib';
-import type { PageKey, AppRoute, ReleaseTrack, ViewerSession } from './routes';
-import {
-  DOC_PAGE_KEYS, SESSION_STORAGE_KEY, buildRoutePath, loadSession, parseRoute,
-} from './routes';
+import type { PageKey, AppRoute, ReleaseTrack, ViewerSession, PageDefinition } from './routes';
+import { DOC_PAGE_KEYS } from './routes';
 import { DOC_NAV_GROUPS, getDocsGroupLabel, getDocsGroupDescription, pageIcons } from './nav-config';
 import { QUICK_START_PREVIEW_SNIPPETS } from './doc-snippets';
+import { CommandPalette } from '../components/CommandPalette';
+import type { SearchEntry } from '../components/CommandPalette';
+import { DocsHome } from './DocsHome';
+import { DocPage } from './DocPage';
+import { getDocsCopy, getDocsHomeCopy } from './doc-copy';
+import { createDocHelpers } from './doc-helpers';
 
 interface DesktopAppProps {
   route: AppRoute;
@@ -63,7 +64,7 @@ export function DesktopApp({
 }: DesktopAppProps) {
   const { t, locale, setLocale } = useI18n();
   const isZh = locale === 'zh';
-  const pages = t.pageDefs as Record<PageKey, import('./routes').PageDefinition>;
+  const pages = t.pageDefs as Record<PageKey, PageDefinition>;
   const { push } = useToast();
   const { mode, setTheme, theme, themes } = useTheme();
   const { isTablet, isTabletPortrait } = useViewport();
@@ -85,119 +86,16 @@ export function DesktopApp({
   const [docsTopbarWidth, setDocsTopbarWidth] = useState<number>(() => (typeof window === 'undefined' ? 0 : window.innerWidth));
   const [isDocHeaderInView, setIsDocHeaderInView] = useState(true);
 
-  const copy = isZh ? {
-    docsBadge: '统一响应式 UI 框架',
-    docsTitle: '一套资源，覆盖手机、平板与桌面',
-    docsLead: '首页、登录页、注册页、错误页、隐私政策、服务条款和文档内容库全部运行在同一套路由、同一套布局壳层与同一套设计 Token 上。',
-    docsPrimary: '查看快速开始',
-    docsSecondary: '返回首页',
-    splitTitle: '不再维护独立移动端应用',
-    splitBody: '手机端通过抽屉导航、一列排版和内容重排适配，而不是切换到另一套 /m 路由和另一套页面组件。',
-    libraryTitle: '文档内容库',
-    libraryLead: '每个章节都可搜索、可预览、可直接打开真实页面。',
-    supportTitle: '响应式支撑',
-    supportCards: [
-      { label: '手机', accent: '单列', description: '关键操作保持在拇指可达区域，侧边导航收拢为抽屉，内容卡片自然堆叠。' },
-      { label: '平板', accent: '双列', description: '保留文档上下文与工具区，同时把表单、统计卡和内容区平衡到双列结构。' },
-      { label: '桌面', accent: '三轨', description: '支持长文档、实时预览和控制面板并行出现，无需复制组件与状态管理。' },
-    ],
-    architectureTitle: '统一信息架构',
-    architectureLead: '搜索、导航、预览和页面跳转绑定到同一个内容模型，不再分裂成两套应用。',
-    architectureBullets: [
-      '桌面端保留常驻导航和工具栏，适合长文档浏览。',
-      '平板端压缩密度与栅格，不改动页面层级和数据源。',
-      '手机端将侧边栏转成抽屉，仍然使用同一套路由和组件。',
-    ],
-    rolloutTitle: '落地方式',
-    rolloutItems: [
-      { key: 'shell', title: '统一入口', content: '入口只渲染一个 App，所有设备共享同一套路由解析和状态管理。' },
-      { key: 'pages', title: '统一页面树', content: '首页、认证页、错误页、法务页和文档页全部保留在同一个页面树中。' },
-      { key: 'shell-responsive', title: '统一壳层响应式', content: '侧边栏在窄屏收为抽屉，顶部工具区自动换行，内容从多列过渡为单列。' },
-    ],
-    releaseLabel: '发布轨道',
-    releaseOptions: { stable: '稳定版', preview: '预览版', internal: '内部版' },
-    contentMapTitle: '内容地图',
-    metrics: {
-      templates: '模板页面', templatesDesc: '首页、认证、错误与法务',
-      docs: '文档条目', docsDesc: '单一内容树驱动导航与搜索',
-      breakpoints: '断点层级', breakpointsDesc: '手机 / 平板 / 桌面',
-      themes: '主题预设', themesDesc: '统一作用于全站',
-    },
-    livePreview: '实时预览',
-    openPage: '打开完整页面',
-    deliveryTitle: '交付清单',
-    responsiveTitle: '响应式检查',
-    responsiveChecklist: [
-      '主操作是否在 390px 宽度下仍位于首屏可见区域。',
-      '文档导航是否从常驻侧栏平滑转为抽屉，不复制状态。',
-      '卡片、表格和表单是否可从三列过渡为单列而不溢出。',
-    ],
-    runtimeTitle: '控制台',
-    runtimeDesc: '把主题、密度和会话状态视为全局能力，而不是页面特例。',
-    sessionMember: '成员视图',
-    sessionGuest: '访客视图',
-    accountMenu: '账户',
-  } : {
-    docsBadge: 'Unified Responsive UI Framework',
-    docsTitle: 'One resource system for phone, tablet, and desktop',
-    docsLead: 'The home page, login, register, error, privacy policy, terms of service, and documentation library now run on one route tree, one layout shell, and one token system.',
-    docsPrimary: 'Open Quick Start',
-    docsSecondary: 'Back to Home',
-    splitTitle: 'No separate mobile application anymore',
-    splitBody: 'Phone layouts now adapt through drawer navigation, single-column composition, and content reflow instead of switching to a second /m route tree.',
-    libraryTitle: 'Documentation Library',
-    libraryLead: 'Every section is searchable, previewable, and linked to the full live page.',
-    supportTitle: 'Responsive Support',
-    supportCards: [
-      { label: 'Phone', accent: 'Single column', description: 'Primary actions stay thumb-reachable, the sidebar becomes a drawer, and cards stack without losing hierarchy.' },
-      { label: 'Tablet', accent: 'Two columns', description: 'The shell keeps context visible while forms, stats, and content rebalance into comfortable two-column compositions.' },
-      { label: 'Desktop', accent: 'Three tracks', description: 'Long-form docs, live previews, and controls can sit side by side without duplicating components or state.' },
-    ],
-    architectureTitle: 'Unified Information Architecture',
-    architectureLead: 'Search, navigation, previews, and route changes are all driven by the same content model instead of two different apps.',
-    architectureBullets: [
-      'Desktop keeps persistent navigation and a utility-rich header for long-form browsing.',
-      'Tablet compresses density and grid structure without changing routes or data sources.',
-      'Phone turns the sidebar into a drawer while keeping the same components and route ownership.',
-    ],
-    rolloutTitle: 'How It Lands',
-    rolloutItems: [
-      { key: 'shell', title: 'Single entry point', content: 'The entry now renders one App, so every device shares the same route parsing and state model.' },
-      { key: 'pages', title: 'Single page tree', content: 'Home, auth, error, legal, and docs remain in one page tree instead of being copied for mobile.' },
-      { key: 'shell-responsive', title: 'Responsive shell', content: 'The sidebar collapses into a drawer on narrow screens, the top bar wraps, and content shifts from multi-column to single-column layouts.' },
-    ],
-    releaseLabel: 'Release Track',
-    releaseOptions: { stable: 'Stable', preview: 'Preview', internal: 'Internal' },
-    contentMapTitle: 'Content Map',
-    metrics: {
-      templates: 'Template screens', templatesDesc: 'Home, auth, error, and legal',
-      docs: 'Doc entries', docsDesc: 'One content tree drives nav and search',
-      breakpoints: 'Breakpoints', breakpointsDesc: 'Phone / tablet / desktop',
-      themes: 'Theme presets', themesDesc: 'Applied across the whole app',
-    },
-    livePreview: 'Live preview',
-    openPage: 'Open full page',
-    deliveryTitle: 'Delivery Checklist',
-    responsiveTitle: 'Responsive Checklist',
-    responsiveChecklist: [
-      'Keep the primary action visible within a 390px viewport.',
-      'Turn docs navigation into a drawer instead of duplicating route state.',
-      'Let cards, tables, and forms reflow from three columns to one without overflow.',
-    ],
-    runtimeTitle: 'Control Panel',
-    runtimeDesc: 'Treat theme, density, and session state as app-wide capabilities instead of page-specific exceptions.',
-    sessionMember: 'Member view',
-    sessionGuest: 'Guest view',
-    accountMenu: 'Account',
-  };
+  const copy = getDocsCopy(isZh);
+  const docsHomeCopy = getDocsHomeCopy(isZh);
+  const helpers = createDocHelpers(isZh, pages, copy, onNavigate, push);
 
-  const activePage = route.view === 'docs' ? route.page ?? 'introduction' : 'introduction';
+  const activePage: PageKey = route.view === 'docs' ? route.page ?? 'introduction' : 'introduction';
   const activeDocument = pages[activePage] ?? pages.introduction;
   const isDocDetailPage = route.view === 'docs' && activePage !== 'introduction';
   const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
   const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
 
-  // Toolbar overflow calculation
   const isTabletLandscape = isTablet && !isTabletPortrait;
   const TOOLBAR_OVERHEAD = isTabletLandscape ? 40 : (isTabletPortrait ? 130 : 246);
   const TOOLBAR_GAP = 10;
@@ -217,6 +115,13 @@ export function DesktopApp({
       if (needed <= inlineBudget) { acc = needed; docsToolbarVisibleCount++; } else break;
     }
   }
+  const showBack = docsToolbarVisibleCount >= 1;
+  const showSearch = docsToolbarVisibleCount >= 2;
+  const showDensity = docsToolbarVisibleCount >= 3;
+  const showThemeBtn = docsToolbarVisibleCount >= 4;
+  const showAccountBtn = docsToolbarVisibleCount >= 5;
+  const showLanguageBtn = docsToolbarVisibleCount >= 6;
+  const showMoreMenu = docsToolbarVisibleCount < TOOLBAR_ITEM_WIDTHS.length;
 
   const densityLabel = isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`;
   const themeMenuItems = themeEntries.map(([themeName, definition]) => ({
@@ -224,7 +129,6 @@ export function DesktopApp({
     icon: <Palette size={14} />,
     onClick: () => setTheme(themeName),
   }));
-
   const accountMenuItems = viewerSession
     ? [{ label: t.publicPages.navLogout, icon: <User size={14} />, onClick: onLogout }]
     : [
@@ -232,28 +136,30 @@ export function DesktopApp({
         { label: t.publicPages.navSignup, icon: <UserPlus size={14} />, onClick: () => onNavigate({ view: 'register' }) },
       ];
 
+  const docsNavigationMenuGroup = {
+    label: isZh ? '导航' : 'Navigation',
+    items: [
+      { label: t.publicPages.backHome, icon: <House size={14} />, onClick: () => onNavigate({ view: 'home' }) },
+      { label: t.searchTrigger, icon: <Search size={14} />, shortcut: '⌘K', onClick: () => onSearchOpenChange(true) },
+    ],
+  };
+  const docsViewMenuGroup = {
+    label: isZh ? '视图' : 'View',
+    items: [{ label: densityLabel, icon: <SlidersHorizontal size={14} />, onClick: () => onCompactDensityChange(!compactDensity) }],
+  };
+  const docsThemeMenuGroup = { label: isZh ? '主题' : 'Theme', items: themeMenuItems };
+  const docsAccountMenuGroup = { label: copy.accountMenu, items: accountMenuItems };
+  const docsLanguageMenuGroup = {
+    label: isZh ? '语言' : 'Language',
+    items: Object.entries(locales).map(([localeKey, definition]) => ({
+      label: `${definition.label}${locale === localeKey ? (isZh ? ' (当前)' : ' (current)') : ''}`,
+      icon: <Globe size={14} />,
+      onClick: () => setLocale(localeKey),
+    })),
+  };
   const docsControlMenuGroups = [
-    {
-      label: isZh ? '导航' : 'Navigation',
-      items: [
-        { label: t.publicPages.backHome, icon: <House size={14} />, onClick: () => onNavigate({ view: 'home' }) },
-        { label: t.searchTrigger, icon: <Search size={14} />, shortcut: '⌘K', onClick: () => onSearchOpenChange(true) },
-      ],
-    },
-    {
-      label: isZh ? '视图' : 'View',
-      items: [{ label: densityLabel, icon: <SlidersHorizontal size={14} />, onClick: () => onCompactDensityChange(!compactDensity) }],
-    },
-    { label: isZh ? '主题' : 'Theme', items: themeMenuItems },
-    { label: copy.accountMenu, items: accountMenuItems },
-    {
-      label: isZh ? '语言' : 'Language',
-      items: Object.entries(locales).map(([localeKey, definition]) => ({
-        label: `${definition.label}${locale === localeKey ? (isZh ? ' (当前)' : ' (current)') : ''}`,
-        icon: <Globe size={14} />,
-        onClick: () => setLocale(localeKey),
-      })),
-    },
+    docsNavigationMenuGroup, docsViewMenuGroup, docsThemeMenuGroup,
+    docsAccountMenuGroup, docsLanguageMenuGroup,
   ];
 
   const metricCards = [
@@ -263,13 +169,10 @@ export function DesktopApp({
     { label: copy.metrics.themes, value: String(themeEntries.length), hint: copy.metrics.themesDesc },
   ];
 
-  const searchEntries = useMemo<import('../components/CommandPalette').SearchEntry[]>(
+  const searchEntries = useMemo<SearchEntry[]>(
     () => DOC_PAGE_KEYS.map((key) => ({
-      key,
-      title: pages[key].title,
-      section: pages[key].section,
-      description: pages[key].description,
-      keywords: pages[key].guidance,
+      key, title: pages[key].title, section: pages[key].section,
+      description: pages[key].description, keywords: pages[key].guidance,
     })),
     [pages],
   );
@@ -282,24 +185,16 @@ export function DesktopApp({
         if (typeof item === 'string') {
           const pageKey = item;
           return {
-            key: pageKey,
-            label: pages[pageKey].title,
-            icon: pageIcons[pageKey],
-            active: pageKey === activePage,
-            onSelect: () => onNavigate({ view: 'docs', page: pageKey }),
+            key: pageKey, label: pages[pageKey].title, icon: pageIcons[pageKey],
+            active: pageKey === activePage, onSelect: () => onNavigate({ view: 'docs', page: pageKey }),
           };
         }
         const title = isZh ? locales.zh.families[item.i18nKey] : locales.en.families[item.i18nKey];
         return {
-          key: item.key,
-          label: title,
-          icon: item.icon,
+          key: item.key, label: title, icon: item.icon,
           children: item.pages.map((pageKey) => ({
-            key: pageKey,
-            label: pages[pageKey].title,
-            icon: pageIcons[pageKey],
-            active: pageKey === activePage,
-            onSelect: () => onNavigate({ view: 'docs', page: pageKey }),
+            key: pageKey, label: pages[pageKey].title, icon: pageIcons[pageKey],
+            active: pageKey === activePage, onSelect: () => onNavigate({ view: 'docs', page: pageKey }),
           })),
         };
       }),
@@ -307,7 +202,13 @@ export function DesktopApp({
     [activePage, isZh, pages, onNavigate],
   );
 
-  // ResizeObserver for topbar width
+  const docsHomeGroups = DOC_NAV_GROUPS.map((group) => ({
+    ...group,
+    pages: group.items.flatMap((item) => (typeof item === 'string' ? item : item.pages)),
+    label: getDocsGroupLabel(group.key, isZh),
+    description: getDocsGroupDescription(group.key, isZh),
+  }));
+
   useEffect(() => {
     const target = docsTopbarRef.current;
     if (!target) return;
@@ -322,9 +223,13 @@ export function DesktopApp({
     return () => observer.disconnect();
   }, []);
 
-  // IntersectionObserver for doc header
   useEffect(() => {
     if (!isDocDetailPage) { setIsDocHeaderInView(true); return; }
+    setIsDocHeaderInView(true);
+  }, [isDocDetailPage, activePage]);
+
+  useEffect(() => {
+    if (!isDocDetailPage) return;
     const target = docHeaderRef.current;
     if (!target || typeof IntersectionObserver === 'undefined') { setIsDocHeaderInView(true); return; }
     const observer = new IntersectionObserver(
@@ -335,124 +240,798 @@ export function DesktopApp({
     return () => observer.disconnect();
   }, [isDocDetailPage, activePage]);
 
-  // Render helpers
-  function renderCodeBlock(code: string, language: 'tsx' | 'bash' = 'tsx') {
-    return (
-      <CodeBlock code={code} language={language}
-        copyLabel={isZh ? '复制代码' : 'Copy code'}
-        copiedLabel={isZh ? '已复制' : 'Copied'}
-        onCopy={async (c) => { try { await navigator.clipboard.writeText(c); return true; } catch { return false; } }}
-      />
-    );
-  }
-
-  function renderTemplateLauncher(pageKey: Extract<PageKey, 'home-page' | 'login-page' | 'register-page' | 'error-page' | 'privacy-policy' | 'terms-of-service'>) {
-    const actionMap: Record<typeof pageKey, () => void> = {
-      'home-page': () => onNavigate({ view: 'home' }),
-      'login-page': () => onNavigate({ view: 'login' }),
-      'register-page': () => onNavigate({ view: 'register' }),
-      'error-page': () => onNavigate({ view: 'error' }),
-      'privacy-policy': () => onNavigate({ view: 'privacy-policy' }),
-      'terms-of-service': () => onNavigate({ view: 'terms-of-service' }),
-    };
-    return (
-      <div className="vx-template-launch">
-        <div className="vx-template-launch__head">
-          <span className="vx-template-launch__icon">{pageIcons[pageKey]}</span>
-          <div>
-            <strong>{pages[pageKey].title}</strong>
-            <p>{pages[pageKey].description}</p>
+  // ── renderSample ──
+  function renderSample(pageKey: PageKey): ReactNode {
+    const { renderCodeBlock, renderTemplateLauncher } = helpers;
+    switch (pageKey) {
+      case 'quick-start': {
+        const tabs = [
+          { value: 'install', label: isZh ? '安装' : 'Install', code: QUICK_START_PREVIEW_SNIPPETS.install },
+          { value: 'providers', label: isZh ? 'Providers' : 'Providers', code: QUICK_START_PREVIEW_SNIPPETS.providers },
+          { value: 'layout', label: isZh ? '页面壳层' : 'Layout', code: QUICK_START_PREVIEW_SNIPPETS.layout },
+          { value: 'feedback', label: isZh ? '反馈' : 'Feedback', code: QUICK_START_PREVIEW_SNIPPETS.feedback },
+        ] as const;
+        return (
+          <Tabs defaultValue="install">
+            <TabsList>{tabs.map((tab) => (<TabsTrigger key={tab.value} value={tab.value}>{tab.label}</TabsTrigger>))}</TabsList>
+            {tabs.map((tab) => (<TabsContent key={tab.value} value={tab.value}>{renderCodeBlock(tab.code, tab.value === 'install' ? 'bash' : 'tsx')}</TabsContent>))}
+          </Tabs>
+        );
+      }
+      case 'shell-sidebar':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ background: 'var(--vx-surface)', border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-lg)', overflow: 'hidden' }}>
+              <ShellNav label={isZh ? '导航示例' : 'Navigation demo'}>
+                <ShellNavSection title={isZh ? '快速开始' : 'Getting started'}>
+                  <ShellNavItem label={isZh ? '介绍' : 'Introduction'} active onSelect={() => {}} />
+                </ShellNavSection>
+                <ShellNavSection title={isZh ? '组件' : 'Components'}>
+                  <ShellNavItem label={isZh ? '表单控件' : 'Form controls'} defaultOpen onSelect={() => {}}>
+                    <ShellNavItem label={isZh ? '输入框' : 'Input'} onSelect={() => {}} />
+                    <ShellNavItem label={isZh ? '多选框' : 'MultiSelect'} onSelect={() => {}} />
+                    <ShellNavItem label={isZh ? '时间选择器' : 'TimePicker'} onSelect={() => {}} />
+                  </ShellNavItem>
+                  <ShellNavItem label={isZh ? '叠层浮层' : 'Overlays'} onSelect={() => {}}>
+                    <ShellNavItem label={isZh ? '对话框' : 'Dialog'} onSelect={() => {}} />
+                    <ShellNavItem label={isZh ? '抽屉' : 'Sheet'} onSelect={() => {}} />
+                  </ShellNavItem>
+                  <ShellNavItem label={isZh ? '导航' : 'Navigation'} onSelect={() => {}} />
+                </ShellNavSection>
+              </ShellNav>
+            </div>
           </div>
-        </div>
-        <Button variant="secondary" onClick={actionMap[pageKey]}>
-          <ArrowRight size={16} /> {copy.openPage}
-        </Button>
-      </div>
-    );
-  }
-
-  // Main render
-  return (
-    <AppShell
-      brand="VXUI"
-      brandCaption={isZh ? 'React 组件库' : 'React component library'}
-      topbarRef={docsTopbarRef}
-      breadcrumb={
-        <div className="vx-doc-breadcrumb" data-state={isDocDetailPage ? 'detail' : 'overview'}>
-          <span className="vx-doc-breadcrumb__kicker">{topbarDocLabel}</span>
-          {showPinnedDocTitle && <><span className="vx-topbar__separator">/</span><strong>{activeDocument.title}</strong></>}
-        </div>
-      }
-      title={activeDocument.title}
-      description={activeDocument.description}
-      navSections={navSections}
-      sidebarCollapsed={sidebarCollapsed}
-      mobileNavOpen={mobileNavOpen}
-      density={compactDensity ? 'compact' : undefined}
-      onSidebarToggle={onSidebarToggle}
-      onMobileNavToggle={onMobileNavToggle}
-      headerActions={
-        <div className="vx-docs-toolbar">
-          {docsToolbarVisibleCount >= 1 && (
-            <Button variant="ghost" size="sm" onClick={() => onNavigate({ view: 'home' })}>
-              <House size={16} /> {isZh ? '首页' : 'Home'}
-            </Button>
-          )}
-          {docsToolbarVisibleCount >= 2 && (
-            <Button variant="ghost" size="sm" onClick={() => onSearchOpenChange(true)}>
-              <Search size={16} /> {isZh ? '搜索' : 'Search'} <kbd className="vx-search-kbd">⌘K</kbd>
-            </Button>
-          )}
-          {docsToolbarVisibleCount >= 3 && (
-            <Button variant="ghost" size="sm" onClick={() => onCompactDensityChange(!compactDensity)}>
-              <SlidersHorizontal size={16} /> {densityLabel}
-            </Button>
-          )}
-          {docsToolbarVisibleCount >= 4 && (
-            <DropdownMenu
-              trigger={<Button variant="ghost" size="sm"><Palette size={16} /> {isZh ? '主题' : 'Theme'}</Button>}
-              items={themeMenuItems}
-            />
-          )}
-          {docsToolbarVisibleCount >= 5 && (
-            <DropdownMenu
-              trigger={<Button variant="ghost" size="sm"><User size={16} /> {viewerSession?.name ?? (isZh ? '账户' : 'Account')}</Button>}
-              items={accountMenuItems}
-            />
-          )}
-          {docsToolbarVisibleCount >= 6 && <LanguageSwitcher variant="inline" />}
-          {docsToolbarVisibleCount < 6 && (
-            <DropdownMenu
-              trigger={<Button variant="ghost" size="sm"><Menu size={16} /></Button>}
-              groups={docsControlMenuGroups}
-            />
-          )}
-        </div>
-      }
-    >
-      {/* Content rendering based on route - simplified for now */}
-      <div className="vx-docs-workspace">
-        {route.view === 'home' && (
-          <div className="vx-docs-workspace__home">
-            <div className="vx-docs-home__hero">
-              <div className="vx-docs-home__copy">
-                <Badge variant="accent">{copy.docsBadge}</Badge>
-                <h1>{copy.docsTitle}</h1>
-                <p>{copy.docsLead}</p>
-                <div className="vx-docs-home__actions">
-                  <Button onClick={() => onNavigate({ view: 'docs', page: 'quick-start' })}>
-                    <Zap size={16} /> {copy.docsPrimary}
-                  </Button>
-                  <Button variant="secondary" onClick={() => onNavigate({ view: 'docs', page: 'introduction' })}>
-                    {copy.docsSecondary}
-                  </Button>
-                </div>
+        );
+      case 'grid-page':
+        return (
+          <div className="vx-doc-stat-grid">
+            {metricCards.map((m) => (
+              <div key={m.label} className="vx-doc-stat-grid__item">
+                <span>{m.label}</span><strong>{m.value}</strong><small>{m.hint}</small>
+              </div>
+            ))}
+          </div>
+        );
+      case 'button':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Button>{isZh ? '主要按钮' : 'Primary'}</Button>
+              <Button variant="secondary">{isZh ? '次级按钮' : 'Secondary'}</Button>
+              <Button variant="ghost">{isZh ? '幽灵按钮' : 'Ghost'}</Button>
+              <Button variant="danger">{isZh ? '危险按钮' : 'Danger'}</Button>
+            </div>
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Button size="sm">{isZh ? '小' : 'Small'}</Button>
+              <Button size="md">{isZh ? '中' : 'Medium'}</Button>
+              <Button size="lg">{isZh ? '大' : 'Large'}</Button>
+            </div>
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Button shape="square">{isZh ? '直角' : 'Square'}</Button>
+              <Button shape="rect">{isZh ? '圆角' : 'Rounded'}</Button>
+              <Button shape="pill">{isZh ? '胶囊' : 'Pill'}</Button>
+              <Button variant="secondary" shape="pill">{isZh ? '次级胶囊' : 'Secondary pill'}</Button>
+            </div>
+            <Button fullWidth>{isZh ? '整行操作' : 'Full width action'}</Button>
+          </div>
+        );
+      case 'elements':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <Button><Zap size={16} />{isZh ? '主要操作' : 'Primary action'}</Button>
+              <Button variant="secondary">{isZh ? '次级操作' : 'Secondary'}</Button>
+              <Button variant="ghost">{isZh ? '幽灵按钮' : 'Ghost'}</Button>
+            </div>
+            <div className="vx-doc-preview-inline">
+              <Badge variant="accent">Brand</Badge><Badge variant="success">Live</Badge><Badge variant="warning">Beta</Badge>
+            </div>
+            <Alert title={isZh ? '统一风格' : 'Unified styling'} variant="info">
+              {isZh ? '基础元素在所有页面共享同一套颜色、圆角和交互节奏。' : 'Core elements now share the same color, radius, and interaction rhythm.'}
+            </Alert>
+            <div className="vx-doc-preview-stack__group">
+              <Heading level={1}>{isZh ? 'H1 标题' : 'Heading 1'}</Heading>
+              <Heading level={2}>{isZh ? 'H2 标题' : 'Heading 2'}</Heading>
+              <Heading level={3}>{isZh ? 'H3 标题' : 'Heading 3'}</Heading>
+              <Text variant="secondary">{isZh ? '大段文本' : 'Lead text'}</Text>
+              <Text variant="muted">{isZh ? '次要文本' : 'Muted text'}</Text>
+            </div>
+          </div>
+        );
+      case 'form-controls':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Input label={isZh ? '项目名称' : 'Project name'} value="VXUI Workspace" readOnly />
+            <Select label={copy.releaseLabel} value={releaseTrack}
+              onChange={(v) => { if (v) onReleaseTrackChange(v as ReleaseTrack); }}
+              options={[{ value: 'stable', label: copy.releaseOptions.stable }, { value: 'preview', label: copy.releaseOptions.preview }, { value: 'internal', label: copy.releaseOptions.internal }]} />
+            <Select label={isZh ? '部署环境' : 'Environment'} value={selectEnv} onChange={setSelectEnv}
+              clearable searchable={4} placeholder={isZh ? '选择环境…' : 'Select environment…'}
+              options={[{ value: 'prod', label: isZh ? '生产' : 'Production' }, { value: 'staging', label: isZh ? '预发布' : 'Staging' }, { value: 'preview', label: isZh ? '预览' : 'Preview' }, { value: 'dev', label: isZh ? '开发' : 'Development' }, { value: 'sandbox', label: isZh ? '沙箱' : 'Sandbox' }]} />
+            <MultiSelect label={isZh ? '技术栈' : 'Tech stack'} value={multiSelectValue} onChange={setMultiSelectValue} clearable
+              options={[{ value: 'react', label: 'React' }, { value: 'typescript', label: 'TypeScript' }, { value: 'vite', label: 'Vite' }, { value: 'css', label: 'CSS' }]} />
+            <TimePicker label={isZh ? '部署时间' : 'Deploy time'} value={timeValue} onChange={setTimeValue} placeholder={isZh ? '选择时间' : 'Select time'} />
+            <Textarea label={isZh ? '变更摘要' : 'Change summary'} value={isZh ? '整合移动端与桌面端资源。' : 'Consolidate mobile and desktop resources.'} readOnly resize="none" />
+            <div style={{ borderTop: '1px solid var(--vx-border)', paddingTop: 16 }}>
+              <p style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--vx-text-muted)', margin: '0 0 12px' }}>
+                {isZh ? '堆叠验证' : 'Stacking verification'}
+              </p>
+              <div style={{ display: 'grid', gap: 12 }}>
+                <Select label={isZh ? '来源区域' : 'Source region'} value={selectRegionA} onChange={setSelectRegionA}
+                  placeholder={isZh ? '选择区域…' : 'Select region…'}
+                  options={[{ value: 'us-east-1', label: 'US East' }, { value: 'us-west-2', label: 'US West' }, { value: 'eu-west-1', label: 'EU West' }, { value: 'ap-southeast-1', label: 'Singapore' }]} />
+                <Select label={isZh ? '目标区域' : 'Target region'} value={selectRegionB} onChange={setSelectRegionB}
+                  placeholder={isZh ? '选择区域…' : 'Select region…'}
+                  options={[{ value: 'us-east-1', label: 'US East' }, { value: 'us-west-2', label: 'US West' }, { value: 'eu-west-1', label: 'EU West' }, { value: 'ap-southeast-1', label: 'Singapore' }]} />
               </div>
             </div>
           </div>
-        )}
-        {/* Other page rendering would go here */}
-      </div>
-    </AppShell>
+        );
+      case 'form-inputs':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-stack__group">
+              <Checkbox checked={checkboxA} label={isZh ? '默认启用响应式抽屉' : 'Enable responsive drawer'} onChange={(e) => setCheckboxA(e.target.checked)} />
+              <Checkbox checked={checkboxB} label={isZh ? '显示调试边界' : 'Show debug boundaries'} onChange={(e) => setCheckboxB(e.target.checked)} />
+            </div>
+            <RadioGroup label={isZh ? '密度策略' : 'Density strategy'}>
+              <Radio checked={radioValue === 'system'} label={isZh ? '跟随系统' : 'Follow system'} name="density" onChange={() => setRadioValue('system')} />
+              <Radio checked={radioValue === 'comfortable'} label={isZh ? '舒适' : 'Comfortable'} name="density" onChange={() => setRadioValue('comfortable')} />
+              <Radio checked={radioValue === 'compact'} label={isZh ? '紧凑' : 'Compact'} name="density" onChange={() => setRadioValue('compact')} />
+            </RadioGroup>
+            <SegmentedControl value={radioValue} onChange={setRadioValue} fullWidth
+              options={[{ label: <><Monitor size={16} />{isZh ? '跟随系统' : 'System'}</>, value: 'system' }, { label: <><Sun size={16} />{isZh ? '浅色' : 'Light'}</>, value: 'comfortable' }, { label: <><Moon size={16} />{isZh ? '深色' : 'Dark'}</>, value: 'compact' }]} />
+            <Slider label={isZh ? '文档完成度' : 'Coverage'} max={100} min={0} onChange={(e) => setSliderValue(Number(e.target.value))} showValue value={sliderValue} />
+            <div className="vx-doc-preview-stack__group" style={{ marginTop: 24 }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <Toggle data-state="on">{isZh ? '自动保存' : 'Auto-save'}</Toggle>
+                <Toggle>{isZh ? '多标签模式' : 'Multiple tabs'}</Toggle>
+              </div>
+              <Switch defaultChecked label={isZh ? '开启实验性功能' : 'Enable experimental features'} />
+              <NumberInput min={0} max={100} defaultValue={10} label={isZh ? '阈值' : 'Threshold'} />
+              <TagInput placeholder={isZh ? '添加标签...' : 'Add tag...'} defaultValue={['React', 'Vite']} />
+              <FileUpload multiple label={isZh ? '上传附件' : 'Upload attachments'} />
+              <div style={{ marginTop: 8 }}><Calendar /></div>
+            </div>
+          </div>
+        );
+      case 'navigation':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Tabs defaultValue="library">
+              <TabsList>
+                <TabsTrigger value="library">{copy.libraryTitle}</TabsTrigger>
+                <TabsTrigger value="templates">{isZh ? '模板' : 'Templates'}</TabsTrigger>
+                <TabsTrigger value="responsive">{isZh ? '响应式' : 'Responsive'}</TabsTrigger>
+              </TabsList>
+              <TabsContent value="library">{copy.libraryLead}</TabsContent>
+              <TabsContent value="templates">{pages['home-page']?.description}</TabsContent>
+              <TabsContent value="responsive">{pages.mobile?.description}</TabsContent>
+            </Tabs>
+            <Pagination page={paginationPage} total={96} pageSize={8} onChange={setPaginationPage} />
+          </div>
+        );
+      case 'data-list':
+        return (
+          <Table columns={[
+            { key: 'name', header: isZh ? '页面' : 'Screen', accessor: (r: any) => r.name },
+            { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: any) => <Badge variant={r.v}>{r.status}</Badge> },
+            { key: 'updated', header: isZh ? '更新时间' : 'Updated', accessor: (r: any) => r.updated },
+          ]} data={[
+            { name: pages['home-page']?.title ?? 'Home', status: isZh ? '已整合' : 'Unified', updated: '2026-05-08', v: 'success' as const },
+            { name: pages['error-page']?.title ?? 'Error', status: isZh ? '新增' : 'New', updated: '2026-05-08', v: 'accent' as const },
+            { name: pages.mobile?.title ?? 'Mobile', status: isZh ? '已重写' : 'Reframed', updated: '2026-05-08', v: 'warning' as const },
+          ]} />
+        );
+      case 'empty-states':
+        return (
+          <div className="vx-doc-empty-state">
+            <div className="vx-doc-empty-state__icon"><AlertTriangle size={20} /></div>
+            <strong>{isZh ? '这里暂时没有内容' : 'Nothing lives here yet'}</strong>
+            <p>{isZh ? '空状态与错误页共享同一套视觉策略。' : 'Empty states share the same visual language.'}</p>
+            <Button variant="secondary" onClick={() => onNavigate({ view: 'error' })}>{copy.openPage}</Button>
+          </div>
+        );
+      case 'toasts':
+        return (
+          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+            <Button onClick={() => push({ tone: 'info', title: isZh ? '文档树已同步' : 'Docs tree synced', description: isZh ? '所有页面已映射到统一壳层。' : 'Every page is mapped to the unified shell.' })}>
+              {isZh ? '信息提示' : 'Info toast'}
+            </Button>
+            <Button variant="secondary" onClick={() => push({ tone: 'success', title: isZh ? '路由更新完成' : 'Route update complete', description: isZh ? '桌面端、平板和手机已共享同一套页面定义。' : 'Desktop, tablet, and phone now share one page definition set.' })}>
+              {isZh ? '成功提示' : 'Success toast'}
+            </Button>
+          </div>
+        );
+      case 'feedback':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Alert title={isZh ? '迁移进度' : 'Migration progress'} variant="info">{isZh ? '响应式壳层、模板页面和文档内容库已经收敛到同一套运行时。' : 'The responsive shell, template pages, and docs library now share the same runtime.'}</Alert>
+            <Progress label={isZh ? '默认' : 'Default'} showLabel value={sliderValue} />
+            <Progress label={isZh ? '成功' : 'Success'} showLabel value={sliderValue} variant="success" />
+            <Progress label={isZh ? '警告' : 'Warning'} showLabel value={sliderValue} variant="warning" />
+            <Progress label={isZh ? '危险' : 'Danger'} showLabel value={sliderValue} variant="danger" />
+            <Progress label={isZh ? '炫彩' : 'Rainbow'} showLabel value={sliderValue} variant="rainbow" size="lg" />
+            <div className="vx-doc-skeleton-grid"><Skeleton lines={3} variant="text" /><Skeleton height={92} /></div>
+            <div className="vx-doc-preview-stack__group">
+              <div className="vx-doc-preview-inline"><Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" /></div>
+              <Stepper currentStep={2} steps={[{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }]} />
+            </div>
+          </div>
+        );
+      case 'overlays':
+        return (
+          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+            <Dialog trigger={<Button variant="secondary">{isZh ? '打开对话框' : 'Open dialog'}</Button>}
+              title={isZh ? '删除项目' : 'Delete project'} description={isZh ? '此操作将移除所有成员的访问权限。' : 'This action removes access for the whole team.'}
+              confirmLabel={isZh ? '删除' : 'Delete'} cancelLabel={isZh ? '取消' : 'Cancel'} confirmVariant="danger">
+              <div style={{ padding: '4px 0', lineHeight: 1.5, color: 'var(--vx-text-secondary)' }}>{isZh ? '此项目将被永久删除且无法恢复。' : 'This project will be removed permanently and cannot be recovered.'}</div>
+            </Dialog>
+            <Popover content={<div>{isZh ? 'Popover 用于补充上下文。' : 'Popover adds context.'}</div>}>
+              <Button variant="secondary">Popover</Button>
+            </Popover>
+            <DropdownMenu trigger={<Button variant="secondary">{isZh ? '更多操作' : 'More actions'}</Button>}
+              items={[{ label: isZh ? '打开首页' : 'Open home', onClick: () => onNavigate({ view: 'home' }) }, { label: isZh ? '打开文档' : 'Open docs', onClick: () => onNavigate({ view: 'docs', page: 'introduction' }) }]} />
+            <Sheet trigger={<Button variant="secondary" size="sm">{isZh ? '底部抽屉' : 'Bottom sheet'}</Button>} title={isZh ? '通知设置' : 'Notifications'} side="bottom">
+              <div className="vx-stack"><Switch label={isZh ? '邮件通知' : 'Email notifications'} defaultChecked /><Switch label={isZh ? '推送通知' : 'Push notifications'} defaultChecked /></div>
+            </Sheet>
+            <Tooltip content={isZh ? '这是一个工具提示' : 'This is a tooltip'}><Button variant="ghost">{isZh ? '工具提示' : 'Tooltip'}</Button></Tooltip>
+          </div>
+        );
+      case 'nav-layout':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Breadcrumb items={[{ label: 'Home' }, { label: 'Components' }, { label: 'Navigation' }]} />
+            <Menubar menus={[{ label: 'File', items: [{ label: 'New', shortcut: '⌘N' }, { label: 'Open...', shortcut: '⌘O' }, { label: 'Exit', danger: true }] }, { label: 'Edit', items: [{ label: 'Undo', shortcut: '⌘Z' }, { label: 'Redo', shortcut: '⇧⌘Z' }] }]} />
+            <Separator />
+            <ScrollArea style
+={{ height: 100, border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-md)', padding: 16 }}>
+              {(isZh ? '此区域展示了 ScrollArea 组件的用法。' : 'This area demonstrates the ScrollArea component. ').repeat(20)}
+            </ScrollArea>
+            <Accordion defaultOpen={['hierarchy']} items={[
+              { key: 'hierarchy', title: isZh ? '层级保持一致' : 'Hierarchy stays consistent', content: isZh ? '所有断点共享同一路由。' : 'Every breakpoint shares the same route tree.' },
+              { key: 'density', title: isZh ? '壳层只调密度' : 'Shell adjusts density', content: isZh ? '导航抽屉、顶部工具区和内容栅格按宽度变化。' : 'The drawer, header tools, and content grids adapt by width.' },
+            ]} />
+          </div>
+        );
+      case 'data-display':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline"><Avatar name="Alice Chen" size="sm" /><Avatar name="Bo Wang" size="md" /><Avatar name="Cora Lin" size="lg" /></div>
+            <Table columns={[{ key: 'name', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.name }, { key: 'scope', header: 'Scope', accessor: (r: any) => r.scope }]}
+              data={[{ name: isZh ? '设计系统' : 'Design system', scope: isZh ? '公共组件' : 'Shared primitives' }, { name: isZh ? '文档库' : 'Documentation', scope: isZh ? '内容导航' : 'Content navigation' }]} />
+            <Timeline items={[{ title: isZh ? '已创建' : 'Created', time: '10:00 AM' }, { title: isZh ? '处理中' : 'Processing', time: '10:05 AM' }, { title: isZh ? '已完成' : 'Completed', time: '10:15 AM' }]} />
+            <Carousel items={[
+              <div key="1" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, background: 'var(--vx-surface-elevated)', borderRadius: 'var(--vx-radius-md)' }}>Slide 1</div>,
+              <div key="2" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 100, background: 'var(--vx-surface-elevated)', borderRadius: 'var(--vx-radius-md)' }}>Slide 2</div>,
+            ]} />
+          </div>
+        );
+      case 'mobile-list':
+        return (
+          <div className="vx-doc-preview-stack" style={{ maxWidth: 320, border: '1px solid var(--vx-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+            <MobileList>
+              <MobileListSection title={isZh ? '账户' : 'Account'}>
+                <MobileListItem label={isZh ? '个人资料' : 'Profile'} chevron onClick={() => {}} />
+                <MobileListItem label={isZh ? '安全设置' : 'Security'} chevron onClick={() => {}} />
+              </MobileListSection>
+              <MobileListSection title={isZh ? '偏好' : 'Preferences'}>
+                <MobileListItem label={isZh ? '通知' : 'Notifications'} trailing={<Badge variant="accent">3</Badge>} />
+                <MobileListItem label={isZh ? '主题' : 'Theme'} description={isZh ? '跟随系统' : 'System'} chevron onClick={() => {}} />
+              </MobileListSection>
+            </MobileList>
+          </div>
+        );
+      case 'mobile':
+        return (
+          <div className="vx-breakpoint-grid">
+            {copy.supportCards?.map((card: any) => (
+              <div key={card.label} className="vx-breakpoint-card">
+                <Badge variant="accent">{card.accent}</Badge><strong>{card.label}</strong><p>{card.description}</p>
+              </div>
+            ))}
+            <Alert title={copy.splitTitle} variant="info">{copy.splitBody}</Alert>
+          </div>
+        );
+      case 'home-page':
+      case 'login-page':
+      case 'register-page':
+      case 'error-page':
+      case 'privacy-policy':
+      case 'terms-of-service':
+        return renderTemplateLauncher(pageKey);
+      case 'command-palette':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <Button onClick={() => onSearchOpenChange(true)}>
+                {isZh ? '打开搜索' : 'Open search'}<kbd className="vx-search-kbd">⌘K</kbd>
+              </Button>
+            </div>
+            <Alert variant="info" title={isZh ? '键盘优先' : 'Keyboard first'}>
+              {isZh ? '按下 ⌘K 即可随时唤起命令面板。' : 'Press ⌘K to open the palette from anywhere.'}
+            </Alert>
+          </div>
+        );
+      case 'code-block':
+        return renderCodeBlock(isZh ? `import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>点击我</Button>;\n}` : `import { Button } from 'vxui-react';\n\nexport function Example() {\n  return <Button>Click me</Button>;\n}`, 'tsx');
+      case 'language-switcher':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline"><LanguageSwitcher variant="inline" /></div>
+            <Alert variant="info" title={isZh ? '全局语言切换' : 'Global language switch'}>
+              {isZh ? '切换语言后，文档内所有 UI 文案同步更新。' : 'Switching locale updates all UI copy across the entire docs surface.'}
+            </Alert>
+          </div>
+        );
+      case 'scroll-area':
+        return (
+          <div className="vx-doc-preview-stack">
+            <ScrollArea maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
+              {Array.from({ length: 20 }, (_, i) => (<div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>{isZh ? `日志行 ${i + 1}` : `Log line ${i + 1}`}</div>))}
+            </ScrollArea>
+          </div>
+        );
+      case 'separator':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              <span>{isZh ? '左' : 'Left'}</span><Separator orientation="vertical" style={{ height: 24 }} /><span>{isZh ? '中' : 'Center'}</span><Separator orientation="vertical" style={{ height: 24 }} /><span>{isZh ? '右' : 'Right'}</span>
+            </div>
+            <Separator />
+            <p>{isZh ? '水平分隔线上方内容' : 'Content above the horizontal separator.'}</p>
+          </div>
+        );
+      case 'timeline':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Timeline items={[{ title: isZh ? '订单已创建' : 'Order created', time: '09:42', status: 'success' }, { title: isZh ? '支付成功' : 'Payment confirmed', time: '09:43', status: 'info' }, { title: isZh ? '配送中' : 'Shipping', time: '10:15', status: 'warning' }, { title: isZh ? '已签收' : 'Delivered', time: '14:30', status: 'default' }]} />
+          </div>
+        );
+      case 'tree-view':
+        return (
+          <div className="vx-doc-preview-stack">
+            <TreeView nodes={[{ id: 'src', label: 'src', children: [{ id: 'components', label: 'components', children: [{ id: 'btn', label: 'Button.tsx' }, { id: 'card', label: 'Card.tsx' }] }, { id: 'pages', label: 'pages', children: [{ id: 'home', label: 'Home.tsx' }, { id: 'about', label: 'About.tsx' }] }] }, { id: 'public', label: 'public', children: [{ id: 'index', label: 'index.html' }] }]} defaultExpanded={['src', 'components', 'pages']} />
+          </div>
+        );
+      case 'carousel':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ maxWidth: 400 }}>
+              <Carousel items={[
+                <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
+                <div key="2" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-3)' }}>{isZh ? '第二张' : 'Slide 2'}</div>,
+                <div key="3" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第三张' : 'Slide 3'}</div>,
+              ]} showDots showArrows />
+            </div>
+          </div>
+        );
+      case 'toggle':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline" style={{ marginBottom: 12 }}>
+              <Toggle defaultPressed={false}><Text size="sm">{isZh ? '加粗' : 'Bold'}</Text></Toggle>
+              <Toggle><Text size="sm">{isZh ? '斜体' : 'Italic'}</Text></Toggle>
+              <Toggle><Text size="sm">{isZh ? '下划线' : 'Underline'}</Text></Toggle>
+            </div>
+            <ToggleGroup type="single" defaultValue="grid" items={[{ value: 'grid', label: isZh ? '网格' : 'Grid' }, { value: 'list', label: isZh ? '列表' : 'List' }, { value: 'table', label: isZh ? '表格' : 'Table' }]} />
+          </div>
+        );
+      case 'rating':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline" style={{ flexDirection: 'column', gap: 16 }}>
+              <Rating defaultValue={3.5} allowHalf /><Rating defaultValue={4} size="sm" /><Rating defaultValue={5} size="lg" readOnly />
+            </div>
+          </div>
+        );
+      case 'label':
+        return (
+          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 12, maxWidth: 320 }}>
+            <div style={{ display: 'grid', gap: 4 }}><Label required>{isZh ? '电子邮箱' : 'Email'}</Label><Input placeholder="name@example.com" /></div>
+            <div style={{ display: 'grid', gap: 4 }}><Label>{isZh ? '备注（选填）' : 'Notes (optional)'}</Label><Input placeholder={isZh ? '添加备注...' : 'Add notes...'} /></div>
+          </div>
+        );
+      case 'date-pickers':
+        return (
+          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 16, maxWidth: 320 }}>
+            <DatePicker label={isZh ? '开始日期' : 'Start date'} /><DatePicker label={isZh ? '结束日期' : 'End date'} weekStartsOnMonday />
+          </div>
+        );
+      case 'avatar':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline" style={{ gap: 16, alignItems: 'center' }}>
+              <Avatar src="https://i.pravatar.cc/80?u=1" name="Alex Morgan" size="xs" />
+              <Avatar src="https://i.pravatar.cc/80?u=2" name="Jamie Chen" size="sm" />
+              <Avatar src="https://i.pravatar.cc/80?u=3" name="Taylor Kim" size="md" />
+              <Avatar name="Sam Wilson" size="lg" /><Avatar size="xl" />
+            </div>
+          </div>
+        );
+      case 'badge':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <Badge variant="accent">{isZh ? '新品' : 'New'}</Badge><Badge variant="success">{isZh ? '在线' : 'Live'}</Badge>
+              <Badge variant="warning">{isZh ? '测试版' : 'Beta'}</Badge><Badge variant="neutral">{isZh ? '草稿' : 'Draft'}</Badge>
+            </div>
+          </div>
+        );
+      case 'skeleton':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ display: 'grid', gap: 8, width: 240 }}>
+              <Skeleton variant="rect" width="100%" height={100} /><Skeleton variant="text" width="65%" /><Skeleton variant="text" lines={2} />
+            </div>
+          </div>
+        );
+      case 'typography':
+        return (
+          <div className="vx-doc-preview-stack" style={{ display: 'grid', gap: 8 }}>
+            <Heading level={1}>{isZh ? '标题 1' : 'Heading 1'}</Heading>
+            <Heading level={2}>{isZh ? '标题 2' : 'Heading 2'}</Heading>
+            <Heading level={3}>{isZh ? '标题 3' : 'Heading 3'}</Heading>
+            <Text>{isZh ? '默认正文文本。' : 'Default body text.'}</Text>
+            <Text variant="secondary">{isZh ? '次级强调文本。' : 'Secondary emphasis text.'}</Text>
+            <Text variant="muted">{isZh ? '弱化辅助文本。' : 'Muted helper text.'}</Text>
+            <Text weight="bold">{isZh ? '加粗正文。' : 'Bold body text.'}</Text>
+          </div>
+        );
+      case 'card':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Card variant="default" padding="md"><CardHeader><CardTitle>Default</CardTitle><CardDescription>Standard card.</CardDescription></CardHeader><CardContent>Content.</CardContent></Card>
+              <Card variant="elevated" padding="md" hoverable><CardHeader><CardTitle>Elevated</CardTitle><CardDescription>Interactive.</CardDescription></CardHeader><CardContent>Hover over this card.</CardContent></Card>
+              <Card variant="outlined" padding="md"><CardHeader><CardTitle>Outlined</CardTitle><CardDescription>Bordered.</CardDescription></CardHeader><CardContent>Content.</CardContent></Card>
+            </div>
+          </div>
+        );
+      case 'form':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Form style={{ display: 'grid', gap: 16, maxWidth: 400 }}>
+              <FormField><FormLabel required>{isZh ? '邮箱' : 'Email'}</FormLabel><FormDescription>{isZh ? '我们不会分享你的邮箱。' : 'We will never share your email.'}</FormDescription><Input type="email" placeholder="name@example.com" /><FormMessage /></FormField>
+              <FormField><FormLabel required>{isZh ? '密码' : 'Password'}</FormLabel><Input type="password" placeholder="••••••••" /><FormMessage /></FormField>
+              <Button type="submit">{isZh ? '提交' : 'Submit'}</Button>
+            </Form>
+          </div>
+        );
+      case 'sheet':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <Sheet trigger={<Button>{isZh ? '打开面板' : 'Open panel'}</Button>} title={isZh ? '侧滑面板' : 'Sheet panel'} description={isZh ? '这是从右侧滑入的面板。' : 'This panel slides in from the right.'} side="right">
+                <div style={{ padding: 16 }}>{isZh ? '面板内容' : 'Panel content'}</div>
+              </Sheet>
+            </div>
+          </div>
+        );
+      case 'resizable':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div style={{ height: 200, border: '1px solid var(--vx-border)', borderRadius: 'var(--vx-radius-lg)', overflow: 'hidden' }}>
+              <ResizablePanelGroup direction="horizontal">
+                <ResizablePanel defaultSize={50} minSize={20}><div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{isZh ? '左侧面板' : 'Left panel'}</div></ResizablePanel>
+                <ResizableHandle />
+                <ResizablePanel defaultSize={50} minSize={20}><div style={{ padding: 16, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{isZh ? '右侧面板' : 'Right panel'}</div></ResizablePanel>
+              </ResizablePanelGroup>
+            </div>
+          </div>
+        );
+      case 'accordion':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Accordion defaultOpen={['getting-started']} items={[
+              { key: 'getting-started', title: isZh ? '快速开始' : 'Getting Started', content: isZh ? '安装包并配置 Provider。' : 'Install the package and set up providers.' },
+              { key: 'components', title: isZh ? '组件库' : 'Components', content: isZh ? '按分类浏览全部组件。' : 'Browse the full component library.' },
+              { key: 'templates', title: isZh ? '页面模板' : 'Templates', content: isZh ? '可直接引入项目的预置页面布局。' : 'Pre-built page layouts.' },
+            ]} />
+          </div>
+        );
+      case 'tabs':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Tabs defaultValue="preview">
+              <TabsList><TabsTrigger value="preview">{isZh ? '预览' : 'Preview'}</TabsTrigger><TabsTrigger value="code">{isZh ? '代码' : 'Code'}</TabsTrigger><TabsTrigger value="props">{isZh ? '属性' : 'Props'}</TabsTrigger></TabsList>
+              <TabsContent value="preview">{isZh ? '实时预览组件效果。' : 'Preview the component in real time.'}</TabsContent>
+              <TabsContent value="code">{isZh ? '查看源代码并复制到项目中使用。' : 'View the source code.'}</TabsContent>
+              <TabsContent value="props">{isZh ? '浏览完整的 API 参考。' : 'Browse the full API reference.'}</TabsContent>
+            </Tabs>
+          </div>
+        );
+      case 'breadcrumb':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Breadcrumb items={[{ label: isZh ? '首页' : 'Home', href: '#' }, { label: isZh ? '组件' : 'Components', href: '#' }, { label: isZh ? '导航' : 'Navigation' }]} />
+          </div>
+        );
+      case 'pagination':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Pagination page={paginationDemoPage} total={48} pageSize={10} onChange={setPaginationDemoPage} />
+          </div>
+        );
+      case 'stepper':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Stepper currentStep={1} steps={[{ label: isZh ? '规划' : 'Plan' }, { label: isZh ? '开发' : 'Build' }, { label: isZh ? '发布' : 'Launch' }]} />
+          </div>
+        );
+      case 'progress':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Progress label={isZh ? '默认' : 'Default'} showLabel value={sliderValue} />
+            <Progress label={isZh ? '成功' : 'Success'} showLabel value={sliderValue} variant="success" />
+            <Progress label={isZh ? '警告' : 'Warning'} showLabel value={sliderValue} variant="warning" />
+            <Progress label={isZh ? '危险' : 'Danger'} showLabel value={sliderValue} variant="danger" />
+          </div>
+        );
+      case 'spinner':
+        return (
+          <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+            <Spinner size="sm" /><Spinner size="md" /><Spinner size="lg" />
+          </div>
+        );
+      case 'alert':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Alert title={isZh ? '提示信息' : 'Information'} variant="info">{isZh ? '这是一条提示信息。' : 'This is an informational message.'}</Alert>
+            <Alert title={isZh ? '操作成功' : 'Success'} variant="success">{isZh ? '操作已成功完成。' : 'Operation completed successfully.'}</Alert>
+            <Alert title={isZh ? '错误' : 'Error'} variant="danger">{isZh ? '出错了，请重试。' : 'Something went wrong.'}</Alert>
+          </div>
+        );
+      case 'table':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Table columns={[
+              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
+              { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+              { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { status: string }) => <Badge variant={(r.status === 'Active' ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge> },
+            ]} data={[
+              { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: 'Active' },
+              { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: 'Active' },
+            ]} striped bordered />
+          </div>
+        );
+      case 'file-upload':
+        return (
+          <div className="vx-doc-preview-stack" style={{ maxWidth: 480 }}>
+            <FileUpload multiple label={isZh ? '上传附件' : 'Upload attachments'} hint={isZh ? '支持多文件上传，单文件最大 10MB' : 'Multiple files allowed, up to 10MB each'} accept="image/*,.pdf" />
+          </div>
+        );
+      case 'color-picker':
+        return (
+          <div className="vx-doc-preview-stack" style={{ maxWidth: 480 }}>
+            <ColorPicker label={isZh ? '主题色' : 'Theme color'} />
+          </div>
+        );
+      case 'dialog':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Dialog trigger={<Button>{isZh ? '打开对话框' : 'Open dialog'}</Button>}
+                title={isZh ? '确认操作' : 'Confirm action'} description={isZh ? '请确认此操作。' : 'Please confirm this operation.'}
+                confirmLabel={isZh ? '确认' : 'Confirm'} cancelLabel={isZh ? '取消' : 'Cancel'}>
+                {isZh ? '此操作将立即生效。' : 'This action will be applied immediately.'}
+              </Dialog>
+              <Dialog placement="right" title={isZh ? '侧边面板' : 'Side panel'} trigger={<Button variant="secondary">{isZh ? '侧边面板' : 'Side panel'}</Button>}>
+                {isZh ? '固定在右侧边缘的对话框。' : 'A dialog anchored to the right edge.'}
+              </Dialog>
+            </div>
+          </div>
+        );
+      case 'popover':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Popover content={<div style={{ padding: 8 }}>{isZh ? '弹出内容，提供额外信息。' : 'Popover content.'}</div>}>
+                <Button variant="secondary">{isZh ? '点击打开' : 'Click me'}</Button>
+              </Popover>
+            </div>
+          </div>
+        );
+      case 'tooltip':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <Tooltip content={isZh ? '这是一个工具提示' : 'This is a tooltip'}><Button variant="secondary">{isZh ? '悬停查看' : 'Hover me'}</Button></Tooltip>
+              <Tooltip content={isZh ? '顶部提示' : 'Top tooltip'} placement="top"><Button variant="ghost">{isZh ? '顶部' : 'Top'}</Button></Tooltip>
+            </div>
+          </div>
+        );
+      case 'hover-card':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <HoverCard content={<div style={{ padding: 12, maxWidth: 220 }}><strong>{isZh ? '用户资料' : 'User profile'}</strong><p style={{ margin: '4px 0 0', color: 'var(--vx-text-secondary)' }}>{isZh ? '无需导航即可预览更多上下文。' : 'Preview additional context.'}</p></div>}>
+                <Button variant="secondary">{isZh ? '悬停查看' : 'Hover me'}</Button>
+              </HoverCard>
+            </div>
+          </div>
+        );
+      case 'dropdown-menu':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline vx-doc-preview-inline--wrap">
+              <DropdownMenu trigger={<Button variant="secondary">{isZh ? '操作' : 'Actions'}</Button>}
+                items={[{ label: isZh ? '复制' : 'Duplicate', onClick: () => {} }, { label: isZh ? '归档' : 'Archive', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]} />
+            </div>
+          </div>
+        );
+      case 'context-menu':
+        return (
+          <div className="vx-doc-preview-stack">
+            <div className="vx-doc-preview-inline">
+              <ContextMenu items={[{ label: isZh ? '复制' : 'Copy', onClick: () => {} }, { label: isZh ? '粘贴' : 'Paste', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]}>
+                <div style={{ padding: '2rem 3rem', border: '1px dashed var(--vx-color-border)', borderRadius: 'var(--vx-radius-md)', textAlign: 'center', color: 'var(--vx-text-secondary)' }}>
+                  {isZh ? '在此区域右键点击' : 'Right-click this area'}
+                </div>
+              </ContextMenu>
+            </div>
+          </div>
+        );
+      case 'navigation-menu':
+        return (
+          <div className="vx-doc-preview-stack">
+            <NavigationMenu items={[
+              { label: isZh ? '文档' : 'Docs', items: [{ label: isZh ? '介绍' : 'Introduction', description: isZh ? '开始使用 VXUI' : 'Get started', onClick: () => {} }, { label: isZh ? '快速开始' : 'Quick Start', description: isZh ? '安装和配置' : 'Install and configure', onClick: () => {} }] },
+              { label: isZh ? '组件' : 'Components', items: [{ label: 'Button', description: isZh ? '主要操作元素' : 'Primary action', onClick: () => {} }, { label: 'Dialog', description: isZh ? '模态叠层' : 'Modal overlay', onClick: () => {} }] },
+              { label: isZh ? '模板' : 'Templates', onClick: () => {} },
+            ]} />
+          </div>
+        );
+      case 'menubar':
+        return (
+          <div className="vx-doc-preview-stack">
+            <Menubar menus={[
+              { label: 'File', items: [{ label: 'New', shortcut: '⌘N', onClick: () => {} }, { label: 'Open...', shortcut: '⌘O', onClick: () => {} }, { label: 'Save', shortcut: '⌘S', onClick: () => {} }, { label: 'Exit', danger: true, onClick: () => {} }] },
+              { label: 'Edit', items: [{ label: 'Undo', shortcut: '⌘Z', onClick: () => {} }, { label: 'Redo', shortcut: '⇧⌘Z', onClick: () => {} }] },
+            ]} />
+          </div>
+        );
+      case 'introduction':
+      default:
+        return null;
+    }
+  }
+
+  // ── 主渲染 ──
+  const activePageKey: PageKey = route.view === 'docs' ? route.page ?? 'introduction' : 'introduction';
+  const isHomePage = activePageKey === 'introduction';
+
+  return (
+    <>
+      <CommandPalette
+        ariaLabel={t.searchAriaLabel}
+        emptyText={t.searchEmpty}
+        entries={searchEntries}
+        labelClose={t.searchClose}
+        labelGo={t.searchGo}
+        labelNavigate={t.searchNavigate}
+        onClose={() => onSearchOpenChange(false)}
+        onSelect={(key) => onNavigate({ view: 'docs', page: key as PageKey })}
+        open={searchOpen}
+        placeholder={t.searchPlaceholder}
+      />
+      <AppShell
+        brand="vxUI"
+        brandCaption={isZh ? '统一响应式系统' : 'Unified responsive system'}
+        brandIcon={<img src="/colorful_flat_icon.svg" alt="" />}
+        topbarRef={docsTopbarRef}
+        density={compactDensity ? 'compact' : 'comfortable'}
+        breadcrumb={
+          <div className="vx-doc-breadcrumb" data-state={showPinnedDocTitle ? 'pinned' : 'overview'}>
+            {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__kicker">{activeDocument.section}</span> : null}
+            <strong>{topbarDocLabel}</strong>
+            {showPinnedDocTitle ? <span className="vx-doc-breadcrumb__summary">{activeDocument.description}</span> : null}
+          </div>
+        }
+        headerActions={
+          <div className="vx-docs-toolbar">
+            {showBack ? (
+              <Button variant="outline" size="sm" onClick={() => onNavigate({ view: 'home' })}>
+                <House size={14} />{t.publicPages.backHome}
+              </Button>
+            ) : null}
+            {showSearch ? (
+              <Button variant="outline" size="sm" onClick={() => onSearchOpenChange(true)}>
+                <Search size={14} />{t.searchTrigger}<kbd className="vx-search-kbd">⌘K</kbd>
+              </Button>
+            ) : null}
+            {showDensity ? (
+              <Button variant={compactDensity ? 'soft' : 'outline'} size="sm" onClick={() => onCompactDensityChange(!compactDensity)}>
+                <SlidersHorizontal size={14} />{densityLabel}
+              </Button>
+            ) : null}
+            {showThemeBtn ? (
+              <DropdownMenu trigger={<Button variant="outline" size="sm"><Palette size={14} />{themes[theme]?.label ?? theme}</Button>}
+                items={themeMenuItems} align="right" />
+            ) : null}
+            {showAccountBtn ? (
+              <DropdownMenu trigger={<Button variant="outline" size="sm"><User size={14} />{viewerSession?.name ?? t.publicPages.guestLabel}</Button>}
+                groups={[{ label: copy.accountMenu, items: accountMenuItems }]} align="right" />
+            ) : null}
+            {showLanguageBtn ? <LanguageSwitcher variant="inline" /> : null}
+            {showMoreMenu ? (
+              <DropdownMenu key="docs-toolbar-more"
+                trigger={<Button variant="outline" size="sm"><MoreHorizontal size={14} />{isZh ? '更多' : 'More'}</Button>}
+                groups={[
+                  ...(!showBack || !showSearch ? [{
+                    label: isZh ? '导航' : 'Navigation',
+                    items: [
+                      ...(!showBack ? [{ label: t.publicPages.backHome, icon: <House size={14} />, onClick: () => onNavigate({ view: 'home' }) }] : []),
+                      ...(!showSearch ? [{ label: t.searchTrigger, icon: <Search size={14} />, shortcut: '⌘K', onClick: () => onSearchOpenChange(true) }] : []),
+                    ],
+                  }] : []),
+                  ...(!showDensity ? [{ label: isZh ? '视图' : 'View', items: [{ label: densityLabel, onClick: () => onCompactDensityChange(!compactDensity) }] }] : []),
+                  ...(!showThemeBtn ? [{ label: isZh ? '主题' : 'Theme', items: themeMenuItems }] : []),
+                  ...(!showAccountBtn ? [{ label: copy.accountMenu, items: accountMenuItems }] : []),
+                  ...(!showLanguageBtn ? [{ label: isZh ? '语言' : 'Language', items: Object.entries(locales).map(([k, d]) => ({ label: `${d.label}${locale === k ? (isZh ? ' (当前)' : ' (current)') : ''}`, icon: <Globe size={14} />, onClick: () => setLocale(k) })) }] : []),
+                ]}
+                align="right" />
+            ) : null}
+          </div>
+        }
+        menuButtonLabel={isZh ? '切换导航' : 'Toggle navigation'}
+        mobileNavOpen={mobileNavOpen}
+        navSections={navSections}
+        onMobileNavToggle={onMobileNavToggle}
+        onSidebarToggle={onSidebarToggle}
+        onSidebarClick={(e) => {
+          if (isTabletPortrait && !mobileNavOpen) {
+            e.stopPropagation();
+            e.preventDefault();
+            onMobileNavToggle();
+          }
+        }}
+        sidebarCloseLabel={t.sidebarCloseLabel}
+        sidebarCollapseLabel={t.sidebarCollapse}
+        sidebarExpandLabel={t.sidebarExpand}
+        sidebarCollapsed={sidebarCollapsed}
+        sidebarFooter={
+          <div className="vx-sidebar-session">
+            <div className="vx-sidebar-session__card">
+              <span>{viewerSession ? copy.sessionMember : copy.sessionGuest}</span>
+              <strong>{viewerSession?.name ?? t.publicPages.guestLabel}</strong>
+            </div>
+            <div className="vx-sidebar-session__meta">
+              <span className="vx-version-pill">{t.versionLabel}</span>
+              <span className="vx-version-pill vx-version-pill--token">{t.modeLabel(mode)}</span>
+            </div>
+          </div>
+        }
+      >
+        <div className="vx-docs-workspace">
+          {isHomePage ? (
+            <DocsHome
+              isZh={isZh}
+              docsHomeCopy={docsHomeCopy}
+              copy={copy}
+              docsHomeGroups={docsHomeGroups}
+              metricCards={metricCards}
+              releaseTrack={releaseTrack}
+              setReleaseTrack={onReleaseTrackChange}
+              navigate={onNavigate}
+              pages={pages}
+            />
+          ) : (
+            <DocPage
+              isZh={isZh}
+              activePage={activePageKey}
+              activeDocument={activeDocument}
+              pages={pages}
+              copy={copy}
+              renderSample={renderSample}
+              renderCodeBlock={helpers.renderCodeBlock}
+              renderTemplateLauncher={helpers.renderTemplateLauncher}
+              navigate={onNavigate}
+              docHeaderRef={docHeaderRef}
+            />
+          )}
+        </div>
+      </AppShell>
+    </>
   );
 }

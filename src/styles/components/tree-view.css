@@ -1,0 +1,49 @@
+/* ═══════════════════════════════════════════════════════════
+   TreeView
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-tree {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.vx-tree__node {
+  list-style: none;
+}
+.vx-tree__node-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: calc(var(--vx-radius) * 0.75);
+  cursor: pointer;
+  transition: background 100ms;
+  font-size: 14px;
+  color: var(--vx-text);
+}
+.vx-tree__node-content:hover { background: var(--vx-bg-accent); }
+.vx-tree__node-content--selected {
+  background: var(--vx-primary-soft);
+  color: var(--vx-primary);
+  font-weight: 500;
+}
+.vx-tree__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--vx-text-muted);
+  transition: transform 150ms;
+}
+.vx-tree__toggle--expanded { transform: rotate(90deg); }
+.vx-tree__toggle--leaf { visibility: hidden; }
+.vx-tree__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--vx-text-muted);
+}
+.vx-tree__label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vx-tree__children { padding-left: 20px; }

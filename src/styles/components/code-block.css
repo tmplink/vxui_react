@@ -1,0 +1,55 @@
+/* ═══════════════════════════════════════════════════════════
+   CodeBlock
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-code-block {
+  border-radius: var(--vx-radius-lg);
+  border: 1px solid var(--vx-code-border);
+  overflow: hidden;
+  background: var(--vx-code-bg);
+}
+.vx-code-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: color-mix(in srgb, var(--vx-code-bg) 80%, black 4%);
+  border-bottom: 1px solid var(--vx-code-border);
+}
+.vx-code-block__lang {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vx-code-comment);
+}
+.vx-code-block__copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--vx-code-border);
+  background: transparent;
+  color: var(--vx-code-comment);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+.vx-code-block__copy-btn:hover {
+  background: color-mix(in srgb, var(--vx-code-bg) 60%, black 8%);
+  color: var(--vx-code-text);
+}
+.vx-code-block__pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+  font-family: var(--vx-mono);
+  color: var(--vx-code-text);
+  tab-size: 2;
+}
+.vx-code-block__code {
+  font-family: inherit;
+}

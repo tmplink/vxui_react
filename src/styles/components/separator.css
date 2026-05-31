@@ -1,0 +1,18 @@
+/* ═══════════════════════════════════════════════════════════
+   Separator
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-separator {
+  border: none;
+  margin: 0;
+}
+.vx-separator--horizontal {
+  border-top: 1px solid var(--vx-border);
+  width: 100%;
+}
+.vx-separator--vertical {
+  border-left: 1px solid var(--vx-border);
+  height: 100%;
+  align-self: stretch;
+  display: inline-block;
+}

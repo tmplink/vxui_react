@@ -1,0 +1,53 @@
+/* ═══════════════════════════════════════════════════════════
+   Checkbox
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+.vx-checkbox--disabled { opacity: 0.5; cursor: not-allowed; }
+.vx-checkbox__control-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+.vx-checkbox__input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: inherit;
+}
+.vx-checkbox__box {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--vx-border-strong);
+  border-radius: calc(var(--vx-radius) * 0.5);
+  background: var(--vx-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: transparent;
+  transition: background 120ms, border-color 120ms, color 120ms;
+  pointer-events: none;
+}
+.vx-checkbox__input:checked ~ .vx-checkbox__box,
+.vx-checkbox__input:indeterminate ~ .vx-checkbox__box {
+  background: var(--vx-primary);
+  border-color: var(--vx-primary);
+  color: #fff;
+}
+.vx-checkbox__input:focus-visible ~ .vx-checkbox__box {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 22%, transparent);
+}
+.vx-checkbox__copy { display: flex; flex-direction: column; gap: 2px; }
+.vx-checkbox__label { font-size: 14px; color: var(--vx-text); line-height: 1.4; }
+.vx-checkbox__description { font-size: 12px; color: var(--vx-text-muted); }

@@ -1,0 +1,59 @@
+/* ═══════════════════════════════════════════════════════════
+   NumberInput
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-number-input {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--vx-ctrl-h-md);
+  border-radius: 10px;
+  border: 1px solid var(--vx-border);
+  background: var(--vx-surface);
+  overflow: hidden;
+  width: 100%;
+}
+.vx-number-input--invalid {
+  border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--vx-danger) 18%, transparent);
+}
+.vx-number-input--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vx-number-input__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 100%;
+  min-height: var(--vx-ctrl-h-md);
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--vx-text-secondary);
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+.vx-number-input__btn:hover:not(:disabled) {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+.vx-number-input__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.vx-number-input__field {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--vx-text);
+  font-size: 14px;
+  text-align: center;
+  padding: 0 4px;
+  -moz-appearance: textfield;
+}
+.vx-number-input__field::-webkit-inner-spin-button,
+.vx-number-input__field::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}

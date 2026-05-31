@@ -8,16 +8,16 @@
 .vx-checkbox {
   display: inline-flex;
   align-items: flex-start;
-  gap: 0.625rem;
+  gap: 10px;
   cursor: pointer;
 }
 .vx-checkbox--disabled { opacity: 0.5; cursor: not-allowed; }
 .vx-checkbox__control-wrap {
   position: relative;
   flex-shrink: 0;
-  width: 1rem;
-  height: 1rem;
-  margin-top: 0.125rem;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
 }
 .vx-checkbox__input {
   position: absolute;
@@ -51,24 +51,24 @@
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 22%, transparent);
 }
-.vx-checkbox__copy { display: flex; flex-direction: column; gap: 0.125rem; }
-.vx-checkbox__label { font-size: 0.875rem; color: var(--vx-text); line-height: 1.4; }
-.vx-checkbox__description { font-size: 0.75rem; color: var(--vx-text-muted); }
+.vx-checkbox__copy { display: flex; flex-direction: column; gap: 2px; }
+.vx-checkbox__label { font-size: 14px; color: var(--vx-text); line-height: 1.4; }
+.vx-checkbox__description { font-size: 12px; color: var(--vx-text-muted); }
 
 /* ── Radio ─────────────────────────────────────────── */
 .vx-radio {
   display: inline-flex;
   align-items: flex-start;
-  gap: 0.625rem;
+  gap: 10px;
   cursor: pointer;
 }
 .vx-radio--disabled { opacity: 0.5; cursor: not-allowed; }
 .vx-radio__control-wrap {
   position: relative;
   flex-shrink: 0;
-  width: 1rem;
-  height: 1rem;
-  margin-top: 0.125rem;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
 }
 .vx-radio__input {
   position: absolute;
@@ -108,24 +108,24 @@
   outline: none;
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 22%, transparent);
 }
-.vx-radio__copy { display: flex; flex-direction: column; gap: 0.125rem; }
-.vx-radio__label { font-size: 0.875rem; color: var(--vx-text); line-height: 1.4; }
-.vx-radio__description { font-size: 0.75rem; color: var(--vx-text-muted); }
+.vx-radio__copy { display: flex; flex-direction: column; gap: 2px; }
+.vx-radio__label { font-size: 14px; color: var(--vx-text); line-height: 1.4; }
+.vx-radio__description { font-size: 12px; color: var(--vx-text-muted); }
 .vx-radio-group { border: none; padding: 0; margin: 0; }
-.vx-radio-group__items { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.375rem; }
+.vx-radio-group__items { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
 
 /* ── Textarea ──────────────────────────────────────── */
 .vx-textarea {
   display: block;
   width: 100%;
-  min-height: 6rem;
+  min-height: 96px;
   background: var(--vx-surface);
   border: 1px solid var(--vx-border);
   border-radius: var(--vx-radius);
   color: var(--vx-text);
-  font-size: 0.875rem;
+  font-size: 14px;
   font-family: inherit;
-  padding: 0.5rem 0.75rem;
+  padding: 8px 12px;
   transition: border-color 150ms, box-shadow 150ms;
   line-height: 1.5;
 }
@@ -144,10 +144,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.375rem;
+  margin-bottom: 6px;
 }
 .vx-slider__label { margin-bottom: 0 !important; }
-.vx-slider__value { font-size: 0.8125rem; color: var(--vx-text-muted); }
+.vx-slider__value { font-size: 13px; color: var(--vx-text-muted); }
 .vx-slider {
   -webkit-appearance: none;
   appearance: none;

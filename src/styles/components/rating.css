@@ -1,0 +1,35 @@
+/* ═══════════════════════════════════════════════════════════
+   Rating
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.vx-rating__star {
+  cursor: pointer;
+  color: var(--vx-border-strong);
+  transition: color 120ms, transform 120ms;
+  display: inline-flex;
+  align-items: center;
+}
+.vx-rating__star:hover { transform: scale(1.15); }
+.vx-rating__star--filled { color: #f59e0b; }
+.vx-rating__star--half { position: relative; }
+.vx-rating__star--half::after {
+  content: '★';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #f59e0b;
+}
+.vx-rating__star--disabled { cursor: default; }
+.vx-rating__star--disabled:hover { transform: none; }
+.vx-rating__value {
+  margin-left: 6px;
+  font-size: 14px;
+  color: var(--vx-text-muted);
+}

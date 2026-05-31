@@ -1,0 +1,17 @@
+/* ═══════════════════════════════════════════════════════════
+   Label
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--vx-text);
+  cursor: default;
+}
+.vx-label__required {
+  color: var(--vx-danger);
+  font-size: 13px;
+}

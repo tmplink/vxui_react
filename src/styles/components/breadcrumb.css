@@ -1,0 +1,34 @@
+/* ═══════════════════════════════════════════════════════════
+   Breadcrumb
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-breadcrumb { display: flex; align-items: center; }
+.vx-breadcrumb__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.vx-breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+.vx-breadcrumb__link {
+  color: var(--vx-text-muted);
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  transition: color 120ms;
+}
+.vx-breadcrumb__link:hover { color: var(--vx-primary); }
+.vx-breadcrumb__current { color: var(--vx-text); font-weight: 500; }
+.vx-breadcrumb__sep { color: var(--vx-text-muted); display: flex; align-items: center; }

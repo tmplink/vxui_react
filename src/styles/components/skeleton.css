@@ -1,0 +1,17 @@
+/* ═══════════════════════════════════════════════════════════
+   Skeleton
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-skeleton {
+  display: block;
+  background: var(--vx-border);
+  border-radius: calc(var(--vx-radius) * 0.5);
+  animation: vx-skeleton-pulse 1.5s ease-in-out infinite;
+}
+@keyframes vx-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.vx-skeleton--text { height: 14px; border-radius: 4px; }
+.vx-skeleton--circle { border-radius: 9999px; }
+.vx-skeleton-text { display: flex; flex-direction: column; gap: 6px; }

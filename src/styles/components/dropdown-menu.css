@@ -1,0 +1,69 @@
+/* ═══════════════════════════════════════════════════════════
+   DropdownMenu
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-dropdown { position: relative; display: inline-flex; }
+.vx-dropdown__trigger { cursor: pointer; display: inline-flex; align-items: center; }
+.vx-dropdown__menu {
+  position: absolute;
+  z-index: var(--vx-z-menu);
+  top: calc(100% + 4px);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
+  border-radius: var(--vx-radius);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
+  padding: 4px;
+  min-width: 192px;
+  max-height: min(296px, calc(100vh - 96px));
+  overflow: auto;
+  overscroll-behavior: contain;
+  animation: vx-fade-in 150ms ease;
+}
+.vx-dropdown__menu--left  { left: 0; }
+.vx-dropdown__menu--right { right: 0; }
+.vx-dropdown__group { display: flex; flex-direction: column; }
+.vx-dropdown__group-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vx-text-muted);
+  padding: 6px 10px 4px;
+}
+.vx-dropdown__separator {
+  height: 1px;
+  background: var(--vx-border);
+  margin: 4px 0;
+}
+.vx-dropdown__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: calc(var(--vx-radius) * 0.75);
+  color: var(--vx-text);
+  font-size: 14px;
+  padding: 7px 10px;
+  cursor: pointer;
+  transition: background 100ms;
+}
+.vx-dropdown__item:hover { background: var(--vx-bg-accent); }
+.vx-dropdown__item--danger { color: var(--vx-danger); }
+.vx-dropdown__item--danger:hover { background: color-mix(in srgb, var(--vx-danger) 10%, transparent); }
+.vx-dropdown__item--disabled { opacity: 0.4; cursor: not-allowed; }
+.vx-dropdown__item-icon { flex-shrink: 0; opacity: 0.7; display: flex; align-items: center; }
+.vx-dropdown__item-label { flex: 1; }
+.vx-dropdown__shortcut {
+  font-size: 11px;
+  color: var(--vx-text-muted);
+  background: var(--vx-bg-accent);
+  border: 1px solid var(--vx-border);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-family: monospace;
+}

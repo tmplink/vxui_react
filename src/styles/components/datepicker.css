@@ -1,0 +1,56 @@
+/* ═══════════════════════════════════════════════════════════
+   DatePicker
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-datepicker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vx-datepicker__trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--vx-ctrl-h-md);
+  padding: 0 var(--vx-ctrl-px-md);
+  border-radius: 10px;
+  border: 1px solid var(--vx-border);
+  background: var(--vx-surface);
+  color: var(--vx-text);
+  font-size: var(--vx-ctrl-fs-md);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 140ms;
+  width: 100%;
+}
+.vx-datepicker__trigger:hover:not(:disabled) {
+  border-color: var(--vx-border-strong);
+}
+.vx-datepicker__trigger--invalid {
+  border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border));
+}
+.vx-datepicker__trigger--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.vx-datepicker__value {
+  flex: 1;
+}
+.vx-datepicker__value--placeholder {
+  color: var(--vx-text-muted);
+}
+.vx-datepicker__popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: var(--vx-z-menu);
+  animation: vx-fade-in 140ms ease;
+}
+.vx-datepicker__popover--in-dialog {
+  z-index: calc(var(--vx-z-dialog) + 1);
+}
+.vx-datepicker__popover--up {
+  top: auto;
+  bottom: calc(100% + 6px);
+}

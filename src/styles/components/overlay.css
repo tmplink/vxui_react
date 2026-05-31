@@ -15,8 +15,8 @@
   white-space: nowrap;
   background: var(--vx-text);
   color: var(--vx-bg);
-  font-size: 0.75rem;
-  padding: 0.3125rem 0.625rem;
+  font-size: 12px;
+  padding: 5px 10px;
   border-radius: calc(var(--vx-radius) * 0.75);
   pointer-events: none;
 }
@@ -43,9 +43,9 @@
   border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
-  padding: 0.75rem;
+  padding: 12px;
   animation: vx-fade-in 150ms ease;
-  min-width: 12rem;
+  min-width: 192px;
 }
 .vx-popover--bottom { top: calc(100% + 6px); left: 0; }
 .vx-popover--top    { bottom: calc(100% + 6px); left: 0; }
@@ -65,9 +65,9 @@
   border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
-  padding: 0.25rem;
-  min-width: 12rem;
-  max-height: min(26rem, calc(100vh - 96px));
+  padding: 4px;
+  min-width: 192px;
+  max-height: min(296px, calc(100vh - 96px));
   overflow: auto;
   overscroll-behavior: contain;
   animation: vx-fade-in 150ms ease;
@@ -76,30 +76,30 @@
 .vx-dropdown__menu--right { right: 0; }
 .vx-dropdown__group { display: flex; flex-direction: column; }
 .vx-dropdown__group-label {
-  font-size: 0.6875rem;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--vx-text-muted);
-  padding: 0.375rem 0.625rem 0.25rem;
+  padding: 6px 10px 4px;
 }
 .vx-dropdown__separator {
   height: 1px;
   background: var(--vx-border);
-  margin: 0.25rem 0;
+  margin: 4px 0;
 }
 .vx-dropdown__item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
   width: 100%;
   text-align: left;
   background: transparent;
   border: none;
   border-radius: calc(var(--vx-radius) * 0.75);
   color: var(--vx-text);
-  font-size: 0.875rem;
-  padding: 0.4375rem 0.625rem;
+  font-size: 14px;
+  padding: 7px 10px;
   cursor: pointer;
   transition: background 100ms;
 }
@@ -110,7 +110,7 @@
 .vx-dropdown__item-icon { flex-shrink: 0; opacity: 0.7; display: flex; align-items: center; }
 .vx-dropdown__item-label { flex: 1; }
 .vx-dropdown__shortcut {
-  font-size: 0.6875rem;
+  font-size: 11px;
   color: var(--vx-text-muted);
   background: var(--vx-bg-accent);
   border: 1px solid var(--vx-border);

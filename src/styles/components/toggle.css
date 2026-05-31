@@ -1,0 +1,52 @@
+/* ═══════════════════════════════════════════════════════════
+   Toggle
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-sm);
+  background: var(--vx-surface);
+  color: var(--vx-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms, color 120ms;
+  white-space: nowrap;
+  user-select: none;
+}
+.vx-toggle:hover {
+  background: var(--vx-bg-accent);
+  border-color: var(--vx-border-strong);
+  color: var(--vx-text);
+}
+.vx-toggle[data-state='on'],
+.vx-toggle--active {
+  background: var(--vx-primary-soft);
+  border-color: var(--vx-primary);
+  color: var(--vx-primary);
+}
+.vx-toggle:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.vx-toggle-group {
+  display: inline-flex;
+  gap: 0;
+}
+.vx-toggle-group .vx-toggle {
+  border-radius: 0;
+}
+.vx-toggle-group .vx-toggle:first-child {
+  border-radius: var(--vx-radius-sm) 0 0 var(--vx-radius-sm);
+}
+.vx-toggle-group .vx-toggle:last-child {
+  border-radius: 0 var(--vx-radius-sm) var(--vx-radius-sm) 0;
+}
+.vx-toggle-group .vx-toggle + .vx-toggle {
+  margin-left: -1px;
+}

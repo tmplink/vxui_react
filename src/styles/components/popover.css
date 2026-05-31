@@ -1,0 +1,25 @@
+/* ═══════════════════════════════════════════════════════════
+   Popover
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-popover-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.vx-popover {
+  position: absolute;
+  z-index: var(--vx-z-popover);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
+  border-radius: var(--vx-radius);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
+  padding: 12px;
+  animation: vx-fade-in 150ms ease;
+  min-width: 192px;
+}
+.vx-popover--bottom { top: calc(100% + 6px); left: 0; }
+.vx-popover--top    { bottom: calc(100% + 6px); left: 0; }
+.vx-popover--right  { left: calc(100% + 6px); top: 0; }
+.vx-popover--left   { right: calc(100% + 6px); top: 0; }

@@ -1,0 +1,29 @@
+/* ═══════════════════════════════════════════════════════════
+   ScrollArea
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-scroll-area {
+  overflow: hidden;
+  position: relative;
+}
+.vx-scroll-area__viewport {
+  width: 100%;
+  height: 100%;
+  max-height: inherit;
+  max-width: inherit;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--vx-border-strong) transparent;
+}
+.vx-scroll-area__viewport::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.vx-scroll-area__viewport::-webkit-scrollbar-thumb {
+  background: var(--vx-border-strong);
+  border-radius: 99px;
+}
+.vx-scroll-area__viewport::-webkit-scrollbar-track {
+  background: transparent;
+}

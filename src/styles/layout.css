@@ -98,7 +98,7 @@
 }
 
 .vx-sidebar__brand-text {
-  font-size: 1.3rem;
+  font-size: 1.48px;
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.03em;
@@ -107,7 +107,7 @@
 
 .vx-sidebar__brand-caption {
   color: var(--vx-text-secondary);
-  font-size: 0.82rem;
+  font-size: 0.832px;
   line-height: 1.45;
 }
 
@@ -424,7 +424,7 @@
 
 .vx-topbar__title {
   margin: 0;
-  font-size: 1.45rem;
+  font-size: 1.480px;
   line-height: 1.08;
   letter-spacing: -0.025em;
 }
