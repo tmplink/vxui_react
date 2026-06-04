@@ -36,3 +36,6 @@
 .vx-form-message--error {
   color: var(--vx-danger);
 }
+.vx-form-field--invalid {
+  /* Reserved for future invalid-field styling (e.g. border, background) */
+}
