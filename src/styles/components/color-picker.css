@@ -87,6 +87,12 @@
   font-family: var(--vx-mono);
   color: var(--vx-text);
   background: var(--vx-bg-accent);
+  outline: none;
+}
+.vx-colorpicker__hex-input:focus,
+.vx-colorpicker__hex-input:focus-visible {
+  border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 18%, transparent);
 }
 .vx-colorpicker__presets {
   display: flex;

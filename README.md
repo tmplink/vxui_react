@@ -1,4 +1,4 @@
-# VXUI React · v1.3.7
+# VXUI React · v1.3.8
 
 **官网**：[ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**：[tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [English](README.en.md)
 
@@ -6,7 +6,7 @@ VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用
 
 ## 🚀 更新公告
 
-> **v1.3.7** — 2026-05
+> **v1.3.8** — 2026-06
 > - Dialog: 新增 onConfirm/onCancel/confirmLabel/cancelLabel/confirmVariant 属性，内置确认/取消按钮支持
 > - 移除 AlertDialog 独立组件，功能已合并至 Dialog
 > - 移除 demo 构建配置 (vite.demo.config.ts)
@@ -17,7 +17,7 @@ VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用
 
 查看完整更新日志请访问 [GitHub Releases](https://github.com/tmplink/vxui_react/releases)。
 
-### v1.3.7 适配指南
+### v1.3.8 适配指南
 
 #### Dialog 组件新增属性
 

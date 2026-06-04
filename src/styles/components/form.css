@@ -387,8 +387,11 @@
   color: var(--vx-text);
   font-size: 13px;
 }
-.vx-select__search:focus {
+.vx-select__search:focus,
+.vx-select__search:focus-visible {
   border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 18%, transparent);
+  outline: none;
 }
 .vx-select__list {
   list-style: none;
@@ -575,8 +578,11 @@
   color: var(--vx-text);
   font-size: 13px;
 }
-.vx-multiselect__search:focus {
+.vx-multiselect__search:focus,
+.vx-multiselect__search:focus-visible {
   border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 18%, transparent);
+  outline: none;
 }
 .vx-multiselect__list {
   list-style: none;
