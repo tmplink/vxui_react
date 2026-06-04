@@ -56,11 +56,12 @@ select {
   outline: none;
 }
 
+/* 组件使用包装层 :focus-within 或 :focus 自行处理焦点样式，
+   全局 input/textarea/select 不再强制绿色 outline。 */
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 2px solid var(--vx-primary);
-  outline-offset: 2px;
+  outline: none;
 }
 
 a:focus-visible {

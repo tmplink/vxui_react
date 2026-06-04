@@ -11,6 +11,11 @@
   background: var(--vx-surface);
   overflow: hidden;
   width: 100%;
+  transition: border-color 120ms, box-shadow 120ms;
+}
+.vx-number-input:focus-within {
+  border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 18%, transparent);
 }
 .vx-number-input--invalid {
   border-color: color-mix(in srgb, var(--vx-danger) 45%, var(--vx-border));

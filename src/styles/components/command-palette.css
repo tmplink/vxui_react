@@ -2,7 +2,7 @@
    CommandPalette
    ═══════════════════════════════════════════════════════════ */
 
-.vx-cmd-overlay {
+.vx-cmd__backdrop {
   position: fixed;
   inset: 0;
   z-index: var(--vx-z-command);
@@ -15,90 +15,225 @@
   -webkit-backdrop-filter: blur(14px) saturate(1.08);
   animation: vx-opacity-in 150ms ease;
 }
+
 .vx-cmd {
-  width: min(580px, calc(100vw - 32px));
-  max-height: min(480px, calc(100dvh - 20vh));
-  background: var(--vx-glass-bg-strong);
-  backdrop-filter: var(--vx-glass-filter);
-  -webkit-backdrop-filter: var(--vx-glass-filter);
-  border: 1px solid var(--vx-glass-border);
-  border-radius: var(--vx-radius-lg);
-  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
+  width: min(640px, calc(100vw - 32px));
+  max-height: min(520px, calc(100dvh - 20vh));
+  background: #ffffff;
+  border: 1px solid var(--vx-border, #e5e7eb);
+  border-radius: 14px;
+  box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.18),
+              0 8px 16px -6px rgba(15, 23, 42, 0.08);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   animation: vx-dialog-in-top 150ms ease;
 }
-.vx-cmd__input-wrap {
+
+/* 搜索区 */
+.vx-cmd__search {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--vx-border);
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--vx-border, #e5e7eb);
+  flex-shrink: 0;
 }
-.vx-cmd__input-icon {
-  color: var(--vx-text-muted);
+
+.vx-cmd__search-icon {
+  color: var(--vx-text-muted, #94a3b8);
   flex-shrink: 0;
   display: flex;
+  width: 16px;
+  height: 16px;
 }
+
 .vx-cmd__input {
   flex: 1;
+  min-width: 0;
   border: none;
   background: transparent;
-  color: var(--vx-text);
-  font-size: 16px;
+  color: var(--vx-text, #0f172a);
+  font-size: 15px;
   outline: none;
+  font-family: inherit;
+  line-height: 1.4;
 }
-.vx-cmd__input::placeholder { color: var(--vx-text-muted); }
+.vx-cmd__input:focus,
+.vx-cmd__input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.vx-cmd__input::placeholder { color: var(--vx-text-muted, #94a3b8); }
+
+.vx-cmd__esc,
+.vx-cmd__enter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+  padding: 0 8px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--vx-text-muted, #64748b);
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.vx-cmd__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--vx-text-muted, #94a3b8);
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 100ms, background 100ms;
+}
+.vx-cmd__clear:hover {
+  color: var(--vx-text, #0f172a);
+  background: #f1f5f9;
+}
+
+/* 列表区 */
 .vx-cmd__list {
   flex: 1;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 6px;
+  padding: 8px;
+  list-style: none;
+  margin: 0;
 }
-.vx-cmd__group-label {
-  padding: 6px 10px 4px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--vx-text-muted);
+
+.vx-cmd__empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--vx-text-muted, #94a3b8);
+  font-size: 14px;
+  list-style: none;
 }
+
+/* 列表项 */
 .vx-cmd__item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
   width: 100%;
-  padding: 8px 10px;
-  border-radius: calc(var(--vx-radius) * 0.75);
+  padding: 12px 14px;
+  border-radius: 10px;
   border: none;
   background: transparent;
-  color: var(--vx-text);
+  color: var(--vx-text, #0f172a);
   font-size: 14px;
   text-align: left;
   cursor: pointer;
+  list-style: none;
   transition: background 100ms;
+  margin-bottom: 2px;
 }
-.vx-cmd__item:hover,
-.vx-cmd__item[data-selected] { background: var(--vx-bg-accent); }
+.vx-cmd__item:last-child { margin-bottom: 0; }
+
+.vx-cmd__item:hover { background: #f1f5f9; }
+.vx-cmd__item--active {
+  background: #eff6ff;
+}
+.vx-cmd__item--active:hover { background: #eff6ff; }
+
 .vx-cmd__item-icon {
   display: flex;
   align-items: center;
-  color: var(--vx-text-muted);
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  color: #2563eb;
+  background: #eff6ff;
+  font-size: 14px;
+  font-weight: 600;
   flex-shrink: 0;
+  letter-spacing: 0;
 }
-.vx-cmd__item-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.vx-cmd__item-desc {
-  font-size: 12px;
-  color: var(--vx-text-muted);
+.vx-cmd__item-icon--section {
+  text-transform: none;
+}
+
+.vx-cmd__item-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.vx-cmd__item-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--vx-text, #0f172a);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 14ch;
+  line-height: 1.3;
 }
-.vx-cmd__empty {
-  padding: 20px 10px;
-  text-align: center;
-  color: var(--vx-text-muted);
-  font-size: 14px;
+
+.vx-cmd__item-sub {
+  font-size: 12.5px;
+  color: var(--vx-text-muted, #94a3b8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+.vx-cmd__mark {
+  background: transparent;
+  color: var(--vx-text, #0f172a);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--vx-text-muted, #94a3b8);
+  text-underline-offset: 2px;
+}
+
+/* 底部 */
+.vx-cmd__footer {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 18px;
+  border-top: 1px solid var(--vx-border, #e5e7eb);
+  font-size: 12.5px;
+  color: var(--vx-text-muted, #64748b);
+  background: #f8fafc;
+  flex-shrink: 0;
+}
+.vx-cmd__footer span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.vx-cmd__footer kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 6px;
+  font-family: inherit;
+  font-size: 11.5px;
+  color: var(--vx-text-muted, #64748b);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  line-height: 1;
+  font-weight: 500;
 }

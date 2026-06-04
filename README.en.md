@@ -1,4 +1,4 @@
-# VXUI React · v1.3.7
+# VXUI React · v1.3.8
 
 **Website**: [ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**: [tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [中文](README.md)
 
@@ -6,7 +6,7 @@ VXUI React is a general-purpose React UI component library designed for admin pa
 
 ## 🚀 Changelog
 
-> **v1.3.7** — 2026-05
+> **v1.3.8** — 2026-06
 > - Dialog: add onConfirm/onCancel/confirmLabel/cancelLabel/confirmVariant props, built-in confirm/cancel button support
 > - Remove AlertDialog component (merged into Dialog)
 > - Remove demo build config (vite.demo.config.ts)
@@ -17,7 +17,7 @@ VXUI React is a general-purpose React UI component library designed for admin pa
 
 See full changelog at [GitHub Releases](https://github.com/tmplink/vxui_react/releases).
 
-### v1.3.7 Migration Guide
+### v1.3.8 Migration Guide
 
 #### New Dialog Props
 
