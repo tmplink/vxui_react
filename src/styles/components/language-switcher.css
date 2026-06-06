@@ -1,58 +1,54 @@
 /* ═══════════════════════════════════════════════════════════
-   LanguageSwitcher
+   LanguageSwitcher — based on Select component
    ═══════════════════════════════════════════════════════════ */
 
 .vx-lang-switcher {
-  position: relative;
   display: inline-flex;
+  width: auto;
 }
-.vx-lang-switcher__trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
-  border-radius: var(--vx-radius-sm);
-  border: 1px solid var(--vx-border);
-  background: var(--vx-surface);
-  color: var(--vx-text-secondary);
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 120ms, border-color 120ms;
+
+.vx-lang-switcher .vx-select__trigger {
+  width: auto;
+  min-height: 36px;
+  padding: 4px 12px;
+  white-space: nowrap;
 }
-.vx-lang-switcher__trigger:hover {
-  background: var(--vx-bg-accent);
+
+/* 覆盖全局 button:focus-visible 样式，使用更精致的聚焦效果 */
+.vx-lang-switcher .vx-select__trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--vx-primary) 22%, transparent);
   border-color: var(--vx-border-strong);
-  color: var(--vx-text);
 }
-.vx-lang-switcher__dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  right: 0;
-  z-index: var(--vx-z-menu);
-  min-width: 140px;
-  background: var(--vx-glass-bg);
-  backdrop-filter: var(--vx-glass-filter);
-  -webkit-backdrop-filter: var(--vx-glass-filter);
-  border: 1px solid var(--vx-glass-border);
-  border-radius: var(--vx-radius);
-  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
-  padding: 4px;
-  animation: vx-fade-in 120ms ease;
+
+.vx-lang-switcher .vx-select__value {
+  white-space: nowrap;
 }
-.vx-lang-switcher__option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+
+.vx-lang-switcher .vx-select__dropdown {
+  background: var(--vx-surface);
+  border-color: var(--vx-border);
+  box-shadow: var(--vx-shadow-lg);
+  /*
+   * Select 组件已通过内联样式 style={{ width: rect.width }} 设置宽度
+   * 不要覆盖它！只需要确保 left 定位正确
+   */
+}
+
+.vx-lang-switcher .vx-select__dropdown .vx-select__list {
+  /* 确保列表内容填满下拉菜单宽度 */
   width: 100%;
-  padding: 7px 10px;
-  border-radius: calc(var(--vx-radius) * 0.75);
-  border: none;
-  background: transparent;
-  color: var(--vx-text);
-  font-size: 14px;
-  cursor: pointer;
-  text-align: left;
-  transition: background 100ms;
 }
-.vx-lang-switcher__option:hover { background: var(--vx-bg-accent); }
-.vx-lang-switcher__option--active { color: var(--vx-primary); font-weight: 500; }
+
+/* 当下拉菜单打开时，确保触发器的边框颜色与下拉菜单一致 */
+.vx-lang-switcher .vx-select__trigger[aria-expanded="true"] {
+  border-color: var(--vx-primary);
+}
+
+.vx-lang-switcher--sidebar {
+  width: 100%;
+}
+
+.vx-lang-switcher--sidebar .vx-select__trigger {
+  width: 100%;
+}

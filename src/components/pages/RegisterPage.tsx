@@ -95,9 +95,7 @@ export function RegisterPage({ onRegister, onLogin, onGuest, onPrivacy, onTerms,
         <div className="vx-auth-topbar__brand"><img src="/colorful_flat_icon.svg" alt="vxUI" height={24} /></div>
         <div className="vx-auth-topbar__actions">
           <LanguageSwitcher variant="inline" />
-          <button type="button" className="vx-lang-drop__trigger" style={{ width: 'auto' }} onClick={onBack}>
-            {pp.backHome}
-          </button>
+          <Button variant="outline" size="sm" onClick={onBack}>{pp.backHome}</Button>
         </div>
       </header>
 

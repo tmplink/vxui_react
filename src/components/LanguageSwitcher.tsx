@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { ChevronDown, Globe } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { useI18n, locales } from '../i18n';
-import { cx } from '../lib/cx';
-import { Button } from './Button';
+import { Select } from './Select';
+import type { SelectOption } from './Select';
 
 export interface LanguageSwitcherProps {
   /**
@@ -13,77 +12,28 @@ export interface LanguageSwitcherProps {
   className?: string;
 }
 
+const languageOptions: SelectOption[] = Object.entries(locales).map(([key, loc]) => ({
+  value: key,
+  label: loc.label,
+}));
+
 export function LanguageSwitcher({ variant = 'inline', className }: LanguageSwitcherProps) {
   const { locale, setLocale } = useI18n();
-  const entries = Object.entries(locales);
-  const current = locales[locale];
-
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  // Close on outside click
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [open]);
-
-  // Close on Escape
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [open]);
-
-  const isSidebar = variant === 'sidebar';
 
   return (
-    <div
-      ref={ref}
-      className={cx(
-        'vx-lang-drop',
-        isSidebar && 'vx-lang-drop--sidebar',
-        open && 'vx-lang-drop--open',
+    <Select
+      options={languageOptions}
+      value={locale}
+      onChange={(value) => { if (value) setLocale(value); }}
+      placeholder="Language"
+      searchable={false}
+      clearable={false}
+      className={[
+        'vx-lang-switcher',
+        variant === 'sidebar' && 'vx-lang-switcher--sidebar',
         className,
-      )}
-    >
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => setOpen((v) => !v)}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-label="Switch language"
-        className="vx-lang-drop__trigger-btn"
-        style={{ height: '36px' }}
-      >
-        <Globe size={14} aria-hidden="true" />
-        {current?.label ?? locale}
-        <ChevronDown size={14} className="vx-lang-drop__chevron" aria-hidden="true" />
-      </Button>
-
-      {open && (
-        <ul className="vx-lang-drop__menu" role="listbox" aria-label="Language">
-          {entries.map(([key, loc]) => (
-            <li key={key} role="option" aria-selected={locale === key}>
-              <button
-                type="button"
-                className={cx('vx-lang-drop__item', locale === key && 'vx-lang-drop__item--active')}
-                onClick={() => { setLocale(key); setOpen(false); }}
-              >
-                {loc.label}
-                {locale === key && <span className="vx-lang-drop__check" aria-hidden="true">✓</span>}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+      ].filter(Boolean).join(' ').trim()}
+      mobileSheet={null}
+    />
   );
 }

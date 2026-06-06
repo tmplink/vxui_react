@@ -77,6 +77,8 @@
   box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   animation: vx-fade-in 140ms ease;
   overflow: hidden;
+  /* 确保内联设置的 width 正确计算，包含 padding 和 border */
+  box-sizing: border-box;
 }
 .vx-select__dropdown--in-dialog {
   z-index: calc(var(--vx-z-dialog) + 1);
@@ -111,6 +113,8 @@
   padding: 4px;
   max-height: 220px;
   overflow-y: auto;
+  /* 确保列表填满下拉菜单宽度 */
+  width: 100%;
 }
 .vx-select__option {
   display: flex;
@@ -134,6 +138,10 @@
 .vx-select__option--disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+/* 确保选项标签文字始终横排显示，防止窄容器下 CJK 字符竖排 */
+.vx-select__option > span {
+  white-space: nowrap;
 }
 .vx-select__empty {
   padding: 12px 10px;

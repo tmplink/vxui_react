@@ -147,15 +147,12 @@
 [data-theme-name='violet'] .vx-input,
 [data-theme-name='violet'] .vx-badge,
 [data-theme-name='violet'] .vx-cmd-trigger,
-[data-theme-name='violet'] .vx-lang-drop__trigger,
 [data-theme-name='violet-dark'] .vx-input,
 [data-theme-name='violet-dark'] .vx-badge,
 [data-theme-name='violet-dark'] .vx-cmd-trigger,
-[data-theme-name='violet-dark'] .vx-lang-drop__trigger,
 [data-theme-name='vxai'] .vx-input,
 [data-theme-name='vxai'] .vx-badge,
 [data-theme-name='vxai'] .vx-cmd-trigger,
-[data-theme-name='vxai'] .vx-lang-drop__trigger,
 [data-theme-name='vxai-dark'] .vx-input,
 [data-theme-name='vxai-dark'] .vx-badge {
   border-radius: 12px;
