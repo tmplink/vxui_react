@@ -4,6 +4,10 @@ import dts from 'vite-plugin-dts';
 import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
+  server: {
+    host: '127.0.0.1', // Force IPv4 to avoid EACCES on ::1
+    port: 3000,      // Use port 3000 (5173 has permission issues)
+  },
   plugins: [
     react(),
     // 运行 `npm run build` 后自动生成 dist/visualizer/index.html
