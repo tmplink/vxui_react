@@ -87,7 +87,7 @@
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18), 0 4px 12px rgba(15, 23, 42, 0.08);
 }
 .vx-select__search-wrap {
-  padding: 0px 8px 8px;
+  padding: 8px 8px 8px;
   border-bottom: 1px solid var(--vx-border);
 }
 .vx-select__search {

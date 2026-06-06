@@ -41,6 +41,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:lib": "vite build",
+    "build:pages": "PAGE_BUILD=true vite build",
     "build:analyze": "VISUALIZE=true vite build",
     "prepare": "npm run build",
     "typecheck": "tsc --noEmit",
