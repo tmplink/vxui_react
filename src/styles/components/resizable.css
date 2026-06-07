@@ -2,35 +2,105 @@
    Resizable
    ═══════════════════════════════════════════════════════════ */
 
-.vx-resizable-panel-group {
+.vx-resizable-group {
   display: flex;
   width: 100%;
   height: 100%;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
 }
-.vx-resizable-panel-group--vertical {
+
+.vx-resizable-group--horizontal {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.vx-resizable-group--vertical {
   flex-direction: column;
+  align-items: stretch;
 }
+
+.vx-resizable-group--disabled {
+  pointer-events: none;
+}
+
 .vx-resizable-panel {
+  position: relative;
   overflow: hidden;
   min-width: 0;
   min-height: 0;
+  /* flexBasis is set inline as a percentage so dragging is responsive. */
+  flex-grow: 0;
+  flex-shrink: 1;
+  box-sizing: border-box;
 }
+
+/* Handle ────────────────────────────────────────────────────── */
 .vx-resizable-handle {
   position: relative;
   flex-shrink: 0;
-  background: var(--vx-border);
+  flex-grow: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
   transition: background 160ms;
   z-index: 1;
+  /* Larger hit zone than the visible bar */
+  touch-action: none;
+  user-select: none;
 }
-.vx-resizable-handle:hover,
-.vx-resizable-handle--active {
-  background: var(--vx-primary);
-}
+
 .vx-resizable-handle--horizontal {
-  width: 4px;
+  width: 8px;
+  margin-left: -4px;
+  margin-right: -4px;
   cursor: col-resize;
 }
+
 .vx-resizable-handle--vertical {
-  height: 4px;
+  height: 8px;
+  margin-top: -4px;
+  margin-bottom: -4px;
   cursor: row-resize;
+}
+
+.vx-resizable-handle__bar {
+  display: block;
+  background: var(--vx-border);
+  border-radius: 999px;
+  transition: background 160ms, transform 160ms;
+}
+
+.vx-resizable-handle--horizontal .vx-resizable-handle__bar {
+  width: 4px;
+  height: 24px;
+}
+
+.vx-resizable-handle--vertical .vx-resizable-handle__bar {
+  width: 24px;
+  height: 4px;
+}
+
+.vx-resizable-handle:hover .vx-resizable-handle__bar,
+.vx-resizable-handle:focus-visible .vx-resizable-handle__bar,
+.vx-resizable-handle--active .vx-resizable-handle__bar {
+  background: var(--vx-primary);
+}
+
+.vx-resizable-handle:focus-visible {
+  outline: none;
+}
+.vx-resizable-handle:focus-visible .vx-resizable-handle__bar {
+  box-shadow: 0 0 0 2px var(--vx-primary);
+}
+
+.vx-resizable-handle--active {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.vx-resizable-handle--disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
 }
