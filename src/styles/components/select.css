@@ -115,6 +115,8 @@
   overflow-y: auto;
   /* 确保列表填满下拉菜单宽度 */
   width: 100%;
+  /* 让内联 style 设置的 maxHeight 包含 padding，避免内容区域比预期小 */
+  box-sizing: border-box;
 }
 .vx-select__option {
   display: flex;

@@ -71,6 +71,12 @@ export function Select({
     left: number;
     width: number;
     direction: 'down' | 'up';
+    /**
+     * 下拉列表可用的最大高度（像素）。
+     * 来自 trigger 与视口上下边缘之间的距离减去安全边距，
+     * 这样下拉能完全显示在视口内且不会出现无谓的滚动条。
+     */
+    maxHeight: number;
   } | null>(null);
   const dialogContentRef = useRef<HTMLElement | null>(null);
 
@@ -147,11 +153,19 @@ export function Select({
     const rect = triggerRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
-    const direction = spaceBelow < 280 && spaceAbove > spaceBelow ? 'up' : 'down';
+    // 只有当下方空间不足以容纳最小下拉时才考虑向上展开
+    const direction = spaceBelow < 200 && spaceAbove > spaceBelow ? 'up' : 'down';
+    // 留出 8px 边距避免贴边；并保留 120px 下限以防止极小空间时列表过窄
+    const SAFETY_MARGIN = 8;
+    const MIN_HEIGHT = 120;
+    const available =
+      direction === 'down'
+        ? Math.max(MIN_HEIGHT, spaceBelow - SAFETY_MARGIN)
+        : Math.max(MIN_HEIGHT, spaceAbove - SAFETY_MARGIN);
     setDropPos(
       direction === 'down'
-        ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction }
-        : { bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width, direction },
+        ? { top: rect.bottom + 4, left: rect.left, width: rect.width, direction, maxHeight: available }
+        : { bottom: window.innerHeight - rect.top + 4, left: rect.left, width: rect.width, direction, maxHeight: available },
     );
   }, [open, isMobile]);
 
@@ -314,7 +328,13 @@ export function Select({
                 />
               </div>
             )}
-            <ul id={listboxId} className="vx-select__list" role="listbox" aria-label={label ?? 'Options'}>
+            <ul
+              id={listboxId}
+              className="vx-select__list"
+              role="listbox"
+              aria-label={label ?? 'Options'}
+              style={dropPos ? { maxHeight: dropPos.maxHeight } : undefined}
+            >
               {filtered.length === 0 ? (
                 <li className="vx-select__empty">{emptyText}</li>
               ) : (
