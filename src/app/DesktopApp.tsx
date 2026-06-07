@@ -107,10 +107,16 @@ export function DesktopApp({
 
   const densityLabel = isZh ? `密度：${compactDensity ? '紧凑' : '舒适'}` : `Density: ${compactDensity ? 'Compact' : 'Comfortable'}`;
 
-  const themeMenuItems = themeEntries.map(([themeName, definition]) => ({
+  const themeOptions = themeEntries.map(([themeName, definition]) => ({
+    value: themeName,
     label: `${definition.label ?? themeName}${theme === themeName ? (isZh ? ' (当前)' : ' (current)') : ''}`,
+  }));
+
+  // 保留 DropdownMenu 格式用于更多菜单中的主题选项
+  const themeMenuItems = themeOptions.map(option => ({
+    label: option.label,
     icon: <Palette size={14} />,
-    onClick: () => setTheme(themeName),
+    onClick: () => setTheme(option.value),
   }));
   const accountMenuItems = viewerSession
     ? [{ label: t.publicPages.navLogout, icon: <User size={14} />, onClick: onLogout }]
@@ -968,8 +974,14 @@ export function DesktopApp({
               </Button>
             ) : null}
             {showThemeBtn ? (
-              <DropdownMenu className="vx-docs-toolbar__item--theme" trigger={<Button variant="outline" size="sm"><Palette size={14} />{themes[theme]?.label ?? theme}</Button>}
-                items={themeMenuItems} align="right" />
+              <Select
+                className="vx-docs-toolbar__item--theme"
+                options={themeOptions}
+                value={theme}
+                onChange={(val) => val && setTheme(val)}
+                placeholder={isZh ? '选择主题' : 'Select theme'}
+                searchable={false}
+              />
             ) : null}
             {showAccountBtn ? (
               <DropdownMenu className="vx-docs-toolbar__item--account" trigger={<Button variant="outline" size="sm"><User size={14} />{viewerSession?.name ?? t.publicPages.guestLabel}</Button>}
