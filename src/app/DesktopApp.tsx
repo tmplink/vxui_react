@@ -93,7 +93,7 @@ export function DesktopApp({
 
   const activePage: PageKey = route.view === 'docs' ? route.page ?? 'introduction' : 'introduction';
   const activeDocument = pages[activePage] ?? pages.introduction;
-  const isDocDetailPage = route.view === 'docs' && activePage !== 'introduction';
+  const isDocDetailPage = route.view === 'docs' && route.page !== undefined;
   const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
   const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
 
@@ -992,7 +992,7 @@ export function DesktopApp({
 
   // ── 主渲染 ──
   const activePageKey: PageKey = route.view === 'docs' ? route.page ?? 'introduction' : 'introduction';
-  const isHomePage = activePageKey === 'introduction';
+  const isHomePage = route.view === 'docs' && !route.page;
 
   return (
     <>
