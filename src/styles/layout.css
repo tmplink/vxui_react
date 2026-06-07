@@ -309,8 +309,6 @@
 
 .vx-sidebar__footer-content {
   padding-bottom: 4px;
-  border-bottom: 1px solid var(--vx-border);
-  margin-bottom: 4px;
 }
 
 /* ── Collapsed sidebar states ────────────────────────────── */
