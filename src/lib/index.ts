@@ -151,7 +151,7 @@ export type { TimePickerProps } from '../components/TimePicker';
 export { FileUpload } from '../components/FileUpload';
 export type { FileUploadProps, UploadedFile } from '../components/FileUpload';
 
-// Sheet — 统一 Sheet 组件（替代 BottomSheet / ActionSheet / MobileDrawer / 旧 Sheet）
+// Sheet — 统一 Sheet 组件（替代 ActionSheet / MobileDrawer / 旧 Sheet）
 export { Sheet } from '../components/Sheet';
 export type { SheetProps, SheetSide, SheetVariant, SheetActionItemProps } from '../components/Sheet';
 

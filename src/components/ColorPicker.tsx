@@ -189,7 +189,7 @@ export function ColorPicker({
     </div>
   );
 
-  // ─── 移动端 BottomSheet 内容 ─────────────────────────────────────
+  // ─── 移动端 Sheet 内容 ───────────────────────────────────────────
   const mobileSheetContent = (
     <div className="vxm-colorpicker__sheet">
       {/* Hue slider */}

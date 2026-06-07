@@ -30,7 +30,6 @@ export interface SelectProps {
   /**
    * 自定义移动端选择面板组件。
    * 默认使用 Sheet 组件。传入 null 可禁用移动端面板。
-   * 可用于注入自定义的 BottomSheet 实现以解耦依赖。
    */
   mobileSheet?: ReactNode;
 }
@@ -93,7 +92,7 @@ export function Select({
       return;
     }
     if (showSearch) {
-      // 移动端需要延迟聚焦，等 BottomSheet 进入动画完成、body overflow 稳定后再聚焦
+      // 移动端需要延迟聚焦，等 Sheet 进入动画完成、body overflow 稳定后再聚焦
       // 否则 iOS Safari 会在 body overflow 切换间隙触发视口调整，导致页面跳动
       const delay = isMobile ? 350 : 0;
       const timeoutId = setTimeout(() => searchRef.current?.focus(), delay);
@@ -200,7 +199,7 @@ export function Select({
   // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
   const [pendingValue, setPendingValue] = useState<string | undefined>(value);
 
-  // 打开 BottomSheet 时，同步 pendingValue 为当前值
+  // 打开 Sheet 时，同步 pendingValue 为当前值
   useEffect(() => {
     if (open && isMobile) {
       setPendingValue(value);
@@ -215,10 +214,10 @@ export function Select({
   const handleConfirm = () => {
     if (!isControlled) setInternalValue(pendingValue);
     onChange?.(pendingValue);
-    // BottomSheet 自主关闭
+    // Sheet 自主关闭
   };
 
-  // Mobile BottomSheet content
+  // Mobile Sheet content
   const mobileSheetContent = (
     <>
       {showSearch && (
@@ -361,7 +360,7 @@ export function Select({
         );
         return shouldPortal ? createPortal(dropdownNode, dialogContentRef.current ?? document.body) : dropdownNode;
       })()}
-      {/* Mobile BottomSheet — 可通过 mobileSheet prop 注入自定义组件 */}
+      {/* Mobile Sheet — 可通过 mobileSheet prop 注入自定义组件 */}
       {isMobile && (mobileSheet !== undefined ? (
         mobileSheet
       ) : (

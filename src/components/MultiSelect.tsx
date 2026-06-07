@@ -78,7 +78,7 @@ export function MultiSelect({
       setSearch('');
       return;
     }
-    // 移动端需要延迟聚焦，等 BottomSheet 进入动画完成、body overflow 稳定后再聚焦
+    // 移动端需要延迟聚焦，等 Sheet 进入动画完成、body overflow 稳定后再聚焦
     // 否则 iOS Safari 会在 body overflow 切换间隙触发视口调整，导致页面跳动
     const delay = isMobile ? 350 : 0;
     const t = setTimeout(() => searchRef.current?.focus(), delay);
@@ -190,7 +190,7 @@ export function MultiSelect({
   // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
   const [pendingValue, setPendingValue] = useState<string[]>(value);
 
-  // 打开 BottomSheet 时，同步 pendingValue 为当前值
+  // 打开 Sheet 时，同步 pendingValue 为当前值
   useEffect(() => {
     if (open && isMobile) {
       setPendingValue(value);
@@ -209,10 +209,10 @@ export function MultiSelect({
   const handleConfirm = () => {
     if (!isControlled) setInternalValue(pendingValue);
     onChange?.(pendingValue);
-    // BottomSheet 自主关闭
+    // Sheet 自主关闭
   };
 
-  // Mobile BottomSheet content
+  // Mobile Sheet content
   const mobileSheetContent = (
     <>
       <div className="vx-multiselect__search-wrap">
@@ -378,7 +378,7 @@ export function MultiSelect({
         );
         return shouldPortal ? createPortal(dropdownNode, dialogContentRef.current ?? document.body) : dropdownNode;
       })()}
-      {/* Mobile BottomSheet */}
+      {/* Mobile Sheet */}
       {isMobile && (
         <Sheet
           side="bottom"

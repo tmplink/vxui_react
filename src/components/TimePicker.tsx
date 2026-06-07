@@ -257,7 +257,7 @@ export function TimePicker({
   const [pendingM, setPendingM] = useState(parsed.m);
   const [pendingS, setPendingS] = useState(parsed.s);
 
-  // 打开 BottomSheet 时，同步 pending 值为当前值
+  // 打开 Sheet 时，同步 pending 值为当前值
   useEffect(() => {
     if (open && isMobile) {
       const p = current ? parseTime(current) : { h: 12, m: 0, s: 0 };
@@ -273,10 +273,10 @@ export function TimePicker({
 
   const handleConfirm = () => {
     commit(pendingH, pendingM, pendingS);
-    // BottomSheet 自主关闭
+    // Sheet 自主关闭
   };
 
-  // Mobile BottomSheet content
+  // Mobile Sheet content
   const mobileSheetContent = (
     <>
       <div className="vx-timepicker__columns">
@@ -361,7 +361,7 @@ export function TimePicker({
         );
         return shouldPortal ? createPortal(popoverNode, dialogContentRef.current ?? document.body) : popoverNode;
       })()}
-      {/* Mobile BottomSheet */}
+      {/* Mobile Sheet */}
       {isMobile && open && (
         <Sheet
           side="bottom"

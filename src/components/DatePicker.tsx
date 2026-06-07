@@ -144,7 +144,7 @@ export function DatePicker({
   // ─── 移动端：pendingValue + 确认模式 ─────────────────────────────
   const [pendingValue, setPendingValue] = useState<Date | undefined>(selected);
 
-  // 打开 BottomSheet 时，同步 pendingValue 为当前值
+  // 打开 Sheet 时，同步 pendingValue 为当前值
   useEffect(() => {
     if (open && isMobile) {
       setPendingValue(selected);
@@ -158,10 +158,10 @@ export function DatePicker({
   const handleConfirm = () => {
     if (!isControlled) setInternalValue(pendingValue);
     onChange?.(pendingValue);
-    // BottomSheet 自主关闭
+    // Sheet 自主关闭
   };
 
-  // Mobile BottomSheet content
+  // Mobile Sheet content
   const mobileSheetContent = (
     <>
       <Calendar
@@ -226,7 +226,7 @@ export function DatePicker({
         );
         return shouldPortal ? createPortal(popoverNode, dialogContentRef.current ?? document.body) : popoverNode;
       })()}
-      {/* Mobile BottomSheet */}
+      {/* Mobile Sheet */}
       {isMobile && open && (
         <Sheet
           side="bottom"

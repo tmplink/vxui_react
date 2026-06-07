@@ -265,7 +265,7 @@ export function Dialog({
       if (e.target !== e.currentTarget) return;
 
       const el = contentRef.current;
-      if (el?.dataset.hasOpenPortal === '1' || el?.dataset.hasOpenBottomSheet === '1') {
+      if (el?.dataset.hasOpenPortal === '1') {
         return;
       }
 
@@ -308,7 +308,7 @@ export function Dialog({
                 onClick={handleOverlayClick}
                 onPointerDown={(e) => {
                   const el = contentRef.current;
-                  if (el?.dataset.hasOpenPortal === '1' || el?.dataset.hasOpenBottomSheet === '1') {
+                  if (el?.dataset.hasOpenPortal === '1') {
                     e.preventDefault();
                   }
                 }}
