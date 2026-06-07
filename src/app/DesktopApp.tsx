@@ -5,13 +5,15 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
   Globe, House, LogIn, Menu, Monitor, Moon, MoreHorizontal, Palette, Search,
-  SlidersHorizontal, Sun, User, UserPlus, Zap, AlertTriangle,
+  SlidersHorizontal, Sun, User, UserPlus, Zap, AlertTriangle, Bell,
 } from 'lucide-react';
 import type { AppShellNavSection } from '../components/AppShell';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { locales, useI18n } from '../i18n';
 import {
   AppShell, Button, DropdownMenu, useTheme, useToast, useViewport,
+  VXUIProvider, BottomNav,
+  BREAKPOINTS, PHONE_MAX_WIDTH, PHONE_ASPECT_RATIO_THRESHOLD, TABLET_ASPECT_RATIO_THRESHOLD,
   Accordion, Alert, Avatar, Badge, Breadcrumb, Calendar, Card, CardContent,
   CardDescription, CardHeader, CardTitle, Carousel, Checkbox, ColorPicker,
   ContextMenu, DatePicker, Dialog, DialogClose, DropdownMenu as DM,
@@ -916,6 +918,69 @@ export function DesktopApp({
                 <strong>{isZh ? '暂无内容' : 'No content yet'}</strong>
                 <p>{isZh ? '使用 vx-empty 和 vx-empty__icon 展示空状态。' : 'Use vx-empty and vx-empty__icon to display empty states.'}</p>
               </div>
+            </div>
+          </div>
+        );
+      case 'vxui-provider':
+        return (
+          <div className="vx-preview-stack">
+            <Alert variant="info" title={isZh ? '组合 Provider' : 'Combined Provider'}>
+              {isZh ? 'VXUIProvider 将 ThemeProvider、ViewportProvider 和 ToastProvider 合并为单一根组件。' : 'VXUIProvider merges ThemeProvider, ViewportProvider, and ToastProvider into one root component.'}
+            </Alert>
+            <div className="vx-example">
+              {renderCodeBlock(isZh ? `import { VXUIProvider, themePresets } from 'vxui-react';\n\nexport function App() {\n  return (\n    <VXUIProvider themes={themePresets} defaultTheme="light">\n      <Shell>\n        <ShellMain>\n          <p>应用内容</p>\n        </ShellMain>\n      </Shell>\n    </VXUIProvider>\n  );\n}` : `import { VXUIProvider, themePresets } from 'vxui-react';\n\nexport function App() {\n  return (\n    <VXUIProvider themes={themePresets} defaultTheme="light">\n      <Shell>\n        <ShellMain>\n          <p>App content</p>\n        </ShellMain>\n      </Shell>\n    </VXUIProvider>\n  );\n}`)}
+            </div>
+          </div>
+        );
+      case 'viewport':
+        return (
+          <div className="vx-preview-stack">
+            <Alert variant="info" title={isZh ? '响应式设备检测' : 'Responsive Device Detection'}>
+              {isZh ? 'ViewportProvider 根据物理屏幕宽度自动检测设备类型，并通过 useViewport hook 暴露状态。' : 'ViewportProvider automatically detects device type based on physical screen width and exposes state via the useViewport hook.'}
+            </Alert>
+            {renderCodeBlock(isZh ? `import { ViewportProvider, useViewport } from 'vxui-react';\n\nfunction DeviceInfo() {\n  const { viewport, isPhone, isTablet, isDesktop } = useViewport();\n  return <p>设备类型：{viewport}</p>;\n}\n\nexport function App() {\n  return (\n    <ViewportProvider>\n      <DeviceInfo />\n    </ViewportProvider>\n  );\n}` : `import { ViewportProvider, useViewport } from 'vxui-react';\n\nfunction DeviceInfo() {\n  const { viewport, isPhone, isTablet, isDesktop } = useViewport();\n  return <p>Device: {viewport}</p>;\n}\n\nexport function App() {\n  return (\n    <ViewportProvider>\n      <DeviceInfo />\n    </ViewportProvider>\n  );\n}`)}
+          </div>
+        );
+      case 'constants':
+        return (
+          <div className="vx-preview-stack">
+            <div className="vx-stats" style={{ marginBottom: 16 }}>
+              {[
+                { label: 'BREAKPOINTS.sm', value: BREAKPOINTS.sm },
+                { label: 'BREAKPOINTS.md', value: BREAKPOINTS.md },
+                { label: 'BREAKPOINTS.lg', value: BREAKPOINTS.lg },
+                { label: 'PHONE_MAX_WIDTH', value: PHONE_MAX_WIDTH },
+                { label: 'PHONE_ASPECT_RATIO_THRESHOLD', value: PHONE_ASPECT_RATIO_THRESHOLD },
+                { label: 'TABLET_ASPECT_RATIO_THRESHOLD', value: TABLET_ASPECT_RATIO_THRESHOLD },
+              ].map((c) => (
+                <div key={c.label} className="vx-stat">
+                  <div className="vx-stat__copy">
+                    <span className="vx-stat__label">{c.label}</span>
+                    <strong className="vx-stat__value">{c.value}</strong>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {renderCodeBlock(`import { BREAKPOINTS, PHONE_MAX_WIDTH } from 'vxui-react';\n\nconsole.log(BREAKPOINTS.lg); // 1000\nconsole.log(PHONE_MAX_WIDTH); // 1000`)}
+          </div>
+        );
+      case 'calendar':
+        return (
+          <div className="vx-preview-stack" style={{ display: 'grid', gap: 16 }}>
+            <Calendar />
+            <Calendar weekStartsOnMonday />
+          </div>
+        );
+      case 'bottom-nav':
+        return (
+          <div className="vx-preview-stack" style={{ maxWidth: 400, border: '1px solid var(--vx-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+            <div style={{ padding: 16 }}>
+              <BottomNav items={[
+                { key: 'home', label: isZh ? '首页' : 'Home', icon: <House size={20} />, active: true },
+                { key: 'search', label: isZh ? '搜索' : 'Search', icon: <Search size={20} /> },
+                { key: 'alerts', label: isZh ? '通知' : 'Alerts', icon: <Bell size={20} />, badge: 3 },
+                { key: 'profile', label: isZh ? '我的' : 'Profile', icon: <User size={20} /> },
+              ]} />
             </div>
           </div>
         );

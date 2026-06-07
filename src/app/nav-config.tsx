@@ -37,6 +37,11 @@ export const pageIcons: Record<PageKey, ReactNode> = {
   toggle: <SlidersHorizontal size={16} />,
   rating: <Star size={16} />,
   label: <Tag size={16} />,
+  'vxui-provider': <Boxes size={16} />,
+  viewport: <Monitor size={16} />,
+  constants: <SlidersHorizontal size={16} />,
+  calendar: <CalendarDays size={16} />,
+  'bottom-nav': <Menu size={16} />,
   'date-pickers': <CalendarDays size={16} />,
   'file-upload': <Upload size={16} />,
   'color-picker': <Palette size={16} />,
@@ -81,14 +86,14 @@ export const pageIcons: Record<PageKey, ReactNode> = {
 };
 
 export const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> = [
-  { key: 'gettingStarted', items: ['introduction'] },
+  { key: 'gettingStarted', items: ['introduction', 'vxui-provider', 'viewport', 'constants'] },
   { key: 'layout', items: ['quick-start', 'shell-sidebar', 'grid-page', 'nav-layout', 'scroll-area', 'separator', 'resizable'] },
   { key: 'content', items: ['typography', 'typography-base', 'badge', 'avatar', 'skeleton', 'card', 'code-block', 'language-switcher'] },
   {
     key: 'forms',
     items: [
       { type: 'submenu', key: 'inputs', i18nKey: 'inputs', pages: ['form-controls', 'form-inputs'], icon: <SlidersHorizontal size={16} /> },
-      'toggle', 'rating', 'label', 'date-pickers', 'file-upload', 'color-picker', 'form',
+      'toggle', 'rating', 'label', 'date-pickers', 'file-upload', 'color-picker', 'form', 'calendar',
     ],
   },
   {
@@ -112,7 +117,7 @@ export const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> 
     key: 'templates',
     items: ['home-page', 'login-page', 'register-page', 'error-page', 'privacy-policy', 'terms-of-service'],
   },
-  { key: 'mobile', items: ['mobile', 'mobile-list'] },
+  { key: 'mobile', items: ['mobile', 'mobile-list', 'bottom-nav'] },
 ];
 
 export const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
@@ -120,7 +125,8 @@ export const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
   'separator', 'resizable', 'typography', 'typography-base', 'badge', 'avatar', 'skeleton',
   'card', 'code-block', 'language-switcher', 'button', 'elements',
   'form-controls', 'form-inputs', 'toggle', 'rating', 'label', 'date-pickers',
-  'file-upload', 'color-picker', 'form', 'accordion', 'tabs', 'breadcrumb',
+  'file-upload', 'color-picker', 'form', 'calendar', 'accordion', 'tabs', 'breadcrumb',
+  'vxui-provider', 'viewport', 'constants', 'calendar', 'bottom-nav',
   'pagination', 'stepper', 'progress', 'spinner', 'alert', 'toasts', 'table',
   'data-list', 'timeline', 'tree-view', 'carousel', 'empty-states', 'overlays',
   'data-display', 'navigation', 'feedback', 'dialog', 'sheet', 'popover',

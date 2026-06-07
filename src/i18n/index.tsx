@@ -89,7 +89,7 @@ export interface Translations {
     navigation: string;
     feedback: string;
     dialog: string;
-    'alert-dialog': string;
+
     sheet: string;
     popover: string;
     tooltip: string;
@@ -107,6 +107,11 @@ export interface Translations {
     'error-page': string;
     'privacy-policy': string;
     'terms-of-service': string;
+    'vxui-provider': string;
+    viewport: string;
+    constants: string;
+    calendar: string;
+    'bottom-nav': string;
   };
 
   // Page content
@@ -374,7 +379,7 @@ export const en: Translations = {
     navigation: 'Navigation',
     feedback: 'Feedback',
     dialog: 'Dialog',
-    'alert-dialog': 'Alert Dialog',
+
     sheet: 'Sheet',
     popover: 'Popover',
     tooltip: 'Tooltip',
@@ -392,6 +397,11 @@ export const en: Translations = {
     'error-page': 'Error Page',
     'privacy-policy': 'Privacy Policy',
     'terms-of-service': 'Terms of Service',
+    'vxui-provider': 'VXUI Provider',
+    viewport: 'Viewport',
+    constants: 'Constants',
+    calendar: 'Calendar',
+    'bottom-nav': 'Bottom Nav',
   },
 
   docs: {
@@ -630,8 +640,17 @@ export const en: Translations = {
         'Use secondary or ghost variants for supporting actions that should stay visually quieter.',
         'Use fullWidth for stacked mobile actions or single-column forms.',
       ],
+      props: [
+        { prop: 'variant', type: '"solid" | "secondary" | "ghost" | "danger" | "outline" | "soft" | "danger-outline" | "primary-outline" | "gradient"', default: '"solid"', description: 'Visual style variant.' },
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Button size preset.' },
+        { prop: 'fullWidth', type: 'boolean', default: 'false', description: 'Stretch to fill container width.' },
+        { prop: 'shape', type: '"rect" | "square" | "pill" | "circle"', default: '"rect"', description: 'Button shape preset.' },
+        { prop: 'loading', type: 'boolean', default: 'false', description: 'Show a spinner and disable the button.' },
+        { prop: 'startIcon', type: 'ReactNode', description: 'Left-side icon slot.' },
+        { prop: 'endIcon', type: 'ReactNode', description: 'Right-side icon slot.' },
+      ],
     },
-    elements: {
+     elements: {
       section: 'Components',
       title: 'Elements',
       description:
@@ -654,8 +673,40 @@ export const en: Translations = {
         'TimePicker supports 24-hour format and an optional seconds column via the `seconds` prop.',
         'Short helper text is better than placeholder-only instruction.',
       ],
+      props: [
+        { prop: 'Select.options', type: 'SelectOption[]', required: true, description: 'Array of selectable options.' },
+        { prop: 'Select.value', type: 'string', description: 'Controlled selected value.' },
+        { prop: 'Select.defaultValue', type: 'string', description: 'Uncontrolled initial value.' },
+        { prop: 'Select.onChange', type: '(value: string | undefined) => void', description: 'Called when selection changes.' },
+        { prop: 'Select.placeholder', type: 'string', default: '"Select..."', description: 'Placeholder when nothing selected.' },
+        { prop: 'Select.label', type: 'string', description: 'Field label.' },
+        { prop: 'Select.hint', type: 'string', description: 'Helper text.' },
+        { prop: 'Select.error', type: 'string', description: 'Error message.' },
+        { prop: 'Select.disabled', type: 'boolean', description: 'Disable the select.' },
+        { prop: 'Select.clearable', type: 'boolean', default: 'false', description: 'Show clear button.' },
+        { prop: 'Select.searchable', type: 'boolean | number', default: 'true', description: 'Enable search. Number enables search above that option count.' },
+        { prop: 'MultiSelect.options', type: 'MultiSelectOption[]', required: true, description: 'Array of selectable options.' },
+        { prop: 'MultiSelect.value', type: 'string[]', description: 'Controlled selected values.' },
+        { prop: 'MultiSelect.defaultValue', type: 'string[]', default: '[]', description: 'Uncontrolled initial values.' },
+        { prop: 'MultiSelect.onChange', type: '(value: string[]) => void', description: 'Called when selection changes.' },
+        { prop: 'MultiSelect.placeholder', type: 'string', default: '"Select..."', description: 'Placeholder when nothing selected.' },
+        { prop: 'MultiSelect.label', type: 'string', description: 'Field label.' },
+        { prop: 'MultiSelect.hint', type: 'string', description: 'Helper text.' },
+        { prop: 'MultiSelect.error', type: 'string', description: 'Error message.' },
+        { prop: 'MultiSelect.disabled', type: 'boolean', description: 'Disable the multi-select.' },
+        { prop: 'MultiSelect.clearable', type: 'boolean', default: 'false', description: 'Show clear-all button.' },
+        { prop: 'MultiSelect.maxDisplay', type: 'number', description: 'Max visible tags before "+N more" badge.' },
+        { prop: 'Textarea.label', type: 'string', description: 'Label above the textarea.' },
+        { prop: 'Textarea.hint', type: 'string', description: 'Helper text below.' },
+        { prop: 'Textarea.resize', type: '"none" | "vertical" | "horizontal" | "both"', default: '"vertical"', description: 'CSS resize direction.' },
+        { prop: 'TimePicker.value', type: 'string', description: 'Controlled time value (HH:MM or HH:MM:SS).' },
+        { prop: 'TimePicker.defaultValue', type: 'string', description: 'Uncontrolled initial time.' },
+        { prop: 'TimePicker.onChange', type: '(value: string) => void', description: 'Called when time changes.' },
+        { prop: 'TimePicker.label', type: 'string', description: 'Field label.' },
+        { prop: 'TimePicker.seconds', type: 'boolean', default: 'false', description: 'Show seconds column.' },
+      ],
     },
-    navigation: {
+     navigation: {
       section: 'Components',
       title: 'Navigation',
       description:
@@ -686,8 +737,28 @@ export const en: Translations = {
         'Choose the appropriate size — "sm" for quick confirmations, "lg" for forms or details.',
         'Dialog traps focus and blocks interaction with the page behind it.',
       ],
+      props: [
+        { prop: 'trigger', type: 'ReactNode', required: true, description: 'Element that opens the dialog.' },
+        { prop: 'title', type: 'string', required: true, description: 'Dialog title.' },
+        { prop: 'description', type: 'string', description: 'Optional description text.' },
+        { prop: 'children', type: 'ReactNode', description: 'Dialog body content.' },
+        { prop: 'footer', type: 'ReactNode', description: 'Custom footer content.' },
+        { prop: 'size', type: '"sm" | "md" | "lg" | "xl" | "full"', default: '"md"', description: 'Dialog width preset.' },
+        { prop: 'placement', type: '"center" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-half" | "right-half" | "bottom-half" | "left-half"', default: '"center"', description: 'Dialog placement.' },
+        { prop: 'scrollable', type: 'boolean', default: 'true', description: 'Allow body scrolling on overflow.' },
+        { prop: 'closable', type: 'boolean', default: 'true', description: 'Show the close button.' },
+        { prop: 'fullscreen', type: 'boolean', default: 'false', description: 'Display in fullscreen mode.' },
+        { prop: 'open', type: 'boolean', description: 'Controlled open state.' },
+        { prop: 'defaultOpen', type: 'boolean', description: 'Default open state (uncontrolled).' },
+        { prop: 'onOpenChange', type: '(open: boolean) => void', description: 'Callback when open state changes.' },
+        { prop: 'onConfirm', type: '() => void', description: 'Shows built-in confirm button.' },
+        { prop: 'onCancel', type: '() => void', description: 'Shows built-in cancel button.' },
+        { prop: 'confirmLabel', type: 'string', default: '"Confirm"', description: 'Confirm button label.' },
+        { prop: 'cancelLabel', type: 'string', default: '"Cancel"', description: 'Cancel button label.' },
+        { prop: 'confirmVariant', type: '"solid" | "danger"', default: '"solid"', description: 'Confirm button variant.' },
+      ],
     },
-    popover: {
+     popover: {
       section: 'Overlays',
       title: 'Popover',
       description: 'A rich popup that can contain forms, buttons, and structured content. Unlike Tooltip, Popover can hold interactive elements and requires an explicit dismiss action.',
@@ -696,8 +767,16 @@ export const en: Translations = {
         'Always provide a close mechanism (click outside or explicit close button).',
         'Use Tooltip for read-only labels and Popover for interactive content.',
       ],
+      props: [
+        { prop: 'content', type: 'ReactNode', required: true, description: 'Popover content (forms, buttons, links).' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Trigger element.' },
+        { prop: 'placement', type: '"top" | "bottom" | "left" | "right"', default: '"bottom"', description: 'Popover placement.' },
+        { prop: 'trigger', type: '"click" | "hover"', default: '"click"', description: 'Open trigger method.' },
+        { prop: 'open', type: 'boolean', description: 'Controlled open state.' },
+        { prop: 'onOpenChange', type: '(open: boolean) => void', description: 'Callback when open state changes.' },
+      ],
     },
-    tooltip: {
+     tooltip: {
       section: 'Overlays',
       title: 'Tooltip',
       description: 'A short, non-interactive label that appears on hover or focus to describe a UI element. Tooltips contain text only — no links, buttons, or forms.',
@@ -706,8 +785,14 @@ export const en: Translations = {
         'Tooltips appear on hover and focus; they do not require a close action.',
         'Keep tooltip text short — one to five words is ideal.',
       ],
+      props: [
+        { prop: 'content', type: 'ReactNode', required: true, description: 'Tooltip text content.' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Trigger element.' },
+        { prop: 'placement', type: '"top" | "bottom" | "left" | "right"', default: '"top"', description: 'Tooltip placement.' },
+        { prop: 'delay', type: 'number', default: '600', description: 'Delay in ms before showing.' },
+      ],
     },
-    'hover-card': {
+     'hover-card': {
       section: 'Overlays',
       title: 'Hover Card',
       description: 'A card that appears on hover, showing a richer preview of a linked element. Useful for user profiles, document previews, or reference summaries.',
@@ -716,8 +801,14 @@ export const en: Translations = {
         'HoverCard can contain richer content than Tooltip — images, metadata, links.',
         'Ensure the HoverCard trigger area is large enough to reach without the card disappearing.',
       ],
+      props: [
+        { prop: 'content', type: 'ReactNode', required: true, description: 'Card content (images, metadata, links).' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Trigger element.' },
+        { prop: 'placement', type: '"top" | "bottom" | "left" | "right"', default: '"bottom"', description: 'HoverCard placement.' },
+        { prop: 'delay', type: 'number', default: '400', description: 'Delay in ms before showing.' },
+      ],
     },
-    'dropdown-menu': {
+     'dropdown-menu': {
       section: 'Overlays',
       title: 'Dropdown Menu',
       description: 'A menu that opens on click, presenting a list of grouped actions or navigation items. Supports nested groups, keyboard navigation, and disabled items.',
@@ -726,8 +817,22 @@ export const en: Translations = {
         'Use separators between unrelated action groups.',
         'DropdownMenu supports keyboard navigation — arrow keys, Enter, and Escape.',
       ],
+      props: [
+        { prop: 'trigger', type: 'ReactNode', required: true, description: 'Element that opens the menu.' },
+        { prop: 'groups', type: 'DropdownMenuGroupProps[]', description: 'Grouped menu items (renders separators between groups).' },
+        { prop: 'items', type: 'DropdownMenuItemProps[]', description: 'Flat list of menu items.' },
+        { prop: 'align', type: '"left" | "right"', default: '"left"', description: 'Menu alignment relative to trigger.' },
+        { prop: 'open', type: 'boolean', description: 'Controlled open state.' },
+        { prop: 'onOpenChange', type: '(open: boolean) => void', description: 'Callback when open state changes.' },
+        { prop: 'DropdownMenuItem.label', type: 'ReactNode', required: true, description: 'Item display content.' },
+        { prop: 'DropdownMenuItem.icon', type: 'ReactNode', description: 'Item icon.' },
+        { prop: 'DropdownMenuItem.shortcut', type: 'string', description: 'Keyboard shortcut hint.' },
+        { prop: 'DropdownMenuItem.disabled', type: 'boolean', description: 'Disable the item.' },
+        { prop: 'DropdownMenuItem.danger', type: 'boolean', description: 'Apply danger styling.' },
+        { prop: 'DropdownMenuItem.onClick', type: '() => void', description: 'Click handler.' },
+      ],
     },
-    'context-menu': {
+     'context-menu': {
       section: 'Overlays',
       title: 'Context Menu',
       description: 'A right-click menu that provides actions relevant to the clicked element. Supports the same item and group API as DropdownMenu.',
@@ -736,8 +841,19 @@ export const en: Translations = {
         'Always provide an alternative way to access the same actions (toolbar, button).',
         'Keep the menu short — long context menus are hard to scan at a glance.',
       ],
+      props: [
+        { prop: 'groups', type: 'ContextMenuGroupProps[]', description: 'Grouped menu items.' },
+        { prop: 'items', type: 'ContextMenuItemProps[]', description: 'Flat list of items.' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Element that triggers on right-click.' },
+        { prop: 'ContextMenuItem.label', type: 'ReactNode', required: true, description: 'Item display content.' },
+        { prop: 'ContextMenuItem.icon', type: 'ReactNode', description: 'Item icon.' },
+        { prop: 'ContextMenuItem.shortcut', type: 'string', description: 'Keyboard shortcut hint.' },
+        { prop: 'ContextMenuItem.disabled', type: 'boolean', description: 'Disable the item.' },
+        { prop: 'ContextMenuItem.danger', type: 'boolean', description: 'Apply danger styling.' },
+        { prop: 'ContextMenuItem.onClick', type: '() => void', description: 'Click handler.' },
+      ],
     },
-    'command-palette': {
+     'command-palette': {
       section: 'Overlays',
       title: 'Command Palette',
       description:
@@ -747,8 +863,16 @@ export const en: Translations = {
         'Populate entries from the same nav data you use for the sidebar so the two surfaces stay in sync.',
         'Bind to ⌘K (Mac) or Ctrl+K (Windows) for a familiar shortcut.',
       ],
+      props: [
+        { prop: 'entries', type: 'SearchEntry[]', required: true, description: 'Flat list of searchable entries.' },
+        { prop: 'open', type: 'boolean', required: true, description: 'Controlled open state.' },
+        { prop: 'onClose', type: '() => void', required: true, description: 'Called when the palette is dismissed.' },
+        { prop: 'onSelect', type: '(key: string) => void', required: true, description: 'Called when an entry is selected.' },
+        { prop: 'placeholder', type: 'string', default: '"Search components, pages, keywords..."', description: 'Search input placeholder.' },
+        { prop: 'emptyText', type: '(query: string) => string', description: 'Function returning empty results message.' },
+      ],
     },
-    'navigation-menu': {
+     'navigation-menu': {
       section: 'Navigation',
       title: 'Navigation Menu',
       description: 'A horizontal navigation bar that supports multi-level dropdown menus on hover. Suitable for top-level site navigation with nested sections.',
@@ -757,8 +881,16 @@ export const en: Translations = {
         'Each item can have sub-items for second-level navigation.',
         'Keep the top-level items short — one or two words each.',
       ],
+      props: [
+        { prop: 'items', type: 'NavMenuItem[]', required: true, description: 'Top-level navigation items.' },
+        { prop: 'NavMenuItem.label', type: 'string', required: true, description: 'Item display text.' },
+        { prop: 'NavMenuItem.href', type: 'string', description: 'Link URL (for items without sub-items).' },
+        { prop: 'NavMenuItem.onClick', type: '() => void', description: 'Click handler.' },
+        { prop: 'NavMenuItem.items', type: 'NavMenuSubItem[]', description: 'Sub-menu items (triggers dropdown).' },
+        { prop: 'NavMenuItem.active', type: 'boolean', description: 'Active state.' },
+      ],
     },
-    menubar: {
+     menubar: {
       section: 'Navigation',
       title: 'Menubar',
       description: 'A horizontal menu bar typically used for application-level actions (File, Edit, View). Supports keyboard-driven navigation between menus.',
@@ -767,8 +899,21 @@ export const en: Translations = {
         'Each menu can contain items, groups, and separators.',
         'Arrow keys navigate between menus; Escape closes the current menu.',
       ],
+      props: [
+        { prop: 'menus', type: 'MenubarMenuProps[]', required: true, description: 'Top-level menu definitions.' },
+        { prop: 'MenubarMenu.label', type: 'string', required: true, description: 'Menu trigger label.' },
+        { prop: 'MenubarMenu.groups', type: 'MenubarGroupProps[]', description: 'Grouped items with separators.' },
+        { prop: 'MenubarMenu.items', type: 'MenubarItemProps[]', description: 'Flat list of items.' },
+        { prop: 'MenubarMenu.disabled', type: 'boolean', description: 'Disable the menu trigger.' },
+        { prop: 'MenubarItem.label', type: 'ReactNode', required: true, description: 'Item display content.' },
+        { prop: 'MenubarItem.icon', type: 'ReactNode', description: 'Item icon.' },
+        { prop: 'MenubarItem.shortcut', type: 'string', description: 'Keyboard shortcut text.' },
+        { prop: 'MenubarItem.disabled', type: 'boolean', description: 'Disable the item.' },
+        { prop: 'MenubarItem.danger', type: 'boolean', description: 'Apply danger styling.' },
+        { prop: 'MenubarItem.onClick', type: '() => void', description: 'Click handler.' },
+      ],
     },
-    resizable: {
+     resizable: {
       section: 'Layout',
       title: 'Resizable',
       description: 'A set of three components — ResizablePanelGroup, ResizablePanel, ResizableHandle — for building split-panel layouts with draggable dividers. Supports horizontal and vertical arrangements.',
@@ -777,8 +922,16 @@ export const en: Translations = {
         'Set direction to "horizontal" for side-by-side panels, "vertical" for stacked panels.',
         'Panels can be collapsed or resized by dragging the handle between them.',
       ],
+      props: [
+        { prop: 'ResizablePanelGroup.direction', type: '"horizontal" | "vertical"', default: '"horizontal"', description: 'Layout axis.' },
+        { prop: 'ResizablePanelGroup.disabled', type: 'boolean', default: 'false', description: 'Disable resize on all handles.' },
+        { prop: 'ResizablePanel.defaultSize', type: 'number', default: '50', description: 'Initial size as percentage.' },
+        { prop: 'ResizablePanel.minSize', type: 'number', default: '10', description: 'Minimum size percentage.' },
+        { prop: 'ResizablePanel.maxSize', type: 'number', default: '90', description: 'Maximum size percentage.' },
+        { prop: 'ResizableHandle.ariaLabel', type: 'string', description: 'Accessible label for the handle.' },
+      ],
     },
-    'file-upload': {
+     'file-upload': {
       section: 'Forms',
       title: 'File Upload',
       description: 'A drag-and-drop file upload area with click-to-browse fallback. Supports multiple files, previews, and removal.',
@@ -787,8 +940,18 @@ export const en: Translations = {
         'Uploaded files are surfaced via the onChange callback with name, size, and file object.',
         'The component handles its own drag state and visual feedback.',
       ],
+      props: [
+        { prop: 'label', type: 'string', description: 'Field label text.' },
+        { prop: 'hint', type: 'string', description: 'Helper text below the drop zone.' },
+        { prop: 'error', type: 'string', description: 'Error message text.' },
+        { prop: 'accept', type: 'string', description: 'File input accept attribute (e.g. ".png,.jpg").' },
+        { prop: 'multiple', type: 'boolean', default: 'false', description: 'Allow multiple file selection.' },
+        { prop: 'maxSize', type: 'number', description: 'Maximum file size in bytes.' },
+        { prop: 'disabled', type: 'boolean', description: 'Disable the upload zone.' },
+        { prop: 'onFiles', type: '(files: File[]) => void', description: 'Callback with selected files.' },
+      ],
     },
-    'color-picker': {
+     'color-picker': {
       section: 'Forms',
       title: 'Color Picker',
       description: 'A color selection control that opens a popup with hue, saturation, and brightness sliders. Supports predefined swatches and custom hex input.',
@@ -797,8 +960,19 @@ export const en: Translations = {
         'The component provides both a visual picker and a hex input for precision.',
         'Swatches can be customized via the swatches prop for brand-specific palettes.',
       ],
+      props: [
+        { prop: 'value', type: 'string', description: 'Controlled hex color value (e.g. "#ff0000").' },
+        { prop: 'defaultValue', type: 'string', default: '"#3b82f6"', description: 'Uncontrolled initial color.' },
+        { prop: 'onChange', type: '(color: string) => void', description: 'Change callback (receives hex string).' },
+        { prop: 'label', type: 'string', description: 'Field label text.' },
+        { prop: 'hint', type: 'string', description: 'Helper text below the picker.' },
+        { prop: 'error', type: 'string', description: 'Error message text.' },
+        { prop: 'disabled', type: 'boolean', description: 'Disable the picker.' },
+        { prop: 'presets', type: 'string[]', description: 'Array of preset swatch hex colors.' },
+        { prop: 'showPresets', type: 'boolean', default: 'true', description: 'Show/hide preset color swatches.' },
+      ],
     },
-    accordion: {
+     accordion: {
       section: 'Components',
       title: 'Accordion',
       description: 'A vertically stacked list of collapsible panels. Each panel has a header that toggles its content open or closed. Supports single and multiple open panels.',
@@ -807,8 +981,13 @@ export const en: Translations = {
         'By default, only one panel is open at a time (type="single").',
         'For accordions where multiple panels should stay open simultaneously, allowMultiple enables independent toggling.',
       ],
+      props: [
+        { prop: 'items', type: 'AccordionItem[]', required: true, description: 'Array of accordion panel definitions.' },
+        { prop: 'multiple', type: 'boolean', default: 'false', description: 'Allow multiple panels open simultaneously.' },
+        { prop: 'defaultOpen', type: 'string[]', default: '[]', description: 'Keys of initially open panels.' },
+      ],
     },
-    tabs: {
+     tabs: {
       section: 'Components',
       title: 'Tabs',
       description: 'A tabbed interface for switching between multiple content panels. Supports controlled and uncontrolled modes with keyboard navigation.',
@@ -817,8 +996,14 @@ export const en: Translations = {
         'TabsList holds the trigger buttons; TabsContent holds the panel content.',
         'Use the defaultValue prop for uncontrolled usage, or value/onValueChange for controlled mode.',
       ],
+      props: [
+        { prop: 'value', type: 'string', description: 'Controlled selected tab value.' },
+        { prop: 'defaultValue', type: 'string', description: 'Uncontrolled initial tab.' },
+        { prop: 'onValueChange', type: '(value: string) => void', description: 'Called when a new tab is selected.' },
+        { prop: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: 'Layout orientation.' },
+      ],
     },
-    breadcrumb: {
+     breadcrumb: {
       section: 'Components',
       title: 'Breadcrumb',
       description: 'A navigation aid that shows the user\'s location within the page hierarchy. Each segment is a link to the corresponding level.',
@@ -827,8 +1012,12 @@ export const en: Translations = {
         'Use the separator prop to customize the divider between segments.',
         'The last segment should be the current page (not a link) for accessibility.',
       ],
+      props: [
+        { prop: 'items', type: 'BreadcrumbItem[]', required: true, description: 'Ordered list of breadcrumb segments.' },
+        { prop: 'separator', type: 'ReactNode', default: 'Chevron', description: 'Custom separator between items.' },
+      ],
     },
-    pagination: {
+     pagination: {
       section: 'Components',
       title: 'Pagination',
       description: 'A page navigation control that breaks large datasets into manageable pages. Shows page numbers with prev/next buttons and an optional page size selector.',
@@ -837,8 +1026,15 @@ export const en: Translations = {
         'Use the siblings prop to control how many page numbers appear around the current page.',
         'The onPageChange callback receives the new page number for external data fetching.',
       ],
+      props: [
+        { prop: 'page', type: 'number', required: true, description: 'Current active page (1-indexed).' },
+        { prop: 'total', type: 'number', required: true, description: 'Total number of items.' },
+        { prop: 'pageSize', type: 'number', default: '10', description: 'Items per page.' },
+        { prop: 'siblingCount', type: 'number', default: '1', description: 'Page buttons around current page.' },
+        { prop: 'onChange', type: '(page: number) => void', required: true, description: 'Callback when a page is clicked.' },
+      ],
     },
-    stepper: {
+     stepper: {
       section: 'Components',
       title: 'Progress Steps',
       description: 'A multi-step progress indicator that visualizes the user\'s current position in a linear workflow. Supports completed, active, pending, and error states.',
@@ -847,8 +1043,13 @@ export const en: Translations = {
         'Each step can be in "completed", "active", "pending", or "error" status.',
         'Steps with error status draw attention to the failed step so users can navigate back to fix it.',
       ],
+      props: [
+        { prop: 'steps', type: 'StepItem[]', required: true, description: 'Array of step definitions.' },
+        { prop: 'currentStep', type: 'number', default: '0', description: '0-based index of the active step.' },
+        { prop: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: 'Layout direction.' },
+      ],
     },
-    progress: {
+     progress: {
       section: 'Components',
       title: 'Progress Bar',
       description: 'A horizontal progress bar that indicates the completion percentage of a deterministic operation. Supports labeled and unlabeled variants.',
@@ -857,8 +1058,16 @@ export const en: Translations = {
         'Use Spinner for indeterminate waits where the duration is unknown.',
         'The value prop accepts 0-100; set to 100 for completion.',
       ],
+      props: [
+        { prop: 'value', type: 'number', default: '0', description: 'Current progress value (0-100).' },
+        { prop: 'label', type: 'string', description: 'Text label above the bar.' },
+        { prop: 'showLabel', type: 'boolean', default: 'false', description: 'Show percentage text.' },
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Bar thickness preset.' },
+        { prop: 'variant', type: '"default" | "success" | "warning" | "danger" | "rainbow"', default: '"default"', description: 'Bar color variant.' },
+        { prop: 'indeterminate', type: 'boolean', default: 'false', description: 'Indeterminate (animated) mode.' },
+      ],
     },
-    spinner: {
+     spinner: {
       section: 'Components',
       title: 'Spinner',
       description: 'A rotating indicator for indeterminate loading states. Use it while content is being fetched or processed without a known duration.',
@@ -867,8 +1076,12 @@ export const en: Translations = {
         'Use Progress for deterministic operations with a known duration.',
         'Spinner accepts size prop ("sm", "md", "lg") to match the surrounding context.',
       ],
+      props: [
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Spinner dimension (16/24/36 px).' },
+        { prop: 'label', type: 'string', default: '"Loading…"', description: 'Accessible aria-label text.' },
+      ],
     },
-    alert: {
+     alert: {
       section: 'Components',
       title: 'Alert',
       description: 'A prominent status message that communicates success, warning, danger, or informational states. Can optionally be dismissed by the user.',
@@ -877,8 +1090,14 @@ export const en: Translations = {
         'Alert supports "info", "success", "warning", and "danger" variants.',
         'The dismissible prop adds a close button for user-dismissable alerts.',
       ],
+      props: [
+        { prop: 'variant', type: '"info" | "success" | "warning" | "danger"', default: '"info"', description: 'Visual style variant.' },
+        { prop: 'title', type: 'string', description: 'Alert title text.' },
+        { prop: 'icon', type: 'ReactNode', description: 'Custom icon override.' },
+        { prop: 'onClose', type: '() => void', description: 'Close button callback (hidden when omitted).' },
+      ],
     },
-    table: {
+     table: {
       section: 'Components',
       title: 'Table',
       description: 'A data table with sortable columns, optional row striping, and responsive overflow. Ideal for listing structured data with column-level sorting.',
@@ -887,8 +1106,23 @@ export const en: Translations = {
         'Use striped rows in dense tables to help eyes track across long rows.',
         'The columns prop defines headers; each column can have a sortKey for client-side sorting.',
       ],
+      props: [
+        { prop: 'columns', type: 'TableColumn[]', required: true, description: 'Column definitions.' },
+        { prop: 'data', type: 'T[]', required: true, description: 'Row data.' },
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Row height preset.' },
+        { prop: 'striped', type: 'boolean', default: 'false', description: 'Alternating row background.' },
+        { prop: 'hoverable', type: 'boolean', default: 'true', description: 'Row hover highlight.' },
+        { prop: 'bordered', type: 'boolean', default: 'false', description: 'Inner cell borders.' },
+        { prop: 'stickyHeader', type: 'boolean', default: 'false', description: 'Sticky table header.' },
+        { prop: 'headless', type: 'boolean', default: 'false', description: 'Hide the header row.' },
+        { prop: 'loading', type: 'boolean', default: 'false', description: 'Show loading overlay.' },
+        { prop: 'sortColumn', type: 'string', description: 'Controlled sort column key.' },
+        { prop: 'sortDirection', type: '"asc" | "desc"', description: 'Controlled sort direction.' },
+        { prop: 'onSortChange', type: '(column: string, direction) => void', description: 'Sort change callback.' },
+        { prop: 'emptyText', type: 'ReactNode', default: '"No data"', description: 'Text when data is empty.' },
+      ],
     },
-    'empty-states': {
+     'empty-states': {
       section: 'Components',
       title: 'Empty States',
       description:
@@ -905,7 +1139,7 @@ export const en: Translations = {
         { prop: 'action', type: 'ReactNode', description: 'Call-to-action button or link for recovery.' },
       ],
     },
-    toasts: {
+     toasts: {
       section: 'Components',
       title: 'Toasts',
       description:
@@ -915,8 +1149,14 @@ export const en: Translations = {
         'Escalate blocking or destructive states to dialogs instead of stacking toasts.',
         'Avoid repeating the same message on every page transition.',
       ],
+      props: [
+        { prop: 'push', type: '(toast: ToastInput) => void', description: 'Show a toast notification.' },
+        { prop: 'ToastInput.title', type: 'string', required: true, description: 'Toast title text.' },
+        { prop: 'ToastInput.description', type: 'string', description: 'Optional description text.' },
+        { prop: 'ToastInput.tone', type: '"info" | "success" | "warning" | "danger"', default: '"info"', description: 'Toast visual tone.' },
+      ],
     },
-    feedback: {
+     feedback: {
       section: 'Feedback',
       title: 'Feedback Components',
       description:
@@ -970,8 +1210,50 @@ export const en: Translations = {
         'Textarea defaults to vertical resize — disable resize only in fixed-height containers.',
         'Use Switch for immediate state toggles (like settings), and Checkbox for form submissions or multi-selections.',
       ],
+      props: [
+        { prop: 'Checkbox.label', type: 'ReactNode', description: 'Label next to the checkbox.' },
+        { prop: 'Checkbox.description', type: 'string', description: 'Description under the label.' },
+        { prop: 'Checkbox.indeterminate', type: 'boolean', description: 'Show indeterminate visual state.' },
+        { prop: 'Radio.label', type: 'ReactNode', description: 'Label next to the radio circle.' },
+        { prop: 'Radio.description', type: 'string', description: 'Description under the label.' },
+        { prop: 'RadioGroup.label', type: 'string', description: 'Group label rendered as <legend>.' },
+        { prop: 'RadioGroup.children', type: 'ReactNode', required: true, description: 'Radio components inside the group.' },
+        { prop: 'Switch.label', type: 'string', required: true, description: 'Visible label text.' },
+        { prop: 'Switch.description', type: 'string', description: 'Description below the label.' },
+        { prop: 'Slider.label', type: 'string', description: 'Label above the slider.' },
+        { prop: 'Slider.showValue', type: 'boolean', default: 'false', description: 'Show current value next to label.' },
+        { prop: 'Slider.hint', type: 'string', description: 'Helper text below.' },
+        { prop: 'NumberInput.label', type: 'string', description: 'Label above the input.' },
+        { prop: 'NumberInput.hint', type: 'string', description: 'Helper text below.' },
+        { prop: 'NumberInput.error', type: 'string', description: 'Error message.' },
+        { prop: 'NumberInput.value', type: 'number', description: 'Controlled value.' },
+        { prop: 'NumberInput.onChange', type: '(value: number) => void', description: 'Called when value changes.' },
+        { prop: 'NumberInput.min', type: 'number', description: 'Minimum value.' },
+        { prop: 'NumberInput.max', type: 'number', description: 'Maximum value.' },
+        { prop: 'NumberInput.step', type: 'number', default: '1', description: 'Step increment.' },
+        { prop: 'TagInput.value', type: 'string[]', description: 'Controlled tags.' },
+        { prop: 'TagInput.defaultValue', type: 'string[]', default: '[]', description: 'Uncontrolled default tags.' },
+        { prop: 'TagInput.onChange', type: '(tags: string[]) => void', description: 'Called when tags change.' },
+        { prop: 'TagInput.label', type: 'string', description: 'Field label.' },
+        { prop: 'TagInput.placeholder', type: 'string', default: '"Add tag..."', description: 'Placeholder.' },
+        { prop: 'TagInput.maxTags', type: 'number', description: 'Maximum number of tags.' },
+        { prop: 'SegmentedControl.options', type: 'SegmentedControlOption[]', required: true, description: 'Array of options.' },
+        { prop: 'SegmentedControl.value', type: 'string', description: 'Controlled value.' },
+        { prop: 'SegmentedControl.defaultValue', type: 'string', description: 'Uncontrolled initial value.' },
+        { prop: 'SegmentedControl.onChange', type: '(value: string) => void', description: 'Called when selection changes.' },
+        { prop: 'SegmentedControl.fullWidth', type: 'boolean', description: 'Stretch to fill container width.' },
+        { prop: 'SegmentedControl.size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Control size preset.' },
+        { prop: 'Input.label', type: 'string', description: 'Label above the input.' },
+        { prop: 'Input.hint', type: 'string', description: 'Helper text below.' },
+        { prop: 'Input.error', type: 'string', description: 'Error message.' },
+        { prop: 'Input.prefix', type: 'ReactNode', description: 'Ornament prepended inside the input.' },
+        { prop: 'Input.suffix', type: 'ReactNode', description: 'Ornament appended inside the input.' },
+        { prop: 'Input.variant', type: '"default" | "filled" | "underline" | "borderless"', default: '"default"', description: 'Visual style variant.' },
+        { prop: 'Input.size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Size preset.' },
+        { prop: 'Input.rounded', type: 'boolean', description: 'Pill-shaped input.' },
+      ],
     },
-    'mobile-list': {
+     'mobile-list': {
       section: 'Responsive',
       title: 'Mobile List',
       description: 'MobileList, MobileListSection, and MobileListItem provide a native-feeling list suitable for mobile navigation, settings, and data display. Each item supports leading icons, trailing content, chevron indicators, and destructive or disabled states.',
@@ -1081,8 +1363,13 @@ export const en: Translations = {
         'Pass a filename to give readers context on where the snippet belongs in a project.',
         'Keep code snippets minimal; show only the lines needed to illustrate the concept being documented.',
       ],
+      props: [
+        { prop: 'code', type: 'string', required: true, description: 'Source code string to highlight.' },
+        { prop: 'language', type: '"tsx" | "typescript" | "javascript" | "jsx" | "bash" | "json" | "markup"', default: '"tsx"', description: 'Prism language identifier.' },
+        { prop: 'filename', type: 'string', description: 'Filename label displayed above the code block.' },
+      ],
     },
-    'language-switcher': {
+     'language-switcher': {
       section: 'Components',
       title: 'Language Switcher',
       description:
@@ -1092,8 +1379,11 @@ export const en: Translations = {
         'The switcher reflects the current locale; no extra state wiring is needed beyond the i18n provider.',
         'Use the inline variant for topbars and the default variant for settings pages to match visual density.',
       ],
+      props: [
+        { prop: 'variant', type: '"inline" | "sidebar"', default: '"inline"', description: '"inline" for topbars; "sidebar" for sidebar footer.' },
+      ],
     },
-    'scroll-area': {
+     'scroll-area': {
       section: 'Layout',
       title: 'ScrollArea',
       description: 'A scrollable container with custom-styled scrollbars. Use it to constrain overflowing content to a fixed viewport with maxHeight or maxWidth.',
@@ -1431,6 +1721,112 @@ export const en: Translations = {
         { prop: 'width', type: 'number', description: 'Custom panel width in pixels.' },
       ],
     },
+    'vxui-provider': {
+      section: 'Getting Started',
+      title: 'VXUI Provider',
+      description:
+        'A combined provider that wraps ThemeProvider, ViewportProvider, and ToastProvider into a single component. Use it at the app root to reduce nesting.',
+      guidance: [
+        'VXUIProvider replaces the need to manually nest ThemeProvider + ViewportProvider + ToastProvider.',
+        'Pass themes, defaultTheme, and storageKey exactly as you would to ThemeProvider.',
+        'The component is fully optional — you can use the individual providers separately if you need more control.',
+      ],
+      props: [
+        { prop: 'themes', type: 'ThemeRegistry', description: 'Theme configuration passed to ThemeProvider.' },
+        { prop: 'defaultTheme', type: 'string', description: 'Default theme name.' },
+        { prop: 'storageKey', type: 'string', default: '"vxui-theme"', description: 'localStorage key for persisting the theme choice.' },
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Application content.' },
+      ],
+    },
+    viewport: {
+      section: 'Getting Started',
+      title: 'Viewport',
+      description:
+        'ViewportProvider monitors screen dimensions and exposes device type, orientation, and breakpoint information via the useViewport hook.',
+      guidance: [
+        'ViewportProvider uses physical screen size (window.screen.width) for device type classification.',
+        'A screen width ≤ 1000px is classified as tablet or phone (distinguished by aspect ratio).',
+        'useViewport() returns isPhone, isTablet, isDesktop, isTabletPortrait, and raw screenWidth/screenHeight.',
+        'Unlike CSS breakpoints, device detection uses physical screen size so a split-screen tablet is still detected as "tablet".',
+      ],
+      props: [
+        { prop: 'children', type: 'ReactNode', required: true, description: 'Application content.' },
+        { prop: 'useViewport()', type: 'ViewportContextValue', description: 'Hook returning viewport state.' },
+        { prop: 'useViewport().viewport', type: '"phone" | "tablet" | "desktop"', description: 'Current device type classification.' },
+        { prop: 'useViewport().isPhone', type: 'boolean', description: 'True when device is a phone (narrow screen).' },
+        { prop: 'useViewport().isTablet', type: 'boolean', description: 'True when device is a tablet.' },
+        { prop: 'useViewport().isDesktop', type: 'boolean', description: 'True when device is a desktop (width > 1000px).' },
+        { prop: 'useViewport().isTabletPortrait', type: 'boolean', description: 'True when tablet AND portrait orientation.' },
+        { prop: 'useViewport().screenWidth', type: 'number', description: 'Physical screen width in CSS pixels.' },
+        { prop: 'useViewport().screenHeight', type: 'number', description: 'Physical screen height in CSS pixels.' },
+      ],
+    },
+    constants: {
+      section: 'Getting Started',
+      title: 'Constants',
+      description:
+        'Layout breakpoints and device detection thresholds used by the responsive system. These constants are available for custom responsive logic.',
+      guidance: [
+        'BREAKPOINTS.sm (640) is the phone-to-tablet CSS viewport breakpoint.',
+        'BREAKPOINTS.md (768) is the tablet-to-desktop CSS viewport breakpoint.',
+        'BREAKPOINTS.lg (1000) is used as PHONE_MAX_WIDTH for device type detection.',
+        'PHONE_ASPECT_RATIO_THRESHOLD (0.7) and TABLET_ASPECT_RATIO_THRESHOLD (0.75) distinguish phone vs tablet by aspect ratio.',
+        'CSS layout breakpoints and device detection thresholds serve different purposes and have different values.',
+      ],
+      props: [
+        { prop: 'BREAKPOINTS.sm', type: '640', description: 'CSS layout breakpoint for phone-to-tablet (max-width: 640px).' },
+        { prop: 'BREAKPOINTS.md', type: '768', description: 'CSS layout breakpoint for tablet (max-width: 768px).' },
+        { prop: 'BREAKPOINTS.lg', type: '1000', description: 'CSS layout breakpoint for desktop (min-width: 1000px).' },
+        { prop: 'PHONE_MAX_WIDTH', type: '1000', description: 'Physical screen width threshold for device detection.' },
+        { prop: 'PHONE_ASPECT_RATIO_THRESHOLD', type: '0.7', description: 'Aspect ratio (w/h) threshold — below this value the device is classified as phone.' },
+        { prop: 'TABLET_ASPECT_RATIO_THRESHOLD', type: '0.75', description: 'Aspect ratio threshold used as the upper bound for tablet classification.' },
+      ],
+    },
+    calendar: {
+      section: 'Forms',
+      title: 'Calendar',
+      description:
+        'A month-based calendar view for selecting dates. Supports controlled and uncontrolled modes, min/max date constraints, and configurable start-of-week.',
+      guidance: [
+        'Use Calendar standalone or inside DatePicker for a date selection experience.',
+        'Set value for controlled mode or defaultValue for uncontrolled mode.',
+        'Use min and max to restrict the selectable date range.',
+        'Set weekStartsOnMonday if your locale requires weeks to start on Monday.',
+      ],
+      props: [
+        { prop: 'value', type: 'Date', description: 'Controlled selected date.' },
+        { prop: 'defaultValue', type: 'Date', description: 'Uncontrolled initial selected date.' },
+        { prop: 'onChange', type: '(date: Date) => void', description: 'Called when a day is selected.' },
+        { prop: 'min', type: 'Date', description: 'Minimum selectable date.' },
+        { prop: 'max', type: 'Date', description: 'Maximum selectable date.' },
+        { prop: 'weekStartsOnMonday', type: 'boolean', default: 'false', description: 'Start the week on Monday instead of Sunday.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class.' },
+      ],
+    },
+    'bottom-nav': {
+      section: 'Responsive',
+      title: 'Bottom Nav',
+      description:
+        'A mobile-style bottom navigation bar with support for active states, badges, and submenu popups. Ideal for phone-sized viewports where sidebar navigation is impractical.',
+      guidance: [
+        'Use BottomNav inside MobileShell for a native mobile navigation experience.',
+        'Each item requires an icon and label — icons are rendered above labels.',
+        'Set the submenu prop on an item to show a popup menu instead of direct navigation.',
+        'Badges support numeric values and string overflow (e.g., "99+").',
+        'The active item is marked with aria-current="page" for accessibility.',
+      ],
+      props: [
+        { prop: 'items', type: 'BottomNavItem[]', required: true, description: 'Array of navigation items.' },
+        { prop: 'items[].key', type: 'string', required: true, description: 'Unique item key.' },
+        { prop: 'items[].label', type: 'string', required: true, description: 'Display label below the icon.' },
+        { prop: 'items[].icon', type: 'ReactNode', required: true, description: 'Icon rendered above the label.' },
+        { prop: 'items[].badge', type: 'string | number', description: 'Badge value displayed on the icon corner.' },
+        { prop: 'items[].active', type: 'boolean', description: 'Mark this item as the active/current page.' },
+        { prop: 'items[].onSelect', type: '() => void', description: 'Click handler (ignored if submenu is set).' },
+        { prop: 'items[].submenu', type: 'BottomNavSubMenuItem[]', description: 'Submenu items shown on click as a popup.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class.' },
+      ],
+    },
   },
 };
 
@@ -1517,7 +1913,7 @@ export const zh: Translations = {
     navigation: '导航',
     feedback: '反馈组件',
     dialog: '弹窗',
-    'alert-dialog': '确认弹窗',
+
     sheet: '侧滑面板',
     popover: '弹出框',
     tooltip: '工具提示',
@@ -1535,6 +1931,11 @@ export const zh: Translations = {
     'error-page': '错误页',
     'privacy-policy': '隐私政策',
     'terms-of-service': '服务条款',
+    'vxui-provider': 'VXUI Provider',
+    viewport: '视口',
+    constants: '常量',
+    calendar: '日历',
+    'bottom-nav': '底部导航',
   },
 
   docs: {
@@ -1775,6 +2176,15 @@ export const zh: Translations = {
         '次级和幽灵按钮更适合辅助动作，避免和主操作竞争视觉优先级。',
         '在移动端单列布局或堆叠表单中，优先使用 fullWidth 提升点击面积。',
       ],
+      props: [
+        { prop: 'variant', type: '"solid" | "secondary" | "ghost" | "danger" | "outline" | "soft" | "danger-outline" | "primary-outline" | "gradient"', default: '"solid"', description: '按钮样式变体。' },
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: '按钮尺寸预设。' },
+        { prop: 'fullWidth', type: 'boolean', default: 'false', description: '拉伸填满容器宽度。' },
+        { prop: 'shape', type: '"rect" | "square" | "pill" | "circle"', default: '"rect"', description: '按钮形状预设。' },
+        { prop: 'loading', type: 'boolean', default: 'false', description: '显示加载旋转器并禁用按钮。' },
+        { prop: 'startIcon', type: 'ReactNode', description: '左侧图标插槽。' },
+        { prop: 'endIcon', type: 'ReactNode', description: '右侧图标插槽。' },
+      ],
     },
     elements: {
       section: '组件',
@@ -1797,6 +2207,28 @@ export const zh: Translations = {
         '当用户需要从有限列表中选择多个值时，使用 MultiSelect。',
         'TimePicker 支持 24 小时制，通过 `seconds` prop 可启用秒选择列。',
         '简短的辅助文本优于仅依赖 placeholder 的说明。',
+      ],
+      props: [
+        { prop: 'Select.options', type: 'SelectOption[]', required: true, description: '可选项数组。' },
+        { prop: 'Select.value', type: 'string', description: '受控选中值。' },
+        { prop: 'Select.defaultValue', type: 'string', description: '非受控初始值。' },
+        { prop: 'Select.onChange', type: '(value: string | undefined) => void', description: '选中项变化时回调。' },
+        { prop: 'Select.placeholder', type: 'string', default: '"Select..."', description: '未选择时的占位文本。' },
+        { prop: 'Select.label', type: 'string', description: '字段标签。' },
+        { prop: 'Select.searchable', type: 'boolean | number', default: 'true', description: '启用搜索。设为数字时超过该数量才显示搜索。' },
+        { prop: 'MultiSelect.options', type: 'MultiSelectOption[]', required: true, description: '可选项数组。' },
+        { prop: 'MultiSelect.value', type: 'string[]', description: '受控选中值。' },
+        { prop: 'MultiSelect.defaultValue', type: 'string[]', default: '[]', description: '非受控初始值。' },
+        { prop: 'MultiSelect.onChange', type: '(value: string[]) => void', description: '选中项变化时回调。' },
+        { prop: 'MultiSelect.label', type: 'string', description: '字段标签。' },
+        { prop: 'MultiSelect.maxDisplay', type: 'number', description: '最多可见标签数，超出显示 "+N more"。' },
+        { prop: 'Textarea.label', type: 'string', description: '文本域上方的标签。' },
+        { prop: 'Textarea.resize', type: '"none" | "vertical" | "horizontal" | "both"', default: '"vertical"', description: 'CSS 缩放方向。' },
+        { prop: 'TimePicker.value', type: 'string', description: '受控时间值（HH:MM 或 HH:MM:SS）。' },
+        { prop: 'TimePicker.defaultValue', type: 'string', description: '非受控初始时间。' },
+        { prop: 'TimePicker.onChange', type: '(value: string) => void', description: '时间变化时回调。' },
+        { prop: 'TimePicker.label', type: 'string', description: '字段标签。' },
+        { prop: 'TimePicker.seconds', type: 'boolean', default: 'false', description: '显示秒列。' },
       ],
     },
     navigation: {
@@ -1830,6 +2262,22 @@ export const zh: Translations = {
         '"sm" 适用于快速确认，"lg" 适用于表单或详细信息展示。',
         'Dialog 会捕获焦点并阻止与背景页面的交互。',
       ],
+      props: [
+        { prop: 'trigger', type: 'ReactNode', required: true, description: '打开弹窗的触发元素。' },
+        { prop: 'title', type: 'string', required: true, description: '弹窗标题。' },
+        { prop: 'description', type: 'string', description: '可选的描述文字。' },
+        { prop: 'children', type: 'ReactNode', description: '弹窗主体内容。' },
+        { prop: 'footer', type: 'ReactNode', description: '自定义页脚内容。' },
+        { prop: 'size', type: '"sm" | "md" | "lg" | "xl" | "full"', default: '"md"', description: '弹窗宽度预设。' },
+        { prop: 'placement', type: '"center" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-half" | "right-half" | "bottom-half" | "left-half"', default: '"center"', description: '弹窗放置位置。' },
+        { prop: 'scrollable', type: 'boolean', default: 'true', description: '内容溢出时允许滚动。' },
+        { prop: 'closable', type: 'boolean', default: 'true', description: '显示关闭按钮。' },
+        { prop: 'open', type: 'boolean', description: '受控打开状态。' },
+        { prop: 'defaultOpen', type: 'boolean', description: '非受控初始打开状态。' },
+        { prop: 'onOpenChange', type: '(open: boolean) => void', description: '打开状态变化时回调。' },
+        { prop: 'onConfirm', type: '() => void', description: '显示内置确认按钮。' },
+        { prop: 'confirmLabel', type: 'string', default: '"Confirm"', description: '确认按钮文本。' },
+      ],
     },
     popover: {
       section: '浮层',
@@ -1839,6 +2287,14 @@ export const zh: Translations = {
         'Popover 可包含交互内容——表单、按钮、链接。',
         '始终提供关闭机制（点击外部或显式关闭按钮）。',
         'Tooltip 用于只读标签，Popover 用于交互内容。',
+      ],
+      props: [
+        { prop: 'content', type: 'ReactNode', required: true, description: '弹出内容（表单、按钮、链接）。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '触发元素。' },
+        { prop: 'placement', type: '"top" | "bottom" | "left" | "right"', default: '"bottom"', description: '弹出位置。' },
+        { prop: 'trigger', type: '"click" | "hover"', default: '"click"', description: '触发方式。' },
+        { prop: 'open', type: 'boolean', description: '受控打开状态。' },
+        { prop: 'onOpenChange', type: '(open: boolean) => void', description: '打开状态变化时回调。' },
       ],
     },
     tooltip: {
@@ -1850,6 +2306,12 @@ export const zh: Translations = {
         'Tooltip 在悬停和聚焦时出现，无需关闭操作。',
         '保持 Tooltip 文本简短——一到五个词为最佳。',
       ],
+      props: [
+        { prop: 'content', type: 'ReactNode', required: true, description: '工具提示文本内容。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '触发元素。' },
+        { prop: 'placement', type: '"top" | "bottom" | "left" | "right"', default: '"top"', description: '提示位置。' },
+        { prop: 'delay', type: 'number', default: '600', description: '显示前延迟（毫秒）。' },
+      ],
     },
     'hover-card': {
       section: '浮层',
@@ -1859,6 +2321,12 @@ export const zh: Translations = {
         '使用 HoverCard 预览相关内容，无需导航离开。',
         'HoverCard 可包含比 Tooltip 更丰富的内容——图片、元数据、链接。',
         '确保触发器区域足够大，避免卡片在到达前消失。',
+      ],
+      props: [
+        { prop: 'content', type: 'ReactNode', required: true, description: '卡片内容（图片、元数据、链接）。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '触发元素。' },
+        { prop: 'placement', type: '"top" | "bottom" | "left" | "right"', default: '"bottom"', description: '卡片位置。' },
+        { prop: 'delay', type: 'number', default: '400', description: '显示前延迟（毫秒）。' },
       ],
     },
     'dropdown-menu': {
@@ -1870,6 +2338,14 @@ export const zh: Translations = {
         '在无关操作组之间使用分隔线。',
         '支持键盘导航——方向键、Enter 和 Escape。',
       ],
+      props: [
+        { prop: 'trigger', type: 'ReactNode', required: true, description: '打开菜单的触发元素。' },
+        { prop: 'groups', type: 'DropdownMenuGroupProps[]', description: '分组菜单项（组间显示分隔线）。' },
+        { prop: 'items', type: 'DropdownMenuItemProps[]', description: '平铺菜单项列表。' },
+        { prop: 'align', type: '"left" | "right"', default: '"left"', description: '菜单相对触发器的对齐方式。' },
+        { prop: 'open', type: 'boolean', description: '受控打开状态。' },
+        { prop: 'onOpenChange', type: '(open: boolean) => void', description: '打开状态变化时回调。' },
+      ],
     },
     'context-menu': {
       section: '浮层',
@@ -1879,6 +2355,11 @@ export const zh: Translations = {
         '使用 ContextMenu 公开用户通过右键发现的次要操作。',
         '始终提供访问相同操作的替代方式（工具栏、按钮）。',
         '保持菜单简短——长右键菜单难以快速扫读。',
+      ],
+      props: [
+        { prop: 'groups', type: 'ContextMenuGroupProps[]', description: '分组菜单项。' },
+        { prop: 'items', type: 'ContextMenuItemProps[]', description: '平铺菜单项列表。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '触发右键菜单的元素。' },
       ],
     },
     'command-palette': {
@@ -1891,6 +2372,13 @@ export const zh: Translations = {
         '从与侧边栏相同的导航数据填充条目，保持两个入口同步。',
         '绑定 ⌘K（Mac）或 Ctrl+K（Windows）快捷键。',
       ],
+      props: [
+        { prop: 'entries', type: 'SearchEntry[]', required: true, description: '可搜索条目的扁平列表。' },
+        { prop: 'open', type: 'boolean', required: true, description: '受控打开状态。' },
+        { prop: 'onClose', type: '() => void', required: true, description: '面板关闭时回调。' },
+        { prop: 'onSelect', type: '(key: string) => void', required: true, description: '条目被选中时回调。' },
+        { prop: 'placeholder', type: 'string', default: '"Search components, pages, keywords..."', description: '搜索输入框占位符。' },
+      ],
     },
     'navigation-menu': {
       section: '导航',
@@ -1900,6 +2388,12 @@ export const zh: Translations = {
         '在具有多层内容的站点级导航中使用 NavigationMenu。',
         '每个项可包含子项用于次级导航。',
         '保持顶级项简短——每个一两个词即可。',
+      ],
+      props: [
+        { prop: 'items', type: 'NavMenuItem[]', required: true, description: '顶级导航项。' },
+        { prop: 'NavMenuItem.label', type: 'string', required: true, description: '项显示文本。' },
+        { prop: 'NavMenuItem.href', type: 'string', description: '链接 URL（无子项时使用）。' },
+        { prop: 'NavMenuItem.items', type: 'NavMenuSubItem[]', description: '子菜单项。' },
       ],
     },
     menubar: {
@@ -1911,6 +2405,18 @@ export const zh: Translations = {
         '每个菜单可包含项、分组和分隔线。',
         '方向键在菜单间导航；Escape 关闭当前菜单。',
       ],
+      props: [
+        { prop: 'menus', type: 'MenubarMenuProps[]', required: true, description: '顶级菜单定义。' },
+        { prop: 'MenubarMenu.label', type: 'string', required: true, description: '菜单触发标签。' },
+        { prop: 'MenubarMenu.groups', type: 'MenubarGroupProps[]', description: '分组项（含分隔线）。' },
+        { prop: 'MenubarMenu.items', type: 'MenubarItemProps[]', description: '平铺项列表。' },
+        { prop: 'MenubarItem.label', type: 'ReactNode', required: true, description: '项显示内容。' },
+        { prop: 'MenubarItem.icon', type: 'ReactNode', description: '项图标。' },
+        { prop: 'MenubarItem.shortcut', type: 'string', description: '快捷键文本。' },
+        { prop: 'MenubarItem.disabled', type: 'boolean', description: '禁用该项。' },
+        { prop: 'MenubarItem.danger', type: 'boolean', description: '应用危险样式。' },
+        { prop: 'MenubarItem.onClick', type: '() => void', description: '点击回调。' },
+      ],
     },
     resizable: {
       section: '布局',
@@ -1920,6 +2426,13 @@ export const zh: Translations = {
         '使用 ResizablePanelGroup 作为外层容器，内部嵌套 ResizablePanel 和 ResizableHandle。',
         'direction 设为 "horizontal" 实现左右布局，"vertical" 实现上下布局。',
         '面板之间的拖拽手柄可拖动调整各面板尺寸。',
+      ],
+      props: [
+        { prop: 'ResizablePanelGroup.direction', type: '"horizontal" | "vertical"', default: '"horizontal"', description: '面板布局方向。' },
+        { prop: 'ResizablePanelGroup.disabled', type: 'boolean', default: 'false', description: '禁用所有分隔线拖拽。' },
+        { prop: 'ResizablePanel.defaultSize', type: 'number', default: '50', description: '初始大小百分比。' },
+        { prop: 'ResizablePanel.minSize', type: 'number', default: '10', description: '最小大小百分比。' },
+        { prop: 'ResizablePanel.maxSize', type: 'number', default: '90', description: '最大大小百分比。' },
       ],
     },
     'file-upload': {
@@ -1931,6 +2444,16 @@ export const zh: Translations = {
         '通过 onChange 回调获取上传文件的信息（名称、大小和文件对象）。',
         '组件自带拖拽状态管理和视觉反馈。',
       ],
+      props: [
+        { prop: 'label', type: 'string', description: '字段标签文本。' },
+        { prop: 'hint', type: 'string', description: '上传区域下方的辅助文本。' },
+        { prop: 'error', type: 'string', description: '错误信息文本。' },
+        { prop: 'accept', type: 'string', description: '文件输入 accept 属性（如 ".png,.jpg"）。' },
+        { prop: 'multiple', type: 'boolean', default: 'false', description: '允许多文件选择。' },
+        { prop: 'maxSize', type: 'number', description: '最大文件大小（字节）。' },
+        { prop: 'disabled', type: 'boolean', description: '禁用上传区域。' },
+        { prop: 'onFiles', type: '(files: File[]) => void', description: '选择文件后的回调。' },
+      ],
     },
     'color-picker': {
       section: '表单',
@@ -1940,6 +2463,17 @@ export const zh: Translations = {
         '适用于品牌颜色配置、标签颜色或主题自定义。',
         '同时提供可视化选取器和精确十六进制输入。',
         '可通过 swatches 属性定制品牌专属色板。',
+      ],
+      props: [
+        { prop: 'value', type: 'string', description: '受控十六进制颜色值。' },
+        { prop: 'defaultValue', type: 'string', default: '"#3b82f6"', description: '非受控初始颜色。' },
+        { prop: 'onChange', type: '(color: string) => void', description: '颜色变化时回调。' },
+        { prop: 'label', type: 'string', description: '字段标签文本。' },
+        { prop: 'hint', type: 'string', description: '选择器下方辅助文本。' },
+        { prop: 'error', type: 'string', description: '错误信息文本。' },
+        { prop: 'disabled', type: 'boolean', description: '禁用选择器。' },
+        { prop: 'presets', type: 'string[]', description: '预设色块十六进制颜色数组。' },
+        { prop: 'showPresets', type: 'boolean', default: 'true', description: '显示/隐藏预设色块。' },
       ],
     },
     accordion: {
@@ -1951,6 +2485,11 @@ export const zh: Translations = {
         '默认每次只能展开一个面板（type="single"）。',
         '设置 allowMultiple 可允许多个面板同时保持展开状态。',
       ],
+      props: [
+        { prop: 'items', type: 'AccordionItem[]', required: true, description: '折叠面板定义数组。' },
+        { prop: 'multiple', type: 'boolean', default: 'false', description: '允许多个面板同时展开。' },
+        { prop: 'defaultOpen', type: 'string[]', default: '[]', description: '初始展开面板的键名数组。' },
+      ],
     },
     tabs: {
       section: '组件',
@@ -1960,6 +2499,12 @@ export const zh: Translations = {
         '使用 Tabs 将相关内容组织到独立面板中，无需跳转到新页面。',
         'TabsList 存放触发按钮，TabsContent 存放面板内容。',
         '非受控使用 defaultValue，受控模式使用 value/onValueChange。',
+      ],
+      props: [
+        { prop: 'value', type: 'string', description: '受控选中标签值。' },
+        { prop: 'defaultValue', type: 'string', description: '非受控初始标签。' },
+        { prop: 'onValueChange', type: '(value: string) => void', description: '标签切换时回调。' },
+        { prop: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: '标签布局方向。' },
       ],
     },
     breadcrumb: {
@@ -1971,6 +2516,10 @@ export const zh: Translations = {
         '使用 separator 属性自定义分段之间的分隔符。',
         '最后一个分段应为当前页面（非链接），以确保无障碍。',
       ],
+      props: [
+        { prop: 'items', type: 'BreadcrumbItem[]', required: true, description: '面包屑分段的有序列表。' },
+        { prop: 'separator', type: 'ReactNode', default: 'Chevron', description: '分段间的自定义分隔符。' },
+      ],
     },
     pagination: {
       section: '组件',
@@ -1980,6 +2529,13 @@ export const zh: Translations = {
         '显示总页数，让用户了解数据集大小。',
         '使用 siblings 属性控制在当前页周围显示的页码数量。',
         'onPageChange 回调返回新页码，用于外部数据加载。',
+      ],
+      props: [
+        { prop: 'page', type: 'number', required: true, description: '当前页码（从 1 开始）。' },
+        { prop: 'total', type: 'number', required: true, description: '数据总条数。' },
+        { prop: 'pageSize', type: 'number', default: '10', description: '每页条数。' },
+        { prop: 'siblingCount', type: 'number', default: '1', description: '当前页两侧显示的页码按钮数。' },
+        { prop: 'onChange', type: '(page: number) => void', required: true, description: '点击页码时回调。' },
       ],
     },
     stepper: {
@@ -1991,6 +2547,11 @@ export const zh: Translations = {
         '每一步可以是 "completed"、"active"、"pending" 或 "error" 状态。',
         '错误状态的步骤将吸引注意力，方便用户导航回去修复。',
       ],
+      props: [
+        { prop: 'steps', type: 'StepItem[]', required: true, description: '步骤定义数组。' },
+        { prop: 'currentStep', type: 'number', default: '0', description: '当前激活步骤的索引（从 0 开始）。' },
+        { prop: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: '布局方向。' },
+      ],
     },
     progress: {
       section: '组件',
@@ -2000,6 +2561,14 @@ export const zh: Translations = {
         '对已知持续时间的确定性操作使用 Progress（如文件上传、数据导出）。',
         '对未知持续时间的等待使用 Spinner。',
         'value 属性接受 0-100 范围的值，100 表示完成。',
+      ],
+      props: [
+        { prop: 'value', type: 'number', default: '0', description: '当前进度值（0-100）。' },
+        { prop: 'label', type: 'string', description: '进度条上方文本标签。' },
+        { prop: 'showLabel', type: 'boolean', default: 'false', description: '显示百分比文字。' },
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: '进度条粗细预设。' },
+        { prop: 'variant', type: '"default" | "success" | "warning" | "danger" | "rainbow"', default: '"default"', description: '进度条颜色变体。' },
+        { prop: 'indeterminate', type: 'boolean', default: 'false', description: '不确定模式（动画）。' },
       ],
     },
     spinner: {
@@ -2011,6 +2580,10 @@ export const zh: Translations = {
         '对已知持续时间的确定性操作使用 Progress。',
         'Spinner 支持 size 属性（"sm"、"md"、"lg"）以匹配周围上下文。',
       ],
+      props: [
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: '旋转器尺寸（16/24/36 px）。' },
+        { prop: 'label', type: 'string', default: '"Loading…"', description: '无障碍 aria-label 文本。' },
+      ],
     },
     alert: {
       section: '组件',
@@ -2021,6 +2594,12 @@ export const zh: Translations = {
         '支持 "info"、"success"、"warning" 和 "danger" 变体。',
         'dismissible 属性可添加关闭按钮，用户可手动关闭提示。',
       ],
+      props: [
+        { prop: 'variant', type: '"info" | "success" | "warning" | "danger"', default: '"info"', description: '样式变体。' },
+        { prop: 'title', type: 'string', description: '提示标题文本。' },
+        { prop: 'icon', type: 'ReactNode', description: '自定义图标覆盖。' },
+        { prop: 'onClose', type: '() => void', description: '关闭按钮回调（省略时不显示关闭按钮）。' },
+      ],
     },
     table: {
       section: '组件',
@@ -2030,6 +2609,18 @@ export const zh: Translations = {
         'Table 支持可排序列——后端数据时请将排序状态向上委托。',
         '在密集表格中使用斑马纹可帮助视线跟踪对齐。',
         'columns 属性定义表头；每列可设置 sortKey 实现客户端排序。',
+      ],
+      props: [
+        { prop: 'columns', type: 'TableColumn[]', required: true, description: '列定义。' },
+        { prop: 'data', type: 'T[]', required: true, description: '行数据。' },
+        { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: '行高预设。' },
+        { prop: 'striped', type: 'boolean', default: 'false', description: '斑马纹交替背景。' },
+        { prop: 'hoverable', type: 'boolean', default: 'true', description: '行悬停高亮。' },
+        { prop: 'stickyHeader', type: 'boolean', default: 'false', description: '固定表头。' },
+        { prop: 'loading', type: 'boolean', default: 'false', description: '显示加载遮罩。' },
+        { prop: 'sortColumn', type: 'string', description: '受控排序列键名。' },
+        { prop: 'sortDirection', type: '"asc" | "desc"', description: '受控排序方向。' },
+        { prop: 'onSortChange', type: '(column: string, direction) => void', description: '排序变化回调。' },
       ],
     },
     'empty-states': {
@@ -2057,6 +2648,12 @@ export const zh: Translations = {
         '使用 success 和 info 确认后台操作。',
         '将阻塞性或破坏性状态升级为对话框，而非堆叠 Toast。',
         '避免在每次页面切换时重复相同消息。',
+      ],
+      props: [
+        { prop: 'push', type: '(toast: ToastInput) => void', description: '显示 Toast 通知。' },
+        { prop: 'ToastInput.title', type: 'string', required: true, description: 'Toast 标题文本。' },
+        { prop: 'ToastInput.description', type: 'string', description: '可选的描述文本。' },
+        { prop: 'ToastInput.tone', type: '"info" | "success" | "warning" | "danger"', default: '"info"', description: 'Toast 视觉风格。' },
       ],
     },
     feedback: {
@@ -2109,6 +2706,39 @@ export const zh: Translations = {
         'Slider 适合数值范围，配合 showValue 可提供即时反馈。',
         'Textarea 默认可垂直调整尺寸——仅在固定高度容器中禁用调整。',
         'Switch 用于即时状态切换（如设置开关），Checkbox 用于表单提交或多选。',
+      ],
+      props: [
+        { prop: 'Checkbox.label', type: 'ReactNode', description: '复选框旁边的标签。' },
+        { prop: 'Checkbox.indeterminate', type: 'boolean', description: '显示不确定状态。' },
+        { prop: 'Radio.label', type: 'ReactNode', description: '单选按钮旁边的标签。' },
+        { prop: 'RadioGroup.label', type: 'string', description: '作为 <legend> 渲染的分组标签。' },
+        { prop: 'Switch.label', type: 'string', required: true, description: '可见标签文本。' },
+        { prop: 'Switch.description', type: 'string', description: '标签下方的描述。' },
+        { prop: 'Slider.label', type: 'string', description: '滑块上方标签。' },
+        { prop: 'Slider.showValue', type: 'boolean', default: 'false', description: '显示当前值。' },
+        { prop: 'NumberInput.label', type: 'string', description: '输入框上方标签。' },
+        { prop: 'NumberInput.value', type: 'number', description: '受控值。' },
+        { prop: 'NumberInput.onChange', type: '(value: number) => void', description: '值变化时回调。' },
+        { prop: 'NumberInput.min', type: 'number', description: '最小值。' },
+        { prop: 'NumberInput.max', type: 'number', description: '最大值。' },
+        { prop: 'NumberInput.step', type: 'number', default: '1', description: '步进增量。' },
+        { prop: 'TagInput.value', type: 'string[]', description: '受控标签值。' },
+        { prop: 'TagInput.defaultValue', type: 'string[]', default: '[]', description: '非受控默认标签。' },
+        { prop: 'TagInput.onChange', type: '(tags: string[]) => void', description: '标签变化时回调。' },
+        { prop: 'TagInput.placeholder', type: 'string', default: '"Add tag..."', description: '占位符。' },
+        { prop: 'TagInput.maxTags', type: 'number', description: '最大标签数量。' },
+        { prop: 'SegmentedControl.options', type: 'SegmentedControlOption[]', required: true, description: '选项数组。' },
+        { prop: 'SegmentedControl.value', type: 'string', description: '受控值。' },
+        { prop: 'SegmentedControl.defaultValue', type: 'string', description: '非受控初始值。' },
+        { prop: 'SegmentedControl.onChange', type: '(value: string) => void', description: '选择变化时回调。' },
+        { prop: 'SegmentedControl.size', type: '"sm" | "md" | "lg"', default: '"md"', description: '控件尺寸预设。' },
+        { prop: 'Input.label', type: 'string', description: '输入框上方标签。' },
+        { prop: 'Input.hint', type: 'string', description: '输入框下方的辅助文本。' },
+        { prop: 'Input.error', type: 'string', description: '错误信息。' },
+        { prop: 'Input.prefix', type: 'ReactNode', description: '输入框内部前置装饰。' },
+        { prop: 'Input.suffix', type: 'ReactNode', description: '输入框内部后置装饰。' },
+        { prop: 'Input.variant', type: '"default" | "filled" | "underline" | "borderless"', default: '"default"', description: '样式变体。' },
+        { prop: 'Input.size', type: '"sm" | "md" | "lg"', default: '"md"', description: '尺寸预设。' },
       ],
     },
     'mobile-list': {
@@ -2221,6 +2851,11 @@ export const zh: Translations = {
         '传入 filename 可为读者提供该代码片段在项目中所属位置的上下文。',
         '保持示例代码精简——只展示说明当前概念所需的最少行数。',
       ],
+      props: [
+        { prop: 'code', type: 'string', required: true, description: '要高亮显示的源代码字符串。' },
+        { prop: 'language', type: '"tsx" | "typescript" | "javascript" | "jsx" | "bash" | "json" | "markup"', default: '"tsx"', description: 'Prism 语言标识符。' },
+        { prop: 'filename', type: 'string', description: '代码块上方显示的文件名标签。' },
+      ],
     },
     'language-switcher': {
       section: '组件',
@@ -2231,6 +2866,9 @@ export const zh: Translations = {
         '将切换器放置在持久性界面（顶栏或设置页）中，方便用户在任何位置找到它。',
         '切换器自动反映当前语言，除 i18n Provider 外无需额外的状态绑定。',
         '顶栏中使用 inline 变体，设置页中使用默认变体，以匹配对应场景的视觉密度。',
+      ],
+      props: [
+        { prop: 'variant', type: '"inline" | "sidebar"', default: '"inline"', description: '"inline" 用于顶栏；"sidebar" 用于侧边栏底部。' },
       ],
     },
     'scroll-area': {
@@ -2569,6 +3207,112 @@ export const zh: Translations = {
         { prop: 'confirmDisabled', type: 'boolean', default: 'false', description: '是否禁用确认按钮。' },
         { prop: 'onConfirm', type: '() => void', description: '确认按钮回调。' },
         { prop: 'width', type: 'number', description: '自定义面板宽度（像素）。' },
+      ],
+    },
+    'vxui-provider': {
+      section: '开始使用',
+      title: 'VXUI Provider',
+      description:
+        '组合 Provider，将 ThemeProvider、ViewportProvider 和 ToastProvider 合并为一个组件。在应用根节点使用以减少嵌套层级。',
+      guidance: [
+        'VXUIProvider 替代了手动嵌套 ThemeProvider + ViewportProvider + ToastProvider。',
+        'themes、defaultTheme 和 storageKey 的用法与 ThemeProvider 完全相同。',
+        '此组件完全可选——如果需要更精细的控制，可以分别使用独立的 Provider。',
+      ],
+      props: [
+        { prop: 'themes', type: 'ThemeRegistry', description: '传递给 ThemeProvider 的主题配置。' },
+        { prop: 'defaultTheme', type: 'string', description: '默认主题名称。' },
+        { prop: 'storageKey', type: 'string', default: '"vxui-theme"', description: '用于持久化主题选择的 localStorage 键名。' },
+        { prop: 'children', type: 'ReactNode', required: true, description: '应用内容。' },
+      ],
+    },
+    viewport: {
+      section: '开始使用',
+      title: '视口',
+      description:
+        'ViewportProvider 监听屏幕尺寸，通过 useViewport hook 暴露设备类型、方向和断点信息。',
+      guidance: [
+        'ViewportProvider 使用物理屏幕尺寸 (window.screen.width) 进行设备类型分类。',
+        '屏幕宽度 ≤ 1000px 时被归类为平板或手机（通过宽高比区分）。',
+        'useViewport() 返回 isPhone、isTablet、isDesktop、isTabletPortrait 和原始 screenWidth/screenHeight。',
+        '与 CSS 断点不同，设备检测使用物理屏幕尺寸，因此分屏平板仍被识别为"平板"。',
+      ],
+      props: [
+        { prop: 'children', type: 'ReactNode', required: true, description: '应用内容。' },
+        { prop: 'useViewport()', type: 'ViewportContextValue', description: '返回视口状态的 Hook。' },
+        { prop: 'useViewport().viewport', type: '"phone" | "tablet" | "desktop"', description: '当前设备类型分类。' },
+        { prop: 'useViewport().isPhone', type: 'boolean', description: '当前设备是否为手机（窄屏）。' },
+        { prop: 'useViewport().isTablet', type: 'boolean', description: '当前设备是否为平板。' },
+        { prop: 'useViewport().isDesktop', type: 'boolean', description: '当前设备是否为桌面端（宽度 > 1000px）。' },
+        { prop: 'useViewport().isTabletPortrait', type: 'boolean', description: '平板且为竖屏时返回 true。' },
+        { prop: 'useViewport().screenWidth', type: 'number', description: '物理屏幕宽度（CSS 像素）。' },
+        { prop: 'useViewport().screenHeight', type: 'number', description: '物理屏幕高度（CSS 像素）。' },
+      ],
+    },
+    constants: {
+      section: '开始使用',
+      title: '常量',
+      description:
+        '响应式系统使用的布局断点和设备检测阈值。这些常量可用于自定义响应式逻辑。',
+      guidance: [
+        'BREAKPOINTS.sm (640) 是手机到平板的 CSS 视口断点。',
+        'BREAKPOINTS.md (768) 是平板到桌面的 CSS 视口断点。',
+        'BREAKPOINTS.lg (1000) 同时作为 PHONE_MAX_WIDTH 用于设备类型检测。',
+        'PHONE_ASPECT_RATIO_THRESHOLD (0.7) 和 TABLET_ASPECT_RATIO_THRESHOLD (0.75) 通过宽高比区分手机和平板。',
+        'CSS 布局断点和设备检测阈值目的不同，值也不同。',
+      ],
+      props: [
+        { prop: 'BREAKPOINTS.sm', type: '640', description: '手机到平板的 CSS 布局断点 (max-width: 640px)。' },
+        { prop: 'BREAKPOINTS.md', type: '768', description: '平板的 CSS 布局断点 (max-width: 768px)。' },
+        { prop: 'BREAKPOINTS.lg', type: '1000', description: '桌面端的 CSS 布局断点 (min-width: 1000px)。' },
+        { prop: 'PHONE_MAX_WIDTH', type: '1000', description: '设备检测的物理屏幕宽度阈值。' },
+        { prop: 'PHONE_ASPECT_RATIO_THRESHOLD', type: '0.7', description: '宽高比阈值——低于此值则归类为手机。' },
+        { prop: 'TABLET_ASPECT_RATIO_THRESHOLD', type: '0.75', description: '平板分类的宽高比上限阈值。' },
+      ],
+    },
+    calendar: {
+      section: '表单',
+      title: '日历',
+      description:
+        '基于月份的日历视图，用于选择日期。支持受控/非受控模式、日期范围限制和可配置的每周起始日。',
+      guidance: [
+        'Calendar 可独立使用，也可嵌入 DatePicker 提供日期选择体验。',
+        '使用 value 进行受控模式，或 defaultValue 进行非受控模式。',
+        '通过 min 和 max 限制可选日期范围。',
+        '如果需要周一作为每周第一天，设置 weekStartsOnMonday。',
+      ],
+      props: [
+        { prop: 'value', type: 'Date', description: '受控模式下当前选中的日期。' },
+        { prop: 'defaultValue', type: 'Date', description: '非受控模式的初始日期。' },
+        { prop: 'onChange', type: '(date: Date) => void', description: '选择日期时的回调。' },
+        { prop: 'min', type: 'Date', description: '最小可选日期。' },
+        { prop: 'max', type: 'Date', description: '最大可选日期。' },
+        { prop: 'weekStartsOnMonday', type: 'boolean', default: 'false', description: '设置周一为一周的第一天。' },
+        { prop: 'className', type: 'string', description: '自定义 CSS 类名。' },
+      ],
+    },
+    'bottom-nav': {
+      section: '响应式',
+      title: '底部导航',
+      description:
+        '移动端风格的底部导航栏，支持激活状态、角标和子菜单弹出。适用于侧边栏不实用的手机尺寸视口。',
+      guidance: [
+        '在 MobileShell 中使用 BottomNav 获得原生移动端导航体验。',
+        '每个导航项需要 icon 和 label——图标显示在标签上方。',
+        '在导航项上设置 submenu 属性可显示弹出子菜单而非直接导航。',
+        '角标支持数值和字符串溢出（如 "99+"）。',
+        '激活的导航项会设置 aria-current="page" 以满足无障碍需求。',
+      ],
+      props: [
+        { prop: 'items', type: 'BottomNavItem[]', required: true, description: '导航项数组。' },
+        { prop: 'items[].key', type: 'string', required: true, description: '唯一标识。' },
+        { prop: 'items[].label', type: 'string', required: true, description: '图标下方的显示标签。' },
+        { prop: 'items[].icon', type: 'ReactNode', required: true, description: '显示在标签上方的图标。' },
+        { prop: 'items[].badge', type: 'string | number', description: '图标角落显示的角标值。' },
+        { prop: 'items[].active', type: 'boolean', description: '标记此项为当前激活页面。' },
+        { prop: 'items[].onSelect', type: '() => void', description: '点击处理函数（有 submenu 时忽略）。' },
+        { prop: 'items[].submenu', type: 'BottomNavSubMenuItem[]', description: '点击时以弹出菜单显示的子菜单项。' },
+        { prop: 'className', type: 'string', description: '自定义 CSS 类名。' },
       ],
     },
   },
