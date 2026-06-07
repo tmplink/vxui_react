@@ -2,7 +2,7 @@
  * sharedDocPreviews — 桌面端和移动端共享的文档预览渲染逻辑
  * 统一了 DesktopApp.tsx 和 MobileApp.tsx 的预览内容
  */
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { PageKey } from '../routes';
 import { CodeBlock } from '../../components/CodeBlock';
 import { Button } from '../../components/Button';
@@ -74,6 +74,12 @@ export interface SharedPreviewOptions {
   onNavigate?: (route: any) => void;
   push?: (toast: any) => void;
   onChange?: (pageKey: PageKey, value: any) => void;
+}
+
+// ── 内部辅助：带状态的分页组件（移动端与桌面端共享，使点击可响应） ──
+function StatefulPagination({ initialPage = 1, total, pageSize }: { initialPage?: number; total: number; pageSize: number }) {
+  const [page, setPage] = useState(initialPage);
+  return <Pagination page={page} total={total} pageSize={pageSize} onChange={setPage} />;
 }
 
 // ── 共享预览渲染函数 ──
@@ -714,7 +720,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     case 'pagination':
       return (
         <div className="vx-preview-stack">
-          <Pagination page={1} total={48} pageSize={10} onChange={() => {}} />
+          <StatefulPagination initialPage={1} total={48} pageSize={10} />
         </div>
       );
 
@@ -932,7 +938,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
             <TabsContent value="templates">{pages['home-page']?.description}</TabsContent>
             <TabsContent value="responsive">{pages.mobile?.description}</TabsContent>
           </Tabs>
-          <Pagination page={4} total={96} pageSize={8} onChange={() => {}} />
+          <StatefulPagination initialPage={4} total={96} pageSize={8} />
         </div>
       );
 
