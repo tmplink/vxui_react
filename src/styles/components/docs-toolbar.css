@@ -102,11 +102,28 @@
   }
 }
 
-/* ── 主题 Select 尺寸匹配 toolbar 按钮 (sm) ──────────── */
-.vx-docs-toolbar__item--theme .vx-select__trigger {
+/* ── 工具栏内 Select 尺寸匹配 toolbar 按钮 (sm) ────────
+   主题 / 账户 / 语言三个 Select 在工具栏中需要保持一致高度、文本色与字重。 */
+.vx-docs-toolbar__item--theme .vx-select__trigger,
+.vx-docs-toolbar__item--account .vx-select__trigger,
+.vx-docs-toolbar__item--language .vx-select__trigger {
   min-height: var(--vx-ctrl-h-sm);
   padding: 0 var(--vx-ctrl-px-sm);
   font-size: var(--vx-ctrl-fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  width: auto;
+  white-space: nowrap;
+  color: inherit;
+}
+
+.vx-docs-toolbar__item--theme .vx-select__trigger .vx-select__value,
+.vx-docs-toolbar__item--account .vx-select__trigger .vx-select__value,
+.vx-docs-toolbar__item--language .vx-select__trigger .vx-select__value,
+.vx-docs-toolbar__item--theme .vx-select__trigger .vx-select__value--placeholder,
+.vx-docs-toolbar__item--account .vx-select__trigger .vx-select__value--placeholder,
+.vx-docs-toolbar__item--language .vx-select__trigger .vx-select__value--placeholder {
+  color: inherit;
 }
 
 /* ── 平板横屏模式下的工具栏 ──────────────────────── */

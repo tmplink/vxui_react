@@ -127,7 +127,7 @@ export function parseRoute(pathname: string): AppRoute {
   if (normalized === '/privacy-policy') return { view: 'privacy-policy' };
   if (normalized === '/terms-of-service') return { view: 'terms-of-service' };
   if (normalized === '/error') return { view: 'error' };
-  if (normalized === '/docs') return { view: 'docs', page: 'introduction' };
+  if (normalized === '/docs') return { view: 'docs' };
 
   if (normalized.startsWith('/docs/')) {
     const pageKey = normalized.split('/')[2];
@@ -148,7 +148,7 @@ export function buildRoutePath(route: AppRoute) {
     case 'terms-of-service': return '/terms-of-service';
     case 'error': return '/error';
     case 'docs':
-    default: return `/docs/${route.page ?? 'introduction'}`;
+    default: return route.page ? `/docs/${route.page}` : '/docs';
   }
 }
 

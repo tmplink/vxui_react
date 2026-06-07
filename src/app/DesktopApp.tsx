@@ -93,7 +93,7 @@ export function DesktopApp({
 
   const activePage: PageKey = route.view === 'docs' ? route.page ?? 'introduction' : 'introduction';
   const activeDocument = pages[activePage] ?? pages.introduction;
-  const isDocDetailPage = route.view === 'docs' && activePage !== 'introduction';
+  const isDocDetailPage = route.view === 'docs' && route.page !== undefined;
   const showPinnedDocTitle = isDocDetailPage && !isDocHeaderInView;
   const topbarDocLabel = showPinnedDocTitle ? activeDocument.title : (isZh ? '文档' : 'Documentation');
 
@@ -125,7 +125,25 @@ export function DesktopApp({
     : [
         { label: t.publicPages.navLogin, icon: <LogIn size={14} />, onClick: () => onNavigate({ view: 'login' }) },
         { label: t.publicPages.navSignup, icon: <UserPlus size={14} />, onClick: () => onNavigate({ view: 'register' }) },
+        { label: t.publicPages.guestLabel, icon: <User size={14} />, onClick: onGuest },
       ];
+
+  // Select 格式：选项列表（无持久选中值，通过 onChange 触发动作）
+  const accountSelectOptions: import('../components/Select').SelectOption[] = viewerSession
+    ? [{ value: 'logout', label: t.publicPages.navLogout }]
+    : [
+        { value: 'login',    label: t.publicPages.navLogin },
+        { value: 'register', label: t.publicPages.navSignup },
+        { value: 'guest',    label: t.publicPages.guestLabel },
+      ];
+
+  function handleAccountSelect(value: string | undefined) {
+    if (!value) return;
+    if (value === 'logout')   { onLogout(); return; }
+    if (value === 'guest')    { onGuest();  return; }
+    if (value === 'login')    { onNavigate({ view: 'login' });    return; }
+    if (value === 'register') { onNavigate({ view: 'register' }); return; }
+  }
 
   const docsNavigationMenuGroup = {
     label: isZh ? '导航' : 'Navigation',
@@ -992,7 +1010,7 @@ export function DesktopApp({
 
   // ── 主渲染 ──
   const activePageKey: PageKey = route.view === 'docs' ? route.page ?? 'introduction' : 'introduction';
-  const isHomePage = activePageKey === 'introduction';
+  const isHomePage = route.view === 'docs' && !route.page;
 
   return (
     <>
@@ -1049,8 +1067,13 @@ export function DesktopApp({
               />
             ) : null}
             {showAccountBtn ? (
-              <DropdownMenu className="vx-docs-toolbar__item--account" trigger={<Button variant="outline" size="sm"><User size={14} />{viewerSession?.name ?? t.publicPages.guestLabel}</Button>}
-                groups={[{ label: copy.accountMenu, items: accountMenuItems }]} align="right" />
+              <Select
+                className="vx-docs-toolbar__item--account"
+                options={accountSelectOptions}
+                placeholder={viewerSession?.name ?? t.publicPages.guestLabel}
+                searchable={false}
+                onChange={handleAccountSelect}
+              />
             ) : null}
             {showLanguageBtn ? <span className="vx-docs-toolbar__item--language"><LanguageSwitcher variant="inline" /></span> : null}
             {showMoreMenu ? (

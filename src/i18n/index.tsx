@@ -756,6 +756,8 @@ export const en: Translations = {
         { prop: 'confirmLabel', type: 'string', default: '"Confirm"', description: 'Confirm button label.' },
         { prop: 'cancelLabel', type: 'string', default: '"Cancel"', description: 'Cancel button label.' },
         { prop: 'confirmVariant', type: '"solid" | "danger"', default: '"solid"', description: 'Confirm button variant.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
+        { prop: 'padding', type: '"none" | "sm" | "md" | "lg"', default: '"md"', description: 'Content padding preset.' },
       ],
     },
      popover: {
@@ -774,6 +776,7 @@ export const en: Translations = {
         { prop: 'trigger', type: '"click" | "hover"', default: '"click"', description: 'Open trigger method.' },
         { prop: 'open', type: 'boolean', description: 'Controlled open state.' },
         { prop: 'onOpenChange', type: '(open: boolean) => void', description: 'Callback when open state changes.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
      tooltip: {
@@ -806,6 +809,7 @@ export const en: Translations = {
         { prop: 'children', type: 'ReactNode', required: true, description: 'Trigger element.' },
         { prop: 'placement', type: '"top" | "bottom" | "left" | "right"', default: '"bottom"', description: 'HoverCard placement.' },
         { prop: 'delay', type: 'number', default: '400', description: 'Delay in ms before showing.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
      'dropdown-menu': {
@@ -830,6 +834,7 @@ export const en: Translations = {
         { prop: 'DropdownMenuItem.disabled', type: 'boolean', description: 'Disable the item.' },
         { prop: 'DropdownMenuItem.danger', type: 'boolean', description: 'Apply danger styling.' },
         { prop: 'DropdownMenuItem.onClick', type: '() => void', description: 'Click handler.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
      'context-menu': {
@@ -851,6 +856,7 @@ export const en: Translations = {
         { prop: 'ContextMenuItem.disabled', type: 'boolean', description: 'Disable the item.' },
         { prop: 'ContextMenuItem.danger', type: 'boolean', description: 'Apply danger styling.' },
         { prop: 'ContextMenuItem.onClick', type: '() => void', description: 'Click handler.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
      'command-palette': {
@@ -870,6 +876,10 @@ export const en: Translations = {
         { prop: 'onSelect', type: '(key: string) => void', required: true, description: 'Called when an entry is selected.' },
         { prop: 'placeholder', type: 'string', default: '"Search components, pages, keywords..."', description: 'Search input placeholder.' },
         { prop: 'emptyText', type: '(query: string) => string', description: 'Function returning empty results message.' },
+        { prop: 'ariaLabel', type: 'string', default: '"Search"', description: 'Accessible label for the dialog.' },
+        { prop: 'labelNavigate', type: 'string', default: '"Navigate"', description: 'Footer navigation hint text.' },
+        { prop: 'labelGo', type: 'string', default: '"Go"', description: 'Footer go hint text.' },
+        { prop: 'labelClose', type: 'string', default: '"Close"', description: 'Footer close hint text.' },
       ],
     },
      'navigation-menu': {
@@ -985,6 +995,11 @@ export const en: Translations = {
         { prop: 'items', type: 'AccordionItem[]', required: true, description: 'Array of accordion panel definitions.' },
         { prop: 'multiple', type: 'boolean', default: 'false', description: 'Allow multiple panels open simultaneously.' },
         { prop: 'defaultOpen', type: 'string[]', default: '[]', description: 'Keys of initially open panels.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
+        { prop: 'AccordionItem.key', type: 'string', required: true, description: 'Unique key for the panel.' },
+        { prop: 'AccordionItem.title', type: 'ReactNode', required: true, description: 'Panel header content.' },
+        { prop: 'AccordionItem.content', type: 'ReactNode', required: true, description: 'Panel body content.' },
+        { prop: 'AccordionItem.disabled', type: 'boolean', description: 'Disable the panel.' },
       ],
     },
      tabs: {
@@ -1015,6 +1030,9 @@ export const en: Translations = {
       props: [
         { prop: 'items', type: 'BreadcrumbItem[]', required: true, description: 'Ordered list of breadcrumb segments.' },
         { prop: 'separator', type: 'ReactNode', default: 'Chevron', description: 'Custom separator between items.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
+        { prop: 'BreadcrumbItem.href', type: 'string', description: 'Link URL for the item.' },
+        { prop: 'BreadcrumbItem.onClick', type: '() => void', description: 'Click handler for the item.' },
       ],
     },
      pagination: {
@@ -1032,6 +1050,7 @@ export const en: Translations = {
         { prop: 'pageSize', type: 'number', default: '10', description: 'Items per page.' },
         { prop: 'siblingCount', type: 'number', default: '1', description: 'Page buttons around current page.' },
         { prop: 'onChange', type: '(page: number) => void', required: true, description: 'Callback when a page is clicked.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
      stepper: {
@@ -1047,6 +1066,7 @@ export const en: Translations = {
         { prop: 'steps', type: 'StepItem[]', required: true, description: 'Array of step definitions.' },
         { prop: 'currentStep', type: 'number', default: '0', description: '0-based index of the active step.' },
         { prop: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: 'Layout direction.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
      progress: {
@@ -1056,10 +1076,11 @@ export const en: Translations = {
       guidance: [
         'Use Progress for deterministic operations where the duration is known (e.g., file upload, data export).',
         'Use Spinner for indeterminate waits where the duration is unknown.',
-        'The value prop accepts 0-100; set to 100 for completion.',
+        'The value prop represents progress toward max; set value equal to max for completion.',
       ],
       props: [
-        { prop: 'value', type: 'number', default: '0', description: 'Current progress value (0-100).' },
+        { prop: 'value', type: 'number', default: '0', description: 'Current progress value.' },
+        { prop: 'max', type: 'number', default: '100', description: 'Maximum value (denominator).' },
         { prop: 'label', type: 'string', description: 'Text label above the bar.' },
         { prop: 'showLabel', type: 'boolean', default: 'false', description: 'Show percentage text.' },
         { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Bar thickness preset.' },
@@ -1088,7 +1109,7 @@ export const en: Translations = {
       guidance: [
         'Use Alert for persistent or page-level status messages — prefer it over Toasts for important information.',
         'Alert supports "info", "success", "warning", and "danger" variants.',
-        'The dismissible prop adds a close button for user-dismissable alerts.',
+        'The onClose prop adds a close button for user-dismissable alerts.',
       ],
       props: [
         { prop: 'variant', type: '"info" | "success" | "warning" | "danger"', default: '"info"', description: 'Visual style variant.' },
@@ -1118,8 +1139,11 @@ export const en: Translations = {
         { prop: 'loading', type: 'boolean', default: 'false', description: 'Show loading overlay.' },
         { prop: 'sortColumn', type: 'string', description: 'Controlled sort column key.' },
         { prop: 'sortDirection', type: '"asc" | "desc"', description: 'Controlled sort direction.' },
-        { prop: 'onSortChange', type: '(column: string, direction) => void', description: 'Sort change callback.' },
+        { prop: 'onSortChange', type: '(column: string, direction: SortDirection) => void', description: 'Sort change callback.' },
         { prop: 'emptyText', type: 'ReactNode', default: '"No data"', description: 'Text when data is empty.' },
+        { prop: 'borderless', type: 'boolean', default: 'false', description: 'Remove all borders including the outer wrapper.' },
+        { prop: 'rounded', type: 'boolean', default: 'false', description: 'Remove outer wrapper border-radius.' },
+        { prop: 'caption', type: 'string', description: 'Table caption for accessibility.' },
       ],
     },
      'empty-states': {
@@ -1137,6 +1161,7 @@ export const en: Translations = {
         { prop: 'title', type: 'string', required: true, description: 'Main heading explaining what is missing.' },
         { prop: 'description', type: 'string', description: 'Optional explanatory text below the title.' },
         { prop: 'action', type: 'ReactNode', description: 'Call-to-action button or link for recovery.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
      toasts: {
@@ -1218,6 +1243,7 @@ export const en: Translations = {
         { prop: 'Radio.description', type: 'string', description: 'Description under the label.' },
         { prop: 'RadioGroup.label', type: 'string', description: 'Group label rendered as <legend>.' },
         { prop: 'RadioGroup.children', type: 'ReactNode', required: true, description: 'Radio components inside the group.' },
+        { prop: 'RadioGroup.className', type: 'string', description: 'Additional CSS class names.' },
         { prop: 'Switch.label', type: 'string', required: true, description: 'Visible label text.' },
         { prop: 'Switch.description', type: 'string', description: 'Description below the label.' },
         { prop: 'Slider.label', type: 'string', description: 'Label above the slider.' },
@@ -1366,7 +1392,9 @@ export const en: Translations = {
       props: [
         { prop: 'code', type: 'string', required: true, description: 'Source code string to highlight.' },
         { prop: 'language', type: '"tsx" | "typescript" | "javascript" | "jsx" | "bash" | "json" | "markup"', default: '"tsx"', description: 'Prism language identifier.' },
-        { prop: 'filename', type: 'string', description: 'Filename label displayed above the code block.' },
+        { prop: 'copyLabel', type: 'string', required: true, description: 'Label for the copy button (idle state).' },
+        { prop: 'copiedLabel', type: 'string', required: true, description: 'Label for the copy button (copied state).' },
+        { prop: 'onCopy', type: '(code: string) => Promise<boolean> | boolean', required: true, description: 'Copy handler returning success status.' },
       ],
     },
      'language-switcher': {
@@ -1396,6 +1424,7 @@ export const en: Translations = {
         { prop: 'maxHeight', type: 'string | number', description: 'Maximum height before content scrolls. Numbers are treated as pixels.' },
         { prop: 'maxWidth', type: 'string | number', description: 'Maximum width before content scrolls. Numbers are treated as pixels.' },
         { prop: 'children', type: 'ReactNode', required: true, description: 'Content inside the scrollable viewport.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
     separator: {
@@ -1428,6 +1457,7 @@ export const en: Translations = {
         { prop: 'items[].time', type: 'string', description: 'Timestamp or date label.' },
         { prop: 'items[].icon', type: 'ReactNode', description: 'Custom icon replacing the default dot.' },
         { prop: 'items[].status', type: '"default" | "success" | "warning" | "danger" | "info"', description: 'Visual status color for the dot.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
     'tree-view': {
@@ -1448,9 +1478,10 @@ export const en: Translations = {
         { prop: 'expanded', type: 'string[]', description: 'Controlled expanded node ids.' },
         { prop: 'defaultExpanded', type: 'string[]', description: 'Uncontrolled initial expanded node ids.' },
         { prop: 'onExpandedChange', type: '(ids: string[]) => void', description: 'Called when expansion state changes.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
-    carousel: {
+     carousel: {
       section: 'Components',
       title: 'Carousel',
       description: 'A slide-based carousel with dot indicators, arrow navigation, optional auto-play, and loop support. Each slide accepts arbitrary React content.',
@@ -1470,9 +1501,10 @@ export const en: Translations = {
         { prop: 'loop', type: 'boolean', default: 'true', description: 'Wrap from last slide back to first.' },
         { prop: 'showDots', type: 'boolean', default: 'true', description: 'Show dot indicators.' },
         { prop: 'showArrows', type: 'boolean', default: 'true', description: 'Show prev/next arrow buttons.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
-    toggle: {
+     toggle: {
       section: 'Forms',
       title: 'Toggle',
       description: 'A two-state button that toggles between pressed and unpressed. ToggleGroup extends this to single/multiple selection among a set of options.',
@@ -1486,11 +1518,17 @@ export const en: Translations = {
         { prop: 'Toggle.defaultPressed', type: 'boolean', default: 'false', description: 'Uncontrolled initial pressed state.' },
         { prop: 'Toggle.onPressedChange', type: '(pressed: boolean) => void', description: 'Called when pressed state changes.' },
         { prop: 'Toggle.size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Button size.' },
+        { prop: 'Toggle.children', type: 'ReactNode', required: true, description: 'Toggle button content (icon or text).' },
         { prop: 'ToggleGroup.items', type: 'ToggleGroupItem[]', required: true, description: 'Array of toggle options.' },
         { prop: 'ToggleGroup.value', type: 'string | string[]', description: 'Controlled selection value.' },
         { prop: 'ToggleGroup.defaultValue', type: 'string | string[]', description: 'Uncontrolled initial selection.' },
         { prop: 'ToggleGroup.onValueChange', type: '(value: string | string[]) => void', description: 'Called when selection changes.' },
         { prop: 'ToggleGroup.type', type: '"single" | "multiple"', default: '"single"', description: 'Selection mode.' },
+        { prop: 'ToggleGroup.size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Toggle group size preset.' },
+        { prop: 'ToggleGroup.className', type: 'string', description: 'Additional CSS class names.' },
+        { prop: 'ToggleGroupItem.value', type: 'string', required: true, description: 'Unique item value.' },
+        { prop: 'ToggleGroupItem.label', type: 'ReactNode', required: true, description: 'Item display content.' },
+        { prop: 'ToggleGroupItem.disabled', type: 'boolean', description: 'Disable the item.' },
       ],
     },
     rating: {
@@ -1512,6 +1550,7 @@ export const en: Translations = {
         { prop: 'readOnly', type: 'boolean', description: 'Display-only mode.' },
         { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: 'Star size.' },
         { prop: 'label', type: 'string', description: 'Accessible label for the rating group.' },
+        { prop: 'className', type: 'string', description: 'Additional CSS class names.' },
       ],
     },
     label: {
@@ -2215,14 +2254,24 @@ export const zh: Translations = {
         { prop: 'Select.onChange', type: '(value: string | undefined) => void', description: '选中项变化时回调。' },
         { prop: 'Select.placeholder', type: 'string', default: '"Select..."', description: '未选择时的占位文本。' },
         { prop: 'Select.label', type: 'string', description: '字段标签。' },
+        { prop: 'Select.hint', type: 'string', description: '辅助文本。' },
+        { prop: 'Select.error', type: 'string', description: '错误信息。' },
+        { prop: 'Select.disabled', type: 'boolean', description: '禁用选择器。' },
+        { prop: 'Select.clearable', type: 'boolean', default: 'false', description: '显示清除按钮。' },
         { prop: 'Select.searchable', type: 'boolean | number', default: 'true', description: '启用搜索。设为数字时超过该数量才显示搜索。' },
         { prop: 'MultiSelect.options', type: 'MultiSelectOption[]', required: true, description: '可选项数组。' },
         { prop: 'MultiSelect.value', type: 'string[]', description: '受控选中值。' },
         { prop: 'MultiSelect.defaultValue', type: 'string[]', default: '[]', description: '非受控初始值。' },
         { prop: 'MultiSelect.onChange', type: '(value: string[]) => void', description: '选中项变化时回调。' },
+        { prop: 'MultiSelect.placeholder', type: 'string', default: '"Select..."', description: '未选择时的占位文本。' },
         { prop: 'MultiSelect.label', type: 'string', description: '字段标签。' },
+        { prop: 'MultiSelect.hint', type: 'string', description: '辅助文本。' },
+        { prop: 'MultiSelect.error', type: 'string', description: '错误信息。' },
+        { prop: 'MultiSelect.disabled', type: 'boolean', description: '禁用多选。' },
+        { prop: 'MultiSelect.clearable', type: 'boolean', default: 'false', description: '显示清除全部按钮。' },
         { prop: 'MultiSelect.maxDisplay', type: 'number', description: '最多可见标签数，超出显示 "+N more"。' },
         { prop: 'Textarea.label', type: 'string', description: '文本域上方的标签。' },
+        { prop: 'Textarea.hint', type: 'string', description: '下方的辅助文本。' },
         { prop: 'Textarea.resize', type: '"none" | "vertical" | "horizontal" | "both"', default: '"vertical"', description: 'CSS 缩放方向。' },
         { prop: 'TimePicker.value', type: 'string', description: '受控时间值（HH:MM 或 HH:MM:SS）。' },
         { prop: 'TimePicker.defaultValue', type: 'string', description: '非受控初始时间。' },
@@ -2277,6 +2326,11 @@ export const zh: Translations = {
         { prop: 'onOpenChange', type: '(open: boolean) => void', description: '打开状态变化时回调。' },
         { prop: 'onConfirm', type: '() => void', description: '显示内置确认按钮。' },
         { prop: 'confirmLabel', type: 'string', default: '"Confirm"', description: '确认按钮文本。' },
+        { prop: 'onCancel', type: '() => void', description: '显示内置取消按钮。' },
+        { prop: 'cancelLabel', type: 'string', default: '"Cancel"', description: '取消按钮文本。' },
+        { prop: 'confirmVariant', type: '"solid" | "danger"', default: '"solid"', description: '确认按钮样式变体。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
+        { prop: 'padding', type: '"none" | "sm" | "md" | "lg"', default: '"md"', description: '内容内边距预设。' },
       ],
     },
     popover: {
@@ -2295,9 +2349,10 @@ export const zh: Translations = {
         { prop: 'trigger', type: '"click" | "hover"', default: '"click"', description: '触发方式。' },
         { prop: 'open', type: 'boolean', description: '受控打开状态。' },
         { prop: 'onOpenChange', type: '(open: boolean) => void', description: '打开状态变化时回调。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
-    tooltip: {
+     tooltip: {
       section: '浮层',
       title: '工具提示',
       description: '悬停或聚焦时出现的简短非交互标签，用于描述 UI 元素。仅包含文本——无链接、按钮或表单。',
@@ -2327,6 +2382,7 @@ export const zh: Translations = {
         { prop: 'children', type: 'ReactNode', required: true, description: '触发元素。' },
         { prop: 'placement', type: '"top" | "bottom" | "left" | "right"', default: '"bottom"', description: '卡片位置。' },
         { prop: 'delay', type: 'number', default: '400', description: '显示前延迟（毫秒）。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
     'dropdown-menu': {
@@ -2345,9 +2401,10 @@ export const zh: Translations = {
         { prop: 'align', type: '"left" | "right"', default: '"left"', description: '菜单相对触发器的对齐方式。' },
         { prop: 'open', type: 'boolean', description: '受控打开状态。' },
         { prop: 'onOpenChange', type: '(open: boolean) => void', description: '打开状态变化时回调。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
-    'context-menu': {
+     'context-menu': {
       section: '浮层',
       title: '右键菜单',
       description: '右键点击时出现的菜单，提供与点击元素相关的操作列表。支持与 DropdownMenu 相同的项和分组 API。',
@@ -2360,9 +2417,10 @@ export const zh: Translations = {
         { prop: 'groups', type: 'ContextMenuGroupProps[]', description: '分组菜单项。' },
         { prop: 'items', type: 'ContextMenuItemProps[]', description: '平铺菜单项列表。' },
         { prop: 'children', type: 'ReactNode', required: true, description: '触发右键菜单的元素。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
-    'command-palette': {
+     'command-palette': {
       section: '浮层',
       title: '命令面板',
       description:
@@ -2378,9 +2436,13 @@ export const zh: Translations = {
         { prop: 'onClose', type: '() => void', required: true, description: '面板关闭时回调。' },
         { prop: 'onSelect', type: '(key: string) => void', required: true, description: '条目被选中时回调。' },
         { prop: 'placeholder', type: 'string', default: '"Search components, pages, keywords..."', description: '搜索输入框占位符。' },
+        { prop: 'ariaLabel', type: 'string', default: '"Search"', description: '对话框的无障碍标签。' },
+        { prop: 'labelNavigate', type: 'string', default: '"Navigate"', description: '底部导航提示文字。' },
+        { prop: 'labelGo', type: 'string', default: '"Go"', description: '底部确认提示文字。' },
+        { prop: 'labelClose', type: 'string', default: '"Close"', description: '底部关闭提示文字。' },
       ],
     },
-    'navigation-menu': {
+     'navigation-menu': {
       section: '导航',
       title: '导航菜单',
       description: '支持悬停时多级下拉菜单的横向导航栏。适用于具有嵌套章节的顶级站点导航。',
@@ -2489,9 +2551,14 @@ export const zh: Translations = {
         { prop: 'items', type: 'AccordionItem[]', required: true, description: '折叠面板定义数组。' },
         { prop: 'multiple', type: 'boolean', default: 'false', description: '允许多个面板同时展开。' },
         { prop: 'defaultOpen', type: 'string[]', default: '[]', description: '初始展开面板的键名数组。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
+        { prop: 'AccordionItem.key', type: 'string', required: true, description: '面板的唯一键。' },
+        { prop: 'AccordionItem.title', type: 'ReactNode', required: true, description: '面板标题内容。' },
+        { prop: 'AccordionItem.content', type: 'ReactNode', required: true, description: '面板正文内容。' },
+        { prop: 'AccordionItem.disabled', type: 'boolean', description: '禁用该面板。' },
       ],
     },
-    tabs: {
+     tabs: {
       section: '组件',
       title: '标签页',
       description: '用于在多个内容面板间切换的标签页组件。支持受控和非受控模式及键盘导航。',
@@ -2519,6 +2586,9 @@ export const zh: Translations = {
       props: [
         { prop: 'items', type: 'BreadcrumbItem[]', required: true, description: '面包屑分段的有序列表。' },
         { prop: 'separator', type: 'ReactNode', default: 'Chevron', description: '分段间的自定义分隔符。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
+        { prop: 'BreadcrumbItem.href', type: 'string', description: '分段的链接 URL。' },
+        { prop: 'BreadcrumbItem.onClick', type: '() => void', description: '分段点击处理函数。' },
       ],
     },
     pagination: {
@@ -2536,9 +2606,10 @@ export const zh: Translations = {
         { prop: 'pageSize', type: 'number', default: '10', description: '每页条数。' },
         { prop: 'siblingCount', type: 'number', default: '1', description: '当前页两侧显示的页码按钮数。' },
         { prop: 'onChange', type: '(page: number) => void', required: true, description: '点击页码时回调。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
-    stepper: {
+     stepper: {
       section: '组件',
       title: '步骤条',
       description: '在线性工作流中可视化用户当前位置的多步骤进度指示器。支持已完成、进行中、待处理和错误状态。',
@@ -2551,19 +2622,21 @@ export const zh: Translations = {
         { prop: 'steps', type: 'StepItem[]', required: true, description: '步骤定义数组。' },
         { prop: 'currentStep', type: 'number', default: '0', description: '当前激活步骤的索引（从 0 开始）。' },
         { prop: 'orientation', type: '"horizontal" | "vertical"', default: '"horizontal"', description: '布局方向。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
-    progress: {
+     progress: {
       section: '组件',
       title: '进度条',
       description: '指示确定性操作完成百分比的横向进度条。支持带标签和不带标签的变体。',
       guidance: [
         '对已知持续时间的确定性操作使用 Progress（如文件上传、数据导出）。',
         '对未知持续时间的等待使用 Spinner。',
-        'value 属性接受 0-100 范围的值，100 表示完成。',
+        'value 属性表示相对于 max 的当前进度，value 等于 max 时表示完成。',
       ],
       props: [
-        { prop: 'value', type: 'number', default: '0', description: '当前进度值（0-100）。' },
+        { prop: 'value', type: 'number', default: '0', description: '当前进度值。' },
+        { prop: 'max', type: 'number', default: '100', description: '最大值（分母）。' },
         { prop: 'label', type: 'string', description: '进度条上方文本标签。' },
         { prop: 'showLabel', type: 'boolean', default: 'false', description: '显示百分比文字。' },
         { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: '进度条粗细预设。' },
@@ -2592,7 +2665,7 @@ export const zh: Translations = {
       guidance: [
         '对持久性或页面级状态消息使用 Alert——重要信息优先于 Toast。',
         '支持 "info"、"success"、"warning" 和 "danger" 变体。',
-        'dismissible 属性可添加关闭按钮，用户可手动关闭提示。',
+        'onClose 属性可添加关闭按钮，用户可手动关闭提示。',
       ],
       props: [
         { prop: 'variant', type: '"info" | "success" | "warning" | "danger"', default: '"info"', description: '样式变体。' },
@@ -2620,10 +2693,13 @@ export const zh: Translations = {
         { prop: 'loading', type: 'boolean', default: 'false', description: '显示加载遮罩。' },
         { prop: 'sortColumn', type: 'string', description: '受控排序列键名。' },
         { prop: 'sortDirection', type: '"asc" | "desc"', description: '受控排序方向。' },
-        { prop: 'onSortChange', type: '(column: string, direction) => void', description: '排序变化回调。' },
+        { prop: 'onSortChange', type: '(column: string, direction: SortDirection) => void', description: '排序变化回调。' },
+        { prop: 'borderless', type: 'boolean', default: 'false', description: '移除所有边框（包括外层包裹器边框）。' },
+        { prop: 'rounded', type: 'boolean', default: 'false', description: '移除外层包裹器圆角。' },
+        { prop: 'caption', type: 'string', description: '表格标题，用于无障碍说明。' },
       ],
     },
-    'empty-states': {
+     'empty-states': {
       section: '组件',
       title: '空状态',
       description:
@@ -2638,9 +2714,10 @@ export const zh: Translations = {
         { prop: 'title', type: 'string', required: true, description: '解释缺失对象的主标题。' },
         { prop: 'description', type: 'string', description: '标题下方的可选说明文字。' },
         { prop: 'action', type: 'ReactNode', description: '用于恢复的操作按钮或链接。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
-    toasts: {
+     toasts: {
       section: '组件',
       title: '消息提示',
       description: 'Toast 在不打断任务流程的情况下确认短暂事件。保持简洁、具体且易于关闭。',
@@ -2709,14 +2786,21 @@ export const zh: Translations = {
       ],
       props: [
         { prop: 'Checkbox.label', type: 'ReactNode', description: '复选框旁边的标签。' },
+        { prop: 'Checkbox.description', type: 'string', description: '标签下方的描述。' },
         { prop: 'Checkbox.indeterminate', type: 'boolean', description: '显示不确定状态。' },
         { prop: 'Radio.label', type: 'ReactNode', description: '单选按钮旁边的标签。' },
+        { prop: 'Radio.description', type: 'string', description: '标签下方的描述。' },
         { prop: 'RadioGroup.label', type: 'string', description: '作为 <legend> 渲染的分组标签。' },
+        { prop: 'RadioGroup.children', type: 'ReactNode', required: true, description: '分组内的 Radio 组件。' },
+        { prop: 'RadioGroup.className', type: 'string', description: '额外的 CSS 类名。' },
         { prop: 'Switch.label', type: 'string', required: true, description: '可见标签文本。' },
         { prop: 'Switch.description', type: 'string', description: '标签下方的描述。' },
         { prop: 'Slider.label', type: 'string', description: '滑块上方标签。' },
         { prop: 'Slider.showValue', type: 'boolean', default: 'false', description: '显示当前值。' },
+        { prop: 'Slider.hint', type: 'string', description: '下方的辅助文本。' },
         { prop: 'NumberInput.label', type: 'string', description: '输入框上方标签。' },
+        { prop: 'NumberInput.hint', type: 'string', description: '下方的辅助文本。' },
+        { prop: 'NumberInput.error', type: 'string', description: '错误信息。' },
         { prop: 'NumberInput.value', type: 'number', description: '受控值。' },
         { prop: 'NumberInput.onChange', type: '(value: number) => void', description: '值变化时回调。' },
         { prop: 'NumberInput.min', type: 'number', description: '最小值。' },
@@ -2725,12 +2809,14 @@ export const zh: Translations = {
         { prop: 'TagInput.value', type: 'string[]', description: '受控标签值。' },
         { prop: 'TagInput.defaultValue', type: 'string[]', default: '[]', description: '非受控默认标签。' },
         { prop: 'TagInput.onChange', type: '(tags: string[]) => void', description: '标签变化时回调。' },
+        { prop: 'TagInput.label', type: 'string', description: '字段标签。' },
         { prop: 'TagInput.placeholder', type: 'string', default: '"Add tag..."', description: '占位符。' },
         { prop: 'TagInput.maxTags', type: 'number', description: '最大标签数量。' },
         { prop: 'SegmentedControl.options', type: 'SegmentedControlOption[]', required: true, description: '选项数组。' },
         { prop: 'SegmentedControl.value', type: 'string', description: '受控值。' },
         { prop: 'SegmentedControl.defaultValue', type: 'string', description: '非受控初始值。' },
         { prop: 'SegmentedControl.onChange', type: '(value: string) => void', description: '选择变化时回调。' },
+        { prop: 'SegmentedControl.fullWidth', type: 'boolean', description: '拉伸填满容器宽度。' },
         { prop: 'SegmentedControl.size', type: '"sm" | "md" | "lg"', default: '"md"', description: '控件尺寸预设。' },
         { prop: 'Input.label', type: 'string', description: '输入框上方标签。' },
         { prop: 'Input.hint', type: 'string', description: '输入框下方的辅助文本。' },
@@ -2739,6 +2825,7 @@ export const zh: Translations = {
         { prop: 'Input.suffix', type: 'ReactNode', description: '输入框内部后置装饰。' },
         { prop: 'Input.variant', type: '"default" | "filled" | "underline" | "borderless"', default: '"default"', description: '样式变体。' },
         { prop: 'Input.size', type: '"sm" | "md" | "lg"', default: '"md"', description: '尺寸预设。' },
+        { prop: 'Input.rounded', type: 'boolean', description: '药丸形状输入框。' },
       ],
     },
     'mobile-list': {
@@ -2854,7 +2941,9 @@ export const zh: Translations = {
       props: [
         { prop: 'code', type: 'string', required: true, description: '要高亮显示的源代码字符串。' },
         { prop: 'language', type: '"tsx" | "typescript" | "javascript" | "jsx" | "bash" | "json" | "markup"', default: '"tsx"', description: 'Prism 语言标识符。' },
-        { prop: 'filename', type: 'string', description: '代码块上方显示的文件名标签。' },
+        { prop: 'copyLabel', type: 'string', required: true, description: '复制按钮的标签（空闲状态）。' },
+        { prop: 'copiedLabel', type: 'string', required: true, description: '复制按钮的标签（已复制状态）。' },
+        { prop: 'onCopy', type: '(code: string) => Promise<boolean> | boolean', required: true, description: '复制处理函数，返回是否成功。' },
       ],
     },
     'language-switcher': {
@@ -2884,6 +2973,7 @@ export const zh: Translations = {
         { prop: 'maxHeight', type: 'string | number', description: '内容滚动前的最大高度，数字按像素处理。' },
         { prop: 'maxWidth', type: 'string | number', description: '内容滚动前的最大宽度，数字按像素处理。' },
         { prop: 'children', type: 'ReactNode', required: true, description: '滚动视口内的内容。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
     separator: {
@@ -2916,6 +3006,7 @@ export const zh: Translations = {
         { prop: 'items[].time', type: 'string', description: '时间戳或日期标签。' },
         { prop: 'items[].icon', type: 'ReactNode', description: '替换默认点的自定义图标。' },
         { prop: 'items[].status', type: '"default" | "success" | "warning" | "danger" | "info"', description: '点的状态颜色。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
     'tree-view': {
@@ -2936,9 +3027,10 @@ export const zh: Translations = {
         { prop: 'expanded', type: 'string[]', description: '受控展开的节点 id 数组。' },
         { prop: 'defaultExpanded', type: 'string[]', description: '非受控初始展开节点 id 数组。' },
         { prop: 'onExpandedChange', type: '(ids: string[]) => void', description: '展开状态变化时调用。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
-    carousel: {
+     carousel: {
       section: '组件',
       title: '轮播',
       description: '基于滑块的轮播组件，支持圆点指示器、箭头导航、自动播放和循环。每个滑块可接受任意 React 内容。',
@@ -2958,9 +3050,10 @@ export const zh: Translations = {
         { prop: 'loop', type: 'boolean', default: 'true', description: '从最后一张循环回到第一张。' },
         { prop: 'showDots', type: 'boolean', default: 'true', description: '显示圆点指示器。' },
         { prop: 'showArrows', type: 'boolean', default: 'true', description: '显示上一张/下一张箭头按钮。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
-    toggle: {
+     toggle: {
       section: '表单',
       title: '开关按钮',
       description: '在按下和未按下状态之间切换的双状态按钮。ToggleGroup 将其扩展为一组选项间的单选/多选。',
@@ -2979,9 +3072,15 @@ export const zh: Translations = {
         { prop: 'ToggleGroup.defaultValue', type: 'string | string[]', description: '非受控初始选中值。' },
         { prop: 'ToggleGroup.onValueChange', type: '(value: string | string[]) => void', description: '选中值变化时调用。' },
         { prop: 'ToggleGroup.type', type: '"single" | "multiple"', default: '"single"', description: '选择模式。' },
+        { prop: 'Toggle.children', type: 'ReactNode', required: true, description: '开关按钮内容（图标或文字）。' },
+        { prop: 'ToggleGroup.size', type: '"sm" | "md" | "lg"', default: '"md"', description: '开关组尺寸预设。' },
+        { prop: 'ToggleGroup.className', type: 'string', description: '额外的 CSS 类名。' },
+        { prop: 'ToggleGroupItem.value', type: 'string', required: true, description: '选项的唯一值。' },
+        { prop: 'ToggleGroupItem.label', type: 'ReactNode', required: true, description: '选项显示内容。' },
+        { prop: 'ToggleGroupItem.disabled', type: 'boolean', description: '禁用该选项。' },
       ],
     },
-    rating: {
+     rating: {
       section: '表单',
       title: '评分',
       description: '基于星形的评分输入组件，支持整星和半星精度、受控/非受控模式和只读/禁用状态。',
@@ -3000,6 +3099,7 @@ export const zh: Translations = {
         { prop: 'readOnly', type: 'boolean', description: '只读展示模式。' },
         { prop: 'size', type: '"sm" | "md" | "lg"', default: '"md"', description: '星形尺寸。' },
         { prop: 'label', type: 'string', description: '评分组的无障碍标签。' },
+        { prop: 'className', type: 'string', description: '额外的 CSS 类名。' },
       ],
     },
     label: {

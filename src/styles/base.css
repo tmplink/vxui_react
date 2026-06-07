@@ -532,6 +532,20 @@
 }
 
 /* ── Docs workspace / home (项目特有，保留在此) ──────────── */
+.vx-docs-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.vx-docs-workspace__home {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+}
+
 .vx-docs-home__hero { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
 .vx-docs-home__copy,
 .vx-docs-home__section,
@@ -670,7 +684,12 @@
   background: color-mix(in srgb, var(--vx-primary-soft) 64%, var(--vx-surface));
 }
 
-.vx-doc-content-map__row > div,
+.vx-doc-content-map__row > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
 .vx-template-launch {
   padding: 16px;
   display: flex;
@@ -747,13 +766,22 @@
 .vx-shell[data-density='compact'] .vx-sidebar__brand-icon { width: 34px; height: 34px; border-radius: 10px; }
 .vx-shell[data-density='compact'] .vx-sidebar__brand { gap: 10px; }
 .vx-shell[data-density='compact'] .vx-shell__content { padding: 16px 20px 28px; }
-.vx-shell[data-density='compact'] .vx-doc-page__hero { gap: 10px; }
-.vx-shell[data-density='compact'] .vx-doc-page__hero > div { gap: 6px; }
+.vx-shell[data-density='compact'] .vx-article__header { gap: 10px; }
+.vx-shell[data-density='compact'] .vx-article__header > div { gap: 6px; }
 .vx-shell[data-density='compact'] .vx-docs-workspace { gap: 20px; }
 .vx-shell[data-density='compact'] .vx-docs-workspace__home,
-.vx-shell[data-density='compact'] .vx-doc-page { gap: 20px; }
+.vx-shell[data-density='compact'] .vx-article { gap: 20px; }
+.vx-shell[data-density='compact'] .vx-article__header { padding-bottom: 16px; }
+.vx-shell[data-density='compact'] .vx-article__body { padding-top: 20px; }
 .vx-shell[data-density='compact'] .vx-docs-home__section { gap: 12px; }
-.vx-shell[data-density='compact'] .vx-doc-architecture-grid { gap: 12px; }
+.vx-shell[data-density='compact'] .vx-doc-metric-grid,
+.vx-shell[data-density='compact'] .vx-doc-control-grid,
+.vx-shell[data-density='compact'] .vx-doc-library-grid,
+.vx-shell[data-density='compact'] .vx-doc-architecture-grid,
+.vx-shell[data-density='compact'] .vx-doc-stat-grid,
+.vx-shell[data-density='compact'] .vx-doc-skeleton-grid {
+  gap: 12px;
+}
 
 /* ── Responsive: tablet/drawer mode ─────────────────────── */
 @media (max-width: 1160px) {
