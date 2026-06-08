@@ -531,6 +531,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     case 'scroll-area':
       return (
         <div className="vx-preview-stack">
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--vx-text-secondary)', margin: 0 }}>{isZh ? '场景一：Overlay 模式（默认）' : 'Scene 1: Overlay mode (default)'}</p>
           <ScrollArea maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
             {Array.from({ length: 10 }, (_, i) => (
               <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>
@@ -538,6 +539,33 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
               </div>
             ))}
           </ScrollArea>
+          <SharedCodeBlock code={isZh
+            ? `<ScrollArea maxHeight={160}>\n  {/* 默认 variant="overlay" */}\n  {...children}\n</ScrollArea>`
+            : `<ScrollArea maxHeight={160}>\n  {/* Default variant="overlay" */}\n  {...children}\n</ScrollArea>`} />
+
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--vx-text-secondary)', margin: 0 }}>{isZh ? '场景二：Native 模式' : 'Scene 2: Native mode'}</p>
+          <ScrollArea variant="native" maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
+            {Array.from({ length: 10 }, (_, i) => (
+              <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>
+                {isZh ? `日志行 ${i + 1}` : `Log line ${i + 1}`}
+              </div>
+            ))}
+          </ScrollArea>
+          <SharedCodeBlock code={isZh
+            ? `<ScrollArea variant="native" maxHeight={160}>\n  {/* 浏览器原生滚动条 */}\n  {...children}\n</ScrollArea>`
+            : `<ScrollArea variant="native" maxHeight={160}>\n  {/* Native browser scrollbar */}\n  {...children}\n</ScrollArea>`} />
+
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--vx-text-secondary)', margin: 0 }}>{isZh ? '场景三：水平 + 垂直滚动' : 'Scene 3: Horizontal + vertical scroll'}</p>
+          <ScrollArea maxHeight={120} maxWidth={300} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8, padding: '8px 0' }}>
+            <div style={{ width: 500, padding: '0 12px' }}>
+              {Array.from({ length: 6 }, (_, i) => (
+                <div key={i} style={{ padding: '6px 0', borderBottom: '1px solid var(--vx-color-border)', whiteSpace: 'nowrap' }}>
+                  {isZh ? `宽内容行 ${i + 1} — 这行文字超出容器宽度因此会触发水平滚动` : `Wide content row ${i + 1} — this text exceeds container width so horizontal scroll is triggered`}
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+          <SharedCodeBlock code={`<ScrollArea maxHeight={120} maxWidth={300}>\n  <div style={{ width: 500 }}>\n    {/* 宽内容触发水平滚动 */}\n  </div>\n</ScrollArea>`} />
         </div>
       );
 
@@ -618,7 +646,27 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
         ]} />
       );
 
-    case 'table':
+    case 'table': {
+      // Large dataset for the scroll / sticky-header stress-test demo
+      const largeRoles = isZh ? ['设计师', '工程师', '产品经理', '测试'] : ['Designer', 'Engineer', 'Product manager', 'QA'];
+      const largeTeams = isZh ? ['设计系统', '平台', '增长', '基础架构'] : ['Design system', 'Platform', 'Growth', 'Infrastructure'];
+      const largeStatuses = isZh ? ['在岗', '休假', '出差'] : ['Active', 'On leave', 'On site'];
+      const largeData = Array.from({ length: 200 }, (_, i) => ({
+        id: i + 1,
+        name: `User-${String(i + 1).padStart(3, '0')}`,
+        role: largeRoles[i % largeRoles.length],
+        team: largeTeams[i % largeTeams.length],
+        status: largeStatuses[i % largeStatuses.length],
+        score: (i * 37) % 100,
+      }));
+      const largeColumns = [
+        { key: 'id', header: isZh ? '编号' : 'ID', accessor: (r: { id: number }) => r.id, sortable: true, width: 80, align: 'right' as const },
+        { key: 'name', header: isZh ? '姓名' : 'Name', accessor: (r: { name: string }) => r.name, sortable: true },
+        { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+        { key: 'team', header: isZh ? '团队' : 'Team', accessor: (r: { team: string }) => r.team },
+        { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { status: string }) => <Badge variant={((r.status === 'Active' || r.status === '在岗') ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge>, sortable: true },
+        { key: 'score', header: isZh ? '得分' : 'Score', accessor: (r: { score: number }) => r.score, align: 'right' as const, sortable: true },
+      ];
       return (
         <div className="vx-preview-stack">
           <Table columns={[
@@ -629,8 +677,23 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
             { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: 'Active' },
             { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: 'Active' },
           ]} striped bordered />
+          <p style={{ fontSize: 13, color: 'var(--vx-text-muted)', margin: '4px 0 0' }}>
+            {isZh
+              ? '大量数据 + 表头吸顶 + 容器滚动（共 200 行）。向下滚动以验证 stickyHeader 效果：'
+              : 'Large dataset with sticky header and scrollable container (200 rows). Scroll down to verify stickyHeader:'}
+          </p>
+          <Table
+            columns={largeColumns}
+            data={largeData}
+            stickyHeader
+            striped
+            hoverable
+            style={{ maxHeight: 360, overflow: 'auto' }}
+            caption={isZh ? `成员名单 · ${largeData.length} 人` : `Roster · ${largeData.length} members`}
+          />
         </div>
       );
+    }
 
     case 'timeline':
       return (
@@ -727,7 +790,11 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     case 'stepper':
       return (
         <div className="vx-preview-stack">
-          <Stepper currentStep={1} steps={[{ label: isZh ? '规划' : 'Plan' }, { label: isZh ? '开发' : 'Build' }, { label: isZh ? '发布' : 'Launch' }]} />
+          <Stepper currentStep={1} steps={[
+            { label: isZh ? '规划' : 'Plan', description: isZh ? '确定需求和目标' : 'Define requirements & goals' },
+            { label: isZh ? '开发' : 'Build', description: isZh ? '编码与测试' : 'Code & test' },
+            { label: isZh ? '发布' : 'Launch', description: isZh ? '部署上线' : 'Deploy to production' },
+          ]} />
         </div>
       );
 

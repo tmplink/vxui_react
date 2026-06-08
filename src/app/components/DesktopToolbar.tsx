@@ -99,13 +99,13 @@ export function DesktopToolbar({
       {/* 主题选择 */}
       {showThemeBtn && (
         <DropdownMenu trigger={<Button variant="outline" size="sm"><Palette size={14} />{(themes as any)[theme]?.label ?? theme}</Button>}
-          items={themeMenuItems} align="right" />
+          items={themeMenuItems} align="end" />
       )}
 
       {/* 账户菜单 */}
       {showAccountBtn && (
         <DropdownMenu trigger={<Button variant="outline" size="sm"><User size={14} />{viewerSession?.name ?? guestLabel}</Button>}
-          groups={[{ label: accountMenu, items: accountMenuItems }]} align="right" />
+          groups={[{ label: accountMenu, items: accountMenuItems }]} align="end" />
       )}
 
       {/* 语言切换 */}
@@ -140,7 +140,7 @@ export function DesktopToolbar({
               }))
             }] : []),
           ]}
-          align="right" />
+          align="end" />
       )}
     </div>
   );

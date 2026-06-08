@@ -1,4 +1,4 @@
-# VXUI React · v1.3.9
+# VXUI React · v1.3.10
 
 **官网**：[ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**：[tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [English](README.en.md)
 
@@ -6,6 +6,9 @@ VXUI React 是一套适合后台、运营台、仪表盘和内部工具的通用
 
 ## 🚀 更新公告
 
+> **v1.3.10** — 2026-06
+> - Version bump to 1.3.10
+>
 > **v1.3.9** — 2026-06
 > - Version bump to 1.3.9
 > - 移除 AlertDialog 独立组件，功能已合并至 Dialog

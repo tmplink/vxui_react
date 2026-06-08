@@ -1,4 +1,4 @@
-# VXUI React · v1.3.9
+# VXUI React · v1.3.10
 
 **Website**: [ui.vx.link](https://ui.vx.link) &nbsp;|&nbsp; **GitHub**: [tmplink/vxui_react](https://github.com/tmplink/vxui_react) &nbsp;|&nbsp; [中文](README.md)
 
@@ -6,6 +6,9 @@ VXUI React is a general-purpose React UI component library designed for admin pa
 
 ## 🚀 Changelog
 
+> **v1.3.10** — 2026-06
+> - Version bump to 1.3.10
+>
 > **v1.3.9** — 2026-06
 > - Version bump to 1.3.9
 > - Remove AlertDialog component (merged into Dialog)

@@ -189,7 +189,7 @@ export function CommandPalette({
                       <span className="vx-cmd__item-icon">{entry.icon}</span>
                     ) : (
                       <span className="vx-cmd__item-icon vx-cmd__item-icon--section">
-                        {entry.section.slice(0, 1)}
+                        {(entry.title || entry.section).slice(0, 1)}
                       </span>
                     )}
                     <span className="vx-cmd__item-body">

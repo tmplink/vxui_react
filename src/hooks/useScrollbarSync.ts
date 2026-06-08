@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useScrollbarSync(
   hostRef: { current: HTMLElement | null },
   scrollRef: { current: HTMLElement | null },
   enabled = true,
 ) {
+  const draggingRef = useRef(false);
+
   useEffect(() => {
     const host = hostRef.current;
     const scroll = scrollRef.current;
@@ -60,6 +62,70 @@ export function useScrollbarSync(
       showThumb();
     };
 
+    // ── Thumb drag support ──
+    const thumbEl = host.querySelector<HTMLElement>('.vx-overlay-scrollbar__thumb');
+
+    const cancelHide = () => {
+      if (hideTimer !== undefined) window.clearTimeout(hideTimer);
+    };
+
+    const scheduleHide = () => {
+      cancelHide();
+      hideTimer = window.setTimeout(() => {
+        host.dataset.scrollbarState = 'hidden';
+      }, 640);
+    };
+
+    const onThumbMouseEnter = () => {
+      cancelHide();
+      host.dataset.scrollbarState = 'active';
+    };
+
+    const onThumbMouseLeave = () => {
+      scheduleHide();
+    };
+
+    const onThumbMouseDown = (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      draggingRef.current = true;
+      host.dataset.scrollbarDragging = 'true';
+      cancelHide();
+
+      // Store initial positions for delta-based calculation
+      const startY = e.clientY;
+      const startScrollTop = scroll.scrollTop;
+      const trackHeight = Math.max(host.clientHeight - 16, 0);
+      const thumbHeight = Math.max((scroll.clientHeight / scroll.scrollHeight) * trackHeight, 36);
+      const maxScrollTop = scroll.scrollHeight - scroll.clientHeight;
+      const maxThumbOffset = Math.max(trackHeight - thumbHeight, 0);
+
+      const onMouseMove = (ev: MouseEvent) => {
+        if (!draggingRef.current) return;
+        const deltaY = ev.clientY - startY;
+        if (maxThumbOffset <= 0) return;
+        const scrollDelta = (deltaY / maxThumbOffset) * maxScrollTop;
+        scroll.scrollTop = Math.max(0, Math.min(maxScrollTop, startScrollTop + scrollDelta));
+      };
+
+      const onMouseUp = () => {
+        draggingRef.current = false;
+        host.dataset.scrollbarDragging = 'false';
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        scheduleHide();
+      };
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    };
+
+    if (thumbEl) {
+      thumbEl.addEventListener('mousedown', onThumbMouseDown);
+      thumbEl.addEventListener('mouseenter', onThumbMouseEnter);
+      thumbEl.addEventListener('mouseleave', onThumbMouseLeave);
+    }
+
     syncThumb();
     scroll.addEventListener('scroll', handleScroll, { passive: true });
 
@@ -69,6 +135,11 @@ export function useScrollbarSync(
 
     return () => {
       scroll.removeEventListener('scroll', handleScroll);
+      if (thumbEl) {
+        thumbEl.removeEventListener('mousedown', onThumbMouseDown);
+        thumbEl.removeEventListener('mouseenter', onThumbMouseEnter);
+        thumbEl.removeEventListener('mouseleave', onThumbMouseLeave);
+      }
       ro.disconnect();
       if (hideTimer !== undefined) window.clearTimeout(hideTimer);
     };
