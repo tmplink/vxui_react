@@ -531,6 +531,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     case 'scroll-area':
       return (
         <div className="vx-preview-stack">
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--vx-text-secondary)', margin: 0 }}>{isZh ? '场景一：Overlay 模式（默认）' : 'Scene 1: Overlay mode (default)'}</p>
           <ScrollArea maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
             {Array.from({ length: 10 }, (_, i) => (
               <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>
@@ -538,6 +539,33 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
               </div>
             ))}
           </ScrollArea>
+          <SharedCodeBlock code={isZh
+            ? `<ScrollArea maxHeight={160}>\n  {/* 默认 variant="overlay" */}\n  {...children}\n</ScrollArea>`
+            : `<ScrollArea maxHeight={160}>\n  {/* Default variant="overlay" */}\n  {...children}\n</ScrollArea>`} />
+
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--vx-text-secondary)', margin: 0 }}>{isZh ? '场景二：Native 模式' : 'Scene 2: Native mode'}</p>
+          <ScrollArea variant="native" maxHeight={160} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8 }}>
+            {Array.from({ length: 10 }, (_, i) => (
+              <div key={i} style={{ padding: '8px 12px', borderBottom: '1px solid var(--vx-color-border)' }}>
+                {isZh ? `日志行 ${i + 1}` : `Log line ${i + 1}`}
+              </div>
+            ))}
+          </ScrollArea>
+          <SharedCodeBlock code={isZh
+            ? `<ScrollArea variant="native" maxHeight={160}>\n  {/* 浏览器原生滚动条 */}\n  {...children}\n</ScrollArea>`
+            : `<ScrollArea variant="native" maxHeight={160}>\n  {/* Native browser scrollbar */}\n  {...children}\n</ScrollArea>`} />
+
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--vx-text-secondary)', margin: 0 }}>{isZh ? '场景三：水平 + 垂直滚动' : 'Scene 3: Horizontal + vertical scroll'}</p>
+          <ScrollArea maxHeight={120} maxWidth={300} style={{ border: '1px solid var(--vx-color-border)', borderRadius: 8, padding: '8px 0' }}>
+            <div style={{ width: 500, padding: '0 12px' }}>
+              {Array.from({ length: 6 }, (_, i) => (
+                <div key={i} style={{ padding: '6px 0', borderBottom: '1px solid var(--vx-color-border)', whiteSpace: 'nowrap' }}>
+                  {isZh ? `宽内容行 ${i + 1} — 这行文字超出容器宽度因此会触发水平滚动` : `Wide content row ${i + 1} — this text exceeds container width so horizontal scroll is triggered`}
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+          <SharedCodeBlock code={`<ScrollArea maxHeight={120} maxWidth={300}>\n  <div style={{ width: 500 }}>\n    {/* 宽内容触发水平滚动 */}\n  </div>\n</ScrollArea>`} />
         </div>
       );
 

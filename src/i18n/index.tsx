@@ -1416,10 +1416,11 @@ export const en: Translations = {
       title: 'ScrollArea',
       description: 'A unified scrollable container. Defaults to overlay scrollbars that float above content without taking layout space. Use variant="native" for browser-native scrollbars.',
       guidance: [
+        'ScrollArea has two variants — "overlay" (default, custom floating scrollbar that auto-hides) and "native" (zero JS overhead, browser-native scrollbar).',
         'Set maxHeight to constrain vertical overflow — all content outside the viewport scrolls inside.',
-        'Pass a number for pixels or a string like "50vh" for relative sizing.',
-        'Overlay mode (default): custom scrollbar auto-hides, does not occupy layout space, supports drag-to-scroll.',
-        'Native mode (variant="native"): zero JS overhead, uses browser scrollbar styling.',
+        'Set maxWidth to constrain horizontal overflow, useful for wide tables or code blocks.',
+        'Pass a number for pixels (e.g. 200) or a string like "50vh" / "100%" for relative sizing.',
+        'Overlay mode supports drag-to-scroll: click and drag on the scrollbar thumb.',
         'ScrollArea is purely presentational; it does not virtualize or lazy-render children.',
       ],
       props: [
