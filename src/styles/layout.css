@@ -466,59 +466,6 @@
   padding: 28px 24px 48px;
 }
 
-/* ── Scrollbar utilities ─────────────────────────────────── */
-.vx-scroll-hide-native {
-  min-height: 0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.vx-scroll-hide-native::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-
-.vx-overlay-scrollbar {
-  position: absolute;
-  top: 8px;
-  right: 4px;
-  bottom: 8px;
-  width: 10px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 180ms ease;
-}
-
-.vx-overlay-scrollbar__thumb {
-  position: absolute;
-  right: 2px;
-  width: 6px;
-  min-height: 36px;
-  height: var(--vx-scrollbar-thumb-height, 0px);
-  transform: translateY(var(--vx-scrollbar-thumb-offset, 0px));
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--vx-text-secondary) 34%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vx-text-secondary) 18%, transparent);
-  pointer-events: auto;
-  transition: width 120ms ease, background 120ms ease;
-}
-
-.vx-overlay-scrollbar__thumb:hover,
-.vx-scroll-host[data-scrollbar-dragging='true'] .vx-overlay-scrollbar__thumb {
-  width: 12px;
-  right: -1px;
-  background: color-mix(in srgb, var(--vx-text-secondary) 52%, transparent);
-}
-
-.vx-scroll-host[data-scrollable='true'][data-scrollbar-state='active'] .vx-overlay-scrollbar {
-  opacity: 1;
-}
-
-:root[data-theme='dark'] .vx-overlay-scrollbar__thumb {
-  background: color-mix(in srgb, var(--vx-text-muted) 48%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vx-text-muted) 22%, transparent);
-}
-
 /* ── Page ────────────────────────────────────────────────── */
 .vx-page {
   display: flex;

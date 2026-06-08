@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useRef, useState, forwardRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import { useScrollbarSync } from '../hooks/useScrollbarSync';
 import { cx } from '../lib/cx';
 import { useViewport } from '../lib/viewport';
 import { Button } from './Button';
+import { ScrollArea } from './ScrollArea';
 
 // ---------- Shared types ----------
 
@@ -92,22 +92,12 @@ export function ShellSidebar({
   onSidebarClick,
   children,
 }: ShellSidebarProps) {
-  const hostRef = useRef<HTMLElement | null>(null);
-  const scrollRef = useRef<HTMLElement | null>(null);
-  useScrollbarSync(hostRef, scrollRef);
-
   return (
     <aside
-      ref={hostRef}
-      className="vx-sidebar vx-scroll-host"
-      data-scrollable="false"
-      data-scrollbar-state="hidden"
+      className="vx-sidebar"
       onClickCapture={onSidebarClick}
     >
-      <div
-        ref={(el) => { scrollRef.current = el; }}
-        className="vx-sidebar__scroll vx-scroll-hide-native"
-      >
+      <ScrollArea className="vx-sidebar__scroll">
         <div className="vx-sidebar__header">
           <div className="vx-sidebar__brand">
             {brandIcon ? <span className="vx-sidebar__brand-icon">{brandIcon}</span> : null}
@@ -137,10 +127,7 @@ export function ShellSidebar({
             </Button>
           ) : null}
         </div>
-      </div>
-      <span className="vx-overlay-scrollbar" aria-hidden="true">
-        <span className="vx-overlay-scrollbar__thumb" />
-      </span>
+      </ScrollArea>
     </aside>
   );
 }
@@ -373,23 +360,11 @@ export interface ShellContentProps {
 }
 
 export function ShellContent({ children }: ShellContentProps) {
-  const hostRef = useRef<HTMLElement | null>(null);
-  const scrollRef = useRef<HTMLElement | null>(null);
-  useScrollbarSync(hostRef, scrollRef);
-
   return (
-    <div
-      ref={(el) => { hostRef.current = el; }}
-      className="vx-shell__content-wrap vx-scroll-host"
-      data-scrollable="false"
-      data-scrollbar-state="hidden"
-    >
-      <main ref={(el) => { scrollRef.current = el; }} className="vx-shell__content vx-scroll-hide-native">
+    <div className="vx-shell__content-wrap">
+      <ScrollArea className="vx-shell__content">
         {children}
-      </main>
-      <span className="vx-overlay-scrollbar" aria-hidden="true">
-        <span className="vx-overlay-scrollbar__thumb" />
-      </span>
+      </ScrollArea>
     </div>
   );
 }

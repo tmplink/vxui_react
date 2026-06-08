@@ -14,12 +14,12 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
-import { useScrollbarSync } from '../hooks/useScrollbarSync';
 import { useDialogState } from '../hooks/useDialogState';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 import { cx } from '../lib/cx';
 import { DialogContentContext } from '../lib/dialogPopover';
+import { ScrollArea } from './ScrollArea';
 
 export type DialogSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export type DialogPadding = 'none' | 'sm' | 'md' | 'lg';
@@ -84,26 +84,21 @@ function useDialogContext(): DialogContextValue {
 // ── DialogBody ──────────────────────────────────────────────────────────────
 
 function DialogBody({ children, scrollable }: { children: ReactNode; scrollable: boolean }) {
-  const scrollHostRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useScrollbarSync(scrollHostRef, scrollRef, scrollable);
+  if (!scrollable) {
+    return (
+      <div className="vx-dialog__body-wrap">
+        <div className="vx-dialog__body">
+          {children}
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div
-      ref={scrollHostRef}
-      className="vx-dialog__body-wrap vx-scroll-host"
-      data-scrollable="false"
-      data-scrollbar-state="hidden"
-    >
-      <div ref={scrollRef} className={cx('vx-dialog__body', scrollable && 'vx-scroll-hide-native')}>
+    <div className="vx-dialog__body-wrap">
+      <ScrollArea className="vx-dialog__body">
         {children}
-      </div>
-      {scrollable ? (
-        <span className="vx-overlay-scrollbar" aria-hidden="true">
-          <span className="vx-overlay-scrollbar__thumb" />
-        </span>
-      ) : null}
+      </ScrollArea>
     </div>
   );
 }

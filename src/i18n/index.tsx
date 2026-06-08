@@ -1414,13 +1414,16 @@ export const en: Translations = {
      'scroll-area': {
       section: 'Layout',
       title: 'ScrollArea',
-      description: 'A scrollable container with custom-styled scrollbars. Use it to constrain overflowing content to a fixed viewport with maxHeight or maxWidth.',
+      description: 'A unified scrollable container. Defaults to overlay scrollbars that float above content without taking layout space. Use variant="native" for browser-native scrollbars.',
       guidance: [
         'Set maxHeight to constrain vertical overflow — all content outside the viewport scrolls inside.',
         'Pass a number for pixels or a string like "50vh" for relative sizing.',
+        'Overlay mode (default): custom scrollbar auto-hides, does not occupy layout space, supports drag-to-scroll.',
+        'Native mode (variant="native"): zero JS overhead, uses browser scrollbar styling.',
         'ScrollArea is purely presentational; it does not virtualize or lazy-render children.',
       ],
       props: [
+        { prop: 'variant', type: '"overlay" | "native"', default: '"overlay"', description: 'Scrollbar style. "overlay" uses a custom floating scrollbar; "native" uses the browser default.' },
         { prop: 'maxHeight', type: 'string | number', description: 'Maximum height before content scrolls. Numbers are treated as pixels.' },
         { prop: 'maxWidth', type: 'string | number', description: 'Maximum width before content scrolls. Numbers are treated as pixels.' },
         { prop: 'children', type: 'ReactNode', required: true, description: 'Content inside the scrollable viewport.' },
@@ -2963,13 +2966,16 @@ export const zh: Translations = {
     'scroll-area': {
       section: '布局',
       title: '滚动区域',
-      description: '一个带有自定义滚动条的滚动容器。使用 maxHeight 或 maxWidth 将溢出内容限制在固定视口内。',
+      description: '统一的滚动容器组件。默认使用悬浮滚动条（overlay），不占用布局空间。可通过 variant="native" 切换为浏览器原生滚动条。',
       guidance: [
         '设置 maxHeight 限制垂直溢出——超出视口的内容可在内部滚动。',
         '传入数字按像素计算，传入字符串如 "50vh" 按相对尺寸计算。',
+        'Overlay 模式（默认）：自定义滚动条自动隐藏，不占布局空间，支持拖拽滚动。',
+        'Native 模式（variant="native"）：零 JS 开销，使用浏览器原生滚动条样式。',
         'ScrollArea 纯属展示性组件，不支持虚拟化或延迟渲染子元素。',
       ],
       props: [
+        { prop: 'variant', type: '"overlay" | "native"', default: '"overlay"', description: '滚动条样式。"overlay" 使用自定义悬浮滚动条；"native" 使用浏览器原生滚动条。' },
         { prop: 'maxHeight', type: 'string | number', description: '内容滚动前的最大高度，数字按像素处理。' },
         { prop: 'maxWidth', type: 'string | number', description: '内容滚动前的最大宽度，数字按像素处理。' },
         { prop: 'children', type: 'ReactNode', required: true, description: '滚动视口内的内容。' },
