@@ -764,7 +764,27 @@ export function DesktopApp({
             <Alert title={isZh ? '错误' : 'Error'} variant="danger">{isZh ? '出错了，请重试。' : 'Something went wrong.'}</Alert>
           </div>
         );
-      case 'table':
+      case 'table': {
+        // Large dataset for the scroll / sticky-header stress-test demo
+        const largeRoles = isZh ? ['设计师', '工程师', '产品经理', '测试'] : ['Designer', 'Engineer', 'Product manager', 'QA'];
+        const largeTeams = isZh ? ['设计系统', '平台', '增长', '基础架构'] : ['Design system', 'Platform', 'Growth', 'Infrastructure'];
+        const largeStatuses = isZh ? ['在岗', '休假', '出差'] : ['Active', 'On leave', 'On site'];
+        const largeData = Array.from({ length: 200 }, (_, i) => ({
+          id: i + 1,
+          name: `User-${String(i + 1).padStart(3, '0')}`,
+          role: largeRoles[i % largeRoles.length],
+          team: largeTeams[i % largeTeams.length],
+          status: largeStatuses[i % largeStatuses.length],
+          score: (i * 37) % 100,
+        }));
+        const largeColumns = [
+          { key: 'id', header: isZh ? '编号' : 'ID', accessor: (r: { id: number }) => r.id, sortable: true, width: 80, align: 'right' as const },
+          { key: 'name', header: isZh ? '姓名' : 'Name', accessor: (r: { name: string }) => r.name, sortable: true },
+          { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+          { key: 'team', header: isZh ? '团队' : 'Team', accessor: (r: { team: string }) => r.team },
+          { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { status: string }) => <Badge variant={((r.status === 'Active' || r.status === '在岗') ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge>, sortable: true },
+          { key: 'score', header: isZh ? '得分' : 'Score', accessor: (r: { score: number }) => r.score, align: 'right' as const, sortable: true },
+        ];
         return (
           <div className="vx-preview-stack">
             <Table columns={[
@@ -775,8 +795,23 @@ export function DesktopApp({
               { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: 'Active' },
               { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: 'Active' },
             ]} striped bordered />
+            <p style={{ fontSize: 13, color: 'var(--vx-text-muted)', margin: '4px 0 0' }}>
+              {isZh
+                ? '大量数据 + 表头吸顶 + 容器滚动（共 200 行）。向下滚动以验证 stickyHeader 效果：'
+                : 'Large dataset with sticky header and scrollable container (200 rows). Scroll down to verify stickyHeader:'}
+            </p>
+            <Table
+              columns={largeColumns}
+              data={largeData}
+              stickyHeader
+              striped
+              hoverable
+              style={{ maxHeight: 360, overflow: 'auto' }}
+              caption={isZh ? `成员名单 · ${largeData.length} 人` : `Roster · ${largeData.length} members`}
+            />
           </div>
         );
+      }
       case 'file-upload':
         return (
           <div className="vx-preview-stack" style={{ maxWidth: 480 }}>
