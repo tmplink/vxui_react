@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.3.10] — 2026-06
+
+### Added
+
+- Version bump to 1.3.10
+
 ## [v1.3.9] — 2026-06
 
 ### Added
@@ -131,7 +137,8 @@ All other components remain backward compatible with v1.3.6.
 
 ---
 
-[unreleased]: https://github.com/tmplink/vxui_react/compare/v1.3.9...HEAD
+[unreleased]: https://github.com/tmplink/vxui_react/compare/v1.3.10...HEAD
+[v1.3.10]: https://github.com/tmplink/vxui_react/releases/tag/v1.3.10
 [v1.3.9]: https://github.com/tmplink/vxui_react/releases/tag/v1.3.9
 [v1.3.8]: https://github.com/tmplink/vxui_react/releases/tag/v1.3.8
 [v1.3.7]: https://github.com/tmplink/vxui_react/releases/tag/v1.3.7
