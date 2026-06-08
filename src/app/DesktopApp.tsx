@@ -182,6 +182,7 @@ export function DesktopApp({
     () => DOC_PAGE_KEYS.map((key) => ({
       key, title: pages[key].title, section: pages[key].section,
       description: pages[key].description, keywords: pages[key].guidance,
+      icon: pageIcons[key],
     })),
     [pages],
   );
