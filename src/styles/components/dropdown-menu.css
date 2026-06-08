@@ -2,12 +2,24 @@
    DropdownMenu
    ═══════════════════════════════════════════════════════════ */
 
+/* ── Container ──────────────────────────────────────── */
 .vx-dropdown { position: relative; display: inline-flex; }
+.vx-dropdown--open { z-index: 1; }
+
+/* ── Trigger ────────────────────────────────────────── */
 .vx-dropdown__trigger { cursor: pointer; display: inline-flex; align-items: center; }
+.vx-dropdown__trigger--default {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}
+
+/* ── Menu panel ─────────────────────────────────────── */
 .vx-dropdown__menu {
-  position: absolute;
+  position: fixed;
   z-index: var(--vx-z-menu);
-  top: calc(100% + 4px);
   background: var(--vx-glass-bg);
   backdrop-filter: var(--vx-glass-filter);
   -webkit-backdrop-filter: var(--vx-glass-filter);
@@ -19,10 +31,15 @@
   max-height: min(296px, calc(100vh - 96px));
   overflow: auto;
   overscroll-behavior: contain;
-  animation: vx-fade-in 150ms ease;
+  animation: vx-dropdown-fade-in 150ms ease;
 }
-.vx-dropdown__menu--left  { left: 0; }
-.vx-dropdown__menu--right { right: 0; }
+
+@keyframes vx-dropdown-fade-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ── Groups & Separators ────────────────────────────── */
 .vx-dropdown__group { display: flex; flex-direction: column; }
 .vx-dropdown__group-label {
   font-size: 11px;
@@ -37,6 +54,8 @@
   background: var(--vx-border);
   margin: 4px 0;
 }
+
+/* ── Menu item ──────────────────────────────────────── */
 .vx-dropdown__item {
   display: flex;
   align-items: center;
@@ -53,9 +72,15 @@
   transition: background 100ms;
 }
 .vx-dropdown__item:hover { background: var(--vx-bg-accent); }
+.vx-dropdown__item:focus-visible {
+  outline: 2px solid var(--vx-focus-ring);
+  outline-offset: -2px;
+}
 .vx-dropdown__item--danger { color: var(--vx-danger); }
 .vx-dropdown__item--danger:hover { background: color-mix(in srgb, var(--vx-danger) 10%, transparent); }
 .vx-dropdown__item--disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Item sub-elements ──────────────────────────────── */
 .vx-dropdown__item-icon { flex-shrink: 0; opacity: 0.7; display: flex; align-items: center; }
 .vx-dropdown__item-label { flex: 1; }
 .vx-dropdown__shortcut {
@@ -66,4 +91,47 @@
   border-radius: 4px;
   padding: 0 4px;
   font-family: monospace;
+}
+.vx-dropdown__sub-arrow {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-left: 4px;
+}
+
+/* ── Sub-menu ───────────────────────────────────────── */
+.vx-dropdown__sub-wrap { position: relative; }
+.vx-dropdown__sub-menu {
+  position: absolute;
+  z-index: var(--vx-z-menu);
+  top: -4px;
+  left: 100%;
+  margin-left: 4px;
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
+  border-radius: var(--vx-radius);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
+  padding: 4px;
+  min-width: 160px;
+  overflow: auto;
+  animation: vx-dropdown-fade-in 150ms ease;
+}
+
+/* ── Empty state ────────────────────────────────────── */
+.vx-dropdown__empty {
+  padding: 12px 10px;
+  font-size: 14px;
+  color: var(--vx-text-muted);
+  text-align: center;
+}
+
+/* ── Mobile sheet inner ─────────────────────────────── */
+.vx-dropdown__mobile-sheet {
+  padding: 8px 0;
+}
+.vx-dropdown__mobile-sheet .vx-dropdown__item {
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 0;
 }

@@ -727,7 +727,11 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     case 'stepper':
       return (
         <div className="vx-preview-stack">
-          <Stepper currentStep={1} steps={[{ label: isZh ? '规划' : 'Plan' }, { label: isZh ? '开发' : 'Build' }, { label: isZh ? '发布' : 'Launch' }]} />
+          <Stepper currentStep={1} steps={[
+            { label: isZh ? '规划' : 'Plan', description: isZh ? '确定需求和目标' : 'Define requirements & goals' },
+            { label: isZh ? '开发' : 'Build', description: isZh ? '编码与测试' : 'Code & test' },
+            { label: isZh ? '发布' : 'Launch', description: isZh ? '部署上线' : 'Deploy to production' },
+          ]} />
         </div>
       );
 

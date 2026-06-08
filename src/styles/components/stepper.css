@@ -4,18 +4,31 @@
 
 .vx-stepper {
   display: flex;
-  align-items: flex-start;
-  gap: 0;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
+  gap: 16px;
 }
+
+.vx-stepper__track {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  gap: 0;
+}
+
 .vx-stepper__step {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex: 1;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 0;
   position: relative;
 }
-.vx-stepper__step:last-child { flex: 0 0 auto; }
+
 .vx-stepper__indicator {
   width: 32px;
   height: 32px;
@@ -29,12 +42,15 @@
   border: 2px solid var(--vx-border);
   color: var(--vx-text-muted);
   background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
   transition: background 200ms, border-color 200ms, color 200ms;
 }
 .vx-stepper__step--active .vx-stepper__indicator {
   background: var(--vx-primary);
   border-color: var(--vx-primary);
   color: #fff;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--vx-primary) 18%, transparent);
 }
 .vx-stepper__step--completed .vx-stepper__indicator {
   background: var(--vx-success);
@@ -46,20 +62,65 @@
   border-color: var(--vx-danger);
   color: #fff;
 }
-.vx-stepper__label {
-  font-size: 14px;
-  color: var(--vx-text-muted);
-  white-space: nowrap;
-}
-.vx-stepper__step--active .vx-stepper__label { color: var(--vx-text); font-weight: 600; }
-.vx-stepper__step--completed .vx-stepper__label { color: var(--vx-success); }
-.vx-stepper__step--error .vx-stepper__label { color: var(--vx-danger); }
+
 .vx-stepper__connector {
-  flex: 1;
+  flex: 1 1 0;
   height: 2px;
+  align-self: center;
   background: var(--vx-border);
   margin: 0 8px;
-  min-width: 16px;
+  min-width: 24px;
+  border-radius: 9999px;
+  transition: background 200ms;
 }
-.vx-stepper__step--completed ~ .vx-stepper__step .vx-stepper__connector,
-.vx-stepper__step--completed + .vx-stepper__step .vx-stepper__connector { background: var(--vx-success); }
+.vx-stepper__connector[data-prev-status='completed'] { background: var(--vx-success); }
+.vx-stepper__connector[data-prev-status='error'] { background: var(--vx-danger); }
+
+/* ── Active panel: shows only the current step's label + description ── */
+.vx-stepper__active-panel {
+  display: flex;
+  align-items: center;
+  min-height: 0;
+}
+.vx-stepper__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 0 1 auto;
+  text-align: left;
+}
+.vx-stepper__label {
+  font-size: 15px;
+  color: var(--vx-text);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.vx-stepper__description {
+  font-size: 13px;
+  color: var(--vx-text-muted);
+  line-height: 1.4;
+  opacity: 0.85;
+}
+
+/* ── Vertical orientation ── */
+.vx-stepper--vertical .vx-stepper__track {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+.vx-stepper--vertical .vx-stepper__step {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 0;
+}
+.vx-stepper--vertical .vx-stepper__connector {
+  width: 2px;
+  height: auto;
+  min-height: 24px;
+  min-width: 0;
+  flex: 0 0 2px;
+  margin: 4px 0 4px 0;
+  align-self: flex-start;
+}
