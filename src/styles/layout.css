@@ -463,6 +463,11 @@
   overflow: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+}
+
+/* 将 padding 设在视口上，避免 height:100% + border-box + 宿主 padding
+   导致视口溢出被 overflow:hidden 裁切（底部内容截断） */
+.vx-shell__content > .vx-scroll-area__viewport {
   padding: 28px 24px 48px;
 }
 

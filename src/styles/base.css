@@ -765,7 +765,7 @@
 .vx-shell[data-density='compact'] .vx-topbar__actions { padding-block: 6px; gap: 8px; }
 .vx-shell[data-density='compact'] .vx-sidebar__brand-icon { width: 34px; height: 34px; border-radius: 10px; }
 .vx-shell[data-density='compact'] .vx-sidebar__brand { gap: 10px; }
-.vx-shell[data-density='compact'] .vx-shell__content { padding: 16px 20px 28px; }
+.vx-shell[data-density='compact'] .vx-shell__content > .vx-scroll-area__viewport { padding: 16px 20px 28px; }
 .vx-shell[data-density='compact'] .vx-article__header { gap: 10px; }
 .vx-shell[data-density='compact'] .vx-article__header > div { gap: 6px; }
 .vx-shell[data-density='compact'] .vx-docs-workspace { gap: 20px; }
