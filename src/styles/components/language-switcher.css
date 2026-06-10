@@ -26,9 +26,11 @@
 }
 
 .vx-lang-switcher .vx-select__dropdown {
-  background: var(--vx-surface);
-  border-color: var(--vx-border);
-  box-shadow: var(--vx-shadow-lg);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border-color: var(--vx-glass-border);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   /*
    * Select 组件已通过内联样式 style={{ width: rect.width }} 设置宽度
    * 不要覆盖它！只需要确保 left 定位正确

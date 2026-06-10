@@ -261,10 +261,12 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius);
-  box-shadow: var(--vx-shadow);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   animation: vx-flyout-in 120ms ease;
 }
 
@@ -382,10 +384,10 @@
   min-height: var(--vx-header-height);
   height: var(--vx-header-height);
   padding: 0 26px;
-  background: var(--vx-surface);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: inset 0 -1px 0 var(--vx-border);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  box-shadow: inset 0 -1px 0 var(--vx-glass-border);
   overflow: visible;
 }
 

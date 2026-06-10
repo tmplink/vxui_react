@@ -442,9 +442,11 @@
   flex-direction: column;
   gap: 4px;
   padding: 14px 18px;
-  border: 1px solid var(--vx-border);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius-lg);
-  background: var(--vx-surface);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
   cursor: pointer;
   text-align: left;
   max-width: 220px;
