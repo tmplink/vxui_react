@@ -191,10 +191,12 @@
   min-width: 200px;
   max-width: calc(100vw - 32px);
   max-height: min(60vh, 520px);
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius-lg);
-  box-shadow: var(--vx-shadow-lg);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   z-index: calc(var(--vx-z-dropdown) + 1);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -366,10 +368,12 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  background: var(--vx-surface);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
   border-radius: var(--vx-radius-lg);
   overflow: hidden;
-  border: 1px solid var(--vx-border);
+  border: 1px solid var(--vx-glass-border);
 }
 
 .vxm-list-section {
@@ -757,8 +761,10 @@
   justify-content: space-between;
   height: 46px;
   padding: 0 16px;
-  background: var(--vx-surface-strong);
-  border-bottom: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg-strong);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border-bottom: 1px solid var(--vx-glass-border);
   z-index: var(--vx-z-layout);
 }
 
@@ -884,8 +890,10 @@
   gap: 10px;
   padding: 12px 12px;
   border-radius: var(--vx-radius-lg);
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
 }
 
 .vxm-docs-home__chip-icon {
@@ -1125,9 +1133,11 @@
 .vxm-legal-page__section-card {
   margin: 0 16px;
   padding: 16px;
-  border: 1px solid var(--vx-border);
+  border: 1px solid var(--vx-glass-border);
   border-radius: var(--vx-radius-lg);
-  background: var(--vx-surface);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
 }
 
 .vxm-legal-page__paragraph {

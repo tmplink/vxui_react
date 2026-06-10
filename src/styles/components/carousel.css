@@ -23,9 +23,11 @@
   width: 36px;
   height: 36px;
   border-radius: 9999px;
-  background: var(--vx-surface);
-  border: 1px solid var(--vx-border);
-  box-shadow: var(--vx-shadow-sm);
+  background: var(--vx-glass-bg);
+  backdrop-filter: var(--vx-glass-filter);
+  -webkit-backdrop-filter: var(--vx-glass-filter);
+  border: 1px solid var(--vx-glass-border);
+  box-shadow: var(--vx-glass-highlight), var(--vx-glass-shadow);
   display: flex;
   align-items: center;
   justify-content: center;
