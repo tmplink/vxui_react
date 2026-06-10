@@ -303,7 +303,7 @@ export function DropdownMenu({
   // ── Menu panel content ────────────────────────────────
   const menuContent = (
     <div ref={menuRef} id={menuId} role="menu"
-      className={cx('vx-dropdown__menu', `vx-dropdown__menu--${pos?.actualSide ?? side}`, align === 'end' && 'vx-dropdown__menu--align-end')}
+      className={cx('vx-dropdown__menu', `vx-dropdown__menu--${pos?.actualSide ?? side}`, align === 'end' && 'vx-dropdown__menu--align-end', Boolean(dialogContent) && 'vx-dropdown__menu--in-dialog')}
       style={{ top: pos?.top, bottom: pos?.bottom, left: pos?.left, right: pos?.right, maxHeight: pos?.maxHeight, minWidth: pos?.width }}
       onKeyDown={handleMenuKeyDown} aria-label="Menu"
     >
@@ -320,7 +320,7 @@ export function DropdownMenu({
   );
 
   // ── Portal target ─────────────────────────────────────
-  const portalTarget = !isMobile && dialogContent ? dialogContent : !isMobile ? document.body : null;
+  const portalTarget = !isMobile ? document.body : null;
 
   // ── Detect if trigger is a valid React element ────────
   const isSingleElement = isValidElement(trigger) && typeof (trigger as ReactElement).type === 'function';

@@ -30,7 +30,7 @@ export type DialogPlacement =
   | 'top-half' | 'right-half' | 'bottom-half' | 'left-half';
 
 export interface DialogProps {
-  trigger: ReactNode;
+  trigger?: ReactNode;
   title: string;
   description?: string;
   children?: ReactNode;
@@ -292,7 +292,7 @@ export function Dialog({
 
   return (
     <>
-      <TriggerWrapper trigger={trigger} onOpen={open} />
+  {trigger != null && <TriggerWrapper trigger={trigger} onOpen={open} />}
 
       {isOpen &&
         createPortal(
