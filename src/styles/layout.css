@@ -395,7 +395,7 @@
   flex: 1 1 auto;
   min-width: 0;
   min-height: 0;
-  padding: 12px 0;
+  padding: 6px 0;
 }
 
 .vx-topbar__title-group > * {
@@ -444,7 +444,7 @@
   flex: 0 0 auto;
   align-self: stretch;
   min-width: 0;
-  padding: 12px 0 12px 18px;
+  padding: 6px 0 6px 18px;
   overflow: visible;
 }
 
@@ -463,6 +463,11 @@
   overflow: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+}
+
+/* 将 padding 设在视口上，避免 height:100% + border-box + 宿主 padding
+   导致视口溢出被 overflow:hidden 裁切（底部内容截断） */
+.vx-shell__content > .vx-scroll-area__viewport {
   padding: 28px 24px 48px;
 }
 
