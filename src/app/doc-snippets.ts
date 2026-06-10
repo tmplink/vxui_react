@@ -326,16 +326,32 @@ function Utilities() {
     </>
   );
 }`,
-  dialog: String.raw`import { Dialog, Button } from 'vxui-react';
+  dialog: String.raw`import { Dialog, Button, Select, Input } from 'vxui-react';
 import { useState } from 'react';
 
 export function DialogExample() {
   const [open, setOpen] = useState(false);
+  const [role, setRole] = useState<string>();
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Open Dialog</Button>
-      <Dialog trigger={<div />} title="Confirm" open={open} onOpenChange={setOpen}>
-        <p>Are you sure you want to proceed?</p>
+      <Button onClick={() => setOpen(true)}>Create User</Button>
+      <Dialog trigger={<div />} title="New User" open={open} onOpenChange={setOpen}
+        onConfirm={() => console.log({ role })} onCancel={() => setOpen(false)}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <Input label="Name" placeholder="Full name" />
+          <Input label="Email" placeholder="user@example.com" />
+          <Select
+            label="Role"
+            placeholder="Choose a role"
+            options={[
+              { value: 'admin', label: 'Admin' },
+              { value: 'editor', label: 'Editor' },
+              { value: 'viewer', label: 'Viewer' },
+            ]}
+            value={role}
+            onChange={setRole}
+          />
+        </div>
       </Dialog>
     </>
   );

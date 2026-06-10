@@ -358,7 +358,7 @@ export function Select({
             </ul>
           </div>
         );
-        return shouldPortal ? createPortal(dropdownNode, dialogContentRef.current ?? document.body) : dropdownNode;
+        return shouldPortal ? createPortal(dropdownNode, document.body) : dropdownNode;
       })()}
       {/* Mobile Sheet — 可通过 mobileSheet prop 注入自定义组件 */}
       {isMobile && (mobileSheet !== undefined ? (

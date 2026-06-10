@@ -872,21 +872,68 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     // ═══════════════════════════════════════════════════════════
     // 叠层浮层
     // ═══════════════════════════════════════════════════════════
-    case 'dialog':
-      return (
-        <div className="vx-preview-stack">
-          <div className="vx-preview-inline vx-preview-inline--wrap">
-            <Dialog trigger={<Button>{isZh ? '打开对话框' : 'Open dialog'}</Button>}
-              title={isZh ? '确认操作' : 'Confirm action'} description={isZh ? '请确认此操作。' : 'Please confirm this operation.'}
+    case 'dialog': {
+      const ConfirmDialogDemo = () => {
+        const [open, setOpen] = useState(false);
+        return (
+          <>
+            <Button onClick={() => setOpen(true)}>{isZh ? '打开对话框' : 'Open dialog'}</Button>
+            <Dialog title={isZh ? '确认操作' : 'Confirm action'} description={isZh ? '请确认此操作。' : 'Please confirm this operation.'} open={open} onOpenChange={setOpen}
               confirmLabel={isZh ? '确认' : 'Confirm'} cancelLabel={isZh ? '取消' : 'Cancel'}>
               {isZh ? '此操作将立即生效。' : 'This action will be applied immediately.'}
             </Dialog>
-            <Dialog placement="right" title={isZh ? '侧边面板' : 'Side panel'} trigger={<Button variant="secondary">{isZh ? '侧边面板' : 'Side panel'}</Button>}>
+          </>
+        );
+      };
+      const DialogFormDemo = () => {
+        const [open, setOpen] = useState(false);
+        const [role, setRole] = useState<string>();
+        return (
+          <>
+            <Button onClick={() => setOpen(true)}>{isZh ? '创建用户' : 'Create User'}</Button>
+            <Dialog title={isZh ? '新建用户' : 'New User'} open={open} onOpenChange={setOpen}
+              onConfirm={() => { console.log({ role }); setOpen(false); }}
+              onCancel={() => setOpen(false)}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <Input label={isZh ? '姓名' : 'Name'} placeholder={isZh ? '全名' : 'Full name'} />
+                <Input label="Email" placeholder="user@example.com" />
+                <Select
+                  label={isZh ? '角色' : 'Role'}
+                  placeholder={isZh ? '选择角色' : 'Choose a role'}
+                  options={[
+                    { value: 'admin', label: isZh ? '管理员' : 'Admin' },
+                    { value: 'editor', label: isZh ? '编辑者' : 'Editor' },
+                    { value: 'viewer', label: isZh ? '观察者' : 'Viewer' },
+                  ]}
+                  value={role}
+                  onChange={setRole}
+                />
+              </div>
+            </Dialog>
+          </>
+        );
+      };
+      const SidePanelDemo = () => {
+        const [open, setOpen] = useState(false);
+        return (
+          <>
+            <Button onClick={() => setOpen(true)}>{isZh ? '侧边面板' : 'Side panel'}</Button>
+            <Dialog placement="right" title={isZh ? '侧边面板' : 'Side panel'} open={open} onOpenChange={setOpen}>
               {isZh ? '固定在右侧边缘的对话框。' : 'A dialog anchored to the right edge.'}
             </Dialog>
+          </>
+        );
+      };
+      return (
+        <div className="vx-preview-stack" style={{ gap: 12 }}>
+          <div className="vx-preview-inline vx-preview-inline--wrap" style={{ gap: 8 }}>
+            <ConfirmDialogDemo />
+            <DialogFormDemo />
+            <SidePanelDemo />
           </div>
         </div>
       );
+    }
 
     case 'sheet':
       return (

@@ -35,8 +35,8 @@ export function MobileDocContent({ activeDocument, preview, hasPreview, docHeade
       {hasPreview && preview && (
         <div className="vxm-docs-page__section">
           <div className="vxm-docs-page__section-title">Preview</div>
-          <Card>
-            <CardContent style={{ paddingTop: '1rem' }}>
+          <Card padding="none">
+            <CardContent style={{ padding: '1rem' }}>
               {preview}
             </CardContent>
           </Card>

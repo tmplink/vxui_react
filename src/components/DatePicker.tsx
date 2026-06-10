@@ -224,7 +224,7 @@ export function DatePicker({
           />
         </div>
         );
-        return shouldPortal ? createPortal(popoverNode, dialogContentRef.current ?? document.body) : popoverNode;
+        return shouldPortal ? createPortal(popoverNode, document.body) : popoverNode;
       })()}
       {/* Mobile Sheet */}
       {isMobile && open && (
