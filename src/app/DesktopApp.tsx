@@ -1096,7 +1096,6 @@ export function DesktopApp({
           <div className="vx-breadcrumb" data-state={showPinnedDocTitle ? 'pinned' : 'overview'}>
             {showPinnedDocTitle ? <span className="vx-breadcrumb__kicker">{activeDocument.section}</span> : null}
             <strong>{topbarDocLabel}</strong>
-            {showPinnedDocTitle ? <span className="vx-breadcrumb__summary">{activeDocument.description}</span> : null}
           </div>
         }
         headerActions={
