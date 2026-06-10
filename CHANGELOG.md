@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.3.12] — 2026-06-10
+
+### Fixed
+
+- **Select / MultiSelect / DatePicker / TimePicker**：修复在 Dialog 内部下拉菜单定位错误的问题。下拉组件现在统一 portal 到 `document.body`，而非 dialog content 元素，消除了因 `.vx-dialog__content` 的 `transform` 和 `backdrop-filter` 属性创建新的 `position: fixed` 包含块而导致的坐标偏移。
+
+### Changed
+
+- DropdownMenu 组件样式优化。
+
 ## [v1.3.10] — 2026-06
 
 ### Added
