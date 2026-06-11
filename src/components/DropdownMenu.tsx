@@ -214,7 +214,7 @@ export function DropdownMenu({
   // ── Positioning state ─────────────────────────────────
   const [pos, setPos] = useState<{
     top?: number; bottom?: number; left?: number; right?: number;
-    maxHeight: number; actualSide: 'top' | 'bottom'; width?: number;
+    maxHeight: number; actualSide: 'top' | 'bottom'; actualAlign: 'start' | 'end'; width?: number;
   } | null>(null);
 
   // ── Typeahead buffer ──────────────────────────────────
@@ -264,7 +264,9 @@ export function DropdownMenu({
     const spaceAbove = rect.top;
     const SAFETY = 8;
     const MIN_HEIGHT = 120;
+    const MIN_WIDTH = 192; // matches CSS min-width for menu
 
+    // ── Vertical flip ──────────────────────────────────
     let actualSide = side;
     if (side === 'bottom' && spaceBelow < 200 && spaceAbove > spaceBelow) actualSide = 'top';
     else if (side === 'top' && spaceAbove < 200 && spaceBelow > spaceAbove) actualSide = 'bottom';
@@ -273,12 +275,31 @@ export function DropdownMenu({
       ? Math.max(MIN_HEIGHT, spaceBelow - sideOffset - SAFETY)
       : Math.max(MIN_HEIGHT, spaceAbove - sideOffset - SAFETY);
 
+    // ── Horizontal collision detection ─────────────────
+    let actualAlign = align;
+    const estimatedWidth = Math.max(MIN_WIDTH, rect.width);
+
+    if (align === 'start' && rect.left + estimatedWidth > window.innerWidth - SAFETY) {
+      actualAlign = 'end';
+    } else if (align === 'end' && rect.right - estimatedWidth < SAFETY) {
+      actualAlign = 'start';
+    }
+
+    // After flipping, clamp position to keep menu within viewport
+    let left: number | undefined;
+    let right: number | undefined;
+    if (actualAlign === 'start') {
+      left = Math.max(SAFETY, rect.left);
+    } else {
+      right = Math.max(SAFETY, window.innerWidth - rect.right);
+    }
+
     setPos({
       top: actualSide === 'bottom' ? rect.bottom + sideOffset : undefined,
       bottom: actualSide === 'top' ? window.innerHeight - rect.top + sideOffset : undefined,
-      left: align === 'start' ? rect.left : undefined,
-      right: align === 'end' ? window.innerWidth - rect.right : undefined,
-      maxHeight: available, actualSide, width: rect.width,
+      left,
+      right,
+      maxHeight: available, actualSide, actualAlign, width: rect.width,
     });
   }, [side, sideOffset, align, isMobile]);
 
@@ -403,7 +424,7 @@ export function DropdownMenu({
   // ── Menu panel content ────────────────────────────────
   const menuContent = (
     <div ref={menuRef} id={menuId} role="menu" tabIndex={-1}
-      className={cx('vx-dropdown__menu', `vx-dropdown__menu--${pos?.actualSide ?? side}`, align === 'end' && 'vx-dropdown__menu--align-end', Boolean(dialogContent) && 'vx-dropdown__menu--in-dialog')}
+      className={cx('vx-dropdown__menu', `vx-dropdown__menu--${pos?.actualSide ?? side}`, (pos?.actualAlign ?? align) === 'end' && 'vx-dropdown__menu--align-end', Boolean(dialogContent) && 'vx-dropdown__menu--in-dialog')}
       style={{ top: pos?.top, bottom: pos?.bottom, left: pos?.left, right: pos?.right, maxHeight: pos?.maxHeight, minWidth: pos?.width }}
       onKeyDown={handleMenuKeyDown} aria-label="Menu"
     >
