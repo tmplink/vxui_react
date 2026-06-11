@@ -4,6 +4,8 @@ import dts from 'vite-plugin-dts';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { resolve } from 'path';
 
+import { cloudflare } from "@cloudflare/vite-plugin";
+
 // 检测是否为页面部署构建（通过环境变量或参数）
 const isPageBuild = process.env.PAGE_BUILD === 'true';
 
@@ -17,18 +19,14 @@ export default defineConfig({
     port: 5173,      // Port 3000 is in Windows excluded range (2957-3056)
     strictPort: false, // Auto-switch to next available port if occupied
   },
-  plugins: [
-    react(),
-    // 运行 `npm run build` 后自动生成 dist/visualizer/index.html
-    ...(process.env.VISUALIZE === 'true' ? [visualizer({ open: true, filename: 'dist/visualizer/stats.html', gzipSize: true })] : []),
-    ...(isPageBuild ? [] : [
-      dts({
-        include: ['src/lib', 'src/components'],
-        insertTypesEntry: true,
-        copyDtsFiles: true,
-      }),
-    ]),
-  ],
+  plugins: [react(), // 运行 `npm run build` 后自动生成 dist/visualizer/index.html
+  ...(process.env.VISUALIZE === 'true' ? [visualizer({ open: true, filename: 'dist/visualizer/stats.html', gzipSize: true })] : []), ...(isPageBuild ? [] : [
+    dts({
+      include: ['src/lib', 'src/components'],
+      insertTypesEntry: true,
+      copyDtsFiles: true,
+    }),
+  ]), cloudflare()],
   build: {
     target: 'es2015',
     minify: true,
