@@ -63,6 +63,7 @@
   border-radius: 8px;
   background: var(--vx-surface);
   box-shadow: var(--vx-shadow-sm);
+  border: 1px solid var(--vx-border);
   transition: transform 250ms cubic-bezier(0.3, 0, 0, 1), width 250ms cubic-bezier(0.3, 0, 0, 1);
   z-index: -1;
   pointer-events: none;
@@ -107,6 +108,10 @@
   color: var(--vx-text);
 }
 
+.vx-segmented-control__item:active:not(:disabled) {
+  background: var(--vx-surface-hover);
+}
+
 .vx-segmented-control__item--active {
   color: var(--vx-text);
   font-weight: 600;
@@ -115,4 +120,9 @@
 .vx-segmented-control__item:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.vx-segmented-control__item:focus-visible {
+  outline: 2px solid var(--vx-primary);
+  outline-offset: -2px;
 }

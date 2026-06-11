@@ -104,7 +104,7 @@
   --vx-code-attr-value: #b45309;
   --vx-code-punctuation: #4a5572;
   --vx-code-operator: #1a2336;
-  --vx-glass-filter: blur(16px) saturate(1.8);
+  --vx-glass-filter: blur(22px) saturate(1.8);
   --vx-glass-scrim: color-mix(in srgb, #e8ecf6 48%, transparent);
 }
 
@@ -145,7 +145,7 @@
   --vx-code-attr-value: #b45309;
   --vx-code-punctuation: #6e6a8a;
   --vx-code-operator: #1e1b2e;
-  --vx-glass-filter: blur(18px) saturate(1.9);
+  --vx-glass-filter: blur(24px) saturate(1.9);
   --vx-glass-scrim: color-mix(in srgb, #f8f7ff 46%, transparent);
 }
 
@@ -193,7 +193,7 @@
   --vx-code-attr-value: #fde68a;
   --vx-code-punctuation: #c4b5fd;
   --vx-code-operator: #f0eeff;
-  --vx-glass-filter: blur(20px) saturate(1.65);
+  --vx-glass-filter: blur(28px) saturate(1.65);
 }
 
 /* ── Ivory Gold theme overrides ─────────────────────────── */
@@ -297,6 +297,14 @@
   border-color: rgba(160, 116, 42, 0.3);
   color: #7d5a1e;
 }
+/* ── Ivory Gold SegmentedControl ──────────────────────────── */
+[data-theme-name='ivory-gold'] .vx-segmented-control {
+  border-color: rgba(160, 116, 42, 0.3);
+}
+[data-theme-name='ivory-gold'] .vx-segmented-control__slider {
+  border-color: rgba(160, 116, 42, 0.4);
+  box-shadow: 0 0 10px rgba(160, 116, 42, 0.1);
+}
 
 /* ── Black Gold theme overrides ─────────────────────────── */
 [data-theme-name='black-gold'] .vx-button {
@@ -390,6 +398,14 @@
   background: rgba(200, 169, 124, 0.14);
   border-color: rgba(200, 169, 124, 0.36);
   color: #c8a97c;
+}
+/* ── Black Gold SegmentedControl ──────────────────────────── */
+[data-theme-name='black-gold'] .vx-segmented-control {
+  border-color: rgba(200, 169, 124, 0.25);
+}
+[data-theme-name='black-gold'] .vx-segmented-control__slider {
+  border-color: rgba(200, 169, 124, 0.35);
+  box-shadow: 0 0 12px rgba(200, 169, 124, 0.12);
 }
 /* primary 为浅金色（#c8a97c），白色文字对比度不足，统一改为深色 */
 [data-theme-name='black-gold'] .vx-multiselect__checkbox--checked,

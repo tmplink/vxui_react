@@ -40,12 +40,12 @@
   --vx-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
   --vx-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
   --vx-shadow-lg: 0 28px 60px rgba(15, 23, 42, 0.12);
-  --vx-glass-bg: color-mix(in srgb, var(--vx-surface-strong) 82%, transparent);
-  --vx-glass-bg-strong: color-mix(in srgb, var(--vx-surface-strong) 90%, transparent);
+  --vx-glass-bg: color-mix(in srgb, var(--vx-surface-strong) 85%, transparent);
+  --vx-glass-bg-strong: color-mix(in srgb, var(--vx-surface-strong) 92%, transparent);
   --vx-glass-border: color-mix(in srgb, var(--vx-border-strong) 52%, var(--vx-border));
   --vx-glass-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
   --vx-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.22);
-  --vx-glass-filter: blur(18px) saturate(1.7);
+  --vx-glass-filter: blur(24px) saturate(1.7);
   --vx-glass-scrim: color-mix(in srgb, var(--vx-bg) 44%, transparent);
   /* ── 移动端组件命名规范 ──────────────────────────────────
      vxm- 前缀用于移动端专属组件（MobileShell, BottomNav 等）。
@@ -135,11 +135,11 @@
   --vx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --vx-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
   --vx-shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.34);
-  --vx-glass-bg: color-mix(in srgb, var(--vx-surface-strong) 86%, transparent);
-  --vx-glass-bg-strong: color-mix(in srgb, var(--vx-surface-strong) 94%, transparent);
+  --vx-glass-bg: color-mix(in srgb, var(--vx-surface-strong) 90%, transparent);
+  --vx-glass-bg-strong: color-mix(in srgb, var(--vx-surface-strong) 96%, transparent);
   --vx-glass-border: color-mix(in srgb, var(--vx-border-strong) 72%, var(--vx-border));
   --vx-glass-shadow: 0 22px 54px rgba(0, 0, 0, 0.42);
   --vx-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --vx-glass-filter: blur(20px) saturate(1.55);
+  --vx-glass-filter: blur(30px) saturate(1.55);
   --vx-glass-scrim: color-mix(in srgb, #020408 58%, transparent);
 }

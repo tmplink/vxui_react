@@ -682,9 +682,9 @@ export function DesktopApp({
           <div className="vx-preview-stack">
             <div style={{ maxWidth: 400 }}>
               <Carousel items={[
-                <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
-                <div key="2" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-3)' }}>{isZh ? '第二张' : 'Slide 2'}</div>,
-                <div key="3" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第三张' : 'Slide 3'}</div>,
+                <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-surface)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
+                <div key="2" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-surface-hover)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '第二张' : 'Slide 2'}</div>,
+                <div key="3" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-surface)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '第三张' : 'Slide 3'}</div>,
               ]} showDots showArrows />
             </div>
           </div>

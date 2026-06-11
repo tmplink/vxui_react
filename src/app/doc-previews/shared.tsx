@@ -150,6 +150,43 @@ function DropdownMenuDemo({ isZh }: { isZh: boolean }) {
   );
 }
 
+// ── 内联组件：带状态的 Form Inputs 预览 ──
+function FormInputsPreview({ isZh }: { isZh: boolean }) {
+  const [segmentedValue, setSegmentedValue] = useState('system');
+  const [sliderValue, setSliderValue] = useState(68);
+  const [checkboxA, setCheckboxA] = useState(true);
+  const [checkboxB, setCheckboxB] = useState(false);
+  const [radioValue, setRadioValue] = useState('system');
+  return (
+    <div className="vx-preview-stack">
+      <div className="vx-preview-stack__group">
+        <Checkbox checked={checkboxA} label={isZh ? '默认启用响应式抽屉' : 'Enable responsive drawer'} onChange={() => setCheckboxA(v => !v)} />
+        <Checkbox checked={checkboxB} label={isZh ? '显示调试边界' : 'Show debug boundaries'} onChange={() => setCheckboxB(v => !v)} />
+      </div>
+      <RadioGroup label={isZh ? '密度策略' : 'Density strategy'}>
+        <Radio checked={radioValue === 'system'} label={isZh ? '跟随系统' : 'Follow system'} name="density" onChange={() => setRadioValue('system')} />
+        <Radio checked={radioValue === 'comfortable'} label={isZh ? '舒适' : 'Comfortable'} name="density" onChange={() => setRadioValue('comfortable')} />
+        <Radio checked={radioValue === 'compact'} label={isZh ? '紧凑' : 'Compact'} name="density" onChange={() => setRadioValue('compact')} />
+      </RadioGroup>
+      <SegmentedControl value={segmentedValue} onChange={setSegmentedValue} fullWidth
+        options={[{ label: <><Monitor size={16} />{isZh ? '跟随系统' : 'System'}</>, value: 'system' }, { label: <><Sun size={16} />{isZh ? '浅色' : 'Light'}</>, value: 'light' }, { label: <><Moon size={16} />{isZh ? '深色' : 'Dark'}</>, value: 'dark' }]} />
+      <Slider label={isZh ? '文档完成度' : 'Coverage'} max={100} min={0} onChange={(e) => setSliderValue(Number(e.target.value))} showValue value={sliderValue} />
+      <div className="vx-preview-stack__group" style={{ marginTop: 24 }}>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <Toggle data-state="on">{isZh ? '自动保存' : 'Auto-save'}</Toggle>
+          <Toggle>{isZh ? '多标签模式' : 'Multiple tabs'}</Toggle>
+        </div>
+        <ToggleGroup type="single" defaultValue="grid" items={[{ value: 'grid', label: isZh ? '网格' : 'Grid' }, { value: 'list', label: isZh ? '列表' : 'List' }, { value: 'table', label: isZh ? '表格' : 'Table' }]} />
+        <Switch defaultChecked label={isZh ? '开启实验性功能' : 'Enable experimental features'} />
+        <NumberInput min={0} max={100} defaultValue={10} label={isZh ? '阈值' : 'Threshold'} />
+        <TagInput placeholder={isZh ? '添加标签...' : 'Add tag...'} defaultValue={['React', 'Vite']} />
+        <FileUpload multiple label={isZh ? '上传附件' : 'Upload attachments'} />
+        <div style={{ marginTop: 8 }}><Calendar /></div>
+      </div>
+    </div>
+  );
+}
+
 // ── 共享预览渲染函数 ──
 export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOptions): ReactNode {
   const { isZh, pages, onNavigate, push } = options;
@@ -420,34 +457,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
       );
 
     case 'form-inputs':
-      return (
-        <div className="vx-preview-stack">
-          <div className="vx-preview-stack__group">
-            <Checkbox checked={true} label={isZh ? '默认启用响应式抽屉' : 'Enable responsive drawer'} onChange={() => {}} />
-            <Checkbox checked={false} label={isZh ? '显示调试边界' : 'Show debug boundaries'} onChange={() => {}} />
-          </div>
-          <RadioGroup label={isZh ? '密度策略' : 'Density strategy'}>
-            <Radio checked={true} label={isZh ? '跟随系统' : 'Follow system'} name="density" onChange={() => {}} />
-            <Radio checked={false} label={isZh ? '舒适' : 'Comfortable'} name="density" onChange={() => {}} />
-            <Radio checked={false} label={isZh ? '紧凑' : 'Compact'} name="density" onChange={() => {}} />
-          </RadioGroup>
-          <SegmentedControl value="system" onChange={() => {}} fullWidth
-            options={[{ label: <><Monitor size={16} />{isZh ? '跟随系统' : 'System'}</>, value: 'system' }, { label: <><Sun size={16} />{isZh ? '浅色' : 'Light'}</>, value: 'light' }, { label: <><Moon size={16} />{isZh ? '深色' : 'Dark'}</>, value: 'dark' }]} />
-          <Slider label={isZh ? '文档完成度' : 'Coverage'} max={100} min={0} onChange={() => {}} showValue value={68} />
-          <div className="vx-preview-stack__group" style={{ marginTop: 24 }}>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <Toggle data-state="on">{isZh ? '自动保存' : 'Auto-save'}</Toggle>
-              <Toggle>{isZh ? '多标签模式' : 'Multiple tabs'}</Toggle>
-            </div>
-            <ToggleGroup type="single" defaultValue="grid" items={[{ value: 'grid', label: isZh ? '网格' : 'Grid' }, { value: 'list', label: isZh ? '列表' : 'List' }, { value: 'table', label: isZh ? '表格' : 'Table' }]} />
-            <Switch defaultChecked label={isZh ? '开启实验性功能' : 'Enable experimental features'} />
-            <NumberInput min={0} max={100} defaultValue={10} label={isZh ? '阈值' : 'Threshold'} />
-            <TagInput placeholder={isZh ? '添加标签...' : 'Add tag...'} defaultValue={['React', 'Vite']} />
-            <FileUpload multiple label={isZh ? '上传附件' : 'Upload attachments'} />
-            <div style={{ marginTop: 8 }}><Calendar /></div>
-          </div>
-        </div>
-      );
+      return <FormInputsPreview isZh={isZh} />;
 
     case 'toggle':
       return (
@@ -800,9 +810,9 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
         <div className="vx-preview-stack">
           <div style={{ maxWidth: 400 }}>
             <Carousel items={[
-              <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
-              <div key="2" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-3)' }}>{isZh ? '第二张' : 'Slide 2'}</div>,
-              <div key="3" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-color-surface-2)' }}>{isZh ? '第三张' : 'Slide 3'}</div>,
+              <div key="1" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-surface)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '第一张' : 'Slide 1'}</div>,
+              <div key="2" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-surface-hover)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '第二张' : 'Slide 2'}</div>,
+              <div key="3" style={{ padding: 40, textAlign: 'center', background: 'var(--vx-surface)', borderRadius: 'var(--vx-radius-md)' }}>{isZh ? '第三张' : 'Slide 3'}</div>,
             ]} showDots showArrows />
           </div>
         </div>
