@@ -8,6 +8,9 @@
   border-radius: var(--vx-radius-lg);
   border: 1px solid var(--vx-border);
 }
+.vx-carousel__track-wrap {
+  overflow: hidden;
+}
 .vx-carousel__track {
   display: flex;
   transition: transform 400ms cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -16,7 +19,7 @@
   flex: 0 0 100%;
   min-width: 0;
 }
-.vx-carousel__nav {
+.vx-carousel__arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -36,10 +39,10 @@
   z-index: 1;
   transition: background 120ms, box-shadow 120ms;
 }
-.vx-carousel__nav:hover { background: var(--vx-bg-accent); box-shadow: var(--vx-shadow); }
-.vx-carousel__nav--prev { left: 12px; }
-.vx-carousel__nav--next { right: 12px; }
-.vx-carousel__nav:disabled { opacity: 0.3; cursor: not-allowed; }
+.vx-carousel__arrow:hover { background: var(--vx-bg-accent); box-shadow: var(--vx-shadow); }
+.vx-carousel__arrow--prev { left: 12px; }
+.vx-carousel__arrow--next { right: 12px; }
+.vx-carousel__arrow:disabled { opacity: 0.3; cursor: not-allowed; }
 .vx-carousel__dots {
   display: flex;
   justify-content: center;
