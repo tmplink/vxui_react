@@ -685,4 +685,113 @@ export function ToastExample() {
     </Button>
   );
 }`,
+  image: String.raw`import { Image } from 'vxui-react';
+
+export function ImageExample() {
+  return (
+    <div style={{ display: 'grid', gap: 16 }}>
+      <Image
+        src="https://picsum.photos/400/300"
+        alt="Sample"
+        width={320}
+        height={220}
+        radius="lg"
+        preview
+        caption="Click to preview"
+      />
+      <Image
+        src="/broken.jpg"
+        width={200}
+        height={140}
+        fallback={<span>Image unavailable</span>}
+      />
+    </div>
+  );
+}`,
+  'pin-input': String.raw`import { useState } from 'react';
+import { PinInput } from 'vxui-react';
+
+export function PinInputExample() {
+  const [code, setCode] = useState('');
+  return (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <PinInput
+        label="Verification code"
+        length={6}
+        value={code}
+        onChange={setCode}
+        onComplete={(val) => console.log('Code:', val)}
+      />
+      <PinInput length={4} type="alphanumeric" size="sm" />
+      <PinInput length={6} mask error="Incorrect code" />
+    </div>
+  );
+}`,
+  descriptions: String.raw`import { Descriptions, Badge } from 'vxui-react';
+
+export function DescriptionsExample() {
+  return (
+    <Descriptions
+      title="User Profile"
+      items={[
+        { label: 'Name', children: 'Alice Johnson' },
+        { label: 'Email', children: 'alice@example.com' },
+        { label: 'Role', children: <Badge variant="accent">Admin</Badge> },
+        { label: 'Status', children: <Badge variant="success">Active</Badge> },
+        { label: 'Joined', children: '2024-01-15' },
+        { label: 'Last login', children: '2 hours ago' },
+      ]}
+      bordered
+      column={2}
+    />
+  );
+}`,
+  notification: String.raw`import { NotificationProvider, useNotification, Button } from 'vxui-react';
+
+function NotificationDemo() {
+  const { push } = useNotification();
+  return (
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Button onClick={() => push({ title: 'Upload complete', tone: 'success', description: '3 files uploaded.', duration: 4000 })}>
+        Auto-dismiss
+      </Button>
+      <Button variant="secondary" onClick={() => push({ title: 'System update', tone: 'warning', description: 'Restart required.' })}>
+        Persistent
+      </Button>
+    </div>
+  );
+}
+
+export function NotificationExample() {
+  return (
+    <NotificationProvider placement="top-right">
+      <NotificationDemo />
+    </NotificationProvider>
+  );
+}`,
+  result: String.raw`import { Result, Button } from 'vxui-react';
+
+export function ResultExample() {
+  return (
+    <div style={{ display: 'grid', gap: 24 }}>
+      <Result
+        status="success"
+        title="Payment Successful"
+        description="Your order #12345 has been confirmed."
+        actions={
+          <>
+            <Button>View Order</Button>
+            <Button variant="secondary">Back to Home</Button>
+          </>
+        }
+      />
+      <Result
+        status="not-found"
+        title="Page Not Found"
+        description="The page you are looking for does not exist."
+        actions={<Button variant="secondary">Go Home</Button>}
+      />
+    </div>
+  );
+}`,
 };

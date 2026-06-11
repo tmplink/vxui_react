@@ -41,6 +41,8 @@ export interface TableProps<T> extends HTMLAttributes<HTMLDivElement> {
   /** @deprecated Use size="sm" instead */
   compact?: boolean;
   stickyHeader?: boolean;
+  /** 搜索栏是否吸顶（滚动时保持可见），默认 false */
+  stickyFilter?: boolean;
   borderless?: boolean;
   headless?: boolean;
   rounded?: boolean;
@@ -312,6 +314,7 @@ export function Table<T>({
   bordered = false,
   compact = false,
   stickyHeader = false,
+  stickyFilter = false,
   borderless = false,
   headless = false,
   rounded = true,
@@ -454,6 +457,7 @@ export function Table<T>({
       borderless && 'vx-table-wrap--borderless',
       !rounded && 'vx-table-wrap--square',
       useCardLayout && 'vx-table-wrap--card',
+      stickyFilter && 'vx-table-wrap--sticky-filter',
       className,
     )} {...props}>
       {/* ── 筛选栏 ── */}

@@ -747,13 +747,14 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
           ]} striped bordered />
           <p style={{ fontSize: 13, color: 'var(--vx-text-muted)', margin: '4px 0 0' }}>
             {isZh
-              ? '大量数据 + 表头吸顶 + 容器滚动（共 200 行）。向下滚动以验证 stickyHeader 效果：'
-              : 'Large dataset with sticky header and scrollable container (200 rows). Scroll down to verify stickyHeader:'}
+              ? '大量数据 + 表头吸顶 + 搜索栏吸顶 + 容器滚动（共 200 行）。向下滚动以验证 stickyHeader / stickyFilter 效果：'
+              : 'Large dataset with sticky header + sticky filter and scrollable container (200 rows). Scroll down to verify:'}
           </p>
           <Table
             columns={largeColumns}
             data={largeData}
             stickyHeader
+            stickyFilter
             striped
             hoverable
             style={{ maxHeight: 360, overflow: 'auto' }}

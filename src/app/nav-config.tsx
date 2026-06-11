@@ -5,8 +5,8 @@
 
 import type { ReactNode } from 'react';
 import {
-  AlertTriangle, Bell, Boxes, CalendarDays, ChevronRight, Compass,
-  FileCode2, FileText, Globe, GripHorizontal, House, LayoutDashboard,
+  AlertTriangle, Bell, Boxes, CalendarDays, ChevronRight, CheckCircle2, Compass,
+  FileCode2, FileText, Globe, GripHorizontal, Hash, House, ImageIcon, LayoutDashboard,
   List, LogIn, Menu, Minus, Monitor, Moon, Navigation, Palette,
   PanelsTopLeft, PanelRightClose, Search, ShieldCheck, SlidersHorizontal,
   Smartphone, Sparkles, Star, Sun, Tag, Upload, User, UserPlus, Zap,
@@ -77,6 +77,11 @@ export const pageIcons: Record<PageKey, ReactNode> = {
   menubar: <Menu size={16} />,
   mobile: <Smartphone size={16} />,
   'mobile-list': <List size={16} />,
+  image: <ImageIcon size={16} />,
+  'pin-input': <Hash size={16} />,
+  descriptions: <List size={16} />,
+  notification: <Bell size={16} />,
+  result: <CheckCircle2 size={16} />,
   'home-page': <House size={16} />,
   'login-page': <LogIn size={16} />,
   'register-page': <UserPlus size={16} />,
@@ -88,12 +93,12 @@ export const pageIcons: Record<PageKey, ReactNode> = {
 export const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> = [
   { key: 'gettingStarted', items: ['introduction', 'vxui-provider', 'viewport', 'constants'] },
   { key: 'layout', items: ['quick-start', 'shell-sidebar', 'grid-page', 'nav-layout', 'scroll-area', 'separator', 'resizable'] },
-  { key: 'content', items: ['typography', 'typography-base', 'badge', 'avatar', 'skeleton', 'card', 'code-block', 'language-switcher'] },
+  { key: 'content', items: ['typography', 'typography-base', 'badge', 'avatar', 'skeleton', 'card', 'code-block', 'language-switcher', 'image', 'descriptions'] },
   {
     key: 'forms',
     items: [
       { type: 'submenu', key: 'inputs', i18nKey: 'inputs', pages: ['form-controls', 'form-inputs'], icon: <SlidersHorizontal size={16} /> },
-      'toggle', 'rating', 'label', 'date-pickers', 'file-upload', 'color-picker', 'form', 'calendar',
+      'toggle', 'rating', 'label', 'date-pickers', 'file-upload', 'color-picker', 'form', 'calendar', 'pin-input',
     ],
   },
   {
@@ -101,7 +106,7 @@ export const DOC_NAV_GROUPS: Array<{ key: NavGroupKey; items: NavGroupItem[] }> 
     items: [
       'button', 'elements', 'accordion', 'tabs', 'breadcrumb', 'pagination',
       'stepper', 'progress', 'spinner', 'alert', 'toasts', 'table',
-      'data-list', 'timeline', 'tree-view', 'carousel', 'empty-states',
+      'data-list', 'timeline', 'tree-view', 'carousel', 'empty-states', 'notification', 'result',
     ],
   },
   {
@@ -133,6 +138,7 @@ export const MOBILE_PREVIEW_PAGES = new Set<PageKey>([
   'tooltip', 'hover-card', 'dropdown-menu', 'context-menu', 'command-palette',
   'navigation-menu', 'menubar', 'mobile', 'mobile-list', 'home-page',
   'login-page', 'register-page', 'error-page', 'privacy-policy', 'terms-of-service',
+  'image', 'pin-input', 'descriptions', 'notification', 'result',
 ]);
 
 export function getDocsGroupLabel(key: NavGroupKey, isZh: boolean) {

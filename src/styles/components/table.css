@@ -103,6 +103,18 @@
   min-width: 120px;
 }
 
+/* ── 筛选栏吸顶 ── */
+.vx-table-wrap--sticky-filter > .vx-table__filterbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* 筛选栏吸顶时，表头吸顶偏移到筛选栏下方（默认筛选栏高度 ≈ 60px） */
+.vx-table-wrap--sticky-filter .vx-table--sticky thead {
+  top: 60px;
+}
+
 /* ── 全屏按钮 ── */
 .vx-table__fullscreen-btn {
   display: inline-flex;
