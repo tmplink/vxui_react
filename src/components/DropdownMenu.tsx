@@ -8,6 +8,8 @@ import { Sheet } from './Sheet';
 
 /* ── Types ─────────────────────────────────────────────── */
 
+export type DropdownMenuItemType = 'checkbox' | 'radio';
+
 export interface DropdownMenuItemProps {
   label: ReactNode;
   icon?: ReactNode;
@@ -17,6 +19,12 @@ export interface DropdownMenuItemProps {
   /** Optional sub-menu items for nested menus (1 level deep) */
   subItems?: DropdownMenuItemProps[];
   onClick?: () => void;
+  /** Optional description text shown below the label */
+  description?: string;
+  /** Item type: 'checkbox' | 'radio' for checkable items */
+  type?: DropdownMenuItemType;
+  /** Checked state for checkbox/radio items */
+  checked?: boolean;
 }
 
 export interface DropdownMenuGroupProps {
@@ -45,12 +53,18 @@ export interface DropdownMenuProps {
   open?: boolean;
   /** Callback when open state changes. */
   onOpenChange?: (open: boolean) => void;
+  /** Unified callback when any item is selected. */
+  onSelect?: (item: DropdownMenuItemProps) => void;
 }
 
 export interface DropdownMenuSubProps {
   trigger: ReactNode;
   items: DropdownMenuItemProps[];
   disabled?: boolean;
+  /** Called when a sub-item is selected to close the entire menu hierarchy */
+  onCloseAll?: () => void;
+  /** Unified select callback forwarded from parent */
+  onSelect?: (item: DropdownMenuItemProps) => void;
 }
 
 /* ── Internal focus utilities ──────────────────────────── */
@@ -58,7 +72,7 @@ export interface DropdownMenuSubProps {
 function getValidItems(container: HTMLElement): HTMLElement[] {
   return Array.from(
     container.querySelectorAll<HTMLElement>(
-      '.vx-dropdown__item:not(.vx-dropdown__item--disabled):not([aria-hidden])',
+      '.vx-dropdown__item:not(.vx-dropdown__item--disabled):not([aria-hidden]):not([aria-haspopup="menu"])',
     ),
   );
 }
@@ -71,10 +85,11 @@ function focusItem(index: number, items: HTMLElement[]) {
 
 /* ── SubMenu component (single level nesting) ──────────── */
 
-function DropdownSubMenu({ trigger, items, disabled }: DropdownMenuSubProps) {
+function DropdownSubMenu({ trigger, items, disabled, onCloseAll, onSelect }: DropdownMenuSubProps) {
   const [subOpen, setSubOpen] = useState(false);
   const subWrapRef = useRef<HTMLDivElement>(null);
   const subMenuRef = useRef<HTMLDivElement>(null);
+  const triggerBtnId = useId();
   const subId = useId();
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -99,7 +114,7 @@ function DropdownSubMenu({ trigger, items, disabled }: DropdownMenuSubProps) {
         e.preventDefault();
         e.stopPropagation();
         closeSub();
-        (subWrapRef.current?.closest('.vx-dropdown__item') as HTMLElement | null)?.focus();
+        (subWrapRef.current?.querySelector('[aria-haspopup="menu"]') as HTMLElement | null)?.focus();
       }
     };
     document.addEventListener('keydown', onKey);
@@ -123,17 +138,44 @@ function DropdownSubMenu({ trigger, items, disabled }: DropdownMenuSubProps) {
     <div ref={subWrapRef} className="vx-dropdown__sub-wrap"
       onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}
     >
-      {trigger}
+      {cloneElement(trigger as ReactElement<any>, {
+        id: triggerBtnId,
+        'aria-expanded': subOpen,
+        'aria-controls': subOpen ? subId : undefined,
+      })}
       {subOpen && !disabled ? (
-        <div ref={subMenuRef} id={subId} className="vx-dropdown__sub-menu" role="menu" onKeyDown={handleSubKeyDown}>
+        <div ref={subMenuRef} id={subId} className="vx-dropdown__sub-menu"
+          role="menu" aria-labelledby={triggerBtnId} onKeyDown={handleSubKeyDown}
+        >
           {items.map((item, ii) => (
             <button key={ii} role="menuitem" disabled={item.disabled}
-              className={cx('vx-dropdown__item', item.danger && 'vx-dropdown__item--danger', item.disabled && 'vx-dropdown__item--disabled')}
+              className={cx(
+                'vx-dropdown__item',
+                item.type && 'vx-dropdown__item--checkable',
+                item.type === 'checkbox' && 'vx-dropdown__item--checkbox',
+                item.type === 'radio' && 'vx-dropdown__item--radio',
+                item.danger && 'vx-dropdown__item--danger',
+                item.disabled && 'vx-dropdown__item--disabled',
+              )}
               aria-disabled={item.disabled || undefined}
-              onClick={() => { if (!item.disabled) { item.onClick?.(); closeSub(); } }}
+              aria-checked={item.type ? item.checked : undefined}
+              onClick={() => {
+                if (!item.disabled) {
+                  item.onClick?.();
+                  onSelect?.(item);
+                  onCloseAll?.();
+                }
+              }}
             >
-              {item.icon ? <span className="vx-dropdown__item-icon">{item.icon}</span> : null}
-              <span className="vx-dropdown__item-label">{item.label}</span>
+              {item.type ? (
+                <span className="vx-dropdown__item-check" aria-hidden="true">
+                  {item.type === 'checkbox' && item.checked ? '✓' : item.type === 'radio' && item.checked ? '●' : null}
+                </span>
+              ) : item.icon ? <span className="vx-dropdown__item-icon">{item.icon}</span> : null}
+              <span className="vx-dropdown__item-content">
+                <span className="vx-dropdown__item-label">{item.label}</span>
+                {item.description && <span className="vx-dropdown__item-desc">{item.description}</span>}
+              </span>
               {item.shortcut ? <kbd className="vx-dropdown__shortcut">{item.shortcut}</kbd> : null}
             </button>
           ))}
@@ -156,7 +198,7 @@ function Slot({ asChild, children, extraProps, wrapper }: {
 
 export function DropdownMenu({
   trigger, groups, items, side = 'bottom', align = 'start', sideOffset = 4,
-  className, open: controlledOpen, onOpenChange,
+  className, open: controlledOpen, onOpenChange, onSelect,
 }: DropdownMenuProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const isControlled = controlledOpen !== undefined;
@@ -175,6 +217,22 @@ export function DropdownMenu({
     maxHeight: number; actualSide: 'top' | 'bottom'; width?: number;
   } | null>(null);
 
+  // ── Typeahead buffer ──────────────────────────────────
+  const searchStr = useRef('');
+  const searchTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const typeaheadSearch = useCallback((char: string) => {
+    if (!menuRef.current) return;
+    clearTimeout(searchTimer.current);
+    searchStr.current += char.toLowerCase();
+    searchTimer.current = setTimeout(() => { searchStr.current = ''; }, 350);
+    const validItems = getValidItems(menuRef.current);
+    for (const el of validItems) {
+      const text = (el.textContent ?? '').trim().toLowerCase();
+      if (text.startsWith(searchStr.current)) { el.focus(); return; }
+    }
+  }, []);
+
   // ── Open/close helpers ────────────────────────────────
   const setOpen = useCallback((value: boolean) => {
     if (!isControlled) setInternalOpen(value);
@@ -182,6 +240,21 @@ export function DropdownMenu({
   }, [isControlled, onOpenChange]);
 
   const toggle = useCallback(() => setOpen(!open), [open, setOpen]);
+
+  const closeAll = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, [setOpen]);
+
+  const onItemSelect = useCallback((item: DropdownMenuItemProps) => {
+    if (item.disabled) return;
+    item.onClick?.();
+    onSelect?.(item);
+    if (!item.type) {
+      setOpen(false);
+      triggerRef.current?.focus();
+    }
+  }, [onSelect, setOpen]);
 
   // ── Dynamic position calculation ──────────────────────
   const calcPosition = useCallback(() => {
@@ -233,7 +306,10 @@ export function DropdownMenu({
       if (e.key === 'Escape') { e.preventDefault(); setOpen(false); triggerRef.current?.focus(); }
     };
     const onOutside = (e: globalThis.MouseEvent) => {
-      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)
+        && !(menuRef.current && menuRef.current.contains(e.target as Node))) {
+        setOpen(false);
+      }
     };
     document.addEventListener('keydown', onKey);
     document.addEventListener('mousedown', onOutside);
@@ -250,8 +326,14 @@ export function DropdownMenu({
     return () => cancelAnimationFrame(raf);
   }, [open, isMobile]);
 
-  // ── Arrow key navigation ──────────────────────────────
+  // ── Arrow key + typeahead navigation ──────────────────
   const handleMenuKeyDown = useCallback((e: ReactKeyboardEvent<HTMLDivElement>) => {
+    // Typeahead: printable character without modifier
+    if (e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      e.preventDefault();
+      typeaheadSearch(e.key);
+      return;
+    }
     if (!menuRef.current) return;
     const items = getValidItems(menuRef.current);
     if (items.length === 0) return;
@@ -261,9 +343,9 @@ export function DropdownMenu({
       case 'ArrowUp': e.preventDefault(); focusItem(currentIdx - 1, items); break;
       case 'Home': e.preventDefault(); focusItem(0, items); break;
       case 'End': e.preventDefault(); focusItem(items.length - 1, items); break;
-      case 'Tab': e.preventDefault(); break;
+      case 'Tab': e.preventDefault(); setOpen(false); triggerRef.current?.focus(); break;
     }
-  }, []);
+  }, [typeaheadSearch, setOpen]);
 
   // ── Build groups ──────────────────────────────────────
   const allGroups: DropdownMenuGroupProps[] = groups ?? (items ? [{ items }] : []);
@@ -272,14 +354,17 @@ export function DropdownMenu({
   const renderItem = (item: DropdownMenuItemProps, index: number): ReactNode => {
     if (item.subItems && item.subItems.length > 0) {
       return (
-        <DropdownSubMenu key={index} disabled={item.disabled}
+        <DropdownSubMenu key={index} disabled={item.disabled} onCloseAll={closeAll} onSelect={onSelect}
           trigger={
             <button role="menuitem" aria-haspopup="menu" disabled={item.disabled}
               className={cx('vx-dropdown__item', item.danger && 'vx-dropdown__item--danger', item.disabled && 'vx-dropdown__item--disabled')}
               aria-disabled={item.disabled || undefined}
             >
               {item.icon ? <span className="vx-dropdown__item-icon">{item.icon}</span> : null}
-              <span className="vx-dropdown__item-label">{item.label}</span>
+              <span className="vx-dropdown__item-content">
+                <span className="vx-dropdown__item-label">{item.label}</span>
+                {item.description && <span className="vx-dropdown__item-desc">{item.description}</span>}
+              </span>
               <span className="vx-dropdown__sub-arrow" aria-hidden="true">▶</span>
             </button>
           }
@@ -289,12 +374,27 @@ export function DropdownMenu({
     }
     return (
       <button key={index} role="menuitem" disabled={item.disabled}
-        className={cx('vx-dropdown__item', item.danger && 'vx-dropdown__item--danger', item.disabled && 'vx-dropdown__item--disabled')}
+        className={cx(
+          'vx-dropdown__item',
+          item.type && 'vx-dropdown__item--checkable',
+          item.type === 'checkbox' && 'vx-dropdown__item--checkbox',
+          item.type === 'radio' && 'vx-dropdown__item--radio',
+          item.danger && 'vx-dropdown__item--danger',
+          item.disabled && 'vx-dropdown__item--disabled',
+        )}
         aria-disabled={item.disabled || undefined}
-        onClick={() => { if (!item.disabled) { item.onClick?.(); setOpen(false); triggerRef.current?.focus(); } }}
+        aria-checked={item.type ? item.checked : undefined}
+        onClick={() => onItemSelect(item)}
       >
-        {item.icon ? <span className="vx-dropdown__item-icon">{item.icon}</span> : null}
-        <span className="vx-dropdown__item-label">{item.label}</span>
+        {item.type ? (
+          <span className="vx-dropdown__item-check" aria-hidden="true">
+            {item.type === 'checkbox' && item.checked ? '✓' : item.type === 'radio' && item.checked ? '●' : null}
+          </span>
+        ) : item.icon ? <span className="vx-dropdown__item-icon">{item.icon}</span> : null}
+        <span className="vx-dropdown__item-content">
+          <span className="vx-dropdown__item-label">{item.label}</span>
+          {item.description && <span className="vx-dropdown__item-desc">{item.description}</span>}
+        </span>
         {item.shortcut ? <kbd className="vx-dropdown__shortcut">{item.shortcut}</kbd> : null}
       </button>
     );
@@ -302,20 +402,23 @@ export function DropdownMenu({
 
   // ── Menu panel content ────────────────────────────────
   const menuContent = (
-    <div ref={menuRef} id={menuId} role="menu"
+    <div ref={menuRef} id={menuId} role="menu" tabIndex={-1}
       className={cx('vx-dropdown__menu', `vx-dropdown__menu--${pos?.actualSide ?? side}`, align === 'end' && 'vx-dropdown__menu--align-end', Boolean(dialogContent) && 'vx-dropdown__menu--in-dialog')}
       style={{ top: pos?.top, bottom: pos?.bottom, left: pos?.left, right: pos?.right, maxHeight: pos?.maxHeight, minWidth: pos?.width }}
       onKeyDown={handleMenuKeyDown} aria-label="Menu"
     >
       {allGroups.length === 0 ? (
         <div className="vx-dropdown__empty" role="presentation">No items</div>
-      ) : allGroups.map((group, gi) => (
-        <div key={gi} className="vx-dropdown__group">
-          {group.label ? <div className="vx-dropdown__group-label" aria-hidden="true">{group.label}</div> : null}
-          {gi > 0 && !group.label ? <div className="vx-dropdown__separator" role="separator" aria-orientation="horizontal" /> : null}
-          {group.items.map((item, ii) => renderItem(item, ii))}
-        </div>
-      ))}
+      ) : allGroups.map((group, gi) => {
+        const groupLabelId = group.label ? `${menuId}-group-${gi}` : undefined;
+        return (
+          <div key={gi} className="vx-dropdown__group" role="group" aria-labelledby={groupLabelId}>
+            {group.label ? <div id={groupLabelId} className="vx-dropdown__group-label" aria-hidden="true">{group.label}</div> : null}
+            {gi > 0 && !group.label ? <div className="vx-dropdown__separator" role="separator" aria-orientation="horizontal" /> : null}
+            {group.items.map((item, ii) => renderItem(item, ii))}
+          </div>
+        );
+      })}
     </div>
   );
 
@@ -359,23 +462,41 @@ export function DropdownMenu({
           </button>
           <Sheet side="bottom" open={open} onOpenChange={(v) => { if (!v) setOpen(false); }} title="">
             <div className="vx-dropdown__mobile-sheet">
-              {allGroups.map((group, gi) => (
-                <div key={gi} className="vx-dropdown__group">
-                  {group.label ? <div className="vx-dropdown__group-label" aria-hidden="true">{group.label}</div> : null}
-                  {gi > 0 && !group.label ? <div className="vx-dropdown__separator" role="separator" aria-orientation="horizontal" /> : null}
-                  {group.items.map((item, ii) => (
-                    <button key={ii} type="button"
-                      className={cx('vx-dropdown__item', item.danger && 'vx-dropdown__item--danger', item.disabled && 'vx-dropdown__item--disabled')}
-                      disabled={item.disabled}
-                      onClick={() => { if (!item.disabled) { item.onClick?.(); setOpen(false); } }}
-                    >
-                      {item.icon ? <span className="vx-dropdown__item-icon">{item.icon}</span> : null}
-                      <span className="vx-dropdown__item-label">{item.label}</span>
-                      {item.shortcut ? <kbd className="vx-dropdown__shortcut">{item.shortcut}</kbd> : null}
-                    </button>
-                  ))}
-                </div>
-              ))}
+              {allGroups.map((group, gi) => {
+                const groupLabelId = group.label ? `${menuId}-mob-group-${gi}` : undefined;
+                return (
+                  <div key={gi} className="vx-dropdown__group" role="group" aria-labelledby={groupLabelId}>
+                    {group.label ? <div id={groupLabelId} className="vx-dropdown__group-label" aria-hidden="true">{group.label}</div> : null}
+                    {gi > 0 && !group.label ? <div className="vx-dropdown__separator" role="separator" aria-orientation="horizontal" /> : null}
+                    {group.items.map((item, ii) => (
+                      <button key={ii} type="button" role="menuitem"
+                        className={cx(
+                          'vx-dropdown__item',
+                          item.type && 'vx-dropdown__item--checkable',
+                          item.type === 'checkbox' && 'vx-dropdown__item--checkbox',
+                          item.type === 'radio' && 'vx-dropdown__item--radio',
+                          item.danger && 'vx-dropdown__item--danger',
+                          item.disabled && 'vx-dropdown__item--disabled',
+                        )}
+                        disabled={item.disabled}
+                        aria-checked={item.type ? item.checked : undefined}
+                        onClick={() => onItemSelect(item)}
+                      >
+                        {item.type ? (
+                          <span className="vx-dropdown__item-check" aria-hidden="true">
+                            {item.type === 'checkbox' && item.checked ? '✓' : item.type === 'radio' && item.checked ? '●' : null}
+                          </span>
+                        ) : item.icon ? <span className="vx-dropdown__item-icon">{item.icon}</span> : null}
+                        <span className="vx-dropdown__item-content">
+                          <span className="vx-dropdown__item-label">{item.label}</span>
+                          {item.description && <span className="vx-dropdown__item-desc">{item.description}</span>}
+                        </span>
+                        {item.shortcut ? <kbd className="vx-dropdown__shortcut">{item.shortcut}</kbd> : null}
+                      </button>
+                    ))}
+                  </div>
+                );
+              })}
             </div>
           </Sheet>
         </>

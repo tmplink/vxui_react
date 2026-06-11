@@ -97,7 +97,7 @@ export type { TooltipProps } from '../components/Tooltip';
 export { Popover } from '../components/Popover';
 export type { PopoverProps } from '../components/Popover';
 export { DropdownMenu } from '../components/DropdownMenu';
-export type { DropdownMenuProps, DropdownMenuItemProps, DropdownMenuGroupProps } from '../components/DropdownMenu';
+export type { DropdownMenuProps, DropdownMenuItemProps, DropdownMenuGroupProps, DropdownMenuItemType } from '../components/DropdownMenu';
 
 // Navigation / Layout components
 export { Breadcrumb } from '../components/Breadcrumb';
@@ -290,3 +290,23 @@ export type {
   StatsGridProps,
   StatItem,
 } from '../components/Article';
+
+// ── Image (图片组件) ───────────────────────────────────
+export { Image } from '../components/Image';
+export type { ImageProps } from '../components/Image';
+
+// ── PinInput (验证码输入) ──────────────────────────────
+export { PinInput } from '../components/PinInput';
+export type { PinInputProps } from '../components/PinInput';
+
+// ── Descriptions (描述列表) ────────────────────────────
+export { Descriptions } from '../components/Descriptions';
+export type { DescriptionsProps, DescriptionsItem } from '../components/Descriptions';
+
+// ── Notification (持久化通知) ──────────────────────────
+export { NotificationProvider, useNotification } from '../components/Notification';
+export type { NotificationProviderProps } from '../components/Notification';
+
+// ── Result (操作结果页) ────────────────────────────────
+export { Result } from '../components/Result';
+export type { ResultProps } from '../components/Result';

@@ -14,7 +14,8 @@ export default defineConfig({
   
   server: {
     host: '127.0.0.1', // Force IPv4 to avoid EACCES on ::1
-    port: 3000,      // Use port 3000 (5173 has permission issues)
+    port: 5173,      // Port 3000 is in Windows excluded range (2957-3056)
+    strictPort: false, // Auto-switch to next available port if occupied
   },
   plugins: [
     react(),

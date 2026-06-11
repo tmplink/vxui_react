@@ -1,6 +1,6 @@
 # VXUI React
 
-> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.3.10.
+> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.3.13.
 
 > ℹ️ This file (`llms.txt`) is included in the npm package. AI tools can read it directly to obtain component documentation and usage guides.
 
@@ -188,7 +188,6 @@ import { Button } from 'vxui-react';
 ### Forms & Inputs
 - **Input** — Text input with label, error, and description support
 - **Textarea** — Multi-line text input
-- **Select** — Native-style select with custom styling (Radix UI)
 - **Checkbox** — Single checkbox or checkbox group
 - **Radio** — Radio button group
 - **Switch** — Toggle switch
@@ -198,7 +197,10 @@ import { Button } from 'vxui-react';
 - **Rating** — Star rating input
 - **DatePicker** — Calendar-based date picker
 - **ColorPicker** — Color swatch/hex picker
-- **Select** — Searchable single-select input with custom overlay behavior
+- **Select** — Searchable single-select dropdown with custom overlay behavior
+- **MultiSelect** — Searchable multi-select with tag display and "+N more" badge
+- **PinInput** — PIN / OTP code input with auto-advance, paste support, and mask mode
+- **TimePicker** — Time selection with hours, minutes, and optional seconds columns
 - **Form** — Form wrapper with validation helpers
 
 ### Overlays & Popovers
@@ -210,18 +212,21 @@ import { Button } from 'vxui-react';
 
 ### Feedback & Status
 - **Toast** — Ephemeral notification (info / success / warning / danger tones)
+- **Notification** — Global notification stack with provider/hook pattern, auto-dismiss, and placement options
 - **Alert** — Inline alert banner (info / success / warning / danger)
 - **Progress** — Linear progress bar (determinate and indeterminate)
 - **Spinner** — Loading spinner
 - **Skeleton** — Placeholder loading skeleton
 
 ### Data Display
-- **Table** — Sortable, filterable data table
+- **Descriptions** — Key-value pair display in horizontal/vertical table layout
+- **Table** — Sortable, filterable data table with mobile card layout, sticky filter bar, and fullscreen search
 - **Badge** — Inline status label with tone variants
 - **Avatar** — User avatar with fallback initials
 - **Card** — Content container card
 - **Accordion** — Collapsible content sections (Radix UI)
 - **Calendar** — Month calendar view
+- **Image** — Lazy-loading image with placeholder, fallback, radius presets, and click-to-preview lightbox
 - **Carousel** — Horizontal content carousel
 - **TreeView** — Hierarchical tree list
 - **Timeline** — Vertical timeline list
@@ -231,9 +236,13 @@ import { Button } from 'vxui-react';
 ### Utility
 - **CodeBlock** — Syntax-highlighted code block (Prism.js)
 - **CommandPalette** — Global keyboard command search
+- **Result** — Status result page with icon, title, description, and actions (success / error / warning / info / forbidden / not-found / server-error)
 - **EmptyState** — Empty content placeholder with action
 - **FileUpload** — Drag-and-drop file upload area
 - **LanguageSwitcher** — Locale toggle button
+- **ThemeProvider** — Theme context provider with light/dark mode, custom token overrides, and localStorage persistence
+- **Responsive** — Conditional rendering based on viewport breakpoint (desktop / tablet / mobile)
+- **Article** — Structured article layout with header, body, sections, props table, pager, and stats grid
 - **Separator** — Horizontal or vertical rule
 - **Heading / Text / Label** — Typography primitives
 
@@ -290,6 +299,359 @@ Dark mode tokens are applied automatically when `<html>` has `class="dark"` or `
 4. **Mobile-first responsive** — Sidebar collapses to an overlay on narrow viewports. Mobile-specific components live in a separate import path.
 5. **No runtime CSS injection** — Styles ship as a single static stylesheet. No flash-of-unstyled-content from runtime injection.
 
+## Descriptions
+
+Display key-value pairs in a structured table layout. Supports horizontal (label left, value right) and vertical (label top, value bottom) modes.
+
+```tsx
+import { Descriptions } from 'vxui-react';
+
+<Descriptions
+  title="User Info"
+  layout="horizontal"
+  column={3}
+  size="md"
+  bordered
+  items={[
+    { label: 'Name', children: 'Alice' },
+    { label: 'Email', children: 'alice@example.com' },
+    { label: 'Role', children: 'Admin', span: 1 },
+  ]}
+/>
+```
+
+### Descriptions Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| items | DescriptionsItem[] | **required** | List of description items |
+| layout | 'horizontal' \| 'vertical' | 'horizontal' | Layout direction |
+| column | number | 3 (h) / 1 (v) | Number of columns per row |
+| size | 'sm' \| 'md' \| 'lg' | 'md' | Size preset controlling spacing and font-size |
+| bordered | boolean | true | Show border around the descriptions |
+| title | ReactNode | — | Title shown above the descriptions |
+| extra | ReactNode | — | Extra content rendered next to the title |
+
+## Image
+
+Lazy-loading image component with placeholder, error fallback, radius presets, and optional click-to-preview lightbox.
+
+```tsx
+import { Image } from 'vxui-react';
+
+<Image
+  src="/photo.jpg"
+  alt="Landscape"
+  width={400}
+  height={300}
+  radius="md"
+  fit="cover"
+  preview
+  caption="A beautiful landscape"
+/>
+```
+
+### Image Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| src | string | **required** | Image source URL |
+| alt | string | '' | Alt text |
+| width | string \| number | — | Fixed width (CSS value or px number) |
+| height | string \| number | — | Fixed height (CSS value or px number) |
+| radius | 'none' \| 'sm' \| 'md' \| 'lg' \| 'full' | 'md' | Border radius preset |
+| fit | 'cover' \| 'contain' \| 'fill' \| 'none' | 'cover' | CSS object-fit value |
+| lazy | boolean | true | Enable lazy loading via IntersectionObserver |
+| placeholder | ReactNode | — | Content shown while loading |
+| fallback | ReactNode | — | Content shown on error |
+| preview | boolean | false | Enable click-to-preview lightbox |
+| caption | ReactNode | — | Caption text below the image |
+
+## Notification
+
+Global notification system using provider/hook pattern. Notifications stack in a fixed position with auto-dismiss and manual dismiss support.
+
+```tsx
+import { NotificationProvider, useNotification } from 'vxui-react';
+
+function App() {
+  return (
+    <NotificationProvider placement="top-right" maxCount={5}>
+      <MyApp />
+    </NotificationProvider>
+  );
+}
+
+function MyApp() {
+  const { push, dismiss, clear } = useNotification();
+  return (
+    <button onClick={() => push({ title: 'Saved', description: 'Changes saved.', tone: 'success', duration: 3000 })}>
+      Save
+    </button>
+  );
+}
+```
+
+### NotificationProvider Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| children | ReactNode | **required** | App content |
+| placement | 'top-right' \| 'top-left' \| 'top-center' \| 'bottom-right' \| 'bottom-left' \| 'bottom-center' | 'top-right' | Placement of the notification stack |
+| maxCount | number | 5 | Maximum number of visible notifications |
+
+### useNotification() API
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| push | (notification: NotificationInput) => number | Push a notification, returns its id |
+| dismiss | (id: number) => void | Dismiss a notification by id |
+| clear | () => void | Dismiss all notifications |
+
+### NotificationInput
+
+```ts
+interface NotificationInput {
+  title: string;
+  description?: string;
+  tone?: 'info' | 'success' | 'warning' | 'danger';
+  duration?: number;  // auto-dismiss ms; 0 = persistent
+  action?: ReactNode; // custom action node
+}
+```
+
+## PinInput
+
+PIN / OTP code input with auto-advance, paste support, numeric/alphanumeric modes, and optional mask.
+
+```tsx
+import { PinInput } from 'vxui-react';
+
+<PinInput
+  length={6}
+  type="numeric"
+  size="md"
+  mask={false}
+  label="Verification Code"
+  onComplete={(value) => console.log('Code:', value)}
+/>
+```
+
+### PinInput Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| length | number | 6 | Number of input fields |
+| value | string | — | Controlled value |
+| defaultValue | string | '' | Default value for uncontrolled mode |
+| onChange | (value: string) => void | — | Callback on value change |
+| onComplete | (value: string) => void | — | Callback when all fields are filled |
+| type | 'numeric' \| 'alphanumeric' | 'numeric' | Input type |
+| size | 'sm' \| 'md' \| 'lg' | 'md' | Size preset |
+| placeholder | string | '○' | Placeholder character in empty fields |
+| disabled | boolean | false | Disable all inputs |
+| error | string | — | Error message |
+| label | string | — | Label above the input group |
+| hint | string | — | Hint text below the input group |
+| mask | boolean | false | Mask input (show dots) |
+| autoFocus | boolean | false | Auto-focus the first input on mount |
+
+## Result
+
+Status result page component for success, error, warning, and other outcomes. Includes default icons per status.
+
+```tsx
+import { Result } from 'vxui-react';
+import { Button } from 'vxui-react';
+
+<Result
+  status="success"
+  title="Order Placed"
+  description="Your order has been placed successfully."
+  actions={<Button>Continue Shopping</Button>}
+/>
+```
+
+### Result Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| status | 'success' \| 'error' \| 'warning' \| 'info' \| 'forbidden' \| 'not-found' \| 'server-error' | **required** | Pre-built status with default icon and color |
+| title | string | **required** | Title text |
+| description | string | — | Description text below the title |
+| icon | ReactNode | — | Custom icon (overrides the default status icon) |
+| actions | ReactNode | — | Action area: buttons, links, etc. |
+| extra | ReactNode | — | Extra content area below actions |
+
+## MultiSelect
+
+Searchable multi-select dropdown with tag display, clearable selection, and a "+N more" badge when tags overflow.
+
+```tsx
+import { MultiSelect } from 'vxui-react';
+
+<MultiSelect
+  options={[
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'angular', label: 'Angular' },
+  ]}
+  placeholder="Select frameworks"
+  maxDisplay={3}
+  onChange={(selected) => console.log(selected)}
+/>
+```
+
+### MultiSelect Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| options | MultiSelectOption[] | **required** | Available options |
+| value | string[] | — | Controlled selected values |
+| defaultValue | string[] | — | Default values for uncontrolled mode |
+| onChange | (value: string[]) => void | — | Callback on selection change |
+| placeholder | string | — | Placeholder text |
+| searchPlaceholder | string | — | Search input placeholder |
+| label | string | — | Label above the select |
+| hint | string | — | Hint text |
+| error | string | — | Error message |
+| disabled | boolean | false | Disable the select |
+| clearable | boolean | — | Show clear button |
+| emptyText | string | — | Text when no options match |
+| maxDisplay | number | — | Max visible tags before "+N more" badge |
+
+## TimePicker
+
+Time selection component with hours and minutes columns, optional seconds, and a dropdown overlay.
+
+```tsx
+import { TimePicker } from 'vxui-react';
+
+<TimePicker
+  label="Meeting Time"
+  seconds={false}
+  onChange={(value) => console.log('Time:', value)}
+/>
+```
+
+### TimePicker Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| value | string | — | Controlled value (HH:MM or HH:MM:SS) |
+| defaultValue | string | — | Default value for uncontrolled mode |
+| onChange | (value: string) => void | — | Callback on value change |
+| placeholder | string | 'Select time' | Placeholder text |
+| label | string | — | Label above the input |
+| hint | string | — | Hint text |
+| error | string | — | Error message |
+| disabled | boolean | false | Disable the input |
+| seconds | boolean | false | Show seconds column |
+
+## ThemeProvider
+
+Theme context provider that manages light/dark mode switching, custom CSS token overrides, and persists the selection to localStorage.
+
+```tsx
+import { ThemeProvider, useTheme, createTheme } from 'vxui-react';
+
+const themes = {
+  light: createTheme('light', { label: 'Light' }),
+  dark: createTheme('dark', { label: 'Dark' }),
+  brand: createTheme('light', {
+    label: 'Brand',
+    tokens: { '--vx-primary': '#7c3aed' },
+  }),
+};
+
+function App() {
+  return (
+    <ThemeProvider defaultTheme="light" themes={themes}>
+      <MyApp />
+    </ThemeProvider>
+  );
+}
+
+function MyApp() {
+  const { theme, setTheme, availableThemes } = useTheme();
+  return <select value={theme} onChange={(e) => setTheme(e.target.value)}>...</select>;
+}
+```
+
+### ThemeProvider Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| children | ReactNode | **required** | App content |
+| defaultTheme | string | 'light' | Default theme name |
+| storageKey | string | 'vxui-react-theme' | localStorage key for persistence |
+| themes | ThemeRegistry | { light, dark } | Registry of named themes |
+
+### useTheme() API
+
+| Property | Type | Description |
+|----------|------|-------------|
+| theme | string | Active theme name |
+| setTheme | (name: string) => void | Switch to a named theme |
+| availableThemes | string[] | List of registered theme names |
+
+## Responsive
+
+Conditionally render different nodes based on the current viewport breakpoint (desktop ≥1024px, tablet 768–1023px, mobile ≤767px).
+
+```tsx
+import { Responsive } from 'vxui-react';
+
+<Responsive
+  desktop={<DesktopLayout />}
+  tablet={<TabletLayout />}
+  mobile={<MobileLayout />}
+/>
+```
+
+### Responsive Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| desktop | ReactNode | **required** | Rendered on desktop (≥1024px) and tablet when tablet is omitted |
+| mobile | ReactNode | **required** | Rendered on phone (≤767px) |
+| tablet | ReactNode | — | Rendered on tablet (768–1023px); falls back to desktop |
+
+## Article
+
+Structured article layout component for documentation and long-form content. Includes sub-components for header, title, body, sections, props table, pager navigation, stats grid, and empty states.
+
+```tsx
+import { Article, ArticleHeader, ArticleTitle, ArticleBody, Section, SectionHeading } from 'vxui-react';
+
+<Article>
+  <ArticleHeader>
+    <ArticleTitle>Getting Started</ArticleTitle>
+  </ArticleHeader>
+  <ArticleBody>
+    <Section sectionId="intro">
+      <SectionHeading anchor="#intro">Introduction</SectionHeading>
+      <p>Welcome to VXUI.</p>
+    </Section>
+  </ArticleBody>
+</Article>
+```
+
+### Article Sub-components
+
+| Component | Description |
+|-----------|-------------|
+| Article | Root `<article>` wrapper |
+| ArticleHeader | Header area with title and metadata |
+| ArticleTitle | Main `<h1>` title |
+| ArticleBody | Body wrapper with content area |
+| Section | Content section with optional anchor id |
+| SectionHeading | Section `<h2>` heading with optional anchor link |
+| Pager | Previous / Next page navigation |
+| PropsTable | Component props documentation table |
+| StatsGrid | Grid of stat cards with label, value, hint, and icon |
+| ArticleEmptyState | Empty state placeholder for articles |
+
 ## File Structure (library source)
 
 ```
@@ -304,4 +666,5 @@ src/
   lib/
     cx.ts            # className utility
     version.ts       # library version
+    VXUIProvider.tsx  # top-level provider combining ThemeProvider + i18n
 ```

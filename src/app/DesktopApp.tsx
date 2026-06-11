@@ -16,16 +16,18 @@ import {
   BREAKPOINTS, PHONE_MAX_WIDTH, PHONE_ASPECT_RATIO_THRESHOLD, TABLET_ASPECT_RATIO_THRESHOLD,
   Accordion, Alert, Avatar, Badge, Breadcrumb, Calendar, Card, CardContent,
   CardDescription, CardHeader, CardTitle, Carousel, Checkbox, ColorPicker,
-  ContextMenu, DatePicker, Dialog, DialogClose, DropdownMenu as DM,
+  ContextMenu, DatePicker, Descriptions, Dialog, DialogClose, DropdownMenu as DM,
   EmptyState, FileUpload, Form, FormField, FormLabel, FormDescription,
-  FormMessage, Heading, HoverCard, Input, Label, Menubar, MobileList,
+  FormMessage, Heading, HoverCard, Image, Input, Label, Menubar, MobileList,
   MobileListItem, MobileListSection, MultiSelect, NavigationMenu,
-  NumberInput, Pagination, Popover, Progress, Radio, RadioGroup, Rating,
-  ResizableHandle, ResizablePanel, ResizablePanelGroup, ScrollArea,
+  NotificationProvider, NumberInput, Pagination, PinInput, Popover, Progress,
+  Radio, RadioGroup, Rating,
+  ResizableHandle, ResizablePanel, ResizablePanelGroup, Result, ScrollArea,
   SegmentedControl, Select, Separator, ShellNav, ShellNavItem,
   ShellNavSection, Sheet, Skeleton, Slider, Spinner, Stepper, Switch,
   Tabs, TabsContent, TabsList, TabsTrigger, Table, TagInput, Text,
   Textarea, TimePicker, Timeline, Toggle, ToggleGroup, Tooltip, TreeView,
+  useNotification,
 } from '../lib';
 import type { PageKey, AppRoute, ReleaseTrack, ViewerSession, PageDefinition } from './routes';
 import { DOC_PAGE_KEYS } from './routes';
@@ -57,6 +59,88 @@ interface DesktopAppProps {
   onRegister: (payload: { name: string; email: string; password: string }) => void;
   onGuest: () => void;
   onLogout: () => void;
+}
+
+// ── DropdownMenu 交互式演示组件（复选框/单选框状态） ──
+
+// ── Notification 交互式演示组件 ──
+function NotificationDemoContent({ isZh }: { isZh: boolean }) {
+  const { push } = useNotification();
+  return (
+    <div className="vx-preview-stack">
+      <Alert variant="info" title={isZh ? '持久化通知' : 'Persistent Notifications'}>
+        {isZh ? '与 Toast 不同，通知保持可见直到手动关闭。' : 'Unlike Toast, notifications stay visible until dismissed.'}
+      </Alert>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <Button onClick={() => push({ title: isZh ? '上传完成' : 'Upload complete', tone: 'success', description: isZh ? '3 个文件已上传。' : '3 files uploaded.', duration: 4000 })}>
+          {isZh ? '自动消失' : 'Auto-dismiss'}
+        </Button>
+        <Button variant="secondary" onClick={() => push({ title: isZh ? '系统更新' : 'System update', tone: 'warning', description: isZh ? '需要重启。' : 'Restart required.' })}>
+          {isZh ? '持久显示' : 'Persistent'}
+        </Button>
+        <Button variant="danger" onClick={() => push({ title: isZh ? '操作失败' : 'Operation failed', tone: 'danger', description: isZh ? '请检查网络连接。' : 'Check your network.' })}>
+          {isZh ? '错误通知' : 'Error'}
+        </Button>
+      </div>
+    </div>
+  );
+}
+function DropdownMenuDemo({ isZh }: { isZh: boolean }) {
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [wordWrap, setWordWrap] = useState(false);
+  const [minimap, setMinimap] = useState(true);
+  const [tabSize, setTabSize] = useState<'2' | '4' | '8'>('4');
+  const [theme, setTheme] = useState<'auto' | 'light' | 'dark'>('auto');
+
+  return (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '文件操作' : 'File Actions'}</Button>}
+        onSelect={(item) => console.log('[File]', item.label)}
+        groups={[
+          {
+            label: isZh ? '操作' : 'Actions',
+            items: [
+              { label: isZh ? '复制' : 'Duplicate', onClick: () => {} },
+              { label: isZh ? '归档' : 'Archive', description: isZh ? '移入归档文件夹' : 'Move to archive folder', onClick: () => {} },
+              { label: isZh ? '导出' : 'Export', description: isZh ? '下载为 ZIP' : 'Download as ZIP', onClick: () => {} },
+            ],
+          },
+          { items: [{ label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }] },
+        ]}
+      />
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '编辑器设置' : 'Editor Settings'}</Button>}
+        onSelect={(item) => console.log('[Editor]', item.label)}
+        groups={[
+          {
+            label: isZh ? '显示' : 'Display',
+            items: [
+              { label: isZh ? '行号' : 'Line Numbers', type: 'checkbox', checked: showLineNumbers, onClick: () => setShowLineNumbers(v => !v) },
+              { label: isZh ? '自动换行' : 'Word Wrap', type: 'checkbox', checked: wordWrap, onClick: () => setWordWrap(v => !v) },
+              { label: isZh ? '缩略图' : 'Minimap', type: 'checkbox', checked: minimap, onClick: () => setMinimap(v => !v) },
+            ],
+          },
+          {
+            label: isZh ? 'Tab 宽度' : 'Tab Size',
+            items: [
+              { label: '2 spaces', type: 'radio', checked: tabSize === '2', onClick: () => setTabSize('2') },
+              { label: '4 spaces', type: 'radio', checked: tabSize === '4', onClick: () => setTabSize('4') },
+              { label: '8 spaces', type: 'radio', checked: tabSize === '8', onClick: () => setTabSize('8') },
+            ],
+          },
+        ]}
+      />
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '主题' : 'Theme'}</Button>}
+        items={[
+          { label: isZh ? '跟随系统' : 'Follow System', type: 'radio', checked: theme === 'auto', onClick: () => setTheme('auto') },
+          { label: isZh ? '浅色' : 'Light', type: 'radio', checked: theme === 'light', onClick: () => setTheme('light') },
+          { label: isZh ? '深色' : 'Dark', type: 'radio', checked: theme === 'dark', onClick: () => setTheme('dark') },
+        ]}
+      />
+    </div>
+  );
 }
 
 export function DesktopApp({
@@ -818,13 +902,14 @@ export function DesktopApp({
             ]} striped bordered />
             <p style={{ fontSize: 13, color: 'var(--vx-text-muted)', margin: '4px 0 0' }}>
               {isZh
-                ? '大量数据 + 表头吸顶 + 容器滚动（共 200 行）。向下滚动以验证 stickyHeader 效果：'
-                : 'Large dataset with sticky header and scrollable container (200 rows). Scroll down to verify stickyHeader:'}
+                ? '大量数据 + 表头吸顶 + 搜索栏吸顶 + 容器滚动（共 200 行）。向下滚动以验证 stickyHeader / stickyFilter 效果：'
+                : 'Large dataset with sticky header + sticky filter and scrollable container (200 rows). Scroll down to verify:'}
             </p>
             <Table
               columns={largeColumns}
               data={largeData}
               stickyHeader
+              stickyFilter
               striped
               hoverable
               style={{ maxHeight: 360, overflow: 'auto' }}
@@ -939,10 +1024,7 @@ export function DesktopApp({
       case 'dropdown-menu':
         return (
           <div className="vx-preview-stack">
-            <div className="vx-preview-inline vx-preview-inline--wrap">
-              <DropdownMenu trigger={<Button variant="secondary">{isZh ? '操作' : 'Actions'}</Button>}
-                items={[{ label: isZh ? '复制' : 'Duplicate', onClick: () => {} }, { label: isZh ? '归档' : 'Archive', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]} />
-            </div>
+            <DropdownMenuDemo isZh={isZh} />
           </div>
         );
       case 'context-menu':
@@ -1110,6 +1192,75 @@ export function DesktopApp({
           </div>
         );
       case 'introduction':
+      case 'image':
+        return (
+          <div className="vx-preview-stack">
+            <div style={{ display: 'grid', gap: 16, maxWidth: 400 }}>
+              <Image
+                src="https://picsum.photos/400/260?random=1"
+                alt="Landscape"
+                width={360}
+                height={220}
+                radius="lg"
+                preview
+                caption={isZh ? '点击预览大图' : 'Click to preview'}
+              />
+              <div style={{ display: 'flex', gap: 12 }}>
+                <Image src="https://picsum.photos/120/120?random=2" width={100} height={100} radius="full" />
+                <Image src="/broken.jpg" width={120} height={100} fallback={<span style={{ padding: 8 }}>{isZh ? '图片加载失败' : 'Image failed'}</span>} />
+              </div>
+            </div>
+          </div>
+        );
+      case 'pin-input':
+        return (
+          <div className="vx-preview-stack">
+            <PinInput label={isZh ? '验证码' : 'Verification code'} length={6} onComplete={(val) => console.log('Code:', val)} />
+            <PinInput length={4} type="alphanumeric" size="sm" placeholder="-" />
+            <PinInput length={6} mask error={isZh ? '验证码错误' : 'Invalid code'} />
+          </div>
+        );
+      case 'descriptions':
+        return (
+          <div className="vx-preview-stack">
+            <Descriptions
+              title={isZh ? '用户信息' : 'User Profile'}
+              items={[
+                { label: isZh ? '姓名' : 'Name', children: 'Alice Johnson' },
+                { label: isZh ? '邮箱' : 'Email', children: 'alice@example.com' },
+                { label: isZh ? '角色' : 'Role', children: <Badge variant="accent">Admin</Badge> },
+                { label: isZh ? '状态' : 'Status', children: <Badge variant="success">{isZh ? '活跃' : 'Active'}</Badge> },
+                { label: isZh ? '注册时间' : 'Joined', children: '2024-01-15' },
+                { label: isZh ? '最后登录' : 'Last login', children: isZh ? '2 小时前' : '2 hours ago' },
+              ]}
+              bordered
+              column={2}
+            />
+          </div>
+        );
+      case 'notification':
+        return (
+          <NotificationProvider placement="top-right">
+            <NotificationDemoContent isZh={isZh} />
+          </NotificationProvider>
+        );
+      case 'result':
+        return (
+          <div className="vx-preview-stack">
+            <Result
+              status="success"
+              title={isZh ? '支付成功' : 'Payment Successful'}
+              description={isZh ? '订单 #12345 已确认。' : 'Your order #12345 has been confirmed.'}
+              actions={<><Button>{isZh ? '查看订单' : 'View Order'}</Button><Button variant="secondary">{isZh ? '返回首页' : 'Back to Home'}</Button></>}
+            />
+            <Result
+              status="not-found"
+              title={isZh ? '页面未找到' : 'Page Not Found'}
+              description={isZh ? '你访问的页面不存在。' : 'The page you are looking for does not exist.'}
+              actions={<Button variant="secondary">{isZh ? '返回首页' : 'Go Home'}</Button>}
+            />
+          </div>
+        );
       default:
         return null;
     }

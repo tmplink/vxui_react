@@ -1,0 +1,116 @@
+/* ═══════════════════════════════════════════════════════════
+   Notification (persistent notification stack)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Stack positioning ─────────────────────────────────── */
+
+.vx-notification-stack {
+  position: fixed;
+  z-index: 710;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  pointer-events: none;
+  max-width: 380px;
+  width: 100%;
+}
+
+.vx-notification-stack--top-right    { top: 0; right: 0; }
+.vx-notification-stack--top-left     { top: 0; left: 0; }
+.vx-notification-stack--top-center   { top: 0; left: 50%; transform: translateX(-50%); }
+.vx-notification-stack--bottom-right { bottom: 0; right: 0; }
+.vx-notification-stack--bottom-left  { bottom: 0; left: 0; }
+.vx-notification-stack--bottom-center { bottom: 0; left: 50%; transform: translateX(-50%); }
+
+/* ── Notification card ─────────────────────────────────── */
+
+.vx-notification {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--vx-radius);
+  background: var(--vx-surface-strong);
+  border: 1px solid var(--vx-border);
+  box-shadow: var(--vx-shadow);
+  pointer-events: auto;
+  animation: vx-notif-in 0.22s ease;
+  position: relative;
+}
+
+.vx-notification__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+
+.vx-notification__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.vx-notification__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--vx-text);
+}
+
+.vx-notification__description {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--vx-text-secondary);
+  line-height: 1.55;
+}
+
+.vx-notification__action {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.vx-notification__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--vx-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.vx-notification__close:hover {
+  background: var(--vx-bg-accent);
+  color: var(--vx-text);
+}
+
+/* ── Tone colors ───────────────────────────────────────── */
+
+.vx-notification--info    .vx-notification__icon { color: var(--vx-info); }
+.vx-notification--success .vx-notification__icon { color: var(--vx-success); }
+.vx-notification--warning .vx-notification__icon { color: var(--vx-warning); }
+.vx-notification--danger  .vx-notification__icon { color: var(--vx-danger); }
+
+.vx-notification--info    { border-left: 3px solid var(--vx-info); }
+.vx-notification--success { border-left: 3px solid var(--vx-success); }
+.vx-notification--warning { border-left: 3px solid var(--vx-warning); }
+.vx-notification--danger  { border-left: 3px solid var(--vx-danger); }
+
+/* ── Animation ─────────────────────────────────────────── */
+
+@keyframes vx-notif-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
