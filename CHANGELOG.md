@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v1.5.0] — 2026-06-11
+
+### Fixed
+
+- **package.json**: 修复 `exports["./styles.css"]` 路径指向不存在的 `dist/vxui-react.css`，更正为实际构建产出的 `dist/index.css`。
+
+---
+
 ## [v1.3.12] — 2026-06-10
 
 ### Fixed
