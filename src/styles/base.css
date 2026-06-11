@@ -74,6 +74,11 @@
 @import './components/language-switcher.css';
 @import './components/docs-toolbar.css';
 @import './components/typography-base.css';
+@import './components/image.css';
+@import './components/pin-input.css';
+@import './components/descriptions.css';
+@import './components/notification.css';
+@import './components/result.css';
 
 /* ═══════════════════════════════════════════════════════════
    以下样式没有对应的独立 CSS 文件，保留在此

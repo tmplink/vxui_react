@@ -383,16 +383,60 @@ export function HoverCardExample() {
     </HoverCard>
   );
 }`,
-  'dropdown-menu': String.raw`import { DropdownMenu } from 'vxui-react';
+  'dropdown-menu': String.raw`import { useState } from 'react';
+import { DropdownMenu } from 'vxui-react';
 
 export function DropdownMenuExample() {
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [wrapLines, setWrapLines] = useState(false);
+  const [fontSize, setFontSize] = useState<'sm' | 'md' | 'lg'>('md');
+
   return (
     <DropdownMenu
-      trigger={<button>Menu</button>}
-      items={[
-        { label: 'Profile', onClick: () => {} },
-        { label: 'Settings', onClick: () => {} },
-        { label: 'Logout', danger: true, onClick: () => {} },
+      trigger={<button>Editor Settings</button>}
+      onSelect={(item) => console.log('Selected:', item.label)}
+      groups={[
+        {
+          label: 'Actions',
+          items: [
+            { label: 'Duplicate', onClick: () => {} },
+            {
+              label: 'Archive',
+              description: 'Move to archive folder',
+              onClick: () => {},
+            },
+          ],
+        },
+        {
+          label: 'Preferences',
+          items: [
+            {
+              label: 'Show Line Numbers',
+              type: 'checkbox',
+              checked: showLineNumbers,
+              onClick: () => setShowLineNumbers((v) => !v),
+            },
+            {
+              label: 'Wrap Lines',
+              type: 'checkbox',
+              checked: wrapLines,
+              onClick: () => setWrapLines((v) => !v),
+            },
+          ],
+        },
+        {
+          label: 'Font Size',
+          items: [
+            { label: 'Small',  type: 'radio', checked: fontSize === 'sm', onClick: () => setFontSize('sm') },
+            { label: 'Medium', type: 'radio', checked: fontSize === 'md', onClick: () => setFontSize('md') },
+            { label: 'Large',  type: 'radio', checked: fontSize === 'lg', onClick: () => setFontSize('lg') },
+          ],
+        },
+        {
+          items: [
+            { label: 'Delete', danger: true, onClick: () => {} },
+          ],
+        },
       ]}
     />
   );

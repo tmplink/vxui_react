@@ -1,0 +1,131 @@
+/* ═══════════════════════════════════════════════════════════
+   Image
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-image {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: var(--vx-image-radius, var(--vx-radius));
+  background: var(--vx-bg-accent);
+  line-height: 0;
+}
+
+.vx-image__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.vx-image--preview .vx-image__img {
+  cursor: zoom-in;
+}
+
+.vx-image__placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vx-text-muted);
+  background: var(--vx-bg-accent);
+}
+
+.vx-image__placeholder-icon {
+  width: 40%;
+  height: 40%;
+  opacity: 0.4;
+}
+
+.vx-image__fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--vx-text-muted);
+  background: var(--vx-bg-accent);
+  font-size: 13px;
+  padding: 12px;
+  text-align: center;
+}
+
+.vx-image__preview-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.vx-image--preview:hover .vx-image__preview-hint {
+  opacity: 1;
+}
+
+.vx-image__caption {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: var(--vx-text-secondary);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── Lightbox ───────────────────────────────────────────── */
+
+.vx-image-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--vx-z-dialog);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(6px);
+  cursor: zoom-out;
+  animation: vx-image-lb-in 0.2s ease;
+}
+
+.vx-image-lightbox__img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--vx-radius-lg);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+  cursor: default;
+}
+
+.vx-image-lightbox__close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.vx-image-lightbox__close:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes vx-image-lb-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

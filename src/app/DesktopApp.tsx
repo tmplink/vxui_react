@@ -59,6 +59,65 @@ interface DesktopAppProps {
   onLogout: () => void;
 }
 
+// ── DropdownMenu 交互式演示组件（复选框/单选框状态） ──
+function DropdownMenuDemo({ isZh }: { isZh: boolean }) {
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [wordWrap, setWordWrap] = useState(false);
+  const [minimap, setMinimap] = useState(true);
+  const [tabSize, setTabSize] = useState<'2' | '4' | '8'>('4');
+  const [theme, setTheme] = useState<'auto' | 'light' | 'dark'>('auto');
+
+  return (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '文件操作' : 'File Actions'}</Button>}
+        onSelect={(item) => console.log('[File]', item.label)}
+        groups={[
+          {
+            label: isZh ? '操作' : 'Actions',
+            items: [
+              { label: isZh ? '复制' : 'Duplicate', onClick: () => {} },
+              { label: isZh ? '归档' : 'Archive', description: isZh ? '移入归档文件夹' : 'Move to archive folder', onClick: () => {} },
+              { label: isZh ? '导出' : 'Export', description: isZh ? '下载为 ZIP' : 'Download as ZIP', onClick: () => {} },
+            ],
+          },
+          { items: [{ label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }] },
+        ]}
+      />
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '编辑器设置' : 'Editor Settings'}</Button>}
+        onSelect={(item) => console.log('[Editor]', item.label)}
+        groups={[
+          {
+            label: isZh ? '显示' : 'Display',
+            items: [
+              { label: isZh ? '行号' : 'Line Numbers', type: 'checkbox', checked: showLineNumbers, onClick: () => setShowLineNumbers(v => !v) },
+              { label: isZh ? '自动换行' : 'Word Wrap', type: 'checkbox', checked: wordWrap, onClick: () => setWordWrap(v => !v) },
+              { label: isZh ? '缩略图' : 'Minimap', type: 'checkbox', checked: minimap, onClick: () => setMinimap(v => !v) },
+            ],
+          },
+          {
+            label: isZh ? 'Tab 宽度' : 'Tab Size',
+            items: [
+              { label: '2 spaces', type: 'radio', checked: tabSize === '2', onClick: () => setTabSize('2') },
+              { label: '4 spaces', type: 'radio', checked: tabSize === '4', onClick: () => setTabSize('4') },
+              { label: '8 spaces', type: 'radio', checked: tabSize === '8', onClick: () => setTabSize('8') },
+            ],
+          },
+        ]}
+      />
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '主题' : 'Theme'}</Button>}
+        items={[
+          { label: isZh ? '跟随系统' : 'Follow System', type: 'radio', checked: theme === 'auto', onClick: () => setTheme('auto') },
+          { label: isZh ? '浅色' : 'Light', type: 'radio', checked: theme === 'light', onClick: () => setTheme('light') },
+          { label: isZh ? '深色' : 'Dark', type: 'radio', checked: theme === 'dark', onClick: () => setTheme('dark') },
+        ]}
+      />
+    </div>
+  );
+}
+
 export function DesktopApp({
   route, onNavigate, onMobileNavToggle, mobileNavOpen,
   sidebarCollapsed, onSidebarToggle, searchOpen, onSearchOpenChange,
@@ -939,10 +998,7 @@ export function DesktopApp({
       case 'dropdown-menu':
         return (
           <div className="vx-preview-stack">
-            <div className="vx-preview-inline vx-preview-inline--wrap">
-              <DropdownMenu trigger={<Button variant="secondary">{isZh ? '操作' : 'Actions'}</Button>}
-                items={[{ label: isZh ? '复制' : 'Duplicate', onClick: () => {} }, { label: isZh ? '归档' : 'Archive', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]} />
-            </div>
+            <DropdownMenuDemo isZh={isZh} />
           </div>
         );
       case 'context-menu':

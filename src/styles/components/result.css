@@ -1,0 +1,92 @@
+/* ═══════════════════════════════════════════════════════════
+   Result (operation result / status page)
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 40px 24px;
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  border: 1px solid var(--vx-border);
+}
+
+.vx-result__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 24px;
+  margin-bottom: 4px;
+}
+
+.vx-result__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--vx-text);
+  line-height: 1.4;
+}
+
+.vx-result__description {
+  margin: 0;
+  max-width: 400px;
+  font-size: 14px;
+  color: var(--vx-text-secondary);
+  line-height: 1.6;
+}
+
+.vx-result__actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.vx-result__extra {
+  margin-top: 8px;
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ── Status colors ─────────────────────────────────────── */
+
+.vx-result--success .vx-result__icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--vx-success);
+}
+
+.vx-result--error .vx-result__icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--vx-danger);
+}
+
+.vx-result--warning .vx-result__icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--vx-warning);
+}
+
+.vx-result--info .vx-result__icon {
+  background: var(--vx-primary-soft);
+  color: var(--vx-primary);
+}
+
+.vx-result--forbidden .vx-result__icon {
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--vx-danger);
+}
+
+.vx-result--not-found .vx-result__icon {
+  background: rgba(245, 158, 11, 0.08);
+  color: var(--vx-warning);
+}
+
+.vx-result--server-error .vx-result__icon {
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--vx-danger);
+}

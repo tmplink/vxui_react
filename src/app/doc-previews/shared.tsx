@@ -82,6 +82,74 @@ function StatefulPagination({ initialPage = 1, total, pageSize }: { initialPage?
   return <Pagination page={page} total={total} pageSize={pageSize} onChange={setPage} />;
 }
 
+// ── 内部辅助：带状态的 DropdownMenu 演示组件（复选框/单选交互） ──
+function DropdownMenuDemo({ isZh }: { isZh: boolean }) {
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [wordWrap, setWordWrap] = useState(false);
+  const [minimap, setMinimap] = useState(true);
+  const [tabSize, setTabSize] = useState<'2' | '4' | '8'>('4');
+  const [theme, setTheme] = useState<'auto' | 'light' | 'dark'>('auto');
+
+  return (
+    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      {/* 基础分组 + 描述 */}
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '文件操作' : 'File Actions'}</Button>}
+        onSelect={(item) => console.log('[File]', item.label)}
+        groups={[
+          {
+            label: isZh ? '操作' : 'Actions',
+            items: [
+              { label: isZh ? '复制' : 'Duplicate', onClick: () => {} },
+              { label: isZh ? '归档' : 'Archive', description: isZh ? '移入归档文件夹' : 'Move to archive folder', onClick: () => {} },
+              { label: isZh ? '导出' : 'Export', description: isZh ? '下载为 ZIP' : 'Download as ZIP', onClick: () => {} },
+            ],
+          },
+          {
+            items: [
+              { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} },
+            ],
+          },
+        ]}
+      />
+
+      {/* 复选框 + 单选框 */}
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '编辑器设置' : 'Editor Settings'}</Button>}
+        onSelect={(item) => console.log('[Editor]', item.label)}
+        groups={[
+          {
+            label: isZh ? '显示' : 'Display',
+            items: [
+              { label: isZh ? '行号' : 'Line Numbers', type: 'checkbox', checked: showLineNumbers, onClick: () => setShowLineNumbers(v => !v) },
+              { label: isZh ? '自动换行' : 'Word Wrap', type: 'checkbox', checked: wordWrap, onClick: () => setWordWrap(v => !v) },
+              { label: isZh ? '缩略图' : 'Minimap', type: 'checkbox', checked: minimap, onClick: () => setMinimap(v => !v) },
+            ],
+          },
+          {
+            label: isZh ? 'Tab 宽度' : 'Tab Size',
+            items: [
+              { label: '2 spaces', type: 'radio', checked: tabSize === '2', onClick: () => setTabSize('2') },
+              { label: '4 spaces', type: 'radio', checked: tabSize === '4', onClick: () => setTabSize('4') },
+              { label: '8 spaces', type: 'radio', checked: tabSize === '8', onClick: () => setTabSize('8') },
+            ],
+          },
+        ]}
+      />
+
+      {/* 主题单选 */}
+      <DropdownMenu
+        trigger={<Button variant="secondary">{isZh ? '主题' : 'Theme'}</Button>}
+        items={[
+          { label: isZh ? '跟随系统' : 'Follow System', type: 'radio', checked: theme === 'auto', onClick: () => setTheme('auto') },
+          { label: isZh ? '浅色' : 'Light', type: 'radio', checked: theme === 'light', onClick: () => setTheme('light') },
+          { label: isZh ? '深色' : 'Dark', type: 'radio', checked: theme === 'dark', onClick: () => setTheme('dark') },
+        ]}
+      />
+    </div>
+  );
+}
+
 // ── 共享预览渲染函数 ──
 export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOptions): ReactNode {
   const { isZh, pages, onNavigate, push } = options;
@@ -982,10 +1050,7 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
     case 'dropdown-menu':
       return (
         <div className="vx-preview-stack">
-          <div className="vx-preview-inline vx-preview-inline--wrap">
-            <DropdownMenu trigger={<Button variant="secondary">{isZh ? '操作' : 'Actions'}</Button>}
-              items={[{ label: isZh ? '复制' : 'Duplicate', onClick: () => {} }, { label: isZh ? '归档' : 'Archive', onClick: () => {} }, { label: isZh ? '删除' : 'Delete', danger: true, onClick: () => {} }]} />
-          </div>
+          <DropdownMenuDemo isZh={isZh} />
         </div>
       );
 

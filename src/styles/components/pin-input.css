@@ -1,0 +1,80 @@
+/* ═══════════════════════════════════════════════════════════
+   PinInput
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-pin-input {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vx-pin-input__group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.vx-pin-input__field {
+  width: 42px;
+  height: 48px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--vx-mono);
+  border: 1.5px solid var(--vx-border-strong);
+  border-radius: var(--vx-radius);
+  background: var(--vx-surface);
+  color: var(--vx-text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -moz-appearance: textfield;
+  caret-color: var(--vx-primary);
+}
+
+.vx-pin-input__field::-webkit-outer-spin-button,
+.vx-pin-input__field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.vx-pin-input__field:focus {
+  border-color: var(--vx-primary);
+  box-shadow: 0 0 0 3px var(--vx-primary-soft);
+}
+
+.vx-pin-input__field::placeholder {
+  color: var(--vx-text-muted);
+  font-weight: 400;
+  font-size: 14px;
+}
+
+/* ── Sizes ──────────────────────────────────────────────── */
+
+.vx-pin-input--sm .vx-pin-input__field {
+  width: 34px;
+  height: 38px;
+  font-size: 15px;
+  border-radius: var(--vx-radius-sm);
+}
+
+.vx-pin-input--lg .vx-pin-input__field {
+  width: 50px;
+  height: 56px;
+  font-size: 22px;
+  border-radius: var(--vx-radius-lg);
+}
+
+/* ── States ─────────────────────────────────────────────── */
+
+.vx-pin-input--invalid .vx-pin-input__field {
+  border-color: var(--vx-danger);
+}
+
+.vx-pin-input--invalid .vx-pin-input__field:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+.vx-pin-input--disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
