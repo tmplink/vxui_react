@@ -740,9 +740,9 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
       const largeColumns = [
         { key: 'id', header: isZh ? '编号' : 'ID', accessor: (r: { id: number }) => r.id, sortable: true, width: 80, align: 'right' as const },
         { key: 'name', header: isZh ? '姓名' : 'Name', accessor: (r: { name: string }) => r.name, sortable: true },
-        { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
-        { key: 'team', header: isZh ? '团队' : 'Team', accessor: (r: { team: string }) => r.team },
-        { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { status: string }) => <Badge variant={((r.status === 'Active' || r.status === '在岗') ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge>, sortable: true },
+        { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role, filterable: true },
+        { key: 'team', header: isZh ? '团队' : 'Team', accessor: (r: { team: string }) => r.team, filterable: true },
+        { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { status: string }) => <Badge variant={((r.status === 'Active' || r.status === '在岗') ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge>, sortable: true, filterable: true },
         { key: 'score', header: isZh ? '得分' : 'Score', accessor: (r: { score: number }) => r.score, align: 'right' as const, sortable: true },
       ];
       return (
@@ -755,10 +755,29 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
             { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: 'Active' },
             { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: 'Active' },
           ]} striped bordered />
-          <p style={{ fontSize: 13, color: 'var(--vx-text-muted)', margin: '4px 0 0' }}>
-            {isZh
-              ? '大量数据 + 表头吸顶 + 搜索栏吸顶 + 容器滚动（共 200 行）。向下滚动以验证 stickyHeader / stickyFilter 效果：'
-              : 'Large dataset with sticky header + sticky filter and scrollable container (200 rows). Scroll down to verify:'}
+          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+            {isZh ? '变体：深色主题' : 'Variant: Dark'}
+          </p>
+          <Table variant="dark" striped hoverable columns={[
+            { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
+            { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+          ]} data={[
+            { name: 'Alice', role: isZh ? '高级工程师' : 'Senior Engineer' },
+            { name: 'Bo', role: isZh ? '设计主管' : 'Design Lead' },
+          ]} />
+          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+            {isZh ? '行选择' : 'Row Selection'}
+          </p>
+          <Table selectable striped hoverable columns={[
+            { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
+            { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+          ]} data={[
+            { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer' },
+            { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer' },
+            { name: 'Cora Lin', role: isZh ? '产品经理' : 'PM' },
+          ]} />
+          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+            {isZh ? '内置自动搜索（200 行）' : 'Built-in auto search (200 rows)'}
           </p>
           <Table
             columns={largeColumns}
@@ -767,9 +786,35 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
             stickyFilter
             striped
             hoverable
+            filterable
             style={{ maxHeight: 360, overflow: 'auto' }}
             caption={isZh ? `成员名单 · ${largeData.length} 人` : `Roster · ${largeData.length} members`}
           />
+          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+            {isZh ? '嵌入模式（flush）' : 'Flush mode'}
+          </p>
+          <Card padding="none">
+            <div style={{ padding: '10px 12px', borderBottom: '1px solid var(--vx-border)' }}>
+              <strong style={{ fontSize: 13 }}>{isZh ? '项目成员' : 'Team members'}</strong>
+            </div>
+            <Table flush hoverable columns={[
+              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
+              { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
+            ]} data={[
+              { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer' },
+              { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer' },
+            ]} />
+          </Card>
+          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+            {isZh ? '移除底部边框' : 'Remove bottom border'}
+          </p>
+          <Table removeBorders={['bottom']} columns={[
+            { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
+            { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
+          ]} data={[
+            { name: 'Alice', role: isZh ? '设计师' : 'Designer' },
+            { name: 'Bo', role: isZh ? '工程师' : 'Engineer' },
+          ]} />
         </div>
       );
     }

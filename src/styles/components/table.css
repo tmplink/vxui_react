@@ -63,6 +63,45 @@
 .vx-table--borderless .vx-table__td { border-bottom: none; }
 .vx-table--borderless .vx-table__row:last-child .vx-table__td { border-bottom: none; }
 .vx-table-wrap--square { border-radius: 0; }
+
+/* ── flush 模式（嵌入 Card 等容器，间距为 0） ── */
+.vx-table-wrap--flush {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.vx-table-wrap--flush .vx-table__filterbar {
+  padding-left: 0;
+  padding-right: 0;
+  border-bottom: 1px solid var(--vx-border);
+}
+.vx-table-wrap--flush .vx-table__th:first-child,
+.vx-table-wrap--flush .vx-table__td:first-child { padding-left: 0; }
+.vx-table-wrap--flush .vx-table__th:last-child,
+.vx-table-wrap--flush .vx-table__td:last-child { padding-right: 0; }
+
+/* ── 单边移除边框 ── */
+.vx-table-wrap--no-top    { border-top: none; }
+.vx-table-wrap--no-right  { border-right: none; }
+.vx-table-wrap--no-bottom { border-bottom: none; }
+.vx-table-wrap--no-left   { border-left: none; }
+/* 移除某边边框时同步调整对应方向的圆角 */
+.vx-table-wrap--no-top.vx-table-wrap:not(.vx-table-wrap--square) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.vx-table-wrap--no-bottom.vx-table-wrap:not(.vx-table-wrap--square) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.vx-table-wrap--no-left.vx-table-wrap:not(.vx-table-wrap--square) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.vx-table-wrap--no-right.vx-table-wrap:not(.vx-table-wrap--square) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
 .vx-table__body--loading {
   position: relative;
   opacity: 0.45;
@@ -72,6 +111,70 @@
   text-align: center;
   padding: 40px;
   color: var(--vx-text-muted);
+}
+
+/* ── 变体：dark ── */
+.vx-table--dark .vx-table__th {
+  background: color-mix(in srgb, var(--vx-primary) 12%, var(--vx-bg-accent));
+  color: var(--vx-text);
+  border-bottom-color: color-mix(in srgb, var(--vx-primary) 25%, var(--vx-border));
+}
+.vx-table--dark .vx-table__td {
+  border-bottom-color: color-mix(in srgb, var(--vx-primary) 15%, var(--vx-border));
+}
+.vx-table--dark .vx-table__row:hover .vx-table__td {
+  background: color-mix(in srgb, var(--vx-primary) 8%, transparent);
+}
+.vx-table--dark .vx-table__row:nth-child(even) .vx-table__td {
+  background: color-mix(in srgb, var(--vx-primary) 5%, transparent);
+}
+.vx-table-wrap--dark {
+  border-color: color-mix(in srgb, var(--vx-primary) 25%, var(--vx-border));
+}
+
+/* ── 变体：outline ── */
+.vx-table--outline .vx-table__th {
+  background: transparent;
+  border-bottom: 2px solid var(--vx-border);
+}
+.vx-table--outline .vx-table__td {
+  border-bottom: 1px solid var(--vx-border);
+}
+.vx-table--outline .vx-table__row:last-child .vx-table__td {
+  border-bottom: none;
+}
+
+/* ── 固定布局 ── */
+.vx-table--fixed {
+  table-layout: fixed;
+}
+.vx-table--fixed .vx-table__td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── 可点击行 ── */
+.vx-table--clickable .vx-table__row {
+  cursor: pointer;
+}
+.vx-table--clickable .vx-table__row:active .vx-table__td {
+  background: color-mix(in srgb, var(--vx-primary) 12%, transparent);
+}
+
+/* ── 行选择 ── */
+.vx-table__th--checkbox,
+.vx-table__td--checkbox {
+  width: 44px;
+  padding-left: 16px;
+  padding-right: 4px;
+  text-align: center;
+}
+.vx-table__row--selected .vx-table__td {
+  background: color-mix(in srgb, var(--vx-primary) 10%, transparent) !important;
+}
+.vx-table__row--selected:hover .vx-table__td {
+  background: color-mix(in srgb, var(--vx-primary) 15%, transparent) !important;
 }
 
 /* ═══════════════════════════════════════════════════════════

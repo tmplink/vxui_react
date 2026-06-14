@@ -1,12 +1,13 @@
 import type { ReactNode, HTMLAttributes } from 'react';
-import { useState, useCallback, useMemo } from 'react';
-import { Search, Maximize2, ArrowUpDown, ArrowUp, ArrowDown, SlidersHorizontal } from 'lucide-react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { Search, Maximize2, ArrowUpDown, ArrowUp, ArrowDown, SlidersHorizontal, CheckSquare, Square } from 'lucide-react';
 import { cx } from '../lib/cx';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { Input } from './Input';
 import { Select, type SelectOption } from './Select';
 import { Dialog } from './Dialog';
 import { Button } from './Button';
+import { Checkbox } from './Checkbox';
 
 export type SortDirection = 'asc' | 'desc' | null;
 
@@ -28,7 +29,14 @@ export interface TableColumn<T> {
   filterType?: 'text' | 'select';
   /** 当下拉筛选时，可选的选项列表（不传则从 data 中自动提取去重值） */
   filterOptions?: SelectOption[];
+  /** 是否参与全局文本搜索（默认 true） */
+  searchable?: boolean;
 }
+
+export type TableVariant = 'default' | 'dark' | 'outline';
+
+/** 可从哪个边移除边框 */
+export type TableBorderSide = 'top' | 'right' | 'bottom' | 'left';
 
 export interface TableProps<T> extends HTMLAttributes<HTMLDivElement> {
   columns: TableColumn<T>[];
@@ -53,6 +61,32 @@ export interface TableProps<T> extends HTMLAttributes<HTMLDivElement> {
   sortDirection?: SortDirection;
   onSortChange?: (column: string, direction: SortDirection) => void;
 
+  // ── 视觉变体 ──
+  /** 表格视觉变体：'default' | 'dark' | 'outline' */
+  variant?: TableVariant;
+  /** 固定表格布局（列宽严格按 width 分配，不换行截断） */
+  fixed?: boolean;
+
+  // ── 边框控制 ──
+  /** 移除指定边边框：'all' 移除四边，或传入边列表。用于嵌入 Card 等容器场景 */
+  removeBorders?: 'all' | TableBorderSide[];
+  /** 紧凑嵌入模式：移除内边距、圆角和外边框，适合直接放入 Card 中 */
+  flush?: boolean;
+
+  // ── 行交互 ──
+  /** 行点击回调 */
+  onRowClick?: (row: T, index: number) => void;
+  /** 自定义行类名（字符串或函数） */
+  rowClassName?: string | ((row: T, index: number) => string);
+
+  // ── 行选择 ──
+  /** 启用行选择（显示复选框列） */
+  selectable?: boolean;
+  /** 受控选中行索引集合 */
+  selectedRows?: Set<number>;
+  /** 选中行变化回调 */
+  onSelectionChange?: (selected: Set<number>) => void;
+
   // ── 移动端卡片布局 ──
   /** 是否在移动端启用卡片式布局（默认 true） */
   mobileCard?: boolean;
@@ -74,6 +108,14 @@ export interface TableProps<T> extends HTMLAttributes<HTMLDivElement> {
   onColumnFilterChange?: (columnKey: string, value: string) => void;
   /** 数据量超过此值时自动显示筛选栏（默认 10） */
   filterThreshold?: number;
+
+  // ── 搜索优化 ──
+  /** 搜索防抖延迟（毫秒），默认 200。设为 0 禁用防抖 */
+  searchDebounce?: number;
+  /** 限定参与文本搜索的列 key 列表，不传则搜索所有 searchable !== false 的列 */
+  searchColumns?: string[];
+  /** 搜索时高亮匹配文本（默认 false） */
+  searchHighlight?: boolean;
 
   // ── 全屏搜索 ──
   /** 是否显示全屏搜索按钮（移动端默认 true） */
@@ -138,6 +180,7 @@ function FullscreenSearchView<T>({
   sortCol,
   sortDir,
   onSort,
+  searchColumns,
 }: {
   open: boolean;
   onClose: () => void;
@@ -155,6 +198,7 @@ function FullscreenSearchView<T>({
   sortCol: string | null;
   sortDir: SortDirection;
   onSort: (key: string) => void;
+  searchColumns?: string[];
 }) {
   const [localFilter, setLocalFilter] = useState(filterValue);
   const [localColFilters, setLocalColFilters] = useState<Record<string, string>>(columnFilters);
@@ -163,12 +207,18 @@ function FullscreenSearchView<T>({
   const effectiveFilter = open ? localFilter : filterValue;
   const effectiveColFilters = open ? localColFilters : columnFilters;
 
+  const searchableCols = useMemo(() => {
+    if (searchColumns) return searchColumns;
+    return columns.filter((c) => c.searchable !== false).map((c) => c.key);
+  }, [columns, searchColumns]);
+
   const filteredData = useMemo(() => {
     let result = data;
     if (effectiveFilter) {
       const q = effectiveFilter.toLowerCase();
       result = result.filter((row) =>
         columns.some((col) => {
+          if (!searchableCols.includes(col.key)) return false;
           const val = col.accessor(row);
           return String(val ?? '').toLowerCase().includes(q);
         }),
@@ -183,7 +233,25 @@ function FullscreenSearchView<T>({
       });
     }
     return result;
-  }, [data, effectiveFilter, effectiveColFilters, columns]);
+  }, [data, effectiveFilter, effectiveColFilters, columns, searchableCols]);
+
+  // ── 全屏视图排序 ──
+  const sortedFullscreenData = useMemo(() => {
+    if (!sortCol || !sortDir) return filteredData;
+    const col = columns.find((c) => c.key === sortCol);
+    if (!col) return filteredData;
+    return [...filteredData].sort((a, b) => {
+      const aRaw = col.accessor(a);
+      const bRaw = col.accessor(b);
+      let cmp: number;
+      if (typeof aRaw === 'number' && typeof bRaw === 'number') {
+        cmp = aRaw - bRaw;
+      } else {
+        cmp = String(aRaw ?? '').localeCompare(String(bRaw ?? ''), undefined, { numeric: true });
+      }
+      return sortDir === 'desc' ? -cmp : cmp;
+    });
+  }, [filteredData, sortCol, sortDir, columns]);
 
   const handleApply = () => {
     onFilterValueChange(localFilter);
@@ -266,10 +334,10 @@ function FullscreenSearchView<T>({
 
         {/* 结果列表 */}
         <div className="vx-table__fullscreen-list">
-          {filteredData.length === 0 ? (
+          {sortedFullscreenData.length === 0 ? (
             <div className="vx-table__empty">{emptyText}</div>
           ) : (
-            filteredData.map((row, ri) => (
+            sortedFullscreenData.map((row, ri) => (
               <div key={ri} className="vx-table__fullscreen-card">
                 {columns.filter((c) => !c.hideOnMobile).map((col) => {
                   const isTitle = col.cardTitle;
@@ -293,8 +361,8 @@ function FullscreenSearchView<T>({
 
         {/* 结果计数 */}
         <div className="vx-table__fullscreen-count">
-          共 {filteredData.length} 条结果
-          {filteredData.length !== data.length ? `（共 ${data.length} 条数据）` : ''}
+          共 {sortedFullscreenData.length} 条结果
+          {sortedFullscreenData.length !== data.length ? `（共 ${data.length} 条数据）` : ''}
         </div>
       </div>
     </Dialog>
@@ -324,6 +392,15 @@ export function Table<T>({
   sortColumn: controlledSortCol,
   sortDirection: controlledSortDir,
   onSortChange,
+  variant = 'default',
+  fixed = false,
+  removeBorders,
+  flush = false,
+  onRowClick,
+  rowClassName,
+  selectable = false,
+  selectedRows: controlledSelectedRows,
+  onSelectionChange,
   className,
   mobileCard = true,
   renderMobileCard,
@@ -334,6 +411,9 @@ export function Table<T>({
   columnFilters: controlledColumnFilters,
   onColumnFilterChange,
   filterThreshold = 10,
+  searchDebounce = 200,
+  searchColumns,
+  searchHighlight = false,
   fullscreenSearch = true,
   fullscreenTitle,
   ...props
@@ -379,6 +459,24 @@ export function Table<T>({
   const filterValue = controlledFilterValue ?? internalFilterValue;
   const columnFilters = controlledColumnFilters ?? internalColumnFilters;
 
+  // 防抖搜索值（用于实际过滤）
+  const [debouncedFilterValue, setDebouncedFilterValue] = useState(filterValue);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (searchDebounce <= 0) {
+      setDebouncedFilterValue(filterValue);
+      return;
+    }
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedFilterValue(filterValue);
+    }, searchDebounce);
+    return () => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    };
+  }, [filterValue, searchDebounce]);
+
   const handleFilterChange = useCallback((val: string) => {
     if (onFilterChange) {
       onFilterChange(val);
@@ -403,13 +501,20 @@ export function Table<T>({
     }
   }, [onColumnFilterChange]);
 
-  // ── 筛选逻辑 ──
+  // ── 可搜索列 ──
+  const searchableCols = useMemo(() => {
+    if (searchColumns) return searchColumns;
+    return columns.filter((c) => c.searchable !== false).map((c) => c.key);
+  }, [columns, searchColumns]);
+
+  // ── 筛选逻辑（使用防抖后的值）──
   const filteredData = useMemo(() => {
     let result = data;
-    if (filterValue) {
-      const q = filterValue.toLowerCase();
+    if (debouncedFilterValue) {
+      const q = debouncedFilterValue.toLowerCase();
       result = result.filter((row) =>
         columns.some((col) => {
+          if (!searchableCols.includes(col.key)) return false;
           const val = col.accessor(row);
           return String(val ?? '').toLowerCase().includes(q);
         }),
@@ -424,7 +529,62 @@ export function Table<T>({
       });
     }
     return result;
-  }, [data, filterValue, columnFilters, columns]);
+  }, [data, debouncedFilterValue, columnFilters, columns, searchableCols]);
+
+  // ── 排序逻辑（在过滤后执行） ──
+  const displayData = useMemo(() => {
+    // 受控模式下由外部负责排序，直接使用 filteredData
+    if (isSortControlled) return filteredData;
+    if (!sortCol || !sortDir) return filteredData;
+    const col = columns.find((c) => c.key === sortCol);
+    if (!col) return filteredData;
+    return [...filteredData].sort((a, b) => {
+      const aRaw = col.accessor(a);
+      const bRaw = col.accessor(b);
+      let cmp: number;
+      if (typeof aRaw === 'number' && typeof bRaw === 'number') {
+        cmp = aRaw - bRaw;
+      } else {
+        cmp = String(aRaw ?? '').localeCompare(String(bRaw ?? ''), undefined, { numeric: true });
+      }
+      return sortDir === 'desc' ? -cmp : cmp;
+    });
+  }, [filteredData, sortCol, sortDir, columns, isSortControlled]);
+
+  // ── 行选择 ──
+  const [internalSelectedRows, setInternalSelectedRows] = useState<Set<number>>(new Set());
+  const selectedSet = controlledSelectedRows ?? internalSelectedRows;
+
+  const handleSelectRow = useCallback((index: number) => {
+    const next = new Set(selectedSet);
+    if (next.has(index)) {
+      next.delete(index);
+    } else {
+      next.add(index);
+    }
+    if (!controlledSelectedRows) {
+      setInternalSelectedRows(next);
+    }
+    onSelectionChange?.(next);
+  }, [selectedSet, controlledSelectedRows, onSelectionChange]);
+
+  const handleSelectAll = useCallback(() => {
+    const allFilteredIndices = displayData.map((_, i) => i);
+    const allSelected = allFilteredIndices.every((i) => selectedSet.has(i));
+    const next = new Set(selectedSet);
+    if (allSelected) {
+      allFilteredIndices.forEach((i) => next.delete(i));
+    } else {
+      allFilteredIndices.forEach((i) => next.add(i));
+    }
+    if (!controlledSelectedRows) {
+      setInternalSelectedRows(next);
+    }
+    onSelectionChange?.(next);
+  }, [displayData, selectedSet, controlledSelectedRows, onSelectionChange]);
+
+  const isAllSelected = displayData.length > 0 && displayData.every((_, i) => selectedSet.has(i));
+  const isIndeterminate = !isAllSelected && displayData.some((_, i) => selectedSet.has(i));
 
   // ── 是否显示筛选栏 ──
   const showFilter = filterableProp === true || (filterableProp !== false && (isMobile || data.length > filterThreshold));
@@ -451,11 +611,24 @@ export function Table<T>({
   // ── 移动端卡片渲染 ──
   const useCardLayout = isMobile && mobileCard;
 
+  // 边框控制类名
+  const borderSideClasses = useMemo(() => {
+    if (!removeBorders) return {};
+    if (removeBorders === 'all') return { top: true, right: true, bottom: true, left: true };
+    return Object.fromEntries(removeBorders.map((s) => [s, true]));
+  }, [removeBorders]);
+
   return (
     <div className={cx(
       'vx-table-wrap',
+      variant !== 'default' && `vx-table-wrap--${variant}`,
       borderless && 'vx-table-wrap--borderless',
       !rounded && 'vx-table-wrap--square',
+      flush && 'vx-table-wrap--flush',
+      borderSideClasses.top && 'vx-table-wrap--no-top',
+      borderSideClasses.right && 'vx-table-wrap--no-right',
+      borderSideClasses.bottom && 'vx-table-wrap--no-bottom',
+      borderSideClasses.left && 'vx-table-wrap--no-left',
       useCardLayout && 'vx-table-wrap--card',
       stickyFilter && 'vx-table-wrap--sticky-filter',
       className,
@@ -533,16 +706,17 @@ export function Table<T>({
           sortCol={sortCol}
           sortDir={sortDir}
           onSort={handleSort}
+          searchColumns={searchColumns}
         />
       ) : null}
 
       {/* ── 移动端卡片布局 ── */}
       {useCardLayout ? (
         <div className="vx-table__card-list">
-          {filteredData.length === 0 ? (
+          {displayData.length === 0 ? (
             <div className="vx-table__empty">{emptyText}</div>
           ) : (
-            filteredData.map((row, ri) =>
+            displayData.map((row, ri) =>
               renderMobileCard ? (
                 renderMobileCard(row, ri)
               ) : (
@@ -557,18 +731,32 @@ export function Table<T>({
         <table
           className={cx(
             'vx-table',
+            `vx-table--${variant}`,
             striped && 'vx-table--striped',
             hoverable && 'vx-table--hoverable',
             bordered && 'vx-table--bordered',
             borderless && 'vx-table--borderless',
+            fixed && 'vx-table--fixed',
             resolvedSize !== 'md' && `vx-table--${resolvedSize}`,
             stickyHeader && 'vx-table--sticky',
+            onRowClick && 'vx-table--clickable',
+            selectable && 'vx-table--selectable',
           )}
         >
           {caption ? <caption className="vx-table__caption">{caption}</caption> : null}
           {!headless ? (
             <thead>
             <tr>
+              {selectable ? (
+                <th className="vx-table__th vx-table__th--checkbox" style={{ width: 44 }}>
+                  <Checkbox
+                    checked={isAllSelected}
+                    indeterminate={isIndeterminate}
+                    onChange={handleSelectAll}
+                    aria-label="全选"
+                  />
+                </th>
+              ) : null}
               {columns.map((col) => (
                 <th
                   key={col.key}
@@ -598,23 +786,46 @@ export function Table<T>({
             </thead>
           ) : null}
           <tbody className={cx(loading && 'vx-table__body--loading')}>
-            {filteredData.length === 0 ? (
+            {displayData.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="vx-table__empty">{emptyText}</td>
+                <td colSpan={columns.length + (selectable ? 1 : 0)} className="vx-table__empty">{emptyText}</td>
               </tr>
             ) : (
-              filteredData.map((row, ri) => (
-                <tr key={ri} className="vx-table__row">
-                  {columns.map((col) => (
-                    <td
-                      key={col.key}
-                      className={cx('vx-table__td', col.align && `vx-table__td--${col.align}`, col.className)}
-                    >
-                      {col.accessor(row)}
-                    </td>
-                  ))}
-                </tr>
-              ))
+              displayData.map((row, ri) => {
+                const isSelected = selectedSet.has(ri);
+                const extraClassName = typeof rowClassName === 'function'
+                  ? rowClassName(row, ri)
+                  : rowClassName;
+                return (
+                  <tr
+                    key={ri}
+                    className={cx(
+                      'vx-table__row',
+                      isSelected && 'vx-table__row--selected',
+                      extraClassName,
+                    )}
+                    onClick={onRowClick ? () => onRowClick(row, ri) : undefined}
+                  >
+                    {selectable ? (
+                      <td className="vx-table__td vx-table__td--checkbox">
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() => handleSelectRow(ri)}
+                          aria-label={`选择第 ${ri + 1} 行`}
+                        />
+                      </td>
+                    ) : null}
+                    {columns.map((col) => (
+                      <td
+                        key={col.key}
+                        className={cx('vx-table__td', col.align && `vx-table__td--${col.align}`, col.className)}
+                      >
+                        {col.accessor(row)}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
