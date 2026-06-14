@@ -75,10 +75,6 @@
   padding-right: 0;
   border-bottom: 1px solid var(--vx-border);
 }
-.vx-table-wrap--flush .vx-table__th:first-child,
-.vx-table-wrap--flush .vx-table__td:first-child { padding-left: 0; }
-.vx-table-wrap--flush .vx-table__th:last-child,
-.vx-table-wrap--flush .vx-table__td:last-child { padding-right: 0; }
 
 /* ── 单边移除边框 ── */
 .vx-table-wrap--no-top    { border-top: none; }

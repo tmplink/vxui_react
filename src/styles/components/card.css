@@ -11,6 +11,7 @@
   background: var(--vx-surface);
   border: 1px solid var(--vx-border);
   box-shadow: var(--vx-shadow-sm);
+  overflow: hidden;
 }
 
 /* Card variants */
