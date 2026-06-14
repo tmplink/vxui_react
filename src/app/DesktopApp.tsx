@@ -885,13 +885,17 @@ export function DesktopApp({
         const largeColumns = [
           { key: 'id', header: isZh ? '编号' : 'ID', accessor: (r: { id: number }) => r.id, sortable: true, width: 80, align: 'right' as const },
           { key: 'name', header: isZh ? '姓名' : 'Name', accessor: (r: { name: string }) => r.name, sortable: true },
-          { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
-          { key: 'team', header: isZh ? '团队' : 'Team', accessor: (r: { team: string }) => r.team },
-          { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { status: string }) => <Badge variant={((r.status === 'Active' || r.status === '在岗') ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge>, sortable: true },
+          { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role, filterable: true },
+          { key: 'team', header: isZh ? '团队' : 'Team', accessor: (r: { team: string }) => r.team, filterable: true },
+          { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { status: string }) => <Badge variant={((r.status === 'Active' || r.status === '在岗') ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge>, sortable: true, filterable: true },
           { key: 'score', header: isZh ? '得分' : 'Score', accessor: (r: { score: number }) => r.score, align: 'right' as const, sortable: true },
         ];
         return (
           <div className="vx-preview-stack">
+            {/* 基础用法 */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: 0 }}>
+              {isZh ? '基础用法（striped + bordered）' : 'Basic (striped + bordered)'}
+            </p>
             <Table columns={[
               { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
               { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
@@ -900,10 +904,76 @@ export function DesktopApp({
               { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: 'Active' },
               { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: 'Active' },
             ]} striped bordered />
-            <p style={{ fontSize: 13, color: 'var(--vx-text-muted)', margin: '4px 0 0' }}>
-              {isZh
-                ? '大量数据 + 表头吸顶 + 搜索栏吸顶 + 容器滚动（共 200 行）。向下滚动以验证 stickyHeader / stickyFilter 效果：'
-                : 'Large dataset with sticky header + sticky filter and scrollable container (200 rows). Scroll down to verify:'}
+
+            {/* 无边框 + headless */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+              {isZh ? '无边框 + headless（borderless + headless）' : 'Borderless + headless'}
+            </p>
+            <Table columns={[
+              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
+              { key: 'email', header: 'Email', accessor: (r: { email: string }) => r.email },
+            ]} data={[
+              { name: 'Alice Chen', email: 'alice@example.com' },
+              { name: 'Bo Wang', email: 'bo@example.com' },
+              { name: 'Cora Lin', email: 'cora@example.com' },
+            ]} borderless headless hoverable />
+
+            {/* variant: dark */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+              {isZh ? '变体：深色主题（variant="dark"）' : 'Variant: Dark (variant="dark")'}
+            </p>
+            <Table variant="dark" striped hoverable columns={[
+              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
+              { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+              { key: 'level', header: isZh ? '级别' : 'Level', accessor: (r: { level: string }) => r.level },
+            ]} data={[
+              { name: 'Alice', role: isZh ? '高级工程师' : 'Senior Engineer', level: 'L6' },
+              { name: 'Bo', role: isZh ? '设计主管' : 'Design Lead', level: 'L5' },
+              { name: 'Cora', role: isZh ? '产品经理' : 'Product Manager', level: 'L6' },
+            ]} />
+
+            {/* variant: outline */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+              {isZh ? '变体：外框（variant="outline"）' : 'Variant: Outline (variant="outline")'}
+            </p>
+            <Table variant="outline" hoverable columns={[
+              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
+              { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+            ]} data={[
+              { name: 'Alice', role: isZh ? '设计师' : 'Designer' },
+              { name: 'Bo', role: isZh ? '工程师' : 'Engineer' },
+            ]} />
+
+            {/* 行选择 */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+              {isZh ? '行选择（selectable）' : 'Row selection (selectable)'}
+            </p>
+            <Table selectable striped hoverable columns={[
+              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
+              { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+              { key: 'team', header: isZh ? '团队' : 'Team', accessor: (r: { team: string }) => r.team },
+            ]} data={[
+              { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', team: isZh ? '设计系统' : 'Design System' },
+              { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', team: isZh ? '平台' : 'Platform' },
+              { name: 'Cora Lin', role: isZh ? '产品经理' : 'PM', team: isZh ? '增长' : 'Growth' },
+            ]} onSelectionChange={(sel) => console.log(isZh ? '已选：' : 'Selected:', sel)} />
+
+            {/* 行点击 + 固定布局 */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+              {isZh ? '可点击行 + 固定布局（onRowClick + fixed）' : 'Clickable rows + fixed layout'}
+            </p>
+            <Table fixed hoverable onRowClick={(row: any) => alert(`Clicked: ${row.name}`)} columns={[
+              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name, width: '30%' },
+              { key: 'email', header: 'Email', accessor: (r: any) => r.email, width: '50%' },
+              { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role, width: '20%' },
+            ]} data={[
+              { name: 'Alice Chen', email: 'alice.chen@longdomainname.example.com', role: isZh ? '设计师' : 'Designer' },
+              { name: 'Bo Wang', email: 'bo.wang@longdomainname.example.com', role: isZh ? '工程师' : 'Engineer' },
+            ]} />
+
+            {/* 内置自动搜索 + 列筛选 */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+              {isZh ? '内置自动搜索（防抖 200ms + 列筛选 + 搜索栏吸顶）' : 'Built-in auto search (debounce 200ms + column filters + sticky filter)'}
             </p>
             <Table
               columns={largeColumns}
@@ -912,9 +982,66 @@ export function DesktopApp({
               stickyFilter
               striped
               hoverable
+              filterable
               style={{ maxHeight: 360, overflow: 'auto' }}
-              caption={isZh ? `成员名单 · ${largeData.length} 人` : `Roster · ${largeData.length} members`}
+              caption={isZh ? `成员名单 · ${largeData.length} 人（内置自动搜索，无需外部控制）` : `Roster · ${largeData.length} members (built-in auto search, no external control needed)`}
             />
+
+            {/* flush 嵌入模式 */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+              {isZh ? '嵌入模式（flush，嵌入 Card 间距为 0）' : 'Flush mode (embedded in Card, zero spacing)'}
+            </p>
+            <Card padding="none">
+              <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--vx-border)' }}>
+                <strong style={{ fontSize: 14 }}>{isZh ? '项目成员' : 'Team members'}</strong>
+                <p style={{ fontSize: 12, color: 'var(--vx-text-muted)', margin: '2px 0 0' }}>{isZh ? '表格嵌入 Card，无外边框，内边距为 0' : 'Table embedded in Card, no outer border, zero padding'}</p>
+              </div>
+              <Table flush hoverable columns={[
+                { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
+                { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
+              ]} data={[
+                { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer' },
+                { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer' },
+                { name: 'Cora Lin', role: isZh ? '产品经理' : 'PM' },
+              ]} />
+            </Card>
+
+            {/* 单边移除边框 */}
+            <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
+              {isZh ? '单边移除边框（removeBorders）' : 'Selective border removal (removeBorders)'}
+            </p>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <p style={{ fontSize: 11, color: 'var(--vx-text-muted)', margin: '0 0 4px' }}>{isZh ? '移除底部边框' : 'Remove bottom border'}</p>
+                <Table removeBorders={['bottom']} columns={[
+                  { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
+                  { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
+                ]} data={[
+                  { name: 'Alice', role: isZh ? '设计师' : 'Designer' },
+                  { name: 'Bo', role: isZh ? '工程师' : 'Engineer' },
+                ]} />
+              </div>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <p style={{ fontSize: 11, color: 'var(--vx-text-muted)', margin: '0 0 4px' }}>{isZh ? '移除左右边框' : 'Remove left & right borders'}</p>
+                <Table removeBorders={['left', 'right']} columns={[
+                  { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
+                  { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
+                ]} data={[
+                  { name: 'Alice', role: isZh ? '设计师' : 'Designer' },
+                  { name: 'Bo', role: isZh ? '工程师' : 'Engineer' },
+                ]} />
+              </div>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <p style={{ fontSize: 11, color: 'var(--vx-text-muted)', margin: '0 0 4px' }}>{isZh ? '移除四边边框' : 'Remove all borders'}</p>
+                <Table removeBorders="all" columns={[
+                  { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
+                  { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
+                ]} data={[
+                  { name: 'Alice', role: isZh ? '设计师' : 'Designer' },
+                  { name: 'Bo', role: isZh ? '工程师' : 'Engineer' },
+                ]} />
+              </div>
+            </div>
           </div>
         );
       }
