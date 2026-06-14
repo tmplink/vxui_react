@@ -50,7 +50,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "preview": "npm run build && wrangler dev",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build:pages && wrangler deploy"
   },
   "peerDependencies": {
     "react": "^19.0.0",
