@@ -1,2 +1,2 @@
-# SPA fallback is handled by wrangler.jsonc `not_found_handling: single-page-application`
-# Remove this file if no other redirects are needed.
+# SPA fallback – double-safety net alongside wrangler.jsonc `not_found_handling`
+/*  /index.html  200
