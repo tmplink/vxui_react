@@ -725,7 +725,12 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
       );
 
     case 'table': {
-      // Large dataset for the scroll / sticky-header stress-test demo
+      const tableSectionLabel = (label: string) => (
+        <div className="vx-table-demo-section">
+          <p>{label}</p>
+        </div>
+      );
+
       const largeRoles = isZh ? ['设计师', '工程师', '产品经理', '测试'] : ['Designer', 'Engineer', 'Product manager', 'QA'];
       const largeTeams = isZh ? ['设计系统', '平台', '增长', '基础架构'] : ['Design system', 'Platform', 'Growth', 'Infrastructure'];
       const largeStatuses = isZh ? ['在岗', '休假', '出差'] : ['Active', 'On leave', 'On site'];
@@ -745,29 +750,38 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
         { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { status: string }) => <Badge variant={((r.status === 'Active' || r.status === '在岗') ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge>, sortable: true, filterable: true },
         { key: 'score', header: isZh ? '得分' : 'Score', accessor: (r: { score: number }) => r.score, align: 'right' as const, sortable: true },
       ];
+      const activeStatus = isZh ? '在岗' : 'Active';
       return (
         <div className="vx-preview-stack">
+          {/* ── 基础用法 ── */}
           <Table columns={[
             { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string; role: string; status: string }) => r.name },
             { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { name: string; role: string; status: string }) => r.role },
-            { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { name: string; role: string; status: string }) => <Badge variant={(r.status === 'Active' ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge> },
+            { key: 'status', header: isZh ? '状态' : 'Status', accessor: (r: { name: string; role: string; status: string }) => <Badge variant={(r.status === activeStatus ? 'success' : 'warning') as 'success' | 'warning'}>{r.status}</Badge> },
           ]} data={[
-            { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: 'Active' },
-            { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: 'Active' },
+            { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer', status: activeStatus },
+            { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer', status: activeStatus },
           ]} striped bordered />
-          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
-            {isZh ? '变体：深色主题' : 'Variant: Dark'}
-          </p>
+
+          {/* ── 视觉变体 ── */}
+          {tableSectionLabel(isZh ? '视觉变体' : 'Variants')}
           <Table variant="dark" striped hoverable columns={[
             { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
             { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
           ]} data={[
-            { name: 'Alice', role: isZh ? '高级工程师' : 'Senior Engineer' },
-            { name: 'Bo', role: isZh ? '设计主管' : 'Design Lead' },
+            { name: 'Alice Chen', role: isZh ? '高级工程师' : 'Senior Engineer' },
+            { name: 'Bo Wang', role: isZh ? '设计主管' : 'Design Lead' },
           ]} />
-          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
-            {isZh ? '行选择' : 'Row Selection'}
-          </p>
+          <Table variant="outline" striped hoverable columns={[
+            { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
+            { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
+          ]} data={[
+            { name: 'Cora Lin', role: isZh ? '产品经理' : 'PM' },
+            { name: 'Dan Xu', role: isZh ? '测试工程师' : 'QA Engineer' },
+          ]} />
+
+          {/* ── 行选择 ── */}
+          {tableSectionLabel(isZh ? '行选择' : 'Row Selection')}
           <Table selectable striped hoverable columns={[
             { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: { name: string }) => r.name },
             { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: { role: string }) => r.role },
@@ -776,9 +790,34 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
             { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer' },
             { name: 'Cora Lin', role: isZh ? '产品经理' : 'PM' },
           ]} />
-          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
-            {isZh ? '内置自动搜索（200 行）' : 'Built-in auto search (200 rows)'}
+
+          {/* ── 嵌入与边框控制 ── */}
+          {tableSectionLabel(isZh ? '嵌入与边框控制' : 'Embedding & Borders')}
+          <div style={{ marginBottom: 12 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--vx-text-secondary)', margin: '0 0 8px' }}>
+              {isZh ? 'flush 模式（嵌入 Card 等容器）' : 'Flush mode (for embedding in containers)'}
+            </p>
+            <Table flush hoverable columns={[
+              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
+              { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
+            ]} data={[
+              { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer' },
+              { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer' },
+            ]} />
+          </div>
+          <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--vx-text-secondary)', margin: '0 0 8px' }}>
+            {isZh ? '移除底部边框（无缝衔接下方内容）' : 'Remove bottom border (seamless continuation)'}
           </p>
+          <Table removeBorders={['bottom']} columns={[
+            { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
+            { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
+          ]} data={[
+            { name: 'Alice', role: isZh ? '设计师' : 'Designer' },
+            { name: 'Bo', role: isZh ? '工程师' : 'Engineer' },
+          ]} />
+
+          {/* ── 搜索与筛选 ── */}
+          {tableSectionLabel(isZh ? '搜索与筛选' : 'Search & Filter')}
           <Table
             columns={largeColumns}
             data={largeData}
@@ -790,31 +829,6 @@ export function renderSharedPreview(pageKey: PageKey, options: SharedPreviewOpti
             style={{ maxHeight: 360, overflow: 'auto' }}
             caption={isZh ? `成员名单 · ${largeData.length} 人` : `Roster · ${largeData.length} members`}
           />
-          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
-            {isZh ? '嵌入模式（flush）' : 'Flush mode'}
-          </p>
-          <Card padding="none">
-            <div style={{ padding: '10px 12px', borderBottom: '1px solid var(--vx-border)' }}>
-              <strong style={{ fontSize: 13 }}>{isZh ? '项目成员' : 'Team members'}</strong>
-            </div>
-            <Table flush hoverable columns={[
-              { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
-              { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
-            ]} data={[
-              { name: 'Alice Chen', role: isZh ? '设计师' : 'Designer' },
-              { name: 'Bo Wang', role: isZh ? '工程师' : 'Engineer' },
-            ]} />
-          </Card>
-          <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--vx-text-muted)', margin: '12px 0 0' }}>
-            {isZh ? '移除底部边框' : 'Remove bottom border'}
-          </p>
-          <Table removeBorders={['bottom']} columns={[
-            { key: 'name', header: isZh ? '名称' : 'Name', accessor: (r: any) => r.name },
-            { key: 'role', header: isZh ? '角色' : 'Role', accessor: (r: any) => r.role },
-          ]} data={[
-            { name: 'Alice', role: isZh ? '设计师' : 'Designer' },
-            { name: 'Bo', role: isZh ? '工程师' : 'Engineer' },
-          ]} />
         </div>
       );
     }

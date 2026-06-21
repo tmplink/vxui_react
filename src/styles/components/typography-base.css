@@ -746,11 +746,19 @@
   }
 
   .vx-example {
-    padding: 16px;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
   }
 
   .vx-example__grid {
     gap: 16px;
+  }
+
+  /* 预览堆叠间距加大，让不同 demo 之间不挤在一起 */
+  .vx-preview-stack {
+    gap: 20px;
   }
 }
 
