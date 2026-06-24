@@ -24,6 +24,13 @@ export interface TableColumn<T> {
   filterOptions?: SelectOption[];
   /** 是否参与全局文本搜索（默认 true） */
   searchable?: boolean;
+  /**
+   * 获取该列用于搜索/筛选的纯文本值。
+   * 当 accessor 返回 ReactNode（如 Badge、Tag 等）时，String(ReactNode) 会得到 "[object Object]"，
+   * 导致搜索失效。提供 searchValue 可显式指定搜索用的文本。
+   * 不传时，仅当 accessor 返回 string | number 时才参与搜索。
+   */
+  searchValue?: (row: T) => string;
 }
 
 export type TableVariant = 'default' | 'dark' | 'outline';
@@ -101,6 +108,24 @@ export interface TableProps<T> extends HTMLAttributes<HTMLDivElement> {
   searchDebounce?: number;
   /** 限定参与文本搜索的列 key 列表，不传则搜索所有 searchable !== false 的列 */
   searchColumns?: string[];
+}
+
+/**
+ * 从某列的数据行中提取用于搜索/筛选的纯文本值。
+ * - 优先使用 `col.searchValue`（如果定义）
+ * - 否则仅当 accessor 返回 string | number 时才提取
+ * - 返回空字符串表示该列不参与匹配
+ */
+function getCellText<T>(col: TableColumn<T>, row: T): string {
+  if (col.searchValue) {
+    return col.searchValue(row);
+  }
+  const raw = col.accessor(row);
+  if (typeof raw === 'string' || typeof raw === 'number') {
+    return String(raw);
+  }
+  // ReactNode（如 JSX、null、boolean、undefined）不参与文本搜索
+  return '';
 }
 
 // ── 排序图标 ──
@@ -246,8 +271,8 @@ export function Table<T>({
       result = result.filter((row) =>
         columns.some((col) => {
           if (!searchableCols.includes(col.key)) return false;
-          const val = col.accessor(row);
-          return String(val ?? '').toLowerCase().includes(q);
+          const text = getCellText(col, row);
+          return text.toLowerCase().includes(q);
         }),
       );
     }
@@ -256,7 +281,7 @@ export function Table<T>({
       result = result.filter((row) => {
         const col = columns.find((c) => c.key === colKey);
         if (!col) return true;
-        return String(col.accessor(row) ?? '') === colVal;
+        return getCellText(col, row) === colVal;
       });
     }
     return result;
@@ -281,40 +306,48 @@ export function Table<T>({
     });
   }, [filteredData, sortCol, sortDir, columns, isSortControlled]);
 
-  // ── 行选择 ──
+  // ── 行选择（使用原始数据索引）──
   const [internalSelectedRows, setInternalSelectedRows] = useState<Set<number>>(new Set());
   const selectedSet = controlledSelectedRows ?? internalSelectedRows;
 
-  const handleSelectRow = useCallback((index: number) => {
+  // 构建 displayData 索引 → 原始 data 索引的映射
+  const dataIndexMap = useMemo(() => {
+    return displayData.map((row) => data.indexOf(row));
+  }, [displayData, data]);
+
+  const handleSelectRow = useCallback((displayIndex: number) => {
+    const originalIndex = dataIndexMap[displayIndex];
+    if (originalIndex === undefined) return;
     const next = new Set(selectedSet);
-    if (next.has(index)) {
-      next.delete(index);
+    if (next.has(originalIndex)) {
+      next.delete(originalIndex);
     } else {
-      next.add(index);
+      next.add(originalIndex);
     }
     if (!controlledSelectedRows) {
       setInternalSelectedRows(next);
     }
     onSelectionChange?.(next);
-  }, [selectedSet, controlledSelectedRows, onSelectionChange]);
+  }, [selectedSet, dataIndexMap, controlledSelectedRows, onSelectionChange]);
 
   const handleSelectAll = useCallback(() => {
-    const allFilteredIndices = displayData.map((_, i) => i);
-    const allSelected = allFilteredIndices.every((i) => selectedSet.has(i));
+    const originalIndices = dataIndexMap.filter((i) => i !== undefined);
+    const allSelected = originalIndices.every((i) => selectedSet.has(i));
     const next = new Set(selectedSet);
     if (allSelected) {
-      allFilteredIndices.forEach((i) => next.delete(i));
+      originalIndices.forEach((i) => next.delete(i));
     } else {
-      allFilteredIndices.forEach((i) => next.add(i));
+      originalIndices.forEach((i) => next.add(i));
     }
     if (!controlledSelectedRows) {
       setInternalSelectedRows(next);
     }
     onSelectionChange?.(next);
-  }, [displayData, selectedSet, controlledSelectedRows, onSelectionChange]);
+  }, [dataIndexMap, selectedSet, controlledSelectedRows, onSelectionChange]);
 
-  const isAllSelected = displayData.length > 0 && displayData.every((_, i) => selectedSet.has(i));
-  const isIndeterminate = !isAllSelected && displayData.some((_, i) => selectedSet.has(i));
+  const displayIndices = dataIndexMap.filter((i) => i !== undefined);
+  const isAllSelected = displayIndices.length > 0 && displayIndices.every((i) => selectedSet.has(i));
+  const isIndeterminate = !isAllSelected && displayIndices.some((i) => selectedSet.has(i));
 
   // ── 是否显示筛选栏 ──
   const showFilter = filterableProp === true || (filterableProp !== false && data.length > filterThreshold);
@@ -327,7 +360,7 @@ export function Table<T>({
       if (col.filterOptions) {
         map[col.key] = col.filterOptions;
       } else {
-        const values = [...new Set(data.map((row) => String(col.accessor(row) ?? '')))];
+        const values = [...new Set(data.map((row) => getCellText(col, row)).filter(Boolean))];
         map[col.key] = values.map((v) => ({ value: v, label: v }));
       }
     }
@@ -451,7 +484,8 @@ export function Table<T>({
             </tr>
           ) : (
             displayData.map((row, ri) => {
-              const isSelected = selectedSet.has(ri);
+              const originalIndex = dataIndexMap[ri];
+              const isSelected = originalIndex !== undefined && selectedSet.has(originalIndex);
               const extraClassName = typeof rowClassName === 'function'
                 ? rowClassName(row, ri)
                 : rowClassName;

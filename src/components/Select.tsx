@@ -8,7 +8,10 @@ import { Sheet } from './Sheet';
 
 export interface SelectOption {
   value: string;
-  label: string;
+  /** 选项显示文本，支持 ReactNode 自定义渲染 */
+  label: ReactNode;
+  /** 当 label 为 ReactNode 时，用于搜索过滤的纯文本。不传且 label 非字符串时，该选项不参与搜索匹配。 */
+  searchLabel?: string;
   disabled?: boolean;
 }
 
@@ -32,6 +35,18 @@ export interface SelectProps {
    * 默认使用 Sheet 组件。传入 null 可禁用移动端面板。
    */
   mobileSheet?: ReactNode;
+}
+
+/**
+ * 从 SelectOption 中提取用于搜索过滤的纯文本。
+ * - 优先使用 option.searchLabel
+ * - 否则仅当 label 为 string 时使用
+ * - 返回空字符串表示该选项不参与搜索匹配
+ */
+function getOptionSearchText(option: SelectOption): string {
+  if (option.searchLabel !== undefined) return option.searchLabel;
+  if (typeof option.label === 'string') return option.label;
+  return '';
 }
 
 export function Select({
@@ -80,9 +95,10 @@ export function Select({
   const dialogContentRef = useRef<HTMLElement | null>(null);
 
   const selectedOption = options.find((option) => option.value === value);
-  const filtered = options.filter((option) =>
-    option.label.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filtered = options.filter((option) => {
+    const text = getOptionSearchText(option);
+    return text && text.toLowerCase().includes(search.toLowerCase());
+  });
   const showSearch =
     typeof searchable === 'number' ? options.length > searchable : searchable;
 

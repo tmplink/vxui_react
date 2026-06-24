@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect, useId } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useId, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { cx } from '../lib/cx';
@@ -8,7 +8,10 @@ import { Sheet } from './Sheet';
 
 export interface MultiSelectOption {
   value: string;
-  label: string;
+  /** 选项显示文本，支持 ReactNode 自定义渲染 */
+  label: ReactNode;
+  /** 当 label 为 ReactNode 时，用于搜索过滤的纯文本。不传且 label 非字符串时，该选项不参与搜索匹配。 */
+  searchLabel?: string;
   disabled?: boolean;
 }
 
@@ -28,6 +31,12 @@ export interface MultiSelectProps {
   /** Max number of visible tags before showing "+N more" badge */
   maxDisplay?: number;
   className?: string;
+}
+
+function getMultiOptionSearchText(option: MultiSelectOption): string {
+  if (option.searchLabel !== undefined) return option.searchLabel;
+  if (typeof option.label === 'string') return option.label;
+  return '';
 }
 
 export function MultiSelect({
@@ -69,9 +78,10 @@ export function MultiSelect({
   } | null>(null);
   const dialogContentRef = useRef<HTMLElement | null>(null);
 
-  const filtered = options.filter((o) =>
-    o.label.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filtered = options.filter((o) => {
+    const text = getMultiOptionSearchText(o);
+    return text && text.toLowerCase().includes(search.toLowerCase());
+  });
 
   useEffect(() => {
     if (!open) {
@@ -182,7 +192,7 @@ export function MultiSelect({
 
   const visibleTags = maxDisplay ? value.slice(0, maxDisplay) : value;
   const hiddenCount = maxDisplay ? Math.max(0, value.length - maxDisplay) : 0;
-  const selectedLabels = options.reduce<Record<string, string>>((acc, o) => {
+  const selectedLabels = options.reduce<Record<string, ReactNode>>((acc, o) => {
     acc[o.value] = o.label;
     return acc;
   }, {});
@@ -279,21 +289,25 @@ export function MultiSelect({
             <span className="vx-multiselect__placeholder">{placeholder}</span>
           ) : (
             <>
-              {visibleTags.map((v) => (
-                <span key={v} className="vx-multiselect__tag">
-                  {selectedLabels[v] ?? v}
-                  {!disabled && (
-                    <span
-                      className="vx-multiselect__tag-remove"
-                      role="button"
-                      aria-label={`Remove ${selectedLabels[v] ?? v}`}
-                      onClick={(e) => removeTag(e, v)}
-                    >
-                      <X size={11} />
-                    </span>
-                  )}
-                </span>
-              ))}
+              {visibleTags.map((v) => {
+                const tagLabel = selectedLabels[v] ?? v;
+                const tagLabelText = typeof tagLabel === 'string' ? tagLabel : v;
+                return (
+                  <span key={v} className="vx-multiselect__tag">
+                    {tagLabel}
+                    {!disabled && (
+                      <span
+                        className="vx-multiselect__tag-remove"
+                        role="button"
+                        aria-label={`Remove ${tagLabelText}`}
+                        onClick={(e) => removeTag(e, v)}
+                      >
+                        <X size={11} />
+                      </span>
+                    )}
+                  </span>
+                );
+              })}
               {hiddenCount > 0 && (
                 <span className="vx-multiselect__overflow">+{hiddenCount}</span>
               )}
