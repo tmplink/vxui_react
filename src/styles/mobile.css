@@ -1217,6 +1217,17 @@
   margin-bottom: 8px;
 }
 
+.vxm-docs-page__preview {
+  border: 1px solid var(--vx-border);
+  border-radius: var(--vx-radius-lg);
+  background: var(--vx-surface);
+  overflow: hidden;
+}
+
+.vxm-docs-page__preview .vx-table-wrap--card {
+  border-radius: 0;
+}
+
 /* ── Mobile list helpers ──────────────────────────── */
 .vxm-docs-home__list,
 .vxm-legal-page__list {

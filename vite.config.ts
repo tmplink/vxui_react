@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { resolve } from 'path';
+import fs from 'fs';
 
 import { cloudflare } from "@cloudflare/vite-plugin";
 
@@ -18,6 +19,18 @@ export default defineConfig({
     host: '127.0.0.1', // Force IPv4 to avoid EACCES on ::1
     port: 5173,      // Port 3000 is in Windows excluded range (2957-3056)
     strictPort: false, // Auto-switch to next available port if occupied
+    middlewares: [
+      (req, res, next) => {
+        if (req.url?.startsWith('/m/')) {
+          const indexPath = resolve(__dirname, 'index.html');
+          const html = fs.readFileSync(indexPath, 'utf-8');
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(html);
+        } else {
+          next();
+        }
+      },
+    ],
   },
   plugins: [react(), // 运行 `npm run build` 后自动生成 dist/visualizer/index.html
   ...(process.env.VISUALIZE === 'true' ? [visualizer({ open: true, filename: 'dist/visualizer/stats.html', gzipSize: true })] : []), ...(isPageBuild ? [] : [

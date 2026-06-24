@@ -3,7 +3,6 @@
  */
 import type { ReactNode, RefObject } from 'react';
 import { Badge } from '../../components/Badge';
-import { Card, CardContent } from '../../components/Card';
 import { MobileList, MobileListItem } from '../../components/mobile/MobileList';
 import { Check } from 'lucide-react';
 
@@ -35,11 +34,9 @@ export function MobileDocContent({ activeDocument, preview, hasPreview, docHeade
       {hasPreview && preview && (
         <div className="vxm-docs-page__section">
           <div className="vxm-docs-page__section-title">Preview</div>
-          <Card padding="none">
-            <CardContent style={{ padding: '1rem' }}>
-              {preview}
-            </CardContent>
-          </Card>
+          <div className="vxm-docs-page__preview">
+            {preview}
+          </div>
         </div>
       )}
 

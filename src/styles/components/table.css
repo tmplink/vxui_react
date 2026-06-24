@@ -1,10 +1,17 @@
 /* ═══════════════════════════════════════════════════════════
-   Table
+   Table — Bootstrap 5 风格
+   ═══════════════════════════════════════════════════════════
+   核心原则：
+   - 桌面端与移动端使用同一套表格结构
+   - 移动端通过外层容器 overflow-x: auto 实现水平滚动
+   - 不做 card 布局转换，不切换 DOM 结构
    ═══════════════════════════════════════════════════════════ */
 
+/* ── 外层容器（响应式滚动容器） ── */
 .vx-table-wrap {
   width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid var(--vx-border);
   border-radius: var(--vx-radius);
 }
@@ -13,6 +20,7 @@
   border-collapse: collapse;
   font-size: 14px;
   color: var(--vx-text);
+  /* 确保表格最小宽度，避免在窄视口下过度挤压 */
 }
 .vx-table__caption {
   caption-side: top;
@@ -81,7 +89,6 @@
 .vx-table-wrap--no-right  { border-right: none; }
 .vx-table-wrap--no-bottom { border-bottom: none; }
 .vx-table-wrap--no-left   { border-left: none; }
-/* 移除某边边框时同步调整对应方向的圆角 */
 .vx-table-wrap--no-top.vx-table-wrap:not(.vx-table-wrap--square) {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -202,336 +209,112 @@
   min-width: 120px;
 }
 
+/* ═══════════════════════════════════════════════════════════
+   Demo section 标题 — 组之间的分隔线
+   ═══════════════════════════════════════════════════════════ */
+
+.vx-table-demo-section {
+  border-top: 1px solid var(--vx-border);
+  margin-top: 32px;
+  margin-bottom: 16px;
+  padding-top: 20px;
+}
+
+.vx-table-demo-section p {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vx-text-muted);
+  margin: 0;
+}
+
 /* ── 筛选栏吸顶 ── */
 .vx-table-wrap--sticky-filter > .vx-table__filterbar {
   position: sticky;
   top: 0;
   z-index: 2;
 }
-
-/* 筛选栏吸顶时，表头吸顶偏移到筛选栏下方（默认筛选栏高度 ≈ 60px） */
 .vx-table-wrap--sticky-filter .vx-table--sticky thead {
   top: 60px;
 }
 
-/* ── 全屏按钮 ── */
-.vx-table__fullscreen-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
-  padding: 6px 14px;
-  border: 1px solid var(--vx-border);
-  border-radius: var(--vx-radius);
-  background: var(--vx-surface);
-  color: var(--vx-primary);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 150ms, border-color 150ms, box-shadow 150ms;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.vx-table__fullscreen-btn:active {
-  background: var(--vx-primary-soft);
-  border-color: var(--vx-primary);
-}
-
-.vx-table__fullscreen-btn--block {
-  width: 100%;
-  justify-content: center;
-  padding: 10px 16px;
-  font-size: 14px;
-}
-
 /* ═══════════════════════════════════════════════════════════
-   移动端卡片布局
-   ═══════════════════════════════════════════════════════════ */
-
-.vx-table-wrap--card {
-  border: none;
-  border-radius: 0;
-  overflow: visible;
-}
-
-.vx-table__card-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px 0;
-}
-
-.vx-table__card {
-  background: var(--vx-glass-bg);
-  backdrop-filter: var(--vx-glass-filter);
-  -webkit-backdrop-filter: var(--vx-glass-filter);
-  border: 1px solid var(--vx-glass-border);
-  border-radius: var(--vx-radius);
-  padding: 12px 14px;
-  transition: box-shadow 150ms ease, border-color 150ms ease;
-}
-
-.vx-table__card:active {
-  border-color: var(--vx-primary);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--vx-primary) 15%, transparent);
-}
-
-.vx-table__card-title {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--vx-text);
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-
-.vx-table__card-body {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.vx-table__card-field {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.vx-table__card-label {
-  flex: 0 0 auto;
-  color: var(--vx-text-muted);
-  font-size: 12px;
-  min-width: 60px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.vx-table__card-value {
-  flex: 1 1 auto;
-  color: var(--vx-text);
-  min-width: 0;
-  word-break: break-word;
-}
-
-.vx-table__card-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  color: var(--vx-text-muted);
-  font-size: 13px;
-}
-
-.vx-table__card-loading::after {
-  content: '加载中...';
-}
-
-/* ═══════════════════════════════════════════════════════════
-   全屏搜索视图
-   ═══════════════════════════════════════════════════════════ */
-
-.vx-table__fullscreen {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  /* 继承 Dialog fullscreen 的 100dvh */
-}
-
-.vx-table__fullscreen-toolbar {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  border-bottom: 1px solid var(--vx-border);
-  background: var(--vx-bg);
-  flex-shrink: 0;
-}
-
-.vx-table__fullscreen-search {
-  width: 100%;
-}
-
-.vx-table__fullscreen-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.vx-table__fullscreen-filters > * {
-  flex: 1 1 140px;
-  min-width: 120px;
-}
-
-.vx-table__fullscreen-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-/* ── 结果列表 ── */
-.vx-table__fullscreen-list {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 12px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.vx-table__fullscreen-card {
-  background: var(--vx-glass-bg);
-  backdrop-filter: var(--vx-glass-filter);
-  -webkit-backdrop-filter: var(--vx-glass-filter);
-  border: 1px solid var(--vx-glass-border);
-  border-radius: var(--vx-radius);
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.vx-table__fullscreen-field {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.vx-table__fullscreen-field--title {
-  margin-bottom: 2px;
-}
-
-.vx-table__fullscreen-field--title .vx-table__fullscreen-value {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--vx-text);
-}
-
-.vx-table__fullscreen-label {
-  flex: 0 0 auto;
-  color: var(--vx-text-muted);
-  font-size: 12px;
-  min-width: 64px;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-
-.vx-table__fullscreen-value {
-  flex: 1 1 auto;
-  color: var(--vx-text);
-  min-width: 0;
-  word-break: break-word;
-}
-
-/* ── 结果计数 ── */
-.vx-table__fullscreen-count {
-  flex-shrink: 0;
-  padding: 10px 16px;
-  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid var(--vx-border);
-  background: var(--vx-bg);
-  font-size: 12px;
-  color: var(--vx-text-muted);
-  text-align: center;
-}
-
-/* ═══════════════════════════════════════════════════════════
-   移动端适配
+   移动端适配 — Bootstrap 5 方式
+   ═══════════════════════════════════════════════════════════
+   核心原则：移动端去掉表格的圆角、外边框和背景色，
+   让表格融入页面内容区域，不再像独立卡片。
+   不同变体之间用 margin-top 明确分隔。
    ═══════════════════════════════════════════════════════════ */
 
 @media (max-width: 640px) {
+  .vx-table-wrap {
+    border-radius: 0;
+    border: none;
+    background: transparent;
+    /* 每个 demo 之间留出足够间距，避免视觉拥挤 */
+    margin-top: 0;
+    margin-bottom: 28px;
+  }
+
+  /* 第一个表格不需要上边距 */
+  .vx-preview-stack > .vx-table-wrap:first-child {
+    margin-top: 0;
+  }
+
+  /* Section 标题 — 移动端去掉内边距，用 margin 控制间距 */
+  .vx-table-demo-section {
+    margin-top: 32px;
+    margin-bottom: 16px;
+    padding-top: 0;
+  }
+
+  /* flush 模式在移动端也保持无样式 */
+  .vx-table-wrap--flush {
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* 变体 dark/outline 在移动端去掉装饰性边框 */
+  .vx-table-wrap--dark,
+  .vx-table-wrap--outline {
+    border-color: transparent;
+  }
+
   .vx-table__filterbar {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 10px 12px;
+    padding: 8px 10px;
     gap: 6px;
   }
 
-  .vx-table__filterbar-search {
-    flex: none;
-    min-width: 0;
-  }
-
+  /* 筛选栏内的 Select 控件在移动端缩小 */
   .vx-table__filterbar-col {
-    flex: none;
+    flex: 1 1 calc(50% - 5px);
     min-width: 0;
   }
 
-  .vx-table__fullscreen-btn {
-    align-self: stretch;
-    justify-content: center;
-  }
-
-  .vx-table__card-list {
-    padding: 4px 0;
-    gap: 6px;
-  }
-
-  .vx-table__card {
-    padding: 10px 12px;
-  }
-
-  .vx-table__fullscreen-toolbar {
-    padding: 12px;
-    gap: 8px;
-  }
-
-  .vx-table__fullscreen-list {
+  .vx-table__th {
     padding: 8px 12px;
-    gap: 6px;
+    font-size: 11px;
   }
 
-  .vx-table__fullscreen-card {
-    padding: 12px 14px;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════
-   CSS 兜底：窄视口强制卡片布局
-   
-   当 JS 端 useIsMobile() 因物理屏幕宽度判断失败时
-   （如桌面端 iframe 中 window.screen.width 仍是桌面尺寸），
-   CSS 媒体查询作为第二道防线，确保窄视口下仍显示卡片布局。
-   ═══════════════════════════════════════════════════════════ */
-
-@media (max-width: 640px) {
-  /* 隐藏原生表格，显示卡片列表 */
-  .vx-table-wrap:not(.vx-table-wrap--card) table.vx-table {
-    display: none;
-  }
-
-  /* 当 JS 未添加 --card 类时，CSS 强制启用卡片布局样式 */
-  .vx-table-wrap:not(.vx-table-wrap--card) .vx-table__card-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 8px 0;
-  }
-
-  /* 确保筛选栏在窄视口下纵向排列 */
-  .vx-table__filterbar {
-    flex-direction: column;
-    align-items: stretch;
+  .vx-table__td {
     padding: 10px 12px;
-    gap: 6px;
+    font-size: 13px;
   }
 
-  .vx-table__filterbar-search {
-    flex: none;
-    min-width: 0;
+  .vx-table__caption {
+    padding: 10px 12px;
+    font-size: 14px;
   }
 
-  .vx-table__filterbar-col {
-    flex: none;
-    min-width: 0;
-  }
+  .vx-table--sm .vx-table__th { padding: 5px 8px; font-size: 10px; }
+  .vx-table--sm .vx-table__td { padding: 6px 8px; font-size: 12px; }
+  .vx-table--lg .vx-table__th { padding: 12px 16px; font-size: 12px; }
+  .vx-table--lg .vx-table__td { padding: 12px 16px; font-size: 14px; }
 
-  .vx-table__fullscreen-btn {
-    align-self: stretch;
-    justify-content: center;
+  .vx-table__empty {
+    padding: 28px 16px;
+    font-size: 13px;
   }
 }

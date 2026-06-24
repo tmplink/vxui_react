@@ -95,7 +95,6 @@ export function MobileApp() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [actionSheetOpen, setActionSheetOpen] = useState(false);
   const docHeaderRef = useRef<HTMLDivElement | null>(null);
-  const [isDocHeaderInView, setIsDocHeaderInView] = useState(true);
 
   // ── component preview state ──
 
@@ -126,23 +125,6 @@ export function MobileApp() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
-
-  useEffect(() => {
-    if (mobileView !== 'docs') { setIsDocHeaderInView(true); return; }
-    setIsDocHeaderInView(true);
-  }, [mobileView, activePage]);
-
-  useEffect(() => {
-    if (mobileView !== 'docs') return;
-    const target = docHeaderRef.current;
-    if (!target || typeof IntersectionObserver === 'undefined') { setIsDocHeaderInView(true); return; }
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsDocHeaderInView(entry.isIntersecting),
-      { rootMargin: '-56px 0px 0px 0px' },
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
-  }, [mobileView, activePage]);
 
   // ── helpers ──
   const selectPage = (page: PageKey) => {
@@ -337,7 +319,7 @@ export function MobileApp() {
     const isLegalView = mobileView === 'privacy-policy' || mobileView === 'terms-of-service';
     const isSearchView = activeTab === 'search';
     const title = isDocsView
-      ? (isDocHeaderInView ? (activeDocument?.section ?? docsTopBarFallback) : (activeDocument?.title ?? docsTopBarFallback))
+      ? (activeDocument?.title ?? docsTopBarFallback)
       : isLegalView
         ? mobileView === 'privacy-policy' ? privacyContent.title : termsContent.title
         : isSearchView
@@ -417,14 +399,14 @@ export function MobileApp() {
 
   const renderBottomNav = () => (
     <BottomNav items={[
-      { key: 'home', label: 'Home', icon: <House size={22} />, active: activeTab === 'home' && !isAuthView && !isLegalView, onSelect: () => { selectTab('home'); setMobileView('home'); } },
-      { key: 'docs', label: 'Docs', icon: <FileCode2 size={22} />, active: activeTab === 'docs' && !isAuthView && !isLegalView,
+      { key: 'home', label: locale === 'zh' ? '首页' : 'Home', icon: <House size={22} />, active: activeTab === 'home' && !isAuthView && !isLegalView, onSelect: () => { selectTab('home'); setMobileView('home'); } },
+      { key: 'docs', label: locale === 'zh' ? '文档' : 'Docs', icon: <FileCode2 size={22} />, active: activeTab === 'docs' && !isAuthView && !isLegalView,
         submenu: navSections.flatMap(s => s.items).map(item => ({
           key: item.key, label: item.label, icon: item.icon,
           onSelect: () => { selectPage(item.key as PageKey); selectTab('docs'); },
         })),
       },
-      { key: 'search', label: 'Search', icon: <Search size={22} />, active: activeTab === 'search' && !isAuthView && !isLegalView, onSelect: () => { selectTab('search'); } },
+      { key: 'search', label: locale === 'zh' ? '搜索' : 'Search', icon: <Search size={22} />, active: activeTab === 'search' && !isAuthView && !isLegalView, onSelect: () => { selectTab('search'); } },
     ]} />
   );
 
