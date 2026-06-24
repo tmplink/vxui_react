@@ -1,6 +1,6 @@
 # VXUI React
 
-> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.5.1.
+> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.5.2.
 
 > ℹ️ This file (`llms.txt`) is included in the npm package. AI tools can read it directly to obtain component documentation and usage guides.
 

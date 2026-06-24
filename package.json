@@ -1,6 +1,6 @@
 {
   "name": "vxui-react",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "A general-purpose React UI framework rebuilt from VXUI principles.",
   "license": "Apache-2.0",
   "repository": {
