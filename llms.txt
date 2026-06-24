@@ -1,6 +1,6 @@
 # VXUI React
 
-> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.3.13.
+> A pure-CSS, zero-dependency React UI library for building admin dashboards and operator interfaces. v1.5.1.
 
 > ℹ️ This file (`llms.txt`) is included in the npm package. AI tools can read it directly to obtain component documentation and usage guides.
 
@@ -197,8 +197,8 @@ import { Button } from 'vxui-react';
 - **Rating** — Star rating input
 - **DatePicker** — Calendar-based date picker
 - **ColorPicker** — Color swatch/hex picker
-- **Select** — Searchable single-select dropdown with custom overlay behavior
-- **MultiSelect** — Searchable multi-select with tag display and "+N more" badge
+- **Select** — Searchable single-select dropdown with custom overlay behavior; supports ReactNode labels with searchLabel for custom UI
+- **MultiSelect** — Searchable multi-select with tag display, "+N more" badge; supports ReactNode labels with searchLabel for custom UI
 - **PinInput** — PIN / OTP code input with auto-advance, paste support, and mask mode
 - **TimePicker** — Time selection with hours, minutes, and optional seconds columns
 - **Form** — Form wrapper with validation helpers
@@ -220,7 +220,7 @@ import { Button } from 'vxui-react';
 
 ### Data Display
 - **Descriptions** — Key-value pair display in horizontal/vertical table layout
-- **Table** — Sortable, filterable data table with mobile card layout, sticky filter bar, and fullscreen search
+- **Table** — Sortable, filterable data table with horizontal scroll on mobile, sticky filter bar, and search; supports searchValue for ReactNode cells
 - **Badge** — Inline status label with tone variants
 - **Avatar** — User avatar with fallback initials
 - **Card** — Content container card
